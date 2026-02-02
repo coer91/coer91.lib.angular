@@ -1,0 +1,75 @@
+header {
+    height: var(--height-toolbar) !important;
+    max-height: var(--height-toolbar) !important;
+    position: relative !important;
+    z-index: var(--z-index-toolbar) !important; 
+    background-color: var(--toolbar) !important;
+    padding: 0px 10px !important;
+    box-shadow: 10px -12px 15px 1px black !important;
+
+    h2 {
+        height: 100% !important;
+        width: 100% !important;
+        max-height: 100% !important; 
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+
+        div.title { 
+            height: inherit !important; 
+            display: inherit !important;
+            align-items: inherit !important;
+            gap: inherit !important;
+            color: var(--sidenav) !important;
+
+            span.title-project {
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;  
+
+                i {
+                    font-size: 25px !important;
+                }
+            }
+        }
+
+        div.user {
+            height: inherit !important;  
+
+            figure { 
+                height: inherit !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 5px !important;
+                border-radius: 5px !important; 
+                cursor: pointer !important; 
+                padding: 0px 5px !important;
+
+                div.user-image {
+                    min-width: 38px !important;
+                    max-width: 38px !important; 
+                    min-height: 38px !important;
+                    max-height: 38px !important;
+                    border-radius: 25px;
+                    background: transparent;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: top;
+                }
+
+                div.user-identity {                      
+                    p {
+                        white-space: nowrap !important;
+                        font-size: 14px !important;
+                        font-weight: bold !important;
+                    }
+                }
+            }
+
+            figure:hover {
+                box-shadow: 0px 0px 10px 0px var(--dark) !important;
+            }
+        }
+    }
+}

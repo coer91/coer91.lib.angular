@@ -1,0 +1,14 @@
+@for(type of typeList(); track type) {
+    <section class="container-section">
+        <h2>{{ type }}</h2>
+        <div class="flex-wrap">
+            @for(color of colorList(); track color) {
+                <coer-button
+                    [color]="color"
+                    [type]="type"
+                    (onClick)="Log(type, color)"
+                ></coer-button>
+            }
+        </div>
+    </section>
+} 

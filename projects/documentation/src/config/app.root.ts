@@ -1,0 +1,97 @@
+import { Component, signal, viewChild } from '@angular/core';  
+import { environmentSIGNAL, isLoadingSIGNAL, userSIGNAL } from 'coer91.angular/signals';
+import { AppModule } from '../app/app.module';
+import { NAVIGATION } from '../app/app.sidenav'; 
+import { ILogin, IMenu } from 'coer91.angular/interfaces';
+import { Coer91 } from 'coer91.angular/core';
+import { Access } from 'coer91.angular/tools'; 
+import { appSettings, AuthService } from '@appSettings';
+
+@Component({
+    selector: 'app-root',
+    imports: [AppModule], 
+    template: `
+        <coer91
+            #coer91 
+            [navigation]="navigation()"
+            (onLogin)="Login($event)"
+            (onRecoveryPassword)="null"
+            (onUpdateJWT)="UpdateJWT()"
+        ></coer91>
+    `
+})
+export class AppRoot { 
+
+    //Elements
+    protected readonly _coer91 = viewChild.required<Coer91>('coer91');
+
+    //Variables 
+    protected readonly navigation = signal<IMenu[]>([]); 
+
+    //Start
+    constructor(private authService: AuthService) { 
+        environmentSIGNAL.set(appSettings.environment);   
+         
+        if(Access.IsLogin()) {  
+            isLoadingSIGNAL.set(true);
+            userSIGNAL.set(Access.GetUser());
+            this.GetNavigation().then(() => isLoadingSIGNAL.set(false));  
+        }  
+    }
+
+
+    /** */
+    protected async Login(login: ILogin): Promise<void> {
+        isLoadingSIGNAL.set(true);
+         
+        const loginResponse = await this.authService.Login({ user: 'coer91', password: '123456' });
+
+        if(loginResponse.ok) {
+            const isLogin = this._coer91().Login(loginResponse.body);
+
+            if(isLogin) {
+                this.GetNavigation();
+            } 
+        }
+
+        else {
+            console.error(loginResponse.message);
+            this._coer91().alert.Error('Login');
+        } 
+
+        isLoadingSIGNAL.set(false);
+    }
+
+
+    /** */
+    protected async GetNavigation(): Promise<void> {
+        if(appSettings.navigation.static) {
+            this.navigation.set(NAVIGATION);
+        }                     
+
+        else {
+            const project = appSettings.appInfo.project;   
+            const role = userSIGNAL()?.role || '';
+            const navigation = await this.authService.GetNavigationByRole(project, role);   
+            
+            if(navigation.ok) this.navigation.set(navigation.body);
+             
+            else {
+                console.error(navigation.message);
+                this._coer91().alert.Error('GetNavigation');
+            }
+        } 
+    }
+
+
+    /** */
+    protected async UpdateJWT(): Promise<void> {      
+        const JWT = await this.authService.UpdateJWT();   
+        if(JWT.ok) Access.SetUser(JWT.body);
+        
+        else {
+            console.error(JWT.message);
+            this._coer91().alert.Error('UpdateJWT');
+        } 
+    }
+}

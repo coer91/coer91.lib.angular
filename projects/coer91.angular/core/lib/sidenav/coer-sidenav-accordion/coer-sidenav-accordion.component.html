@@ -1,0 +1,37 @@
+<div title="">    
+    <div [id]="id()" (click)="_Toggle()"
+        [ngClass]="{
+            'accordion-header': true, 
+            'expanded-lv1': (!isCollapsed() && level() === 'lv1'),
+            'expanded-lv2': (!isCollapsed() && level() === 'lv2')
+        }"> 
+
+        <h4 [ngStyle]="{ paddingLeft: _paddingLeft() }">
+            @if(IsNotOnlyWhiteSpace(icon())) {
+                <i [class]="icon()"></i>
+            }
+
+            @else if(!showSidenav()) {
+                <i class='i91-menu'></i>
+            }
+
+            <span>{{ title() || '' }}</span>
+        </h4>
+      
+        @if(showSidenav()) {
+            <button type="button">
+                <i class="i91-angle" [class]="_isCollapsed() ? 'i91-270deg' : 'i91-90deg'"></i> 
+            </button>
+        }
+    </div>
+    
+    <div class="accordion-body"
+        [ngStyle]="{ 
+            'overflow'   : (_isCollapsed() ? 'hidden' : 'auto'),
+            'max-height' : (_isCollapsed() ? '0px'    : '')
+        }"> 
+        <div [ngClass]="{ 'display-none': _isCollapsed() }">
+            <ng-content></ng-content>               
+        </div> 
+    </div>   
+</div>   

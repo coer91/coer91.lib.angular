@@ -1,0 +1,70 @@
+$item-height: calc(var(--height-sidenav-item) - 0.800px);
+
+div { 
+    overflow: hidden !important;  
+
+    div.accordion-header {
+        height: $item-height !important; 
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;  
+        transition: border-radius 0.3s ease-in-out !important;
+        border-bottom: 1px solid color-mix(in srgb, var(--body), var(--sidenav) 90%) !important;  
+        transition: all 0.3s ease-in-out !important;
+        user-select: none !important;
+        background-color: var(--sidenav);
+
+        h4 {
+            display: inherit !important;
+            align-items: inherit !important;
+            gap: 15px !important;
+            white-space: nowrap !important; 
+            width: calc(100% - 35px) !important;  
+            cursor: inherit !important;
+
+            i {
+                min-width: 16px !important;
+            }
+
+            span { 
+                overflow: hidden !important; 
+                max-width: calc(100% - 20px) !important;
+            }
+        }
+
+        button {
+            padding: 0px 3px 0px 0px !important;
+            border: none !important;
+            cursor: inherit !important;
+            background-color: transparent;
+            color: inherit;
+
+            i {
+                font-size: 30px !important;
+                transition: transform 0.3s ease-in-out !important; 
+            }
+        }
+    }  
+
+    div.accordion-header:hover {
+        background-color: color-mix(in srgb, var(--body), var(--sidenav) 90%) !important;
+    }
+
+    div.accordion-header.selected {
+        color: var(--navigation) !important; 
+    }
+
+    div.accordion-header.expanded-lv1 {
+        background-color: var(--navigation) !important; 
+        color: var(--inherit) !important; 
+    } 
+
+    div.accordion-header.expanded-lv2 {
+        color: var(--navigation) !important; 
+    } 
+
+    div.accordion-body {
+        background-color: var(--sidenav) !important;
+        transition: all 0.3s ease-in-out; 
+    }
+} 

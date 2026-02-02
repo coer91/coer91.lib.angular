@@ -1,0 +1,67 @@
+/* Components */
+@use "../styles/../tools/lib/coer-alert/coer-alert.component.scss";
+
+/* Classes */
+@use "./lib/animation-speed.scss";
+@use "./lib/animation.scss";
+@use "./lib/app.scss";
+@use "./lib/border.scss";
+@use "./lib/border-radius.scss";
+@use "./lib/color.scss";
+@use "./lib/component.scss";
+@use "./lib/container.scss";
+@use "./lib/cursor.scss";
+@use "./lib/flex-wrap.scss";
+@use "./lib/font-family.scss";
+@use "./lib/icons.scss";
+
+/* USE MODULES */
+@use "./lib/font-size.breakpoint.scss"    as _font-size; 
+@use "./lib/gap.breakpoint.scss"          as _gap; 
+@use "./lib/padding.breakpoint.scss"      as _padding; 
+@use "./lib/position.breakpoint.scss"     as _position; 
+@use "./lib/width-height.breakpoint.scss" as _width-height; 
+
+@mixin Module($module, $breakpoint) {
+    @if $module == '' {} 
+    @else if $module == '_font-size'    { @include _font-size.mixin($breakpoint)    }
+    @else if $module == '_gap'          { @include _gap.mixin($breakpoint)          } 
+    @else if $module == '_padding'      { @include _padding.mixin($breakpoint)      } 
+    @else if $module == '_position'     { @include _position.mixin($breakpoint)     }
+    @else if $module == '_width-height' { @include _width-height.mixin($breakpoint) } 
+} 
+
+@mixin ApplyBreakpoints($module) { 
+    @each $breakpoint, $min-width in (      
+        ''     : 0px,
+        'mv-'  : 0px,
+        'xs-'  : 500px,    
+        'sm-'  : 576px,  
+        'md-'  : 768px,  
+        'lg-'  : 992px,   
+        'xl-'  : 1200px,  
+        'xxl-' : 1400px, 
+    ) {   
+        @if ($breakpoint == '') {       
+            @include Module($module, $breakpoint);
+        }
+
+        @else if ($breakpoint == 'mv-') {
+            @media (min-width: $min-width) and (max-width: 499px) {   
+                @include Module($module, $breakpoint);
+            }
+        }
+
+        @else {
+            @media (min-width: $min-width) {      
+                @include Module($module, $breakpoint);
+            } 
+        }
+    }   
+} 
+
+@include ApplyBreakpoints('_font-size');
+@include ApplyBreakpoints('_gap');
+@include ApplyBreakpoints('_padding'); 
+@include ApplyBreakpoints('_position'); 
+@include ApplyBreakpoints('_width-height'); 

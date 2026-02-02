@@ -1,0 +1,34 @@
+<header>
+    <h2>
+        <div class="title">
+            <coer-button
+                type="icon-rounded"
+                icon="i91-menu"
+                height="20px"
+                color="navigation"
+                (onClick)="onClickToogle.emit()"
+            ></coer-button>
+
+            <span class="title-project">
+                <span>{{ title }}</span>
+                
+                @if(_icon().length > 0) {
+                    <i [class]="_icon()"></i> 
+                }
+            </span>
+        </div>
+
+        <div class="user"> 
+            <figure>
+                <div class="user-image" [ngStyle]="{ backgroundImage: `url('${userImage() | noImage: 'USER'}')` }"></div>
+                
+                @if(_showIdentity()) {
+                    <div class="user-identity">
+                        <p>{{ user()?.fullName }}</p>
+                        <p>{{ user()?.role     }}</p>
+                    </div>
+                }
+            </figure>
+        </div>
+    </h2>
+</header> 

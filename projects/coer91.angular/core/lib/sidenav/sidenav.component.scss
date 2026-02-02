@@ -1,0 +1,93 @@
+$item-height: calc(var(--height-sidenav-item) - 0.800px);
+
+nav {
+    height: var(--height-main) !important; 
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    position: relative !important;
+    z-index: var(--z-index-sidenav) !important;
+    background-color: var(--sidenav) !important;
+    transition: width 0.5s ease !important;  
+    width: 0px; 
+
+    ul {
+        padding: 0px !important;
+        margin: 0px !important;
+        background-color: inherit !important;
+
+        li { 
+            background-color: inherit !important;
+
+            div.option {
+                min-height: $item-height !important;
+            }
+        }
+    }
+
+    ul.lv1 { 
+        li.lv1 {    
+            cursor: pointer !important;  
+            color: var(--sidenav-item);
+
+            div.lv1-option,
+            div.lv2-option,
+            div.lv3-option {
+                height: calc(100% - 0.800px) !important;
+                max-height: calc(100% - 0.800px) !important;
+                padding-left: 10px !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 15px !important;
+                border-bottom: 1px solid color-mix(in srgb, var(--body), var(--sidenav) 90%) !important;
+                user-select: none !important;  
+                background-color: inherit;
+                              
+                i { 
+                    width: 16px !important;
+                    min-width: 16px !important;
+                    max-width: 16px !important;
+                    height: 16px !important;
+                    min-height: 16px !important;
+                    max-height: 16px !important;
+                }
+
+                span {
+                    white-space: nowrap !important;
+                    overflow: hidden !important;
+                    font-weight: bold !important;
+                }
+
+                div.grid {
+                    width: 100% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: space-between !important;
+
+                    i {  
+                        font-size: 30px !important;
+                    }
+                }
+            }
+
+            div.lv2-option {
+                padding-left: 40px !important;
+            }
+
+            div.lv3-option {
+                padding-left: 40px !important;
+            }
+
+            div.option.selected {
+                color: var(--navigation) !important;
+            }
+        }
+
+        div.option:hover {
+            background-color: color-mix(in srgb, var(--body), var(--sidenav) 90%) !important;
+        }
+    }
+}
+
+nav.width-sidenav {
+    width: var(--width-sidenav);  
+}

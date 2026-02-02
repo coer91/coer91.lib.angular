@@ -1,0 +1,6 @@
+/dist
+/.angular
+/.vscode
+/.github
+/node_modules 
+*.mp4

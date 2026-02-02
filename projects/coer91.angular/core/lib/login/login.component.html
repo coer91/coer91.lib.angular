@@ -1,0 +1,27 @@
+<main>
+    <div class="login-container">
+        <h1>{{ title }}</h1>
+
+        <section class="form">
+            <coer-button
+                [label]="(view() === 'LOGIN' ? 'Login' : 'Recovery')"
+                width="100%"
+                marginTop="35px"
+                [isLoading]="isLoading()"
+                (onClick)="_Click()"
+            ></coer-button>
+        </section>
+
+        @if(!isLoading()) {
+            <section class="options" (click)="_Toggle()">
+                {{ (view() === 'LOGIN' ? 'Recovery' : 'Back') }}
+            </section>
+        }
+    </div> 
+     
+    @if(clip().length > 0) {
+        <video autoPlay loop muted playsInline>
+            <source [src]="clip()" type="video/mp4" />
+        </video>
+    }   
+</main>

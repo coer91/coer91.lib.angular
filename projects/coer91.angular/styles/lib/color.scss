@@ -1,0 +1,163 @@
+:root {
+    //Fixed colors
+    --blue    :#0d6efd;
+    --sky     :#0d6efd;
+    --cyan    :#00ffff;
+    --green   :#198754;
+    --yellow  :#ffc107;
+    --orange  :#fd6031; 
+    --red     :#dc3545;
+    --purple  :#a615bc;
+    --black   :#000000;   
+    --dark    :#292828;
+    --gray    :#6c757d;
+    --light   :#ffffff; 
+    --smoke   :#f5f5f5;
+    --ghost   :#f8f8ff;
+    --backdrop:#5a5a5ae6;  
+
+    //Action Colors
+    --primary:           var(--blue  );
+    --secondary:         var(--gray  ); 
+    --success:           var(--green ); 
+    --warning:           var(--yellow); 
+    --danger:            var(--red   ); 
+    --navigation:        var(--orange); 
+    --information:       var(--blue  );
+    
+    //Action Colors Light
+    --primary-light:     color-mix(in srgb, var(--primary),     var(--light) 80%);
+    --secondary-light:   color-mix(in srgb, var(--secondary),   var(--light) 80%); 
+    --success-light:     color-mix(in srgb, var(--success),     var(--light) 80%); 
+    --warning-light:     color-mix(in srgb, var(--warning),     var(--light) 80%); 
+    --danger-light:      color-mix(in srgb, var(--danger),      var(--light) 80%); 
+    --navigation-light:  color-mix(in srgb, var(--navigation),  var(--light) 80%); 
+    --information-light: color-mix(in srgb, var(--information), var(--light) 80%); 
+
+    //App Colors 
+    --toolbar:      var(--light); 
+    --sidenav:      var(--dark);
+    --sidenav-item: var(--body);  
+    --breadcrumbs:  var(--sky  ); 
+    --body:         var(--smoke); 
+
+    //Item Colors
+    --containers:    var(--light); 
+    --hover:         color-mix(in srgb, var(--primary), transparent 93%);
+    --focus:         color-mix(in srgb, var(--primary), transparent 75%);
+    --loading:       color-mix(in srgb, var(--gray), var(--light) 50%); 
+    --readonly:      color-mix(in srgb, var(--gray), var(--light) 70%); 
+    --input:         color-mix(in srgb, var(--gray), var(--light) 85%);
+} 
+
+
+@each $key, $value in ( 
+    //Fixed colors 
+    'transparent': transparent,  
+    'blue'    : var(--blue    ), 
+    'cyan'    : var(--cyan    ), 
+    'green'   : var(--green   ), 
+    'yellow'  : var(--yellow  ), 
+    'orange'  : var(--orange  ), 
+    'red'     : var(--red     ), 
+    'purple'  : var(--purple  ),
+    'black'   : var(--black   ),
+    'dark'    : var(--dark    ), 
+    'gray'    : var(--gray    ), 
+    'light'   : var(--light   ),
+    'smoke'   : var(--smoke   ), 
+    'ghost'   : var(--ghost   ), 
+    'backdrop': var(--backdrop),
+
+    //Action Colors 
+    'primary'    : var(--primary    ),  
+    'secondary'  : var(--secondary  ),   
+    'success'    : var(--success    ),  
+    'warning'    : var(--warning    ),  
+    'danger'     : var(--danger     ),  
+    'navigation' : var(--navigation ),  
+    'information': var(--information),
+
+    //Action Colors Light
+    'primary-light'    : var(--primary-light    ),  
+    'secondary-light'  : var(--secondary-light  ),   
+    'success-light'    : var(--success-light    ),  
+    'warning-light'    : var(--warning-light    ),  
+    'danger-light'     : var(--danger-light     ),  
+    'navigation-light' : var(--navigation-light ),  
+    'information-light': var(--information-light),
+
+    //App Colors
+    'toolbar'      : var(--toolbar      ), 
+    'sidenav'      : var(--sidenav      ), 
+    'sidenav-item' : var(--sidenav-item), 
+    'breadcrumbs'  : var(--breadcrumbs  ),  
+    'body'         : var(--body         ),   
+    
+    //Item Colors
+    'containers' : var(--containers),
+    'hover'      : var(--hover     ),  
+    'focus'      : var(--focus     ),  
+    'loading'    : var(--loading   ),  
+    'readonly'   : var(--readonly  ),  
+    'input'      : var(--input     ),
+) {  
+    // Text  
+    .color-#{$key} {  
+        color: $value !important;  
+    } 
+
+    // Backgrounds 
+    .background-color-#{$key} { background-color: $value !important; } 
+    
+    // Outline 
+    .outline-color-#{$key} { outline-color: $value !important; }  
+
+    // Borders 
+    .border-color-#{$key} { border-color: $value !important; }  
+    .border-color-#{$key}-top { border-top-color: $value !important; } 
+    .border-color-#{$key}-right { border-right-color: $value !important; } 
+    .border-color-#{$key}-bottom { border-bottom-color: $value !important; } 
+    .border-color-#{$key}-left { border-left-color: $value !important; }  
+
+    // Borders X - Y 
+    .border-color-#{$key}-y { 
+        border-top-color: $value !important; 
+        border-bottom-color: $value !important; 
+    } 
+    
+    .border-color-#{$key}-x { 
+        border-left-color: $value !important; 
+        border-right-color: $value !important; 
+    } 
+
+    @for $i from 0 through 10 { 
+        @if($i == 0) {
+            .#{$key}-lightning-5 { 
+                background-color: color-mix(in srgb, $value, var(--light) 5%) !important;
+            }
+
+            .#{$key}-darkness-5 { 
+                background-color: color-mix(in srgb, $value, var(--dark) 5%) !important;
+            } 
+        }
+
+        @else {
+            .#{$key}-lightning-#{($i * 10) - 5} { 
+                background-color: color-mix(in srgb, $value, var(--light) (($i * 10%) - 5%)) !important;
+            } 
+
+            .#{$key}-lightning-#{($i * 10)} { 
+                background-color: color-mix(in srgb, $value, var(--light) ($i * 10%)) !important;
+            }
+
+            .#{$key}-darkness-#{($i * 10) - 5} { 
+                background-color: color-mix(in srgb, $value, var(--dark) (($i * 10%) - 5%)) !important;
+            }
+
+            .#{$key}-darkness-#{($i * 10)} { 
+                background-color: color-mix(in srgb, $value, var(--dark) ($i * 10%)) !important;
+            }
+        }
+    } 
+}    

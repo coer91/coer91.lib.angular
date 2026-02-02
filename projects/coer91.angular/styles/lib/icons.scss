@@ -1,0 +1,95 @@
+@mixin Icon() {
+    min-width: 10px !important;
+    min-height: 10px !important; 
+    width: 1em !important;
+    height: 1em !important;
+    mask-size: contain !important; 
+    mask-repeat: no-repeat !important;
+    mask-position: center !important; 
+    display: inline-block !important; 
+    background-color: currentColor !important; 
+    vertical-align: sub !important;
+    font-size: 16px;
+} 
+
+.i91 {
+    @include Icon();
+}  
+
+.i91-mirror-X {
+    transform: rotateX(180deg) !important;
+} 
+
+.i91-mirror-Y {
+    transform: rotateY(180deg) !important;
+} 
+
+@for $i from 0 through 360 { 
+    .i91-#{$i}deg  {
+        transform: rotateZ($i * 1deg) !important;
+    }   
+}  
+ 
+@each $icon in (    
+    'angle', 
+    'arrow-circle',
+    'arrow-from-bracket',
+    'arrows-rotate',
+    'bell-slash',
+    'bell',
+    'bug-fill',
+    'bug-slash-fill',
+    'calendar-days',
+    'check-all',
+    'check-circle-fill',
+    'check-circle-out',
+    'check-circle',
+    'check-square-fill',
+    'check-square-out',
+    'check-square',
+    'circle-fill',
+    'circle',
+    'code',
+    'copyright',
+    'developer-fill',
+    'door-closed-fill',
+    'door-open-fill',
+    'exclamation-circle-fill',
+    'exclamation-circle',
+    'exclamation-diamond-fill',
+    'exclamation-diamond',
+    'exclamation-octagon-fill',
+    'exclamation-octagon',
+    'exclamation-square-fill',
+    'exclamation-square',
+    'exclamation-triangle-fill',
+    'exclamation-triangle',
+    'exclamation',
+    'grid',
+    'hand-pointer-fill',
+    'hand-pointer',
+    'home-door-fill',
+    'home-door', 
+    'info-circle-fill',
+    'info-circle',
+    'info-square-fill',
+    'info-square',
+    'info',  
+    'laptop-code', 
+    'logo-angular-fill',
+    'logo-coer91',
+    'logo-csharp-fill',
+    'logo-datamovil',
+    'mark',
+    'menu',
+    'quality-fill',
+    'quality',
+    'reply',
+    'sort-asc-arrow-down',
+    'sort-desc-arrow-down', 
+) {
+    .i91-#{$icon} { 
+        @include Icon();
+        mask-image: url('./svg/#{$icon}.svg');
+    } 
+} 

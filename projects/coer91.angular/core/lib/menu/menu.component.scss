@@ -1,0 +1,42 @@
+nav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    margin: 30px !important;
+    gap: 30px !important;
+
+    a {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-direction: column !important;
+        flex-basis: 150px !important;
+        padding: 10px !important;
+        gap: 10px !important;
+        height: 150px !important;
+        max-height: 150px !important;
+        text-decoration: none !important;
+        font-weight: 700 !important;
+        border: 2px ridge var(--sidenav) !important;
+        border-radius: 5px !important;
+        color: var(--sidenav) !important;
+        flex-grow: 1 !important;
+
+        i {
+            font-size: 25px !important;
+        }
+
+        span {
+            text-align: center !important;
+        }
+    }
+
+
+    a:not(.menu):hover {
+        transform: scale(1.02) !important;
+        box-shadow: 0px 0px 15px -4px var(--navigation) !important; 
+        border-color: var(--navigation) !important;
+        border-width: 1px !important;
+        color: var(--navigation) !important;
+        background-color: var(--containers) !important; 
+    }
+}

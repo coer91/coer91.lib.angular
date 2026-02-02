@@ -1,0 +1,33 @@
+@if(_isLogin()) {
+    <coer-toolbar (onClickToogle)="sidenav.Toggle()"></coer-toolbar>
+    
+    <div class="coer91">
+        <sidenav 
+            #sidenav
+            [navigation]="navigation()"
+            [showHomeOption]="navigationShowHomeOption()"
+            (onOpen)="isOpenSidenav.set(true)"
+            (onClose)="isOpenSidenav.set(false)">
+            <div></div>
+        </sidenav>
+    
+        <main>   
+            <router-outlet></router-outlet>
+            
+            @if(_showBackdrop()) {
+                <div class="backdrop" (click)="sidenav.Close()"></div>
+            }
+        </main>
+    
+    </div>
+}
+
+@else {
+    <login
+        #login
+        (onLogin)="onLogin.emit($event)"
+        (onRecoveryPassword)="onRecoveryPassword.emit($event)"
+    ></login>
+}
+
+<coer-alert></coer-alert>

@@ -1,0 +1,8 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/coer91.angular",
+  "lib": {
+    "entryFile": "index.ts"
+  },
+  "assets": ["./images", "./styles/lib/svg", "./styles/lib/fonts"]
+}

@@ -1,0 +1,41 @@
+<a class="coer-button" (click)="_Click($event)" [routerLink]="_path()" 
+    [ngStyle]="{ 
+        'width'        : _width(),
+        'min-width'    : minWidth(),
+        'max-width'    : maxWidth(),
+        'height'       : height(),
+        'min-height'   : minHeight(),
+        'max-height'   : maxHeight(),      
+        'margin-top'   : marginTop(),
+        'margin-right' : marginRight(),
+        'margin-bottom': marginBottom(),
+        'margin-left'  : marginLeft(),
+        'display'      : (isHidden()    ? 'none'   : 'inline-block'),
+        'visibility'   : (isInvisible() ? 'hidden' : 'visible'     )    
+    }">
+
+    <button 
+        [id]="_id"
+        type="button"
+        [class]="`${_color()}`" 
+        [ngStyle]="{ 
+            'border'        : (_isEnabled() && ['outline', 'icon-outline', 'icon-outline-rounded'].includes(type()) ? '2px solid' : 'none'),
+            'border-radius' : (['icon-rounded', 'icon-filled-rounded', 'icon-outline-rounded'].includes(type()) ? '25px' : '5px'),
+            'cursor'        : _cursor(),      
+        }"
+    >
+        <span class="label-container">
+            @if(IsNotOnlyWhiteSpace(_icon()) && _iconPosition() === 'left') {
+                <i [class]="_icon()"></i> 
+            }
+            
+            @if(['filled', 'outline'].includes(type())) {
+                <span>{{ _label() }}</span> 
+            }
+            
+            @if(IsNotOnlyWhiteSpace(_icon()) && _iconPosition() === 'right') {
+                <i [class]="_icon()"></i> 
+            }
+        </span> 
+    </button>
+</a>  

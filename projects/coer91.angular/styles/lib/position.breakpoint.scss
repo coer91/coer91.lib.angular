@@ -1,0 +1,32 @@
+:root {
+    --z-index-alert   : 100;
+    --z-index-confirm : 99;
+    --z-index-items   : 98;
+    --z-index-backdrop: 97;
+    --z-index-toolbar : 96;
+    --z-index-sidenav : 95; 
+}
+
+@mixin mixin($breakpoint) {    
+    //z-index 
+    @for $i from 0 through 100 {
+        .#{$breakpoint}z-index-#{$i} {
+            z-index: $i !important;
+        }
+    }  
+
+    //position
+    @each $key, $value in (
+        'static'  : static, 
+        'relative': relative, 
+        'absolute': absolute, 
+        'fixed'   : fixed,
+        'sticky'  : sticky,
+        'inherit' : inherit,
+        'unset'   : unset
+    ) {
+        .#{$breakpoint}position-#{$key} { 
+            position: $value !important; 
+        } 
+    }   
+} 

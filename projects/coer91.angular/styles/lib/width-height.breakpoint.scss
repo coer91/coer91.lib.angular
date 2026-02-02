@@ -1,0 +1,114 @@
+@mixin WidthHeightContent($breakpoint) {
+    @each $key, $value in (
+        'auto'       : auto,
+        'inherit'    : inherit,
+        'fit-content': fit-content, 
+        'min-content': min-content,
+        'max-content': max-content, 
+    ) {
+        .#{$breakpoint}width-#{$key} { 
+            width: $value !important; 
+        }
+        
+        .#{$breakpoint}height-#{$key} { 
+            height: $value !important;
+        }
+    }
+}
+
+
+@mixin First100($breakpoint) {
+    @each $key, $value in (
+        ''  : 1%,
+        'px': 1px, 
+        'vw': 1vw
+    ) {
+        @for $i from 0 through 100 { 
+            .#{$breakpoint}width-#{$i}#{$key}  {
+                width: $i * $value !important;
+            }  
+
+            .#{$breakpoint}min-width-#{$i}#{$key} {
+                min-width: $i * $value !important;
+            }  
+
+            .#{$breakpoint}max-width-#{$i}#{$key} {
+                max-width: $i * $value !important;
+            }   
+
+            .#{$breakpoint}height-#{$i}#{$key} {
+                height: $i * $value !important;
+            } 
+
+            .#{$breakpoint}min-height-#{$i}#{$key} {
+                min-height: $i * $value !important;
+            } 
+
+            .#{$breakpoint}max-height-#{$i}#{$key} {
+                max-height: $i * $value !important;
+            }  
+        } 
+    } 
+}
+
+
+@mixin mixin($breakpoint) {
+    @include WidthHeightContent($breakpoint);
+    @include First100($breakpoint);
+     
+    @for $i from 2 through 10 { 
+        //width
+        .#{$breakpoint}width-#{($i * 100) - 50}px {
+            width: ($i * 100px) - 50px !important;
+        } 
+
+        .#{$breakpoint}width-#{($i * 100)}px {
+            width: ($i * 100px) !important;
+        }
+        
+        //min-width
+        .#{$breakpoint}min-width-#{($i * 100) - 50}px {
+            min-width: ($i * 100px) - 50px !important;
+        } 
+
+        .#{$breakpoint}min-width-#{($i * 100)}px {
+            min-width: ($i * 100px) !important;
+        }
+
+        //max-width
+        .#{$breakpoint}max-width-#{($i * 100) - 50}px {
+            max-width: ($i * 100px) - 50px !important;
+        } 
+
+        .#{$breakpoint}max-width-#{($i * 100)}px {
+            max-width: ($i * 100px) !important;
+        }
+
+        //height
+        .#{$breakpoint}height-#{($i * 100) - 50}px {
+            height: ($i * 100px) - 50px !important;
+        } 
+
+        .#{$breakpoint}height-#{($i * 100)}px {
+            height: ($i * 100px) !important;
+        }
+        
+        //min-height
+        .#{$breakpoint}min-height-#{($i * 100) - 50}px {
+            min-height: ($i * 100px) - 50px !important;
+        } 
+
+        .#{$breakpoint}min-height-#{($i * 100)}px {
+            min-height: ($i * 100px) !important;
+        }
+
+        //max-height
+        .#{$breakpoint}max-height-#{($i * 100) - 50}px {
+            max-height: ($i * 100px) - 50px !important;
+        } 
+
+        .#{$breakpoint}max-height-#{($i * 100)}px {
+            max-height: ($i * 100px) !important;
+        }
+    }
+}

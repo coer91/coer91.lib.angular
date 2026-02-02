@@ -1,0 +1,7 @@
+@mixin mixin($breakpoint) {
+    @for $i from 0 through 50 {  
+        .#{$breakpoint}gap-#{$i}px {
+            gap: $i * 1px !important;
+        } 
+    } 
+}

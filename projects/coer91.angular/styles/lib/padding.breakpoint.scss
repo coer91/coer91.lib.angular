@@ -1,0 +1,33 @@
+@mixin mixin($breakpoint) {
+    @for $i from 0 through 50 {   
+        .#{$breakpoint}padding-#{$i}px {
+            padding: $i * 1px !important;
+        }
+        
+        .#{$breakpoint}padding-y-#{$i}px {
+            padding-top: $i * 1px !important;
+            padding-bottom: $i * 1px !important;
+        }
+
+        .#{$breakpoint}padding-x-#{$i}px {
+            padding-left: $i * 1px !important;
+            padding-right: $i * 1px !important;
+        } 
+        
+        .#{$breakpoint}padding-top-#{$i}px {
+            padding-top: $i * 1px !important;
+        } 
+
+        .#{$breakpoint}padding-right-#{$i}px {
+            padding-right: $i * 1px !important;
+        }  
+
+        .#{$breakpoint}padding-bottom-#{$i}px {
+            padding-bottom: $i * 1px !important;
+        }  
+
+        .#{$breakpoint}padding-left-#{$i}px {
+            padding-left: $i * 1px !important;
+        }  
+    } 
+}

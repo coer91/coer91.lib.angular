@@ -1,0 +1,67 @@
+@mixin Container() { 
+    animation-name: __KeyOpacity100 !important; 
+    animation-iteration-count: 1 !important; 
+    animation-duration: 1.0s !important;
+    animation-direction: reverse !important;
+    box-shadow: 0px 1px 12px -10px var(--dark) !important;
+    background-color: var(--containers);
+    border-radius: 8px;
+    margin: 15px 30px 0px 30px;
+    padding: 10px;
+    min-height: 35px;      
+    
+    @media (min-width: 0px) and (max-width: 499px) {
+        margin: 15px 15px 0px 15px;
+    }   
+}
+
+.container-section {
+    @include Container(); 
+}
+
+.container-code {
+    font-family: 'consolas', 'console', monospace !important;
+    background-color: var(--dark) !important;
+    color: var(--smoke) !important;
+    border-radius: 10px !important;
+    padding: 10px !important;
+    font-size: 14px;
+} 
+
+.readonly { 
+    cursor: default !important; 
+    background-color: var(--readonly) !important;
+    border-color: var(--readonly) !important;
+    box-shadow: none !important;
+    color: var(--dark) !important;
+}
+
+.loading {
+    position: relative !important;
+    top: 0px !important;
+    right: 0px !important;
+    bottom: 0px !important;
+    left: 0px !important;
+    cursor: wait !important;  
+    background-color: var(--loading) !important;
+    animation: __KeyOpacity50 0.8s ease-in-out infinite alternate !important; 
+}
+
+.backdrop {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;  
+    background-color: var(--backdrop) !important;
+    backdrop-filter: blur(1.5px) !important;
+}
+
+.caret-none {
+    caret-color: transparent !important;
+}
+
+.no-selection,
+.no-selection::selection {
+    user-select: none !important;
+} 

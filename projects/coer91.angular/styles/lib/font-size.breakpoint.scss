@@ -1,0 +1,27 @@
+@mixin mixin($breakpoint) {  
+    .#{$breakpoint}font-size-small { 
+        font-size: 10px !important; 
+    } 
+
+    .#{$breakpoint}font-size-medium { 
+        font-size: 13px !important; 
+    } 
+
+    .#{$breakpoint}font-size-normal { 
+        font-size: 16px !important; 
+    } 
+
+    .#{$breakpoint}font-size-large { 
+        font-size: 18px !important; 
+    }  
+
+    .#{$breakpoint}font-size-larger { 
+        font-size: 20px !important; 
+    } 
+
+    @for $i from 0 through 50 {
+        .#{$breakpoint}font-size-#{$i}px {
+            font-size: $i * 1px !important;
+        }
+    } 
+} 

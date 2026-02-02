@@ -1,0 +1,16 @@
+@each $key, $value in ( 
+    'default'  : default, 
+    'pointer'  : pointer, 
+    'loading'  : wait, 
+    'drag'     : grabbing, 
+    'drop'     : grab, 
+    'text'     : text, 
+    'forbident': no-drop,
+    'none'     : none,
+    'crosshair': crosshair,
+    'move'     : move      
+) {   
+    .cursor-#{$key} {
+        cursor: $value !important; 
+    }
+} 

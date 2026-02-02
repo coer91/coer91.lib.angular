@@ -1,0 +1,95 @@
+<nav [class]="_width()" (click)="show() ? null : Open()">
+    <ul class="lv1">
+        @for(lv1 of SetId(_navigation()); let i1 = $index; track `${lv1.id}-${i1}`) {
+            <li class="lv1">
+                @if(_IsOption(lv1)) {
+                    <div [id]="_IdGenerate(lv1.id, 0, 0, i1)" class="option lv1-option" (click)="_ClickOptionLv1(lv1, _IdGenerate(lv1.id, 0, 0, i1));">
+                        @if(IsNotOnlyWhiteSpace(lv1.icon)) {
+                            <i [class]="lv1.icon"></i>
+                        }
+
+                        @else if(!show()) {
+                            <i class='i91-circle-fill'></i>
+                        }
+
+                        <span>{{ lv1.label }}</span>
+                    </div>
+                }
+
+                @else if(_IsMenu(lv1)) {
+                    <coer-sidenav-accordion 
+                        level="lv1"
+                        [icon]="lv1.icon" 
+                        [title]="lv1.label" 
+                        [showSidenav]="show()"
+                        [id]="_IdGenerate(lv1.id, 0, 0, i1)" 
+                        (onOpen)="_ClickMenu(lv1, 'OPEN', _IdGenerate(lv1.id, 0, 0, i1))">
+                        
+                        <ul class="lv2">
+                            @for(lv2 of SetId(lv1.items!); let i2 = $index; track `${lv2.id}-${i2}`) {
+                                <li class="lv2">
+                                    @if(_IsOption(lv2)) {
+                                        <div [id]="_IdGenerate(lv1.id, lv2.id, 0, i2)" class="option lv2-option" (click)="_ClickOptionLv2(lv2, lv1, _IdGenerate(lv1.id, lv2.id, 0, i2), _IdGenerate(lv1.id, 0, 0, i1))">
+                                            @if(IsNotOnlyWhiteSpace(lv2.icon)) {
+                                                <i [class]="lv2.icon"></i>
+                                            }
+                                            <span>{{ lv2.label }} </span>
+                                        </div>
+                                    }
+    
+                                    @else if(_IsMenu(lv2)) {
+                                        <coer-sidenav-accordion 
+                                            level="lv2"
+                                            [icon]="lv2.icon" 
+                                            [title]="lv2.label"  
+                                            [showSidenav]="show()"
+                                            [id]="_IdGenerate(lv1.id, lv2.id, 0, i2)" 
+                                            (onOpen)="_ClickSubmenu(lv2, lv1, 'OPEN', _IdGenerate(lv1.id, lv2.id, 0, i2), _IdGenerate(lv1.id, 0, 0, i1))">
+                                            
+                                            <ul class="lv3">
+                                                @for(lv3 of SetId(lv2.items!); let i3 = $index; track `${lv3.id}-${i3}`) {
+                                                    @if(_IsOption(lv3)) {
+                                                        <div [id]="_IdGenerate(lv1.id, lv2.id, lv3.id, i3)" class="option lv3-option" (click)="_ClickOptionLv3(lv3, lv2, lv1, _IdGenerate(lv1.id, lv2.id, lv3.id, i3), _IdGenerate(lv1.id, lv2.id, 0, i2), _IdGenerate(lv1.id, 0, 0, i1))">
+                                                            <i [class]="IsNotOnlyWhiteSpace(lv3.icon) ? lv3.icon : 'width-16px'"></i> 
+                                                            <span>{{ lv3.label }}</span>
+                                                        </div>
+                                                    }
+                                                }
+                                            </ul>
+                                        </coer-sidenav-accordion>
+                                    }
+
+                                    @else {
+                                        <div [id]="_IdGenerate(lv1.id, lv2.id, 0, i2)" class="option lv2-option padding-right-10px" (click)="_ClickSubmenuGrid(lv2, lv1, _IdGenerate(lv1.id, lv2.id, 0, i2), _IdGenerate(lv1.id, 0, 0, i1))">
+                                            @if(IsNotOnlyWhiteSpace(lv2.icon)) {
+                                                <i [class]="lv2.icon"></i>
+                                            }
+
+                                            <div class="grid">
+                                                <span>{{ lv2.label }}</span>
+                                                <i class="i91-grid"></i>
+                                            </div> 
+                                        </div>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </coer-sidenav-accordion>
+                }
+
+                @else {
+                    <div [id]="_IdGenerate(lv1.id, 0, 0, i1)" class="option lv1-option padding-right-10px" (click)="_ClickMenuGrid(lv1, _IdGenerate(lv1.id, 0, 0, i1))">
+                        @if(IsNotOnlyWhiteSpace(lv1.icon)) {
+                            <i [class]="lv1.icon"></i>
+                        }
+
+                        <div class="grid">
+                            <span>{{ lv1.label }}</span>
+                            <i class="i91-grid"></i>
+                        </div> 
+                    </div>
+                }
+            </li>
+        }
+    </ul>
+</nav> 

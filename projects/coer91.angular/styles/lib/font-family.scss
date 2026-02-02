@@ -1,0 +1,53 @@
+@font-face {
+    font-family: 'Consolas';
+    src: url('./fonts/consolas.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+.font-family-consolas {
+    font-family: 'Consolas' !important;
+}
+
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('./fonts/montserrat.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+.font-family-montserrat {
+    font-family: 'Montserrat' !important;
+}
+
+
+@font-face {
+    font-family: 'OpenSans';
+    src: url('./fonts/open-sans.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+.font-family-open-sans {
+    font-family: 'OpenSans' !important;
+}
+
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./fonts/roboto.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+.font-family-roboto {
+    font-family: 'Roboto' !important;
+} 
+
+
+@font-face {
+    font-family: 'Roboto Monospace';
+    src: url('./fonts/roboto-monospace.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+.font-family-roboto-monospace {
+    font-family: 'Roboto Monospace' !important;
+} 
