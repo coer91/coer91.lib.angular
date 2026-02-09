@@ -33,25 +33,21 @@ declare global {
 
         removeClass(className: string): HTMLElement | null;
 
-        hasChildren(): boolean;
-
         getChildren(): HTMLElement[];
 
-        getFather(): HTMLElement | null;
-
-        getGrandfather(): HTMLElement | null;
+        getFather(): HTMLElement | null; 
     }
 }
 
-HTMLElement.prototype.scrollX = function(x: number = 0): HTMLElement | null {
+HTMLElement.prototype.scrollX = function(x: number): HTMLElement | null {
     return HTMLElements.ScrollX(this, x);
 };
 
-HTMLElement.prototype.scrollY = function(y: number = 0): HTMLElement | null {
+HTMLElement.prototype.scrollY = function(y: number): HTMLElement | null {
     return HTMLElements.ScrollY(this, y);
 };
 
-HTMLElement.prototype.scrollToCoordinates = function(x: number = 0, y: number = 0): HTMLElement | null {
+HTMLElement.prototype.scrollToCoordinates = function(x: number, y: number): HTMLElement | null {
     return HTMLElements.ScrollToCoordinates(this, x, y);
 };
 
@@ -87,20 +83,12 @@ HTMLElement.prototype.removeClass = function(className: string): HTMLElement | n
     return HTMLElements.RemoveClass(this, className);
 }; 
 
-HTMLElement.prototype.hasChildren = function(): boolean {
-    return HTMLElements.HasChildren(this);
-}; 
-
 HTMLElement.prototype.getChildren = function(): HTMLElement[] {
     return HTMLElements.GetChildren(this);
 }; 
 
 HTMLElement.prototype.getFather = function(): HTMLElement | null {
     return HTMLElements.GetFather(this);
-}; 
-
-HTMLElement.prototype.getGrandfather = function(): HTMLElement | null {
-    return HTMLElements.GetGrandfather(this);
-}; 
+};  
 
 export {};

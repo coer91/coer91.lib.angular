@@ -5,6 +5,7 @@
       "coer91.angular":            ["./projects/coer91.angular/index.ts"           ],
       "coer91.angular/components": ["./projects/coer91.angular/components/index.ts"],  
       "coer91.angular/core":       ["./projects/coer91.angular/core/index.ts"      ],  
+      "coer91.angular/directives": ["./projects/coer91.angular/directives/index.ts"],  
       "coer91.angular/extensions": ["./projects/coer91.angular/extensions/index.ts"],  
       "coer91.angular/interfaces": ["./projects/coer91.angular/interfaces/index.ts"],
       "coer91.angular/pages":      ["./projects/coer91.angular/pages/index.ts"     ],

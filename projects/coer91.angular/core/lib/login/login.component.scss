@@ -44,12 +44,25 @@ main {
             font-weight: bold !important;
             text-decoration: underline;
         }  
-    }
+    } 
 
-    video {
+
+    video,
+    div.login-background,
+    div.login-background-image {
         width: 100% !important;
         height: 100% !important; 
+        position: absolute !important;
+        background: radial-gradient(circle, var(--blue), var(--dark));
+    }
+
+    div.login-background-image {
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+    }
+
+    video {  
         object-fit: cover !important;
-        position: absolute !important; 
     }
 }

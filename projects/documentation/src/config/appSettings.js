@@ -5,7 +5,7 @@ const appSettings = {
         title: 'COER 91',
         version: '1.0.0', 
         imageURL: '',
-        byCompany: 'COER 91'
+        forCompany: 'COER 91'
     },
     webAPI: {
         development: {
@@ -18,6 +18,10 @@ const appSettings = {
             mySystem: ''
         }
     },
+    background: {
+        home: 'coer-system-91.png',
+        login: 'clip.mp4'
+    },
     security: {
         useJWT: true
     },
@@ -25,6 +29,6 @@ const appSettings = {
         format: 'MDY'
     },
     navigation: {
-        static: false 
+        static: true 
     }
 }

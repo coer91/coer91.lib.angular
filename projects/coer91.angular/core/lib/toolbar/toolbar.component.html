@@ -16,9 +16,9 @@
                     <i [class]="_icon()"></i> 
                 }
             </span>
-        </div>
+        </div> 
 
-        <div class="user"> 
+        <div id="coer91-toolbar-user" class="user" (click)="_isCollapsed.set(!_isCollapsed())"> 
             <figure>
                 <div class="user-image" [ngStyle]="{ backgroundImage: `url('${userImage() | noImage: 'USER'}')` }"></div>
                 
@@ -29,6 +29,30 @@
                     </div>
                 }
             </figure>
+
+            <ul [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
+                @for(item of _menu(); track item.index) {
+                    <li (click)="_SelectMenu(item)"> 
+                        @if((item?.icon || '').length > 0) {
+                            <span class="icon-container-option">
+                                <i [class]="item?.icon"></i> 
+                            </span>
+                        } 
+
+                        <span class="display-property-option">{{ item?.label || '' }}</span>    
+                    </li>
+                }
+            </ul>
         </div>
     </h2>
 </header> 
+
+
+<coer-modal #profileModal [title]="user()?.fullName || ''" icon="i91-user-fill">
+    {{ user() | json }}
+</coer-modal>
+
+
+<coer-modal #passwordModal title="Change Password" icon="i91-lock-fill">
+     
+</coer-modal>

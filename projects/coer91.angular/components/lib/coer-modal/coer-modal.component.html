@@ -1,0 +1,65 @@
+<aside title="" 
+    (click)="_clickBackdrop($event)"
+    class="coer-modal backdrop" 
+    [style]="{ 
+        'display': (_showBackdrop() ? 'flex' : 'none'),
+        'align-items': _alignY(), 
+        'justify-content': _alignX() 
+    }">
+    <div [id]="`${_id}-content`"
+        class="coer-modal-content"
+        (click)="$event.stopPropagation()"
+        [ngStyle]="{ 
+            'transform': (_showContent() ? 'scale(1.0)' : 'scale(0)'),
+            'grid-template-rows': _gridTemplateRows(), 
+            'margin'   : _margin(),  
+            'width'    : _width(), 
+            'max-width': _maxWidth()
+        }">
+
+        @if(_showHeader()) {
+            <header> 
+                <h3>
+                    @if(icon().length > 3) {
+                        <i [class]="icon()"></i>
+                    }
+                    <span> {{ title() }} </span>
+                </h3>
+
+                @if(showCancelButton()) {
+                    <coer-button
+                        type="icon-rounded"
+                        icon="i91-mark font-size-25px"
+                        color="secondary"
+                        minWidth="25px"
+                        maxWidth="25px"
+                        minHeight="25px"
+                        maxHeight="25px"
+                        (onClick)="Close()"
+                    ></coer-button>
+                }
+            </header>
+        }
+             
+        <section [ngStyle]="{ 
+            'width'     : _width(), 
+            'max-width' : _maxWidth(),
+            'height'    : height(), 
+            'max-height': _maxHeight() 
+        }"> 
+            @if(_modalBody()?.template && _modalBody()?.show()) {
+                <ng-container [ngTemplateOutlet]="_modalBody().template"></ng-container>
+            }
+    
+            @else {
+                <ng-content></ng-content>
+            }
+        </section>
+
+        @if(_showFooter()) { 
+            <footer [ngStyle]="{ 'width': _width(), 'max-width': _maxWidth() }">
+                <ng-container [ngTemplateOutlet]="_modalFooter().template"></ng-container>
+            </footer>
+        }
+    </div>
+</aside>

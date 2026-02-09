@@ -208,10 +208,15 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
             project: '',
             title: 'COER 91',
             version: '0.0.0',
-            byCompany: 'COER 91',
+            forCompany: 'COER 91',
             ...appSettings?.appInfo
         },
         ...webAPI,
+        background: {
+            home: '',
+            login: '',
+            ...appSettings?.background
+        },
         security: {
             useJWT: false,
             ...appSettings?.security

@@ -76,6 +76,7 @@
     'info-square',
     'info',  
     'laptop-code', 
+    'lock-fill',
     'logo-angular-fill',
     'logo-coer91',
     'logo-csharp-fill',
@@ -87,6 +88,8 @@
     'reply',
     'sort-asc-arrow-down',
     'sort-desc-arrow-down', 
+    'user',
+    'user-fill'
 ) {
     .i91-#{$icon} { 
         @include Icon();

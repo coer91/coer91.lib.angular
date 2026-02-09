@@ -13,10 +13,11 @@ import { appSettings, AuthService } from '@appSettings';
     template: `
         <coer91
             #coer91 
-            [navigation]="navigation()"
+            [navigation]="navigation()" 
             (onLogin)="Login($event)"
             (onRecoveryPassword)="null"
             (onUpdateJWT)="UpdateJWT()"
+            (onClickToolbarMenu)="Test($event)"
         ></coer91>
     `
 })
@@ -93,5 +94,10 @@ export class AppRoot {
             console.error(JWT.message);
             this._coer91().alert.Error('UpdateJWT');
         } 
+    }
+
+
+    Test(ev: any) {
+        console.log(ev)
     }
 }

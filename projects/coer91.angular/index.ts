@@ -7,9 +7,9 @@ import 'coer91.angular/extensions';
 //Modules    
 import * as components from 'coer91.angular/components';
 import * as core       from 'coer91.angular/core'; 
+import * as directives from 'coer91.angular/directives'; 
 import * as pipes      from 'coer91.angular/pipes'; 
 import * as tools      from 'coer91.angular/tools';
-// import * as directives from 'coer91.angular/directives'; 
 
 @NgModule({    
     imports: [  
@@ -20,9 +20,9 @@ import * as tools      from 'coer91.angular/tools';
         // ReactiveFormsModule, 
         components.ComponentsModule,
         core.CoreModule, 
+        directives.DirectivesModule,
         pipes.PipesModule,
-        tools.CoerAlert 
-        // directives.DirectivesModule,
+        tools.CoerAlert, 
     ], 
     providers: [
         tools.CoerAlert
@@ -34,14 +34,9 @@ import * as tools      from 'coer91.angular/tools';
         // FormsModule,
         // ReactiveFormsModule,  
         components.CoerButton,
-        // components.CoerGrid,
-        // components.CoerPageTitle,
-        // components.CoerSelectBox, 
-        // components.CoerSwitch,
-        // components.CoerTextBox, 
-        // components.CoerAccordion,
-        // directives.ElementRefDirective,  
+        components.CoerModal, 
         core.Coer91,
+        directives.TemplateRefDirective,  
         pipes.DatePipe,
         pipes.DateTimePipe,
         pipes.CurrencyPipe,

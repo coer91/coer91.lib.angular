@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, output, signal, viewChild } from '@angular/core';  
-import { ILogin, ILoginResponse, IMenu, IUser } from 'coer91.angular/interfaces';
+import { ILogin, ILoginResponse, IMenu, IToolbarMenu, IUser } from 'coer91.angular/interfaces';
 import { Access, CoerAlert, Dates, Screen, Tools } from 'coer91.angular/tools';
 import { screenSizeSIGNAL, userSIGNAL } from 'coer91.angular/signals';
 import { LoginPage } from '../login/login.component';
@@ -29,11 +29,19 @@ export class Coer91 {
     //Inputs  
     public readonly navigation = input.required<IMenu[]>();
     public readonly navigationShowHomeOption = input<boolean>(true);
+    public readonly toolbarMenu = input<IToolbarMenu[]>([]);
+    public readonly toolbarShowProfileMenu = input<boolean>(true); 
+    public readonly toolbarPreventProfileMenu = input<boolean>(false); 
+    public readonly toolbarShowPasswordMenu = input<boolean>(true); 
+    public readonly toolbarPreventPasswordMenu = input<boolean>(false);  
+    public readonly toolbarShowLogOutMenu = input<boolean>(true);  
+    public readonly toolbarPreventLogOutMenu = input<boolean>(false);
 
     //Output
     protected readonly onLogin            = output<ILogin>();
     protected readonly onRecoveryPassword = output<string>(); 
     protected readonly onUpdateJWT        = output<void>();
+    protected readonly onClickToolbarMenu = output<IToolbarMenu>();
  
     constructor() {    
         Screen.Resize.subscribe(screenSizeSIGNAL.set); 

@@ -11,19 +11,19 @@ declare const appSettings: any;
 })
 export class HomePage {   
   
-    protected readonly img = 'coer91/images/coer91.png';
     protected readonly version = '0.0.0'; 
+    protected readonly img = 'coer91/images/coer-system.png';
 
     constructor() {
-        if(Tools.IsNotOnlyWhiteSpace(appSettings?.appInfo?.imageURL)) this.img = appSettings?.appInfo?.imageURL;
-        if(Tools.IsNotOnlyWhiteSpace(appSettings?.appInfo?.version)) this.version = appSettings?.appInfo?.version;
+        if(Tools.IsNotOnlyWhiteSpace(appSettings?.appInfo?.version)) this.version = appSettings?.appInfo?.version; 
+        if(Tools.IsNotOnlyWhiteSpace(appSettings?.background?.home)) this.img = appSettings?.background?.home;
     } 
 
 
     //Computed
     protected _environment = computed(() => {
         return environmentSIGNAL().info === 'PRODUCTION'
-            ? `${appSettings?.appInfo?.byCompany} © ${Dates.GetCurrentDate().getFullYear()}` 
+            ? `${appSettings?.appInfo?.forCompany} © ${Dates.GetCurrentDate().getFullYear()}` 
             : environmentSIGNAL().info;
     });
 }

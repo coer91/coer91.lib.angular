@@ -31,11 +31,12 @@
 //     100% { transform: rotate(25deg)  } 
 // }
 
-// @keyframes __KeyScale {
-//     from { transform: scale(1.0) }
-//     to   { transform: scale(1.3) }
-// }
-
+@for $i from 1 through 10 { 
+    @keyframes __KeyScale#{$i} { 
+        from { transform: scale(1.0); } 
+        to { transform: scale(1 + $i * 0.05); } 
+    } 
+}
  
 .animation-fadeIn {
     animation-name: __KeyOpacity100 !important;

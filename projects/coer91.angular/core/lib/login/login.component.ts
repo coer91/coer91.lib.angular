@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, computed, output, signal, viewChild } from '@angular/core';  
-import { CoerButton } from 'coer91.angular/components';
+import { AfterViewInit, Component, output, signal } from '@angular/core';  
 import { isLoadingSIGNAL } from 'coer91.angular/signals';
 import { Tools } from 'coer91.angular/tools';
 import { ILogin } from 'coer91.angular/interfaces'; 
@@ -21,16 +20,22 @@ export class LoginPage implements AfterViewInit {
     // protected readonly _recoveryButton = viewChild.required<CoerButton>('recoveryButton');
 
     //Variables
-    protected readonly title     = appSettings.appInfo.title;
-    protected readonly isLoading = isLoadingSIGNAL; 
-    protected readonly view      = signal<'LOGIN' | 'RECOVERY'>('LOGIN');  
-    protected readonly user      = signal<string>(''); 
-    protected readonly password  = signal<string>('');
-    protected readonly clip      = signal<string>('./clip.mp4'); 
+    protected readonly title      = appSettings.appInfo.title;
+    protected readonly isLoading  = isLoadingSIGNAL; 
+    protected readonly background = ''; 
+    protected readonly view       = signal<'LOGIN' | 'RECOVERY'>('LOGIN');  
+    protected readonly user       = signal<string>(''); 
+    protected readonly password   = signal<string>(''); 
 
     //Outputs 
     protected readonly onLogin = output<ILogin>();
     protected readonly onRecoveryPassword = output<string>();
+
+
+    constructor() {
+        if(Tools.IsNotOnlyWhiteSpace(appSettings?.background?.login)) this.background = appSettings?.background?.login; 
+    }
+
 
     async ngAfterViewInit() {
         // await Tools.Sleep(1000);

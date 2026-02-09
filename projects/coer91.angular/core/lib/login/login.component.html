@@ -17,11 +17,20 @@
                 {{ (view() === 'LOGIN' ? 'Recovery' : 'Back') }}
             </section>
         }
-    </div> 
-     
-    @if(clip().length > 0) {
-        <video autoPlay loop muted playsInline>
-            <source [src]="clip()" type="video/mp4" />
+    </div>  
+
+    <!-- background -->
+    @if(background.length <= 0) {
+        <div class="login-background"></div>
+    }
+
+    @else if (background.toLowerCase().endsWith('.png') || background.toLowerCase().endsWith('.jpeg')) {
+        <div class="login-background-image" [ngStyle]="{ backgroundImage: `url('${background}')` }"></div>
+    }
+
+    @else if (background.toLowerCase().endsWith('.mp4')) {
+        <video autoplay loop muted playsinline>
+            <source [src]="background" type="video/mp4" />
         </video>
-    }   
+    }
 </main>

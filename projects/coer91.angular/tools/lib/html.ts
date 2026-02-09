@@ -1,3 +1,4 @@
+import { Observable } from "rxjs";
 import { Tools } from "./generic";
 
 export class HTMLElements {
@@ -21,22 +22,23 @@ export class HTMLElements {
     }
 
 
+    /** Returns the first element within node's descendants whose ID is elementId. */
+    public static SelectElementById = (id: string): HTMLElement | null => {    
+        if(!id.startsWith('#')) id = `#${id}`;
+        return this._QuerySelector(id);
+    }
+
+
     /** Returns the first element that is a descendant of node that matches selectors */
     public static SelectElement = (selector: string): HTMLElement | null => { 
         return this._QuerySelector(selector);
-    }
-
-
-    /** Returns the first element within node's descendants whose ID is elementId. */
-    public static SelectElementById = (id: string): HTMLElement | null => {         
-        return this._QuerySelector(`#${id}`);
-    }
+    } 
 
 
     /** Returns all element descendants of node that match selectors. */
     public static SelectAllElements = (selector: string): HTMLElement[] => { 
         try {
-            return Tools.IsOnlyWhiteSpace(selector) ? [] : Array.from(document.querySelectorAll(selector));
+            return Tools.IsNotOnlyWhiteSpace(selector) ? Array.from(document.querySelectorAll(selector)) : [];
         }
 
         catch(error) {
@@ -47,7 +49,7 @@ export class HTMLElements {
 
 
     /** */
-    public static ScrollX = (element: string | HTMLElement, x: number = 0): HTMLElement | null => { 
+    public static ScrollX = (element: string | HTMLElement, x: number): HTMLElement | null => { 
         const HTML_ELEMENT = this._QuerySelector(element); 
         HTML_ELEMENT?.scroll({ top: 0, left: x, behavior: 'smooth' });
         return HTML_ELEMENT;
@@ -55,7 +57,7 @@ export class HTMLElements {
 
 
     /** */
-    public static ScrollY = (element: string | HTMLElement, y: number = 0): HTMLElement | null => { 
+    public static ScrollY = (element: string | HTMLElement, y: number): HTMLElement | null => { 
         const HTML_ELEMENT = this._QuerySelector(element);         
         HTML_ELEMENT?.scroll({ top: y, left: 0, behavior: 'smooth' });
         return HTML_ELEMENT;
@@ -63,7 +65,7 @@ export class HTMLElements {
 
 
     /** */
-    public static ScrollToCoordinates = (element: string | HTMLElement, x: number = 0, y: number = 0): HTMLElement | null => { 
+    public static ScrollToCoordinates = (element: string | HTMLElement, x: number, y: number): HTMLElement | null => { 
         const HTML_ELEMENT = this._QuerySelector(element);         
         HTML_ELEMENT?.scroll({ top: y, left: x, behavior: 'smooth' });
         return HTML_ELEMENT;
@@ -142,12 +144,6 @@ export class HTMLElements {
 
 
     /** */
-    public static HasChildren = (element: string | HTMLElement): boolean => {
-        return this.GetChildren(element).length > 0;
-    }
-
-
-    /** */
     public static GetChildren = (element: string | HTMLElement): HTMLElement[] => {
         const HTML_ELEMENT = this._QuerySelector(element);  
         return Array.from(HTML_ELEMENT?.children || []) as HTMLElement[];  
@@ -162,8 +158,18 @@ export class HTMLElements {
 
 
     /** */
-    public static GetGrandfather = (element: string | HTMLElement): HTMLElement | null => {
-        const HTML_ELEMENT = this._QuerySelector(element);   
-        return HTML_ELEMENT ? this.GetFather(HTML_ELEMENT.parentElement!) : null;
-    }
+    public static OnMouseLeave = (element: string | HTMLElement) => {
+        const ELEMENT = this._QuerySelector(element); 
+
+        if(ELEMENT) {
+            return new Observable<'mouseleave'>(subscriber => {  
+                const Handle = () => subscriber.next('mouseleave');  
+                ELEMENT.addEventListener("mouseleave", Handle); 
+                return () => ELEMENT.removeEventListener("mouseleave", Handle);
+            }); 
+        } 
+
+        console.warn('Element not found for OnMouseLeave');
+        return null; 
+    } 
 };

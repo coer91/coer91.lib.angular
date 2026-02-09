@@ -18,3 +18,4 @@ export * from './lib/http/patch.interface';
 export * from './lib/navigation/menu-selected.interface';
 export * from './lib/navigation/menu.interface';
 export * from './lib/navigation/source.interface';
+export * from './lib/navigation/toolbar-menu.interface';

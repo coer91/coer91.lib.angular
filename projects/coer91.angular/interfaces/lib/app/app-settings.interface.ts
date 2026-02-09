@@ -7,9 +7,13 @@ export interface IAppSettings {
         title: string;
         version: string;
         imageURL: string;
-        byCompany: string;
+        forCompany: string;
     }, 
     environment: IEnvironments;
+    background: {
+        home: string;
+        login: string;
+    },
     security: {
         useJWT: boolean;
     }

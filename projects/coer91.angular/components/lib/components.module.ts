@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 
 //Components  
 import { CoerButton } from './coer-button/coer-button.component'; 
+import { CoerModal } from './coer-modal/coer-modal.component';
 
 @NgModule({
     imports: [
@@ -11,10 +12,12 @@ import { CoerButton } from './coer-button/coer-button.component';
         RouterModule,
     ],
     declarations: [  
-        CoerButton 
+        CoerButton,
+        CoerModal, 
     ],
     exports: [   
-        CoerButton 
+        CoerButton,
+        CoerModal, 
     ]
 })
 export class ComponentsModule { }

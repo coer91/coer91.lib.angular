@@ -1,5 +1,15 @@
 @if(_isLogin()) {
-    <coer-toolbar (onClickToogle)="sidenav.Toggle()"></coer-toolbar>
+    <coer-toolbar 
+        [menu]="toolbarMenu()"
+        [showProfileMenu]="toolbarShowProfileMenu()"    
+        [preventProfileMenu]="toolbarPreventProfileMenu()"
+        [showPasswordMenu]="toolbarShowPasswordMenu()"   
+        [preventPasswordMenu]="toolbarPreventPasswordMenu()"
+        [showLogOutMenu]="toolbarShowLogOutMenu()"     
+        [preventLogOutMenu]="toolbarPreventLogOutMenu()"  
+        (onClickToogle)="sidenav.Toggle()"
+        (onClickToolbarMenu)="onClickToolbarMenu.emit($event)"
+    ></coer-toolbar>
     
     <div class="coer91">
         <sidenav 
