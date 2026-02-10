@@ -1,6 +1,6 @@
 import { Component, computed } from '@angular/core';  
 import { environmentSIGNAL } from 'coer91.angular/signals';
-import { Dates, Tools } from 'coer91.angular/tools'; 
+import { Dates, Page, Tools } from 'coer91.angular/tools'; 
 declare const appSettings: any;
 
 @Component({
@@ -9,12 +9,13 @@ declare const appSettings: any;
     styleUrl: './home.component.scss',
     standalone: false
 })
-export class HomePage {   
+export class HomePage extends Page {   
   
     protected readonly version = '0.0.0'; 
     protected readonly img = 'coer91/images/coer-system.png';
 
     constructor() {
+        super('home');
         if(Tools.IsNotOnlyWhiteSpace(appSettings?.appInfo?.version)) this.version = appSettings?.appInfo?.version; 
         if(Tools.IsNotOnlyWhiteSpace(appSettings?.background?.home)) this.img = appSettings?.background?.home;
     } 

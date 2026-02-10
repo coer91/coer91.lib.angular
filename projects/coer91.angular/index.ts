@@ -35,6 +35,7 @@ import * as tools      from 'coer91.angular/tools';
         // ReactiveFormsModule,  
         components.CoerButton,
         components.CoerModal, 
+        components.CoerPageTitle, 
         core.Coer91,
         directives.TemplateRefDirective,  
         pipes.DatePipe,

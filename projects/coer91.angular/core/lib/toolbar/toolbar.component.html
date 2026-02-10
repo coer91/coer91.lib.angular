@@ -30,7 +30,7 @@
                 }
             </figure>
 
-            <ul [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
+            <ul [ngClass]="{ 'absolute-menu': !_showIdentity() }" [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
                 @for(item of _menu(); track item.index) {
                     <li (click)="_SelectMenu(item)"> 
                         @if((item?.icon || '').length > 0) {

@@ -1,4 +1,4 @@
-export interface ISource {
+export interface IAppSource {
     page: string;
     path: string;
 }

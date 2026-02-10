@@ -1,9 +1,10 @@
 import { SidenavAccordion } from './coer-sidenav-accordion/coer-sidenav-accordion.component'; 
 import { Component, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';  
-import { HTMLElements, Strings, Tools, Navigation, Source, Collections } from 'coer91.angular/tools';
+import { HTMLElements, Strings, Tools, Navigation, SourcePage, Collections } from 'coer91.angular/tools';
 import { navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';
 import { Router } from '@angular/router';
+declare const appSettings: any;
 
 @Component({
     selector: 'sidenav',
@@ -104,7 +105,7 @@ export class Sidenav {
     protected _ClickOptionLv1(lv1: IMenu, lv1Id: string): void {
         if(!this.show()) return;
 
-        Source.Reset(); 
+        this._Reset(); 
 
         this._NavigateTo({
             id: lv1Id,
@@ -122,7 +123,7 @@ export class Sidenav {
     protected _ClickOptionLv2(lv2: IMenu, lv1: IMenu, lv2Id: string, lv1Id: string): void {
         if(!this.show()) return;
 
-        Source.Reset();
+        this._Reset();
 
         this._NavigateTo({
             id: lv2Id,
@@ -141,7 +142,7 @@ export class Sidenav {
     protected _ClickOptionLv3(lv3: IMenu, lv2: IMenu, lv1: IMenu, lv3Id: string, lv2Id: string, lv1Id: string): void {
         if(!this.show()) return;
 
-        Source.Reset();
+        this._Reset();
 
         this._NavigateTo({
             id: lv3Id,
@@ -198,7 +199,7 @@ export class Sidenav {
     protected _ClickMenuGrid(lv1: IMenu, lv1Id: string): void {
         if(!this.show()) return;
         
-        Source.Reset();
+        this._Reset();
 
         this._NavigateTo({
             id: lv1Id,
@@ -216,7 +217,7 @@ export class Sidenav {
     protected _ClickSubmenuGrid(lv2: IMenu, lv1: IMenu, lv2Id: string, lv1Id: string): void {
         if(!this.show()) return;
         
-        Source.Reset();
+        this._Reset();
 
         this._NavigateTo({
             id: lv1Id,
@@ -308,6 +309,13 @@ export class Sidenav {
             else accordion.Close();
         }  
     } 
+
+
+    //Function
+    protected _Reset(): void {
+        const storage = (appSettings?.appInfo?.project as string).replaceAll(' ', '') || 'coer91';
+        sessionStorage.removeItem(storage);
+    }
 
 
     /** */

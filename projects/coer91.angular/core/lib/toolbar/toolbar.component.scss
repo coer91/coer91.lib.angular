@@ -81,11 +81,8 @@ header {
                 box-shadow: 0px 5px 10px -3px var(--dark) !important;
                 font-size: 16px !important;
                 overflow: auto !important;
-                min-width: 200px !important;
-                max-width: 200px !important;
+                min-width: 200px !important; 
                 user-select: none !important;  
-                position: absolute !important;
-                right: 10px !important; 
 
                 li { 
                     min-height: 24.2px !important;
@@ -120,6 +117,11 @@ header {
                     background-color: var(--hover) !important;
                     border-radius: 0px 0px 5px 5px !important;
                 }
+            }
+
+            ul.absolute-menu {
+                position: absolute !important;
+                right: 10px !important;
             }
         }
     }

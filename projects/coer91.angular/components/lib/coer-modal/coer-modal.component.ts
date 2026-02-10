@@ -17,7 +17,7 @@ export class CoerModal {
     //Variables
     protected readonly _id = Tools.GetGuid("coer-modal");    
     protected readonly _showBackdrop = signal<boolean>(false);
-    protected readonly _showContent = signal<boolean>(false);
+    protected readonly _showContent = signal<boolean>(false); 
     protected _htmlElement!: HTMLElement; 
 
     //input  
