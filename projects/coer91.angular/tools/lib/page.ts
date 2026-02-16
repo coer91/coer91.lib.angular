@@ -1,19 +1,20 @@
-import { ITitleBreadcrumb, ITitleGoBack } from "coer91.angular/components";
-import { IAppSource } from "coer91.angular/interfaces";
-import { ResponsePage } from "./page-response";
+import { AfterViewInit, Component, Inject, inject } from "@angular/core"; 
+import { CoerAlert } from "./coer-alert/coer-alert.component";
+import { ActivatedRoute, Router } from "@angular/router";
+import { IAppSource, ITitleBreadcrumb, ITitleGoBack } from "coer91.angular/interfaces";
 import { BreadcrumbsPage } from "./page-breadcrumbs";
-import { FiltersPage } from "./page-filters";
+import { ResponsePage } from "./page-response"; 
+import { FiltersPage } from "./page-filters"; 
 import { SourcePage } from "./page-source";
 import { Tools } from "./generic";
-import { ActivatedRoute, Router } from "@angular/router";
-import { AfterViewInit, Component, Inject, inject } from "@angular/core"; 
 
 @Component({ template: '' })
 export abstract class Page implements AfterViewInit {
 
     //Injection
     protected readonly router = inject(Router);
-    private readonly _activatedRoute = inject(ActivatedRoute);
+    protected readonly alert = new CoerAlert();
+    private readonly _activatedRoute = inject(ActivatedRoute); 
 
     /** */
     protected isUpdatingPage: boolean = false;
@@ -93,8 +94,8 @@ export abstract class Page implements AfterViewInit {
             PATH_ARRAY[PATH_ARRAY.length - 1] = String(id);
             this._path = PATH_ARRAY.join('/');
         }
-
-        if (this.breadcrumbsPage.length > 0) {
+         
+        if (this.breadcrumbsPage.length > 0) { 
             this.breadcrumbsPage[this.breadcrumbsPage.length - 1].page = pageName;
             this.breadcrumbsPage[this.breadcrumbsPage.length - 1].path = this._path;
             BreadcrumbsPage.UpdateLast(pageName, this._path); 

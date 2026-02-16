@@ -11,6 +11,8 @@ export class CoerModalPage extends Page {
 
     protected readonly modal = viewChild<CoerModal>('modal');
 
+    //Variables 
+
     constructor() { 
         super('coer-modal')
     }

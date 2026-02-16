@@ -1,10 +1,17 @@
 :root {
-    --height-toolbar: 40px;
-    --height-main: calc(100vh - var(--height-toolbar));
-    --height-input: 40px;
-    --height-sidenav-item: 40px;  
-    --width-sidenav : 260px;
-}
+    --z-index-alert      : 100;
+    --z-index-confirm    : 99;
+    --z-index-items      : 98;
+    --z-index-backdrop   : 97;
+    --z-index-toolbar    : 96;
+    --z-index-sidenav    : 95;
+    --toolbar-height     : 40px;
+    --input-height       : 40px;
+    --input-font-size    : 17px; 
+    --sidenav-item-height: 40px;  
+    --sidenav-width      : 260px;
+    --main-screen-height : calc(100vh - var(--toolbar-height));
+} 
 
 * {
     font-family: 'Roboto', 'Montserrat', 'OpenSans';
@@ -33,7 +40,7 @@ h1, h2, h3, h4, h5, h6, p, pre, hr, figure, fieldset, ul, ol {
 }
 
 *::-webkit-scrollbar-thumb:hover {
-    background-color: var(--hover) !important;
+    background-color: var(--item-hover) !important;
     cursor: grab !important;
 }
 

@@ -1,7 +1,7 @@
-$item-height: calc(var(--height-sidenav-item) - 0.800px);
+$item-height: calc(var(--sidenav-item-height) - 0.800px);
 
 nav {
-    height: var(--height-main) !important; 
+    height: var(--main-screen-height) !important; 
     overflow-x: hidden !important;
     overflow-y: auto !important;
     position: relative !important;
@@ -89,5 +89,5 @@ nav {
 }
 
 nav.width-sidenav {
-    width: var(--width-sidenav);  
+    width: var(--sidenav-width);  
 }

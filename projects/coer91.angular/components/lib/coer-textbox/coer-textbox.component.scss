@@ -1,0 +1,68 @@
+div.coer-textbox { 
+    height: var(--input-height) !important;
+    align-items: center !important;
+    display: flex !important; 
+    position: relative !important;
+    border-radius: 5px !important;
+    background-color: var(--input);
+
+    div.coer-textbox-button {
+        display: inline !important;
+        background-color: inherit !important; 
+        z-index: 1 !important;
+    }
+
+    input { 
+        border: none !important;
+        height: inherit !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important; 
+        border-radius: inherit !important;
+        font-size: var(--input-font-size) !important;
+        background-color: inherit !important;
+        color: var(--dark);
+    }
+
+    input:focus { 
+        outline: none !important;
+    }
+
+    input:disabled {
+        background-color: var(--readonly);
+    }
+
+    $label-top: calc((var(--input-height) / 2) * -1);
+
+    label {
+        user-select: none !important;
+        position: absolute !important;
+        transition: all 0.3s ease !important;  
+        color: var(--gray) !important; 
+    } 
+
+    label.focus, label.no-empty {
+        font-size: 14px !important;
+        font-weight: bold !important;
+        transform: translate(5px, $label-top) !important;        
+        background-color: transparent !important; 
+    }
+
+    label.focus {
+        color: var(--input-focus) !important;
+    }
+
+    label.external-button {
+        transform: translate(50px, 0) !important;
+    }
+
+    label.focus.external-button,
+    label.no-empty.external-button {
+        transform: translate(45px, $label-top) !important;
+    }
+
+    div.loading {
+        border-radius: inherit !important;
+        position: absolute !important;
+        z-index: 1 !important;
+    }
+}

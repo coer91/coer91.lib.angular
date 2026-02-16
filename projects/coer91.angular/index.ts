@@ -10,13 +10,14 @@ import * as core       from 'coer91.angular/core';
 import * as directives from 'coer91.angular/directives'; 
 import * as pipes      from 'coer91.angular/pipes'; 
 import * as tools      from 'coer91.angular/tools';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({    
     imports: [  
         CommonModule,
         RouterModule, 
         RouterOutlet,
-        // FormsModule,
+        FormsModule,
         // ReactiveFormsModule, 
         components.ComponentsModule,
         core.CoreModule, 
@@ -31,11 +32,12 @@ import * as tools      from 'coer91.angular/tools';
         CommonModule, 
         RouterModule, 
         RouterOutlet,
-        // FormsModule,
+        FormsModule,
         // ReactiveFormsModule,  
         components.CoerButton,
         components.CoerModal, 
         components.CoerPageTitle, 
+        components.CoerTextBox,
         core.Coer91,
         directives.TemplateRefDirective,  
         pipes.DatePipe,

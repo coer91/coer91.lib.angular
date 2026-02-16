@@ -1,0 +1,11 @@
+@mixin mixin($breakpoint) { 
+    @each $key, $value in ( 
+        'visible'  : visible,
+        'invisible': hidden 
+    ) {   
+        .#{$breakpoint}#{$key},
+        .#{$breakpoint}#{$key} * {  
+            visibility: $value !important; 
+        } 
+    } 
+} 

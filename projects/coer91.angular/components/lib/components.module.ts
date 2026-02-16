@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { CoerButton } from './coer-button/coer-button.component'; 
 import { CoerModal } from './coer-modal/coer-modal.component';
 import { CoerPageTitle } from './coer-page-title/coer-page-title.component';
+import { CoerTextBox } from './coer-textbox/coer-textbox.component';
 
 @NgModule({
     imports: [
@@ -15,12 +16,14 @@ import { CoerPageTitle } from './coer-page-title/coer-page-title.component';
     declarations: [  
         CoerButton,
         CoerModal, 
-        CoerPageTitle
+        CoerPageTitle,
+        CoerTextBox,
     ],
     exports: [   
         CoerButton,
         CoerModal, 
-        CoerPageTitle
+        CoerPageTitle,
+        CoerTextBox,
     ]
 })
 export class ComponentsModule { }

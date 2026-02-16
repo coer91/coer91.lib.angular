@@ -33,11 +33,11 @@ export class BreadcrumbsPage {
 
     /** */
     public static UpdateLast(page: string, path: string): void {
-        const breadcrumbs = this.Get();
-
+        const breadcrumbs = this.Get(); 
+        
         if (breadcrumbs.length > 0) {
             breadcrumbs[breadcrumbs.length - 1] = { page, path };
-            this._Save(breadcrumbs);
+            this._Save(breadcrumbs);  
         }
     } 
 

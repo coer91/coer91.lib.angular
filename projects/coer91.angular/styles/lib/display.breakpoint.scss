@@ -1,0 +1,16 @@
+@mixin mixin($breakpoint) {  
+    @each $key, $value in ( 
+        'none'        : none,
+        'flex'        : flex,
+        'block'       : block, 
+        'inline'      : inline, 
+        'inline-block': inline-block, 
+        'inline-flex' : inline-flex,
+        'contents'    : contents,
+        'grid'        : grid   
+    ) {   
+        .#{$breakpoint}display-#{$key} {  
+            display: $value !important; 
+        } 
+    } 
+} 

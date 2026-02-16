@@ -1,7 +1,7 @@
 import { Component, computed, input, output } from '@angular/core';
+import { ITitleBreadcrumb, ITitleGoBack, ITitleInformation } from 'coer91.angular/interfaces';
 import { screenSizeSIGNAL } from 'coer91.angular/signals'; 
-import { Navigation, Tools } from 'coer91.angular/tools';
-import { ITitleBreadcrumb, ITitleGoBack, ITitleInformation } from './interfaces';
+import { Navigation, Tools } from 'coer91.angular/tools'; 
 
 @Component({
     selector: 'coer-page-title',

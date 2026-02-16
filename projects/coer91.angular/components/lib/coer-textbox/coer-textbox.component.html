@@ -1,0 +1,65 @@
+<div class="coer-textbox" 
+    [ngClass]="{ 
+        'background-color-readonly': isReadonly() 
+    }"
+    [ngStyle]="{
+        width       : width(), 
+        minWidth    : minWidth(),
+        maxWidth    : maxWidth(),
+        marginTop   : marginTop(),
+        marginRight : marginRight(),
+        marginBottom: marginBottom(),
+        marginLeft  : marginLeft() 
+    }">  
+
+    @if(_showExternalButtonLeft()) {
+        <div class="coer-textbox-button border-radius-left-5px">
+            <coer-button
+                [icon]="externalButtons()?.iconLeft || ''"
+                [type]="externalButtons()?.typeLeft || 'icon-filled'"
+                [color]="externalButtons()?.colorLeft || 'secondary'"
+                [isReadonly]="(externalButtons()?.isReadonlyLeft || false) || !_isEnabled()"
+            ></coer-button>
+        </div>
+    }
+    
+    <input type="text" 
+        [id]="_id" 
+        [name]="_id" 
+        [value]="_value()"
+        [disabled]="!_isEnabled()"
+        [minLength]="minLength()"
+        [maxLength]="maxLength()"
+        (input)="_SetValue($event.target.value)"
+        [ngStyle]="{ 
+            width: _widtht(),
+            paddingLeft:  _paddingLeft(),
+            paddingRight: _paddingRight(), 
+            'text-align': textPosition()
+        }"> 
+
+    @if(_showExternalButtonRight()) {
+        <div class="coer-textbox-button border-radius-right-5px">
+            <coer-button
+                [icon]="externalButtons()?.iconRight || ''"
+                [type]="externalButtons()?.typeRight || 'icon-filled'"
+                [color]="externalButtons()?.colorRight || 'secondary'"
+                [isReadonly]="(externalButtons()?.isReadonlyRight || false) || !_isEnabled()" 
+            ></coer-button>
+        </div>
+    }
+
+    <label [for]="_id"
+        [ngClass]="{ 
+            'focus': _isFocused(),
+            'no-empty': IsNotNull(_value()),
+            'external-button': _showExternalButtonLeft(), 
+            'display-none': isLoading()
+        }">
+        {{ _label() }}
+    </label>
+
+    @if(isLoading()) {
+        <div class="loading"></div>
+    }
+</div> 

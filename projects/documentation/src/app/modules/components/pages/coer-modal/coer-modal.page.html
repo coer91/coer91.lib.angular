@@ -4,9 +4,24 @@
     [goBack]="goBackPage"
 ></coer-page-title>
 
-<coer-modal #modal title="ejemplo" icon="i91-logo-coer91">
-    hola
+<section class="container-section">
+    <coer-button 
+        label="Open"
+        (onClick)="modal.Open()"
+    ></coer-button>
+</section>
 
 
-    <div style="width: 100px; height: 10000px; background-color: red;"></div>
-</coer-modal>
+<coer-modal #modal title="Modal" icon="i91-logo-coer91"> 
+    <ng-template templateRef="modal-body">
+        
+    </ng-template>
+
+    <ng-template templateRef="modal-footer">
+        <coer-button
+            label="Cancel"
+            color="danger"
+            (onClick)="modal.Close()"
+        ></coer-button>
+    </ng-template>
+</coer-modal>  

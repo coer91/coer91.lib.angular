@@ -1,0 +1,53 @@
+<coer-page-title
+    title="Textbox"
+    [breadcrumbs]="breadcrumbsPage"
+    [goBack]="goBackPage"
+></coer-page-title>
+
+<section class="container-section">
+    <coer-textbox
+        [(ngModel)]="value1"
+        label="Ejemplo"
+        placeholder="place"
+        [externalButtons]="{ 
+            showLeft: true, 
+            iconLeft: 'i91-info',
+            isReadonlyLeft: false, 
+            showRight: true,
+            iconRight: 'i91-logo-coer91', 
+            isReadonlyRight: true,
+            typeRight: 'icon-filled',
+            colorRight: 'danger',
+            
+        }"
+        [value]="'hello world'"
+        maxWidth="200px"
+        marginRight="50px"
+        marginTop="10px"
+        [isLoading]="false"
+        [isReadonly]="true"
+        (onValueChange)="Log('onValueChange', $event)"
+    ></coer-textbox>
+
+    <coer-textbox
+        [(ngModel)]="value1"
+        label="Ejemplo"
+        placeholder="place"
+        [externalButtons]="{ 
+            showLeft: true, 
+            iconLeft: 'i91-info',
+            isReadonlyLeft: false, 
+            showRight: true,
+            iconRight: 'i91-logo-coer91', 
+            isReadonlyRight: true,
+            typeRight: 'icon-filled',
+            colorRight: 'danger',
+            
+        }"
+        textPosition="right"
+        [value]="'hello world'"
+        maxWidth="200px"
+        marginLeft="10px"
+        (onValueChange)="Log('onValueChange', $event)"
+    ></coer-textbox>
+</section>

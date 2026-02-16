@@ -8,7 +8,7 @@ export class SourcePage {
 
 
     /** */
-    public static Set(pageName: string, path: string): void {
+    public static Set(pageName: string, path: string): void { 
         let source: IAppSource | null = null;
         
         BreadcrumbsPage.Set(pageName, path);

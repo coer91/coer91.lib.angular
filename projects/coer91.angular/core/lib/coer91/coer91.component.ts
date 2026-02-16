@@ -44,7 +44,7 @@ export class Coer91 {
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
  
     constructor() {    
-        Screen.Resize.subscribe(screenSizeSIGNAL.set); 
+        Screen.Resize.subscribe(screenSizeSIGNAL.set);  
 
         effect(() => { 
             if(this._isLogin()) this._WatchJWT(); 
@@ -157,5 +157,5 @@ export class Coer91 {
                 }  
             }, VALIDATE_EVERY);   
         }
-    }    
+    }     
 }

@@ -17,7 +17,6 @@ import { appSettings, AuthService } from '@appSettings';
             (onLogin)="Login($event)"
             (onRecoveryPassword)="null"
             (onUpdateJWT)="UpdateJWT()"
-            (onClickToolbarMenu)="Test($event)"
         ></coer91>
     `
 })
@@ -26,7 +25,7 @@ export class AppRoot {
     //Elements
     protected readonly _coer91 = viewChild.required<Coer91>('coer91');
 
-    //Variables 
+    //Variables  
     protected readonly navigation = signal<IMenu[]>([]); 
 
     //Start
@@ -43,9 +42,27 @@ export class AppRoot {
 
     /** */
     protected async Login(login: ILogin): Promise<void> {
-        isLoadingSIGNAL.set(true);
          
-        const loginResponse = await this.authService.Login({ user: 'coer91', password: '123456' });
+        //const loginResponse = await this.authService.Login({ user: 'coer91', password: '123456' });
+
+        const loginResponse = {
+            status: 200,
+            message: '',
+            ok: true,
+            body: {
+                userId: 1,
+                user: 'coer91',
+                userNumber: '',
+                role: 'Development',
+                partner: '',
+                fullName: 'Christian Omar Escamilla Rodriguez',
+                nickname: 'chris',
+                email: 'coer0408@gmail.com',
+                jwt: '',
+                roles: ['Development', 'Administrator'],
+                message: 'Christian'
+            }
+        }
 
         if(loginResponse.ok) {
             const isLogin = this._coer91().Login(loginResponse.body);
@@ -98,6 +115,6 @@ export class AppRoot {
 
 
     Test(ev: any) {
-        console.log(ev)
+        
     }
 }

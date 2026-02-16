@@ -24,7 +24,7 @@ export class MenuPage extends Page {
 
             if(TREE.length > 0) { 
                 this.menu.set([]);
-                this.title.set(TREE[0].label);
+                this.title.set(TREE[0].label); 
                 this.SetPageName(TREE[TREE.length - 1].label); 
                 const INDEX_MENU = Number(TREE[0].id.split('index')[1]);
                 const MENU = navigationSIGNAL()[INDEX_MENU]?.items || [];

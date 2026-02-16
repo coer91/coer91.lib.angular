@@ -1,6 +1,6 @@
 import { SidenavAccordion } from './coer-sidenav-accordion/coer-sidenav-accordion.component'; 
 import { Component, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';  
-import { HTMLElements, Strings, Tools, Navigation, SourcePage, Collections } from 'coer91.angular/tools';
+import { HTMLElements, Strings, Tools, Navigation, Collections, BreadcrumbsPage, Screen } from 'coer91.angular/tools';
 import { navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';
 import { Router } from '@angular/router';
@@ -37,6 +37,8 @@ export class Sidenav {
  
 
     constructor() {
+        Screen.ClickBrowserButton.subscribe(() => this._ClickBrowserButton()); 
+
         effect(() => {  
             this._navigation.set(
                 this.showHomeOption() 
@@ -337,5 +339,17 @@ export class Sidenav {
         this.show.set(false);
         this._CloseMenus(null);
         this.onClose.emit();
-    }   
+    }  
+    
+    
+    //Function 
+    private _ClickBrowserButton(): void { 
+        // const breadcrumbs = BreadcrumbsPage.Get();          
+
+        // if(breadcrumbs.length > 0) {
+        //     if(this._router.url === breadcrumbs.pop()?.path) {
+        //         BreadcrumbsPage.RemoveLast();
+        //     }
+        // }
+    }
 }

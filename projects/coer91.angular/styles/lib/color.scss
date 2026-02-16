@@ -23,16 +23,7 @@
     --warning:           var(--yellow); 
     --danger:            var(--red   ); 
     --navigation:        var(--orange); 
-    --information:       var(--blue  );
-    
-    //Action Colors Light
-    --primary-light:     color-mix(in srgb, var(--primary),     var(--light) 80%);
-    --secondary-light:   color-mix(in srgb, var(--secondary),   var(--light) 80%); 
-    --success-light:     color-mix(in srgb, var(--success),     var(--light) 80%); 
-    --warning-light:     color-mix(in srgb, var(--warning),     var(--light) 80%); 
-    --danger-light:      color-mix(in srgb, var(--danger),      var(--light) 80%); 
-    --navigation-light:  color-mix(in srgb, var(--navigation),  var(--light) 80%); 
-    --information-light: color-mix(in srgb, var(--information), var(--light) 80%); 
+    --information:       var(--blue  ); 
 
     //App Colors 
     --toolbar:      var(--light); 
@@ -42,12 +33,13 @@
     --body:         var(--smoke); 
 
     //Item Colors
-    --containers:    var(--light); 
-    --hover:         color-mix(in srgb, var(--primary), transparent 93%);
-    --focus:         color-mix(in srgb, var(--primary), transparent 75%);
-    --loading:       color-mix(in srgb, var(--gray), var(--light) 50%); 
-    --readonly:      color-mix(in srgb, var(--gray), var(--light) 70%); 
-    --input:         color-mix(in srgb, var(--gray), var(--light) 85%);
+    --containers:  var(--light); 
+    --item-hover:  color-mix(in srgb, var(--primary), transparent 93%);
+    --item-focus:  color-mix(in srgb, var(--primary), transparent 75%);
+    --loading:     color-mix(in srgb, var(--gray), var(--light) 50%); 
+    --readonly:    color-mix(in srgb, var(--gray), var(--light) 70%); 
+    --input:       color-mix(in srgb, var(--gray), var(--light) 85%);
+    --input-focus: var(--primary);
 } 
 
 
@@ -76,16 +68,16 @@
     'warning'    : var(--warning    ),  
     'danger'     : var(--danger     ),  
     'navigation' : var(--navigation ),  
-    'information': var(--information),
+    'information': var(--information), 
 
     //Action Colors Light
-    'primary-light'    : var(--primary-light    ),  
-    'secondary-light'  : var(--secondary-light  ),   
-    'success-light'    : var(--success-light    ),  
-    'warning-light'    : var(--warning-light    ),  
-    'danger-light'     : var(--danger-light     ),  
-    'navigation-light' : var(--navigation-light ),  
-    'information-light': var(--information-light),
+    'primary-light'    : color-mix(in srgb, var(--primary),     var(--light) 80%),  
+    'secondary-light'  : color-mix(in srgb, var(--secondary),   var(--light) 80%),   
+    'success-light'    : color-mix(in srgb, var(--success),     var(--light) 80%),  
+    'warning-light'    : color-mix(in srgb, var(--warning),     var(--light) 80%),  
+    'danger-light'     : color-mix(in srgb, var(--danger),      var(--light) 80%),  
+    'navigation-light' : color-mix(in srgb, var(--navigation),  var(--light) 80%),  
+    'information-light': color-mix(in srgb, var(--information), var(--light) 80%),
 
     //App Colors
     'toolbar'      : var(--toolbar      ), 
@@ -95,12 +87,13 @@
     'body'         : var(--body         ),   
     
     //Item Colors
-    'containers' : var(--containers),
-    'hover'      : var(--hover     ),  
-    'focus'      : var(--focus     ),  
-    'loading'    : var(--loading   ),  
-    'readonly'   : var(--readonly  ),  
-    'input'      : var(--input     ),
+    'containers' : var(--containers ),
+    'item-hover' : var(--item-hover ),  
+    'item-focus' : var(--item-focus ),  
+    'loading'    : var(--loading    ),  
+    'readonly'   : var(--readonly   ),  
+    'input'      : var(--input      ),
+    'input-focus': var(--input-focus),
 ) {  
     // Text  
     .color-#{$key} {  

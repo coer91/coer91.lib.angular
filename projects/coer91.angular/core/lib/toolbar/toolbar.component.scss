@@ -1,6 +1,6 @@
 header {
-    height: var(--height-toolbar) !important;
-    max-height: var(--height-toolbar) !important;
+    height: var(--toolbar-height) !important;
+    max-height: var(--toolbar-height) !important;
     position: relative !important;
     z-index: var(--z-index-toolbar) !important; 
     background-color: var(--toolbar) !important;
@@ -27,6 +27,7 @@ header {
                 display: flex !important;
                 align-items: center !important;
                 gap: 5px !important;  
+                white-space: nowrap !important;
 
                 i {
                     font-size: 25px !important;
@@ -114,7 +115,7 @@ header {
                 }
             
                 li:not(.focus):hover {
-                    background-color: var(--hover) !important;
+                    background-color: var(--item-hover) !important;
                     border-radius: 0px 0px 5px 5px !important;
                 }
             }
