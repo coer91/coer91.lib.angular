@@ -80,7 +80,7 @@
                 'isValid'        : isValid(), 
                 'isInvalid'      : isInvalid(),
             }">
-        {{ _label() }}
+            {{ _label() }}
         </label>
     }
 
@@ -92,11 +92,11 @@
         <div class="line"
             [ngStyle]="{ left: _left(), right: _right() }"
             [ngClass]="{   
-                'focus'     : _isFocused(), 
-                'isValid'   : _isFocused() && isValid(), 
-                'isInvalid' : _isFocused() && isInvalid(),
-                'height-2px': _isEnabled()
+                'focus'    : _isFocused(), 
+                'isValid'  : _isFocused() && isValid(), 
+                'isInvalid': _isFocused() && isInvalid(),
+                'display-none': !_isEnabled()
             }" 
         ></div>
     }
-</div> 
+</div>  

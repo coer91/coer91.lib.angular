@@ -9,10 +9,7 @@ import { IExternalButton } from 'coer91.angular/interfaces';
     providers: [CONTROL_VALUE(CoerTextBox)],
     standalone: false
 })
-export class CoerTextBox extends ControlValue<string> { 
-    
-    //start value
-    protected override _value = signal<string>('');
+export class CoerTextBox extends ControlValue<string> {  
 
     //Variables
     protected readonly _isFocused = signal<boolean>(false);

@@ -60,6 +60,7 @@ div.coer-textbox {
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
+        transform: translate(10px, 0px) !important;   
     } 
 
     label.focus, label.no-empty {
@@ -97,24 +98,22 @@ div.coer-textbox {
     }
 
     div.line {
-        position: absolute !important;
-        left: 40px !important;
-        right: 40px !important;
+        position: absolute !important; 
         bottom: 0px !important;
-        z-index: 2 !important;
-        background-color: var(--gray) !important;      
-        transition: background-color 0.4s ease-in-out !important;   
+        z-index: 2 !important;    
+        transition: all 0.4s ease-in-out !important;   
+        border: 1px solid var(--gray) !important; 
     }
 
     div.line.focus {
-        background-color: var(--input-focus) !important;
+        border-color: var(--input-focus) !important;
     }
 
     div.line.isValid {
-        background-color: var(--success) !important;
+        border-color: var(--success) !important;
     }
 
     div.line.isInvalid {
-        background-color: var(--danger) !important;
+        border-color: var(--danger) !important;
     }
 }

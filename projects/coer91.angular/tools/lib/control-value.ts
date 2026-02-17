@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, effect, EffectRef, forwardRef, input, OnDestroy, output, signal } from "@angular/core";  
+import { AfterViewInit, Component, computed, effect, EffectRef, forwardRef, input, OnDestroy, output, signal, WritableSignal } from "@angular/core";  
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Tools } from "./generic";
 
@@ -10,11 +10,11 @@ export const CONTROL_VALUE = <T>(component: T) => {
     }
 } 
 
+
 @Component({ template: '' })
 export abstract class ControlValue<T> implements AfterViewInit, OnDestroy { 
 
-    //Variables
-    protected _valueRef$!: EffectRef;
+    //Variables 
     protected readonly _id = Tools.GetGuid();
     protected readonly _value = signal<any>(null);
     private readonly _isTouched = signal<boolean>(false);
@@ -45,14 +45,7 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
     //Output
     protected readonly onValueChange = output<string>();
     protected readonly onDestroy     = output<void>();
-    protected onReady = output<void>();
-
-    constructor() { 
-        this._valueRef$ = effect(() => {
-            const VALUE = this.value();
-            if(!this._useModelBinding()) this._SetValue(VALUE);
-        });
-    }
+    protected onReady = output<void>(); 
 
 
     //AfterViewInit
@@ -68,8 +61,7 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
 
     //OnDestroy
     ngOnDestroy() { 
-        this.onReady = null as any;   
-        this._valueRef$?.destroy(); 
+        this.onReady = null as any;    
         this.Destructor();
         this.onDestroy.emit(); 
     } 
@@ -92,13 +84,13 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
 
 
     /** Sets the value of the component */
-    protected _SetValue(value: any): void { 
+    protected _SetValue(value: any): void {   
         if(this._useModelBinding()) {
             this._UpdateValue()!(value); 
         } 
                   
         this.onValueChange.emit(value); 
-        this._value.set(value); 
+        this._value.set(value);  
     }
 
 
@@ -107,7 +99,7 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
 
 
     //Function
-    protected writeValue(value: any): void {   
+    protected writeValue(value: any): void {    
         this._SetValue(value);
     }
 

@@ -10,7 +10,7 @@ import * as core       from 'coer91.angular/core';
 import * as directives from 'coer91.angular/directives'; 
 import * as pipes      from 'coer91.angular/pipes'; 
 import * as tools      from 'coer91.angular/tools';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({    
     imports: [  
@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms';
         RouterModule, 
         RouterOutlet,
         FormsModule,
-        // ReactiveFormsModule, 
+        ReactiveFormsModule, 
         components.ComponentsModule,
         core.CoreModule, 
         directives.DirectivesModule,
@@ -33,7 +33,7 @@ import { FormsModule } from '@angular/forms';
         RouterModule, 
         RouterOutlet,
         FormsModule,
-        // ReactiveFormsModule,  
+        ReactiveFormsModule,  
         components.CoerButton,
         components.CoerModal, 
         components.CoerPageTitle, 
