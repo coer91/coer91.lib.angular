@@ -1,4 +1,4 @@
-import { Component, computed, effect, EffectRef, forwardRef, input, output, signal } from "@angular/core";  
+import { AfterViewInit, Component, computed, effect, EffectRef, forwardRef, input, OnDestroy, output, signal } from "@angular/core";  
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Tools } from "./generic";
 
@@ -11,7 +11,7 @@ export const CONTROL_VALUE = <T>(component: T) => {
 } 
 
 @Component({ template: '' })
-export abstract class ControlValue<T> { 
+export abstract class ControlValue<T> implements AfterViewInit, OnDestroy { 
 
     //Variables
     protected _valueRef$!: EffectRef;
@@ -44,6 +44,8 @@ export abstract class ControlValue<T> {
 
     //Output
     protected readonly onValueChange = output<string>();
+    protected readonly onDestroy     = output<void>();
+    protected onReady = output<void>();
 
     constructor() { 
         this._valueRef$ = effect(() => {
@@ -51,6 +53,30 @@ export abstract class ControlValue<T> {
             if(!this._useModelBinding()) this._SetValue(VALUE);
         });
     }
+
+
+    //AfterViewInit
+    async ngAfterViewInit() {
+        await Tools.Sleep(); 
+        await this.StartComponent();  
+        this.onReady?.emit();
+    }
+
+
+    protected async StartComponent(){}
+
+
+    //OnDestroy
+    ngOnDestroy() { 
+        this.onReady = null as any;   
+        this._valueRef$?.destroy(); 
+        this.Destructor();
+        this.onDestroy.emit(); 
+    } 
+
+
+    protected Destructor() {}
+
 
     /** */
     public isTouched = computed<boolean>(() => this._isTouched());

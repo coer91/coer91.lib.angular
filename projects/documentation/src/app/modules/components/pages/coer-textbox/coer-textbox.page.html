@@ -7,12 +7,12 @@
 <section class="container-section">
     <coer-textbox
         [(ngModel)]="value1"
-        label="Ejemplo"
+        label="Ejemplo ssssssss s vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
         placeholder="place"
         [externalButtons]="{ 
             showLeft: true, 
             iconLeft: 'i91-info',
-            isReadonlyLeft: false, 
+            isReadonlyLeft: true, 
             showRight: true,
             iconRight: 'i91-logo-coer91', 
             isReadonlyRight: true,
@@ -21,33 +21,15 @@
             
         }"
         [value]="'hello world'"
-        maxWidth="200px"
+        maxWidth="300px"
         marginRight="50px"
         marginTop="10px"
         [isLoading]="false"
-        [isReadonly]="true"
-        (onValueChange)="Log('onValueChange', $event)"
-    ></coer-textbox>
-
-    <coer-textbox
-        [(ngModel)]="value1"
-        label="Ejemplo"
-        placeholder="place"
-        [externalButtons]="{ 
-            showLeft: true, 
-            iconLeft: 'i91-info',
-            isReadonlyLeft: false, 
-            showRight: true,
-            iconRight: 'i91-logo-coer91', 
-            isReadonlyRight: true,
-            typeRight: 'icon-filled',
-            colorRight: 'danger',
-            
-        }"
-        textPosition="right"
-        [value]="'hello world'"
-        maxWidth="200px"
-        marginLeft="10px"
+        [isReadonly]="false" 
+        [selectOnFocus]="true"
+        [showSearchButton]="true"
+        [showClearButton]="true"
+        [isInvalid]="true"
         (onValueChange)="Log('onValueChange', $event)"
     ></coer-textbox>
 </section>

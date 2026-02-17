@@ -1,4 +1,4 @@
-import { Component, input, AfterViewInit, output, OnDestroy, computed, signal } from '@angular/core';
+import { Component, input, output, computed, signal } from '@angular/core';
 import { CONTROL_VALUE, ControlValue, HTMLElements, Tools } from 'coer91.angular/tools';
 import { IExternalButton } from 'coer91.angular/interfaces';
 
@@ -9,7 +9,7 @@ import { IExternalButton } from 'coer91.angular/interfaces';
     providers: [CONTROL_VALUE(CoerTextBox)],
     standalone: false
 })
-export class CoerTextBox extends ControlValue<string> implements AfterViewInit, OnDestroy { 
+export class CoerTextBox extends ControlValue<string> { 
     
     //start value
     protected override _value = signal<string>('');
@@ -24,8 +24,8 @@ export class CoerTextBox extends ControlValue<string> implements AfterViewInit, 
     public textPosition     = input<'left' | 'center' | 'right'>('left'); 
     public minLength        = input<number | string>(0);
     public maxLength        = input<number | string>(50);
-    // public showClearButton  = input<boolean>(false);
-    // public showSearchButton = input<boolean>(false);
+    public showClearButton  = input<boolean>(false);
+    public showSearchButton = input<boolean>(false);
     public externalButtons  = input<IExternalButton>();
     public width            = input<string>('100%');
     public minWidth         = input<string>('100px');
@@ -33,23 +33,28 @@ export class CoerTextBox extends ControlValue<string> implements AfterViewInit, 
 
 
     //Output 
-    protected readonly onKeyupEnter = output<string>();
-    protected readonly onClear      = output<void>();
-    protected readonly onSearch     = output<string>();
-    protected readonly onDestroy    = output<void>();
-    protected onReady = output<void>();
+    protected readonly onKeyupEnter  = output<string>();
+    protected readonly onClickClear  = output<void>();
+    protected readonly onClickSearch = output<string>(); 
 
 
-    //AfterViewInit
-    async ngAfterViewInit() {
-        await Tools.Sleep();
+    //Start
+    override async StartComponent() { 
         this._htmlElement = HTMLElements.SelectElementById(this._id) as HTMLInputElement;  
         this._htmlElement?.addEventListener('keyup', this._onKeyup);
         this._htmlElement?.addEventListener('paste', this._onPaste);
         this._htmlElement?.addEventListener('focus', this._onFocus);
-        this._htmlElement?.addEventListener('blur', this._onBlur);   
-        this.onReady?.emit();
+        this._htmlElement?.addEventListener('blur', this._onBlur);    
     }
+
+
+    //Destroy
+    override Destructor() {   
+        this._htmlElement?.removeEventListener('keyup', this._onKeyup);
+        this._htmlElement?.removeEventListener('paste', this._onPaste);
+        this._htmlElement?.removeEventListener('focus', this._onFocus); 
+        this._htmlElement?.removeEventListener('blur', this._onBlur);  
+    } 
 
 
     //Function
@@ -81,30 +86,36 @@ export class CoerTextBox extends ControlValue<string> implements AfterViewInit, 
 
 
     //Function
-    private _onBlur = () => this.Blur();   
-
-
-    //OnDestroy
-    ngOnDestroy() { 
-        this.onReady = null as any;   
-        this._valueRef$?.destroy();
-        this._htmlElement?.removeEventListener('keyup', this._onKeyup);
-        this._htmlElement?.removeEventListener('paste', this._onPaste);
-        this._htmlElement?.removeEventListener('focus', this._onFocus); 
-        this._htmlElement?.removeEventListener('blur', this._onBlur); 
-        this.onDestroy.emit();
-    }  
+    private _onBlur = () => this.Blur();    
 
 
     //Computed
     protected _showExternalButtonLeft = computed<boolean>(() => {
-        return Tools.IsBooleanTrue(this.externalButtons()?.showLeft);
+        return Tools.IsBooleanTrue(this.externalButtons()?.showLeft)
+            && this.isLoading() === false
+            && this.isInvisible() === false
+            && this.isHidden() === false;
     });
 
 
     //Computed
     protected _showExternalButtonRight = computed<boolean>(() => {
-        return Tools.IsBooleanTrue(this.externalButtons()?.showRight);
+        return Tools.IsBooleanTrue(this.externalButtons()?.showRight)
+            && this.isLoading() === false
+            && this.isInvisible() === false
+            && this.isHidden() === false;
+    });
+
+
+    //Computed
+    protected _left = computed(() => {
+        return this._showExternalButtonLeft() ? '40px' : '0px';
+    });
+
+
+    //Computed
+    protected _right = computed(() => {
+        return this._showExternalButtonLeft() ? '40px' : '0px';
     });
 
 
@@ -114,7 +125,11 @@ export class CoerTextBox extends ControlValue<string> implements AfterViewInit, 
     
     //Computed
     protected _paddingRight = computed(() => {
-        return '10px';
+        let padding = 10;
+        if(this._showClearButton() || this._showSearchButton()) padding += 20; 
+        if(this.isValid() || this.isInvalid()) padding += 20;  
+        if(padding > 10) padding += 10;
+        return `${padding}px`;
     });
 
 
@@ -133,6 +148,46 @@ export class CoerTextBox extends ControlValue<string> implements AfterViewInit, 
     protected _label = computed<string>(() => {
         return Tools.IsNotOnlyWhiteSpace(this.label()) ? this.label() : this.placeholder();
     }); 
+
+
+    //Computed
+    protected _showLabel = computed<boolean>(() => {
+        return Tools.IsNotOnlyWhiteSpace(this.label()) || (
+            Tools.IsNotOnlyWhiteSpace(this.placeholder()) && Tools.IsOnlyWhiteSpace(this._value())
+        );
+    }); 
+
+
+    //Computed
+    protected _showClearButton = computed(() => {
+        return this.showClearButton()
+            && this._isEnabled() 
+            && this.IsNotOnlyWhiteSpace(this._value()) 
+    })
+
+
+    //Computed
+    protected _showSearchButton = computed(() => {
+        return this.showSearchButton()
+            && !this._showClearButton()
+            && this._isEnabled()
+    }); 
+
+
+    //Function
+    protected _ClickSearch(): void {         
+        if (this.showClearButton()) this.Focus();
+        else this.Blur();
+        this.onClickSearch.emit(this._value());
+    } 
+
+
+    /** */
+    public Clear(): void {
+        this._SetValue('');
+        this.Focus(false);
+        this.onClickClear.emit();
+    } 
 
 
     /** */

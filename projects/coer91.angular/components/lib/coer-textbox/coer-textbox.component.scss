@@ -1,7 +1,7 @@
 div.coer-textbox { 
     height: var(--input-height) !important;
     align-items: center !important;
-    display: flex !important; 
+    display: inline-flex !important; 
     position: relative !important;
     border-radius: 5px !important;
     background-color: var(--input);
@@ -31,13 +31,35 @@ div.coer-textbox {
         background-color: var(--readonly);
     }
 
+
+    div.icon-container { 
+        position: absolute !important;
+        top: 0px !important;
+        right: 40px !important;
+        bottom: 0px !important;
+        display: flex !important;  
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 10px !important;
+        background-color: inherit !important;
+        z-index: 1 !important;
+        gap: 5px !important;
+
+        i { 
+            font-size: 20px !important;
+        }
+    }
+
     $label-top: calc((var(--input-height) / 2) * -1);
 
     label {
         user-select: none !important;
         position: absolute !important;
         transition: all 0.3s ease !important;  
-        color: var(--gray) !important; 
+        color: var(--gray) !important;  
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     } 
 
     label.focus, label.no-empty {
@@ -49,6 +71,14 @@ div.coer-textbox {
 
     label.focus {
         color: var(--input-focus) !important;
+    }
+
+    label.focus.isValid {
+        color: var(--success) !important;
+    }
+
+    label.focus.isInvalid {
+        color: var(--danger) !important;
     }
 
     label.external-button {
@@ -64,5 +94,27 @@ div.coer-textbox {
         border-radius: inherit !important;
         position: absolute !important;
         z-index: 1 !important;
+    }
+
+    div.line {
+        position: absolute !important;
+        left: 40px !important;
+        right: 40px !important;
+        bottom: 0px !important;
+        z-index: 2 !important;
+        background-color: var(--gray) !important;      
+        transition: background-color 0.4s ease-in-out !important;   
+    }
+
+    div.line.focus {
+        background-color: var(--input-focus) !important;
+    }
+
+    div.line.isValid {
+        background-color: var(--success) !important;
+    }
+
+    div.line.isInvalid {
+        background-color: var(--danger) !important;
     }
 }

@@ -18,7 +18,7 @@
                 [icon]="externalButtons()?.iconLeft || ''"
                 [type]="externalButtons()?.typeLeft || 'icon-filled'"
                 [color]="externalButtons()?.colorLeft || 'secondary'"
-                [isReadonly]="(externalButtons()?.isReadonlyLeft || false) || !_isEnabled()"
+                [isReadonly]="(externalButtons()?.isReadonlyLeft || false)"
             ></coer-button>
         </div>
     }
@@ -44,22 +44,59 @@
                 [icon]="externalButtons()?.iconRight || ''"
                 [type]="externalButtons()?.typeRight || 'icon-filled'"
                 [color]="externalButtons()?.colorRight || 'secondary'"
-                [isReadonly]="(externalButtons()?.isReadonlyRight || false) || !_isEnabled()" 
+                [isReadonly]="(externalButtons()?.isReadonlyRight || false)" 
             ></coer-button>
         </div>
     }
 
-    <label [for]="_id"
-        [ngClass]="{ 
-            'focus': _isFocused(),
-            'no-empty': IsNotNull(_value()),
-            'external-button': _showExternalButtonLeft(), 
-            'display-none': isLoading()
-        }">
+    @if(_paddingRight() != '10px') {
+        <div class="icon-container" [ngStyle]="{ right: _right() }">
+            @if(_showSearchButton()) {
+                <i class="i91-search color-gray cursor-pointer" (click)="_ClickSearch()"></i>
+            }
+    
+            @else if(_showClearButton()) {
+                <i class="i91-mark color-gray cursor-pointer" (click)="Clear()"></i>
+            }  
+
+            @if(isInvalid() && _isEnabled()) {
+                <i class="i91-exclamation-circle-fill color-danger"></i>
+            }
+    
+            @else if(isValid() && _isEnabled()) {
+                <i class="i91-check-circle-fill color-green"></i>
+            } 
+        </div>
+    }
+
+    @if(_showLabel()) {
+        <label [for]="_id"
+            [ngStyle]="{ width: _widtht() }"
+            [ngClass]="{ 
+                'focus'          : _isFocused() && IsNotOnlyWhiteSpace(label()),
+                'no-empty'       : IsNotOnlyWhiteSpace(_value()),
+                'external-button': _showExternalButtonLeft(), 
+                'display-none'   : isLoading(),
+                'isValid'        : isValid(), 
+                'isInvalid'      : isInvalid(),
+            }">
         {{ _label() }}
-    </label>
+        </label>
+    }
 
     @if(isLoading()) {
         <div class="loading"></div>
+    }
+
+    @if(_isEnabled()) {
+        <div class="line"
+            [ngStyle]="{ left: _left(), right: _right() }"
+            [ngClass]="{   
+                'focus'     : _isFocused(), 
+                'isValid'   : _isFocused() && isValid(), 
+                'isInvalid' : _isFocused() && isInvalid(),
+                'height-2px': _isEnabled()
+            }" 
+        ></div>
     }
 </div> 

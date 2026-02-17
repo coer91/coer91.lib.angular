@@ -9,7 +9,7 @@ import { Page } from 'coer91.angular/tools';
 export class CoerTextboxPage extends Page {   
     
     //Variables
-    protected value1 = 'hello';
+    protected value1 = '';
 
     constructor() {
         super('coer-textbox'); 
