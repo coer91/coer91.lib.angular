@@ -1,10 +1,12 @@
 import { Component, effect, EffectRef, input } from '@angular/core';
 import { CoerTextBox } from '../coer-textbox/coer-textbox.component';
+import { CONTROL_VALUE } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-secretbox',
     templateUrl: '../coer-textbox/coer-textbox.component.html', 
     styleUrl: '../coer-textbox/coer-textbox.component.scss', 
+    providers: [CONTROL_VALUE(CoerSecretBox)],
     standalone: false
 })
 export class CoerSecretBox extends CoerTextBox {   

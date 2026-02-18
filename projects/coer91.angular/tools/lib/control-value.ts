@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, effect, EffectRef, forwardRef, input, OnDestroy, output, signal, WritableSignal } from "@angular/core";  
+import { AfterViewInit, Component, computed, forwardRef, input, OnDestroy, output, signal } from "@angular/core";  
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Tools } from "./generic";
 
@@ -18,7 +18,7 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
     protected readonly _id = Tools.GetGuid();
     protected readonly _value = signal<any>(null);
     private readonly _isTouched = signal<boolean>(false);
-    private readonly _IsTouched = signal<Function | null>(null);
+    private readonly _IsTouchedFunction = signal<Function | null>(null);
     private readonly _UpdateValue = signal<Function | null>(null);
     
     protected readonly IsNull              = Tools.IsNull;
@@ -115,16 +115,17 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
     //Function
     protected registerOnTouched(callback: Function): void { 
         if(Tools.IsFunction(callback)) {
-            this._IsTouched.set(callback);  
-        } 
+            this._IsTouchedFunction.set(callback);   
+        }  
     }  
 
 
     /** Sets whether the component has been touched */
-    public SetTouched(isTouched: boolean): void {
-        if(Tools.IsFunction(this._IsTouched())) {
-            this._IsTouched()!(isTouched);
-        }
+    public SetTouched(isTouched: boolean): void { 
+        
+        if(Tools.IsFunction(this._IsTouchedFunction())) {
+            this._IsTouchedFunction()!(isTouched);
+        } 
 
         this._isTouched.set(isTouched);
     } 

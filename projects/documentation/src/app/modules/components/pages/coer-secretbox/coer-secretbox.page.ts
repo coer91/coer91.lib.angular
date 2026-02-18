@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';    
+import { Component, signal } from '@angular/core';    
 import { Page } from 'coer91.angular/tools';
 
 @Component({
@@ -6,7 +6,9 @@ import { Page } from 'coer91.angular/tools';
     templateUrl: './coer-secretbox.page.html', 
     standalone: false
 })
-export class CoerSecretBoxPage extends Page {   
+export class CoerSecretBoxPage extends Page {  
+    
+    protected value1 = signal<string>('hello');
 
     constructor() { super('coer-secretbox') }
 

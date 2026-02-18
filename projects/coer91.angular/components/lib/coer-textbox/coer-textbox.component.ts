@@ -82,6 +82,8 @@ export class CoerTextBox extends ControlValue<string> {
         }
 
         else this.Blur(); 
+
+        if(!this.isTouched()) this.SetTouched(true);
     } 
 
 
