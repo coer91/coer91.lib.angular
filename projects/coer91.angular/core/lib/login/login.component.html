@@ -2,14 +2,41 @@
     <div class="login-container">
         <h1>{{ title }}</h1>
 
-        <section class="form">
-            <coer-button
-                [label]="(view() === 'LOGIN' ? 'Login' : 'Recovery')"
-                width="100%"
-                marginTop="35px"
-                [isLoading]="isLoading()"
-                (onClick)="_Click()"
-            ></coer-button>
+        <section class="form"> 
+            <coer-form #form [formGroup]="formGroup" [isLoading]="isLoading()">
+                <!-- user -->
+                <coer-textbox
+                    #userRef
+                    label="User"
+                    formControlName="user"
+                    [isLoading]="isLoading()"
+                    [isInvalid]="form.IsInvalidControl('user')"
+                    marginTop="35px"
+                    (onKeyupEnter)="passwordRef.Focus()"
+                ></coer-textbox>
+
+                <!-- password -->
+                <coer-secretbox
+                    #passwordRef
+                    label="Password"
+                    formControlName="password"
+                    [isLoading]="isLoading()"
+                    marginTop="35px"
+                    [isInvisible]="view() === 'RECOVERY'"
+                    (onKeyupEnter)="loginRef.Click()"
+                ></coer-secretbox>
+
+                <!-- Login -->
+                <coer-button
+                    #loginRef
+                    [label]="(view() === 'LOGIN' ? 'Login' : 'Recovery')"
+                    width="100%"
+                    marginTop="35px"
+                    [isLoading]="isLoading()"
+                    [isInvisible]="!_ShowButton()"
+                    (onClick)="_Click()"
+                ></coer-button>
+            </coer-form>  
         </section>
 
         @if(!isLoading()) {

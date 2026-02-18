@@ -13,7 +13,7 @@ export class CoerTextBox extends ControlValue<string> {
 
     //Variables
     protected readonly _isFocused = signal<boolean>(false); 
-    protected readonly _isSecretComponent = signal<boolean>(true);
+    protected readonly _isSecretComponent = signal<boolean>(false);
     protected readonly _showSecret = signal<boolean>(true);
     protected _htmlElement!: HTMLInputElement; 
     
@@ -92,8 +92,8 @@ export class CoerTextBox extends ControlValue<string> {
     
     
     //Computed
-    protected _inputType = computed<string>(() => {
-        if(this._showSecret()) return 'password'; 
+    protected _inputType = computed<'text' | 'password'>(() => {
+        if(this._showSecretClosed()) return 'password'; 
         return 'text';
     });
 

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router'; 
 import { ComponentsModule } from 'coer91.angular/components';
+import { ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'coer91.angular/pipes';
 import { CoerAlert } from 'coer91.angular/tools';
 
@@ -13,7 +14,7 @@ import { HomePage         } from './home/home.component';
 import { LoginPage        } from './login/login.component';
 import { Sidenav          } from './sidenav/sidenav.component';
 import { SidenavAccordion } from './sidenav/coer-sidenav-accordion/coer-sidenav-accordion.component'; 
-import { Toolbar          } from './toolbar/toolbar.component';   
+import { Toolbar          } from './toolbar/toolbar.component';  
 
 //Routes
 export const ROUTES_91: any = [  
@@ -24,12 +25,13 @@ export const ROUTES_91: any = [
 
 @NgModule({
     imports: [
-        CommonModule,
-        RouterModule,
-        ComponentsModule,
-        PipesModule,
-        CoerAlert 
-    ],
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    ComponentsModule,
+    PipesModule,
+    CoerAlert 
+],
     declarations: [  
         MenuPage,
         Coer91,

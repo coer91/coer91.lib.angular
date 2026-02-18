@@ -41,9 +41,8 @@ export class AppRoot {
 
 
     /** */
-    protected async Login(login: ILogin): Promise<void> {
-         
-        //const loginResponse = await this.authService.Login({ user: 'coer91', password: '123456' });
+    protected async Login(login: ILogin): Promise<void> { 
+        //const loginResponse = await this.authService.Login(login);
 
         const loginResponse = {
             status: 200,

@@ -35,6 +35,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         FormsModule,
         ReactiveFormsModule,  
         components.CoerButton,
+        components.CoerForm,
         components.CoerModal, 
         components.CoerPageTitle, 
         components.CoerSecretBox,
