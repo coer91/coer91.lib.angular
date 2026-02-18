@@ -11,9 +11,10 @@ export const NAVIGATION: IMenu[] = [
 
         //Components
         { label: 'Components', icon: '', show: 'GRID', items: [ 
-            { label: 'coer-button' , icon: 'i91-hand-pointer-fill', path: '/components/coer-button'  },  
-            { label: 'coer-modal'  , icon: 'i91-modal-fill',        path: '/components/coer-modal'   },
-            { label: 'coer-textbox', icon: 'i91-input-text',        path: '/components/coer-textbox' },  
+            { label: 'coer-button'   , icon: 'i91-hand-pointer-fill', path: '/components/coer-button'    },  
+            { label: 'coer-modal'    , icon: 'i91-modal-fill',        path: '/components/coer-modal'     },
+            { label: 'coer-secretbox', icon: 'i91-eye-slash-fill',    path: '/components/coer-secretbox' },
+            { label: 'coer-textbox'  , icon: 'i91-input-text',        path: '/components/coer-textbox'   },  
         ]}  
     ]},  
 ];

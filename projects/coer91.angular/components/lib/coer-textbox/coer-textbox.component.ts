@@ -12,7 +12,9 @@ import { IExternalButton } from 'coer91.angular/interfaces';
 export class CoerTextBox extends ControlValue<string> {  
 
     //Variables
-    protected readonly _isFocused = signal<boolean>(false);
+    protected readonly _isFocused = signal<boolean>(false); 
+    protected readonly _isSecretComponent = signal<boolean>(true);
+    protected readonly _showSecret = signal<boolean>(true);
     protected _htmlElement!: HTMLInputElement; 
     
     //Input
@@ -36,7 +38,7 @@ export class CoerTextBox extends ControlValue<string> {
 
 
     //Start
-    override async StartComponent() { 
+    protected override async Start() { 
         this._htmlElement = HTMLElements.SelectElementById(this._id) as HTMLInputElement;  
         this._htmlElement?.addEventListener('keyup', this._onKeyup);
         this._htmlElement?.addEventListener('paste', this._onPaste);
@@ -46,11 +48,11 @@ export class CoerTextBox extends ControlValue<string> {
 
 
     //Destroy
-    override Destructor() {   
+    protected override Destructor() {   
         this._htmlElement?.removeEventListener('keyup', this._onKeyup);
         this._htmlElement?.removeEventListener('paste', this._onPaste);
         this._htmlElement?.removeEventListener('focus', this._onFocus); 
-        this._htmlElement?.removeEventListener('blur', this._onBlur);  
+        this._htmlElement?.removeEventListener('blur', this._onBlur); 
     } 
 
 
@@ -60,13 +62,14 @@ export class CoerTextBox extends ControlValue<string> {
 
         if (event.key === 'Enter') {
             this.onKeyupEnter.emit(this._value());
-            this.Blur();
+            this.Blur(); 
         }
+
     } 
 
 
     //Function
-    private _onPaste = () => {
+    private _onPaste = () => { 
         Tools.Sleep().then(() => this._SetValue(String(this._value()).trim()));        
     }
 
@@ -83,7 +86,14 @@ export class CoerTextBox extends ControlValue<string> {
 
 
     //Function
-    private _onBlur = () => this.Blur();    
+    private _onBlur = () => this.Blur(); 
+    
+    
+    //Computed
+    protected _inputType = computed<string>(() => {
+        if(this._showSecret()) return 'password'; 
+        return 'text';
+    });
 
 
     //Computed
@@ -112,8 +122,20 @@ export class CoerTextBox extends ControlValue<string> {
 
     //Computed
     protected _right = computed(() => {
-        return this._showExternalButtonLeft() ? '40px' : '0px';
+        return this._showExternalButtonRight() ? '40px' : '0px';
     });
+
+
+    //Computed
+    protected _showSecretClosed = computed(() => {
+        return this._isSecretComponent() && this._showSecret();
+    });
+
+
+    //Computed
+    protected _showSecretOpen = computed(() => {
+        return this._isSecretComponent() && !this._showSecret();
+    }); 
 
 
     //Computed
@@ -123,9 +145,18 @@ export class CoerTextBox extends ControlValue<string> {
     //Computed
     protected _paddingRight = computed(() => {
         let padding = 10;
-        if(this._showClearButton() || this._showSearchButton()) padding += 20; 
-        if(this.isValid() || this.isInvalid()) padding += 20;  
-        if(padding > 10) padding += 10;
+        
+        if(this._showClearButton() 
+            || this._showSearchButton() 
+            || this._showSecretClosed() 
+            || this._showSecretOpen()
+        ) padding += 20; 
+        
+        if(this.isValid() || this.isInvalid()) padding += 20; 
+
+        if(padding == 30) padding += 5; 
+        if(padding == 50) padding += 10; 
+        
         return `${padding}px`;
     });
 
@@ -168,14 +199,17 @@ export class CoerTextBox extends ControlValue<string> {
         return this.showSearchButton()
             && !this._showClearButton()
             && this._isEnabled()
-    }); 
+    });   
 
 
     //Function
     protected _ClickSearch(): void {         
-        if (this.showClearButton()) this.Focus();
+        if (Tools.IsOnlyWhiteSpace(this._value())) {
+            this.Focus();
+        }
+
         else this.Blur();
-        this.onClickSearch.emit(this._value());
+        this.onClickSearch.emit(this._value()); 
     } 
 
 

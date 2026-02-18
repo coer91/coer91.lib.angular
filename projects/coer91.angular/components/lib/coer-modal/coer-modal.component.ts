@@ -1,4 +1,4 @@
-import { Component, computed, contentChildren, input, output, signal, } from '@angular/core';
+import { AfterViewInit, Component, computed, contentChildren, input, OnDestroy, output, signal, } from '@angular/core';
 import { TemplateRefDirective } from 'coer91.angular/directives';
 import { screenSizeSIGNAL } from 'coer91.angular/signals';
 import { HTMLElements, Tools } from 'coer91.angular/tools';
@@ -9,7 +9,7 @@ import { HTMLElements, Tools } from 'coer91.angular/tools';
     styleUrl: './coer-modal.component.scss', 
     standalone: false
 })
-export class CoerModal {     
+export class CoerModal implements AfterViewInit, OnDestroy {     
 
     //Content 
     public contentElements = contentChildren<TemplateRefDirective>(TemplateRefDirective);

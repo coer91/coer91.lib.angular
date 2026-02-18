@@ -4,15 +4,226 @@
     [goBack]="goBackPage"
 ></coer-page-title>
 
-<section class="container-section">
-    <coer-textbox
-        [(ngModel)]="value1"
-        label="Easy"
-    ></coer-textbox>
+<section class="container-section flex-wrap">
+    <!--  -->
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 1"
+            [(ngModel)]="example1"
+        ></coer-textbox>
+    </div>
+
+    <!--  -->
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 2"
+            [(ngModel)]="example2"
+            [showClearButton]="true"
+        ></coer-textbox>
+    </div>
+
+    <!--  -->
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 3"
+            [(ngModel)]="example3" 
+            [showSearchButton]="true"
+        ></coer-textbox>
+    </div>
+
+    <!--  -->
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 4"
+            [(ngModel)]="example4" 
+            [showClearButton]="true"
+            [showSearchButton]="true"
+        ></coer-textbox>
+    </div>
 </section>
 
-<section class="container-section">
-    <coer-textbox
+<section class="container-section flex-wrap">
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 1"
+            [(ngModel)]="example1"
+            [externalButtons]="{ 
+                showLeft: true, 
+                iconLeft: 'i91-logo-coer91',
+                isReadonlyLeft: false,  
+                typeLeft: 'icon-filled',
+                colorLeft: 'primary'
+            }"
+        ></coer-textbox>
+    </div>
+
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 2"
+            [(ngModel)]="example2"
+            [showClearButton]="true"
+            [externalButtons]="{ 
+                showLeft: true, 
+                iconLeft: 'i91-logo-coer91',
+                isReadonlyLeft: false,  
+                typeLeft: 'icon-outline',
+                colorLeft: 'primary'
+            }"
+        ></coer-textbox>
+    </div>
+
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 3"
+            [(ngModel)]="example3" 
+            [showSearchButton]="true"
+            [externalButtons]="{ 
+                showLeft: true, 
+                iconLeft: 'i91-logo-coer91',
+                isReadonlyLeft: false,  
+                typeLeft: 'icon',
+                colorLeft: 'primary'
+            }"
+        ></coer-textbox>
+    </div>
+
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 3"
+            [(ngModel)]="example3" 
+            [showSearchButton]="true"
+            [externalButtons]="{ 
+                showLeft: true, 
+                iconLeft: 'i91-logo-coer91',
+                isReadonlyLeft: true,  
+                typeLeft: 'icon',
+                colorLeft: 'primary'
+            }"
+        ></coer-textbox>
+    </div> 
+</section> 
+
+
+<section class="container-section flex-wrap">
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 1"
+            [(ngModel)]="example1"
+            [isLoading]="true"
+            [externalButtons]="{ 
+                showLeft: true, 
+                iconLeft: 'i91-logo-coer91',
+                isReadonlyLeft: false,  
+                typeLeft: 'icon-filled',
+                colorLeft: 'primary'
+            }"
+        ></coer-textbox>
+    </div>
+
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 2"
+            [(ngModel)]="example2"
+            [isReadonly]="true"
+            [showClearButton]="true"
+            [externalButtons]="{ 
+                showLeft: true, 
+                iconLeft: 'i91-logo-coer91',
+                isReadonlyLeft: false,  
+                typeLeft: 'icon-filled',
+                colorLeft: 'primary'
+            }"
+        ></coer-textbox>
+    </div>
+
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 3"
+            [(ngModel)]="example3" 
+            [showSearchButton]="true"
+            [isInvisible]="true" 
+            [externalButtons]="{ 
+                showLeft: true, 
+                iconLeft: 'i91-logo-coer91',
+                isReadonlyLeft: false,  
+                typeLeft: 'icon',
+                colorLeft: 'primary'
+            }"
+        ></coer-textbox>
+    </div>
+
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 3"
+            [(ngModel)]="example3" 
+            [showSearchButton]="true"
+            [externalButtons]="{ 
+                showRight: true, 
+                iconRight: 'i91-logo-coer91',
+                isReadonlyRight: true,  
+                typeRight: 'icon',
+                colorRight: 'primary'
+            }"
+        ></coer-textbox>
+    </div> 
+</section> 
+
+
+<section class="container-section flex-wrap">
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 1"
+            [(ngModel)]="example1" 
+            [isValid]="true" 
+        ></coer-textbox>
+    </div>
+
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 2"
+            [(ngModel)]="example2" 
+            [showClearButton]="true" 
+            [isInvalid]="true"
+        ></coer-textbox>
+    </div>
+
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 3"
+            [(ngModel)]="example3" 
+            [showSearchButton]="true"
+            [isHidden]="true"  
+        ></coer-textbox>
+    </div>
+
+    <div class="flex-basis-20 flex-grow-1">
+        <coer-textbox
+            label="Example 3"
+            [(ngModel)]="example3" 
+            [showSearchButton]="true"
+            [showClearButton]="true"
+            [isInvalid]="true"
+            [externalButtons]="{ 
+                showRight: true, 
+                iconRight: 'i91-logo-coer91',
+                isReadonlyRight: true,  
+                typeRight: 'icon',
+                colorRight: 'primary'
+            }"
+        ></coer-textbox>
+    </div> 
+</section> 
+
+<!-- <section class="container-section">
+    <form [formGroup]="form">
+        <coer-textbox
+            formControlName="nombre"
+            label="Easy"
+        ></coer-textbox>
+    </form>
+</section>  -->
+
+  <!-- <coer-textbox
         [(ngModel)]="value2"
         label="Ejemplo ssssssss s vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
         placeholder="place"
@@ -37,17 +248,4 @@
         [showSearchButton]="true"
         [showClearButton]="true"
         [isInvalid]="true" 
-    ></coer-textbox>
-</section> 
-
-
-<section class="container-section">
-    <form [formGroup]="form">
-        <coer-textbox
-            formControlName="nombre"
-            label="Easy"
-        ></coer-textbox>
-    </form>
-</section> 
-
-  
+    ></coer-textbox> -->

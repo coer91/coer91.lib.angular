@@ -37,9 +37,9 @@ export class CoerButton implements AfterViewInit, OnDestroy {
     public marginLeft   = input<string>('0px');
 
     //Output
-    protected onClick   = output<void>(); 
+    protected readonly onClick   = output<void>(); 
+    protected readonly onDestroy = output<void>();
     protected onReady   = output<void>();
-    protected onDestroy = output<void>();
 
 
     //AfterViewInit

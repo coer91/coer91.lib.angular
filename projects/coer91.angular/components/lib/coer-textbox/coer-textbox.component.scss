@@ -1,10 +1,10 @@
 div.coer-textbox { 
     height: var(--input-height) !important;
     align-items: center !important;
-    display: inline-flex !important; 
     position: relative !important;
     border-radius: 5px !important;
     background-color: var(--input);
+    display: inline-flex; 
 
     div.coer-textbox-button {
         display: inline !important;
@@ -35,18 +35,35 @@ div.coer-textbox {
     div.icon-container { 
         position: absolute !important;
         top: 0px !important;
-        right: 40px !important;
         bottom: 0px !important;
         display: flex !important;  
         align-items: center !important;
         justify-content: center !important;
-        padding: 10px !important;
+        padding: 10px 10px 10px 5px !important;
         background-color: inherit !important;
+        border-radius: inherit !important;
         z-index: 1 !important;
         gap: 5px !important;
 
         i { 
             font-size: 20px !important;
+        }
+
+        i.i91-search, i.i91-mark, i.i91-eye-fill, i.i91-eye-slash-fill { 
+            color: color-mix(in srgb, var(--gray), var(--light) 50%);
+            cursor: pointer !important;
+        }
+
+        i.i91-search:hover, i.i91-mark:hover, i.i91-eye-fill:hover, i.i91-eye-slash-fill:hover { 
+            color: var(--gray) !important; 
+        }
+
+        i.i91-exclamation-circle-fill { 
+            color: var(--danger); 
+        }
+
+        i.i91-check-circle-fill { 
+            color: var(--success); 
         }
     }
 

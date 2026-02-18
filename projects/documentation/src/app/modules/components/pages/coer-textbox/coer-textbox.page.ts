@@ -7,14 +7,16 @@ import { Page } from 'coer91.angular/tools';
     templateUrl: './coer-textbox.page.html', 
     standalone: false
 })
-export class CoerTextboxPage extends Page {   
+export class CoerTextBoxPage extends Page {   
 
-    //
+    //Injections
     private formBuilder = inject(FormBuilder);
     
     //Variables
-    protected value1 = signal<string>('');
-    protected value2 = 'Pre'; 
+    protected example1 = signal<string>('This is an example');
+    protected example2 = signal<string>('showClearButton');
+    protected example3 = signal<string>('showSearchButton');
+    protected example4 = signal<string>('showClearButton & showSearchButton');
 
     public form: FormGroup = this.formBuilder.group({ 
         nombre: ['test', [Validators.required]]
@@ -26,7 +28,7 @@ export class CoerTextboxPage extends Page {
 
     //Start
     protected override async StartPage() {
-        this.value1.set('hello world');
+         
 
         //this.form.get('nombre')?.setValue('updated');
 
@@ -36,8 +38,8 @@ export class CoerTextboxPage extends Page {
             nombre: 'sfffbddfbdf'
          });
 
-         setTimeout(() =>{
-  this.form.reset({
+         setTimeout(() => {
+        this.form.reset({
             nombre: 'sfffsssssssssssssssssssbddfbdf'
          });
          }, 3000)

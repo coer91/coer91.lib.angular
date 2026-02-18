@@ -1,6 +1,8 @@
 <div class="coer-textbox" 
     [ngClass]="{ 
-        'background-color-readonly': isReadonly() 
+        'background-color-readonly': isReadonly(),
+        'invisible': isInvisible(),
+        'display-none': isHidden(), 
     }"
     [ngStyle]="{
         width       : width(), 
@@ -23,7 +25,7 @@
         </div>
     }
     
-    <input type="text" 
+    <input [type]="_inputType()" 
         [id]="_id" 
         [name]="_id" 
         [value]="_value()"
@@ -36,7 +38,7 @@
             paddingLeft:  _paddingLeft(),
             paddingRight: _paddingRight(), 
             'text-align': textPosition()
-        }"> 
+        }">  
 
     @if(_showExternalButtonRight()) {
         <div class="coer-textbox-button border-radius-right-5px">
@@ -51,21 +53,29 @@
 
     @if(_paddingRight() != '10px') {
         <div class="icon-container" [ngStyle]="{ right: _right() }">
-            @if(_showSearchButton()) {
-                <i class="i91-search color-gray cursor-pointer" (click)="_ClickSearch()"></i>
-            }
-    
-            @else if(_showClearButton()) {
-                <i class="i91-mark color-gray cursor-pointer" (click)="Clear()"></i>
-            }  
-
             @if(isInvalid() && _isEnabled()) {
-                <i class="i91-exclamation-circle-fill color-danger"></i>
+                <i class="i91-exclamation-circle-fill"></i>
             }
     
             @else if(isValid() && _isEnabled()) {
-                <i class="i91-check-circle-fill color-green"></i>
-            } 
+                <i class="i91-check-circle-fill"></i>
+            }  
+
+            @if(_showSearchButton()) {
+                <i class="i91-search" (click)="_ClickSearch()"></i>
+            }
+    
+            @else if(_showClearButton()) {
+                <i class="i91-mark" (click)="Clear()"></i>
+            }  
+
+            @else if(_showSecretClosed()) {
+                <i class="i91-eye-slash-fill" (click)="_showSecret.set(false); Focus();"></i>
+            }
+    
+            @else if(_showSecretOpen()) {
+                <i class="i91-eye-fill" (click)="_showSecret.set(true); Focus();"></i>
+            }  
         </div>
     }
 
@@ -99,4 +109,4 @@
             }" 
         ></div>
     }
-</div>  
+</div>    

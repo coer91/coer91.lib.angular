@@ -1,0 +1,35 @@
+@mixin mixin($breakpoint) { 
+    //%
+    @for $i from 0 through 100 {  
+        .#{$breakpoint}flex-basis-#{$i} { 
+            flex-basis: $i * 1% !important;
+            width: $i * 1% !important;
+        }   
+    }  
+
+    //PX
+    @for $i from 1 through 10 { 
+        .#{$breakpoint}flex-basis-#{($i * 100) - 50}px { 
+            flex-basis: ($i * 100px) - 50px !important;
+            width: ($i * 100px) - 50px !important;
+        }
+
+        .#{$breakpoint}flex-basis-#{($i * 100)}px { 
+            flex-basis: ($i * 100px) !important;
+            width: ($i * 100px) !important;
+        } 
+    }   
+
+    @each $key, $value in (
+        'content': content, 
+        'fit-content': fit-content, 
+        'min-content': min-content,
+        'max-content': max-content
+        ) { 
+
+        .#{$breakpoint}flex-basis-#{$key} {
+            flex-basis: $value !important;
+            width: $value !important;
+        }
+    }     
+}

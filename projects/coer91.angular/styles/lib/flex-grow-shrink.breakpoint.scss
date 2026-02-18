@@ -1,0 +1,11 @@
+@mixin mixin($breakpoint) {  
+    @for $i from 0 through 12 {
+        .#{$breakpoint}flex-grow-#{$i} { 
+            flex-grow: $i !important;  
+        }  
+
+        .#{$breakpoint}flex-shrink-#{$i} { 
+            flex-shrink: $i !important;  
+        } 
+    } 
+}

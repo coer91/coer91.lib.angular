@@ -35,8 +35,8 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
     public isReadonly   = input<boolean>(false);
     public isInvisible  = input<boolean>(false);
     public isHidden     = input<boolean>(false);
-    public isInvalid    = input<boolean>(false);
     public isValid      = input<boolean>(false); 
+    public isInvalid    = input<boolean>(false);
     public marginTop    = input<string>('0px');
     public marginRight  = input<string>('0px');
     public marginBottom = input<string>('0px');
@@ -51,12 +51,12 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
     //AfterViewInit
     async ngAfterViewInit() {
         await Tools.Sleep(); 
-        await this.StartComponent();  
+        await this.Start();  
         this.onReady?.emit();
     }
 
 
-    protected async StartComponent(){}
+    protected async Start(){}
 
 
     //OnDestroy
