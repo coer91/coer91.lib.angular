@@ -15,7 +15,8 @@ import { appSettings, AuthService } from '@appSettings';
             #coer91 
             [navigation]="navigation()" 
             (onLogin)="Login($event)"
-            (onRecoveryPassword)="null"
+            (onRecoveryPassword)="RecoveryPassword($event)"
+            (onUpdatePassword)="SetPassword($event)"
             (onUpdateJWT)="UpdateJWT()"
         ></coer91>
     `
@@ -41,46 +42,6 @@ export class AppRoot {
 
 
     /** */
-    protected async Login(login: ILogin): Promise<void> { 
-        //const loginResponse = await this.authService.Login(login);
-
-        const loginResponse = {
-            status: 200,
-            message: '',
-            ok: true,
-            body: {
-                userId: 1,
-                user: 'coer91',
-                userNumber: '',
-                role: 'Development',
-                partner: '',
-                fullName: 'Christian Omar Escamilla Rodriguez',
-                nickname: 'chris',
-                email: 'coer0408@gmail.com',
-                jwt: '',
-                roles: ['Development', 'Administrator'],
-                message: 'Christian'
-            }
-        }
-
-        if(loginResponse.ok) {
-            const isLogin = this._coer91().Login(loginResponse.body);
-
-            if(isLogin) {
-                this.GetNavigation();
-            } 
-        }
-
-        else {
-            console.error(loginResponse.message);
-            this._coer91().alert.Error('Login');
-        } 
-
-        isLoadingSIGNAL.set(false);
-    }
-
-
-    /** */
     protected async GetNavigation(): Promise<void> {
         if(appSettings.navigation.static) {
             this.navigation.set(NAVIGATION);
@@ -102,6 +63,46 @@ export class AppRoot {
 
 
     /** */
+    protected async RecoveryPassword(user: string): Promise<void> {   
+        isLoadingSIGNAL.set(true);
+
+        const response = await this.authService.RecoveryPassword(user);   
+
+        if(response.ok) {
+            this._coer91().alert.Information(response.body.password);
+            this._coer91().Show('LOGIN'); 
+        }
+
+        else {
+            this._coer91().alert.Warning(response.message);
+            this._coer91().FocusUser();
+        } 
+
+        isLoadingSIGNAL.set(false);
+    }
+
+
+    /** */
+    protected async SetPassword(password: string): Promise<void> {   
+        isLoadingSIGNAL.set(true);
+
+        const user = userSIGNAL()?.user || '';
+        const response = await this.authService.SetPassword({ user, password });   
+
+        if(response.ok) {
+            this._coer91().alert.Success(response.body, 'Change Password', 'i91-lock-fill');
+            this._coer91().CloseModal();
+        }
+
+        else {
+            this._coer91().alert.Warning(response.message, 'Change Password', 'i91-lock-fill'); 
+        } 
+
+        isLoadingSIGNAL.set(false);
+    }
+
+
+    /** */
     protected async UpdateJWT(): Promise<void> {      
         const JWT = await this.authService.UpdateJWT();   
         if(JWT.ok) Access.SetUser(JWT.body);
@@ -113,7 +114,26 @@ export class AppRoot {
     }
 
 
-    Test(ev: any) {
-        
-    }
+    /** */
+    protected async Login(login: ILogin): Promise<void> { 
+        const loginResponse = await this.authService.Login(login); 
+
+        if(loginResponse.ok) {
+            const access = this._coer91().SetAccess(loginResponse.body);
+
+            if(access) {
+                this.GetNavigation();
+            } 
+        }
+
+        else {
+            console.error(loginResponse.message);
+            this._coer91().alert.Error('Login');
+        } 
+
+        isLoadingSIGNAL.set(false);
+    } 
+
+
+    
 }

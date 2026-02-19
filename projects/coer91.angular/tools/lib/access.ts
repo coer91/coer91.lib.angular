@@ -109,7 +109,7 @@ export class Access {
     public static LogOut(userSIGNAL: WritableSignal<IUser | null>): void {
         userSIGNAL.set(null);
 
-        const user = (true) 
+        const user = this.useJWT
             ? Access.GetJWTInfo()?.claims?.User || '' 
             : Access.GetUser()?.user || ''; 
 

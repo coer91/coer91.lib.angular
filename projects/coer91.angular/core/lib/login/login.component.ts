@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject, output, signal, viewChild } from '@angular/core';  
+import { AfterViewInit, Component, inject, output, signal, viewChild } from '@angular/core';  
 import { isLoadingSIGNAL } from 'coer91.angular/signals';
 import { Tools } from 'coer91.angular/tools';
 import { ILogin } from 'coer91.angular/interfaces'; 
@@ -47,7 +47,7 @@ export class LoginPage implements AfterViewInit {
 
     async ngAfterViewInit() {
         await Tools.Sleep();
-        if(this._form().GetControlValue<string>('user', '').length < 6) this._FocusUser();
+        if(this._form().GetControlValue<string>('user', '').length < 6) this.FocusUser();
         else this.FocusPassword(); 
     } 
 
@@ -55,8 +55,8 @@ export class LoginPage implements AfterViewInit {
 
     //Function
     protected _Toggle(): void {
-        if(this.view() === 'LOGIN') this._Show('RECOVERY');
-        else this._Show('LOGIN');
+        if(this.view() === 'LOGIN') this.Show('RECOVERY');
+        else this.Show('LOGIN');
     }
 
 
@@ -84,32 +84,32 @@ export class LoginPage implements AfterViewInit {
 
 
     /** */
-    protected _Show(view: 'LOGIN' | 'RECOVERY') {
+    public Show(view: 'LOGIN' | 'RECOVERY') {
         this.view.set(view);  
         
         Tools.Sleep().then(_ => {    
             if(view === 'RECOVERY') {    
                 if(this._form().IsValidControl('user')) this._loginButton().Focus();       
-                else this._FocusUser(); 
+                else this.FocusUser(); 
             }
     
-            else if (view === 'LOGIN') {
-                if(this._form().IsValid()) this.FocusPassword(true);       
-                else this._FocusUser();
+            else if (view === 'LOGIN') { 
+                if(this._form().IsValidControl('user')) this.FocusPassword(true);       
+                else this.FocusUser();
             } 
         });
     }
 
 
     /** */
-    protected _FocusUser(): void { 
-        Tools.Sleep().then(() => this._inputUser().Focus());
+    public FocusUser(): void { 
+        Tools.Sleep(200).then(() => this._inputUser().Focus());
     }
 
 
     /** */
     public FocusPassword(select: boolean = false): void {  
-        Tools.Sleep().then(() => this._inputPassword().Focus(select));
+        Tools.Sleep(200).then(() => this._inputPassword().Focus(select));
     }
 
 

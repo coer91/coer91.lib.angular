@@ -23,7 +23,7 @@ const appSettings = {
         login: 'clip.mp4'
     },
     security: {
-        useJWT: false
+        useJWT: true
     },
     dateTime: {
         format: 'MDY'

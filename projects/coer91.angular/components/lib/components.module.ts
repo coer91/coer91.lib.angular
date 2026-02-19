@@ -10,12 +10,14 @@ import { CoerModal     } from './coer-modal/coer-modal.component';
 import { CoerPageTitle } from './coer-page-title/coer-page-title.component';
 import { CoerSecretBox } from './coer-secretbox/coer-secretbox.component'; 
 import { CoerTextBox   } from './coer-textbox/coer-textbox.component';
+import { DirectivesModule } from 'coer91.angular/directives';
 
 @NgModule({
     imports: [
         CommonModule,  
         RouterModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        DirectivesModule,
     ],
     declarations: [  
         CoerButton,

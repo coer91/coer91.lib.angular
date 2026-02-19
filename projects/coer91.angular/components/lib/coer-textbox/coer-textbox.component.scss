@@ -72,12 +72,18 @@ div.coer-textbox {
     label {
         user-select: none !important;
         position: absolute !important;
-        transition: all 0.3s ease !important;  
         color: var(--gray) !important;  
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
         transform: translate(10px, 0px) !important;   
+        transition: transform 0.3s ease !important;
+
+        span {
+            padding: 0px 5px !important;
+            border-radius: 10px !important;
+            background-color: var(--input);
+        }
     } 
 
     label.focus, label.no-empty {

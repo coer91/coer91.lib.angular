@@ -53,6 +53,46 @@
 </coer-modal>
 
 
-<coer-modal #passwordModal title="Change Password" icon="i91-lock-fill">
-     
+<coer-modal #passwordModal title="Change Password" icon="i91-lock-fill" (onClose)="_ResetPassword()" (onOpen)="passwordRef.Focus()">
+    <div class="flex-wrap margin-top-15px max-width-300px margin-x-10px">
+        <!-- Password -->
+        <div class="flex-basis-300px flex-grow-1">
+            <coer-secretbox
+                #passwordRef
+                label="Password"
+                [(ngModel)]="_password" 
+                [isLoading]="_isLoading()" 
+                [isInvalid]="_isInvalidPassword()"
+                marginTop="5px"
+                (onKeyupEnter)="confirmRef.Focus()"
+            ></coer-secretbox> 
+        </div> 
+
+        <!-- Confirm -->
+        <div class="flex-basis-300px flex-grow-1">
+            <coer-secretbox
+                #confirmRef
+                label="Confirm"
+                [(ngModel)]="_confirm" 
+                [isLoading]="_isLoading()" 
+                [isInvalid]="_isInvalidConfirm()"
+                marginTop="5px"
+                marginBottom="10px"
+                (onKeyupEnter)="buttonRef()?.Click()"
+            ></coer-secretbox> 
+        </div>
+    </div>
+    
+    <ng-template templateRef="modal-footer">
+        <coer-button
+            #buttonRef
+            label="Update"
+            icon="save"
+            color="success"
+            [isLoading]="_isLoading()"
+            marginRight="10px"
+            [isReadonly]="_disableUpdatePassword()"
+            (onClick)="onUpdatePassword.emit(_password())"
+        ></coer-button>
+    </ng-template>
 </coer-modal>

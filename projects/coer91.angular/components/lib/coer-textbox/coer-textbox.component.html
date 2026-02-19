@@ -90,7 +90,7 @@
                 'isValid'        : isValid(), 
                 'isInvalid'      : isInvalid(),
             }">
-            {{ _label() }}
+            <span [ngClass]="{ 'background-color-readonly': isReadonly() }"> {{ _label() }} </span>
         </label>
     }
 

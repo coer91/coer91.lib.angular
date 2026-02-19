@@ -81,9 +81,7 @@ export class CoerTextBox extends ControlValue<string> {
             this._isFocused.set(true);
         }
 
-        else this.Blur(); 
-
-        if(!this.isTouched()) this.SetTouched(true);
+        else this.Blur();  
     } 
 
 
@@ -238,5 +236,6 @@ export class CoerTextBox extends ControlValue<string> {
     public Blur(): void {      
         this._htmlElement?.blur();  
         this._isFocused.set(false);
+        if(!this.isTouched()) this.SetTouched(true);
     }
 }

@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, input, output, signal, viewChild }
 import { ILogin, ILoginResponse, IMenu, IToolbarMenu, IUser } from 'coer91.angular/interfaces';
 import { Access, CoerAlert, Dates, Screen, Tools } from 'coer91.angular/tools';
 import { screenSizeSIGNAL, userSIGNAL } from 'coer91.angular/signals';
+import { Toolbar } from '../toolbar/toolbar.component';
 import { LoginPage } from '../login/login.component';
 import { Router } from '@angular/router'; 
 declare const appSettings: any;
@@ -19,6 +20,7 @@ export class Coer91 {
     protected readonly _router = inject(Router); 
 
     //Elements
+    protected readonly _toolbar = viewChild<Toolbar>('toolbar');
     protected readonly _login = viewChild<LoginPage>('login');
 
     //Variables
@@ -42,6 +44,7 @@ export class Coer91 {
     protected readonly onRecoveryPassword = output<string>(); 
     protected readonly onUpdateJWT        = output<void>();
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
+    protected readonly onUpdatePassword   = output<string>();
  
     constructor() {    
         Screen.Resize.subscribe(screenSizeSIGNAL.set);  
@@ -70,45 +73,67 @@ export class Coer91 {
             && this.isOpenSidenav() 
             && ['mv', 'xs', 'sm', 'md', 'lg'].includes(screenSizeSIGNAL().breakpoint);
     });
+
+
+    /** */
+    public FocusUser(): void { 
+        this._login()?.FocusUser();
+    }
+
+
+    /** */
+    public FocusPassword(select: boolean = false): void {  
+        this._login()?.FocusPassword(select);
+    }
+
+
+    /** */
+    public Show(view: 'LOGIN' | 'RECOVERY'): void {  
+        this._login()?.Show(view);
+    }
+
+
+    /** */
+    public CloseModal() {
+        this._toolbar()?.CloseModal();         
+    } 
     
     
     /** */
-    public Login(response: ILoginResponse | IUser): boolean {  
+    public SetAccess(response: ILoginResponse | IUser): boolean {  
         const _response = response as ILoginResponse;
+        Access.SetUser(null);
+        userSIGNAL.set(null);
 
+        //Set Response
         if(Tools.IsBooleanTrue(appSettings.security.useJWT)) {
             if(Tools.IsNotOnlyWhiteSpace(_response?.jwt)) {
                 Access.SetUser(_response.jwt);
-                userSIGNAL.set(_response); 
-
-                if(Tools.HasProperty(_response, 'message')) { 
-                    this._alert.Information(_response.message, 'Welcome', 'i91-logo-coer91');
-                    this._router.navigateByUrl('/home'); 
-                } 
-
-                return Access.IsLogin();
+                userSIGNAL.set(_response);  
             }
         }
 
         else {
             if(Tools.IsNotOnlyWhiteSpace(_response?.user)) {
                 Access.SetUser(_response);
-                userSIGNAL.set(_response); 
-
-                if(Tools.HasProperty(_response, 'message')) { 
-                    this._alert.Information(_response.message, 'Welcome', 'i91-logo-coer91');
-                    this._router.navigateByUrl('/home'); 
-                }
-
-                return Access.IsLogin();
+                userSIGNAL.set(_response);  
             }
         }  
          
-        Access.SetUser(null);
-        userSIGNAL.set(null);
-        this._alert.Warning(_response.message, 'No access', 'i91-hand-stop-fill');
-        this._login()?.FocusPassword();
-        return false;  
+        //Has Access
+        if(Access.IsLogin()) {
+            if(Tools.HasProperty(_response, 'message')) { 
+                this._alert.Information(_response.message, 'Welcome', 'i91-logo-coer91');
+                this._router.navigateByUrl('/home'); 
+            } 
+        }
+
+        else {
+            this._alert.Warning(_response.message, 'No access', 'i91-hand-stop-fill');
+            this._login()?.FocusPassword();
+        }
+
+        return Access.IsLogin();  
     } 
 
 

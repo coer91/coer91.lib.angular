@@ -1,0 +1,56 @@
+@mixin mixin($breakpoint) { 
+    
+    .#{$breakpoint}margin-auto {
+        margin: auto !important;
+    } 
+
+    .#{$breakpoint}margin-top-auto {
+        margin-top: auto !important;
+    } 
+
+    .#{$breakpoint}margin-right-auto {
+        margin-right: auto !important;
+    }  
+
+    .#{$breakpoint}margin-bottom-auto {
+        margin-bottom: auto !important;
+    }  
+
+    .#{$breakpoint}margin-left-auto {
+        margin-left: auto !important;
+    }
+    
+    @for $i from 0 through 50 {
+        .#{$breakpoint}margin-#{$i}px {
+            margin: $i * 1px !important;
+        }
+
+        // X - Y
+        .#{$breakpoint}margin-y-#{$i}px {
+            margin-top: $i * 1px !important;
+            margin-bottom: $i * 1px !important;
+        }
+
+        .#{$breakpoint}margin-x-#{$i}px {
+            margin-left: $i * 1px !important;
+            margin-right: $i * 1px !important;
+        }        
+        
+        // ONE SIDE
+        .#{$breakpoint}margin-top-#{$i}px {
+            margin-top: $i * 1px !important;
+        } 
+
+        .#{$breakpoint}margin-right-#{$i}px {
+            margin-right: $i * 1px !important;
+        }  
+
+        .#{$breakpoint}margin-bottom-#{$i}px {
+            margin-bottom: $i * 1px !important;
+        }  
+
+        .#{$breakpoint}margin-left-#{$i}px {
+            margin-left: $i * 1px !important;
+        }    
+    }   
+}

@@ -1,8 +1,8 @@
-import { environmentSIGNAL, screenSizeSIGNAL, userSIGNAL, userImageSIGNAL } from 'coer91.angular/signals';
+import { environmentSIGNAL, screenSizeSIGNAL, userSIGNAL, userImageSIGNAL, isLoadingSIGNAL } from 'coer91.angular/signals';
 import { AfterViewInit, Component, computed, input, output, signal, viewChild } from '@angular/core';  
 import { Access, Collections, HTMLElements, Tools } from 'coer91.angular/tools';
 import { IToolbarMenu } from 'coer91.angular/interfaces';
-import { CoerModal } from 'coer91.angular/components';
+import { CoerButton, CoerModal, CoerSecretBox } from 'coer91.angular/components';
 declare const appSettings: any;
 
 @Component({
@@ -16,12 +16,18 @@ export class Toolbar implements AfterViewInit {
     //Elements
     protected readonly _profileModal = viewChild<CoerModal>('profileModal');
     protected readonly _passwordModal = viewChild<CoerModal>('passwordModal');
+    protected readonly passwordRef = viewChild<CoerSecretBox>('passwordRef');
+    protected readonly confirmRef = viewChild<CoerSecretBox>('confirmRef');
+    protected readonly buttonRef = viewChild<CoerButton>('buttonRef');
 
     //Variables 
     protected readonly user = userSIGNAL;  
-    protected readonly userImage = userImageSIGNAL;    
+    protected readonly userImage = userImageSIGNAL;   
+    protected readonly _isLoading = isLoadingSIGNAL;    
     protected readonly title = appSettings?.appInfo?.title; 
     protected readonly _isCollapsed = signal<boolean>(true); 
+    protected readonly _password = signal<string>(''); 
+    protected readonly _confirm = signal<string>(''); 
 
     //Inputs
     public readonly menu                = input.required<IToolbarMenu[]>();
@@ -35,7 +41,7 @@ export class Toolbar implements AfterViewInit {
     //Output 
     protected readonly onClickToogle = output<void>(); 
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
-
+    protected readonly onUpdatePassword  = output<string>();
 
     ngAfterViewInit(): void {
         Tools.Sleep().then(() => {
@@ -54,6 +60,29 @@ export class Toolbar implements AfterViewInit {
         }  
 
         return '';
+    });
+
+
+    //Computed
+    protected _isInvalidPassword = computed<boolean>(() => {
+        return this.passwordRef()!.isTouched() 
+            && this._password().length <= 5
+    });
+
+
+    //Computed
+    protected _isInvalidConfirm = computed<boolean>(() => {
+        return this.confirmRef()!.isTouched()
+            && (this._confirm().length <= 5 || this._confirm() != this._password());
+    });
+
+
+    //Computed
+    protected _disableUpdatePassword = computed(() => {
+        return !this.passwordRef()!.isTouched() 
+            || !this.confirmRef()!.isTouched()
+            || this._isInvalidPassword() 
+            || this._isInvalidConfirm();
     });
 
 
@@ -92,7 +121,6 @@ export class Toolbar implements AfterViewInit {
     
                     case 'Log Out': {
                         Access.LogOut(userSIGNAL); 
-                        userSIGNAL.set(null);
                         break;
                     }
                 }                        
@@ -101,4 +129,20 @@ export class Toolbar implements AfterViewInit {
             this.onClickToolbarMenu.emit(menu);
         }
     }
+
+
+    //Function
+    protected _ResetPassword() {     
+        this._password.set('');
+        this._confirm.set('');        
+        this.passwordRef()?.SetTouched(false);
+        this.confirmRef()?.SetTouched(false);
+    } 
+
+
+    /** */
+    public CloseModal() {
+        this._profileModal()?.Close();  
+        this._passwordModal()?.Close();          
+    } 
 }

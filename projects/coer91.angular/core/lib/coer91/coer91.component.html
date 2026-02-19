@@ -1,5 +1,6 @@
 @if(_isLogin()) {
     <coer-toolbar 
+        #toolbar
         [menu]="toolbarMenu()"
         [showProfileMenu]="toolbarShowProfileMenu()"    
         [preventProfileMenu]="toolbarPreventProfileMenu()"
@@ -9,6 +10,8 @@
         [preventLogOutMenu]="toolbarPreventLogOutMenu()"  
         (onClickToogle)="sidenav.Toggle()"
         (onClickToolbarMenu)="onClickToolbarMenu.emit($event)"
+        (onUpdatePassword)="onUpdatePassword.emit($event)"
+
     ></coer-toolbar>
     
     <div class="coer91">

@@ -7,12 +7,12 @@
                 <!-- user -->
                 <coer-textbox
                     #userRef
-                    label="User"
+                    [label]="(view() === 'LOGIN' ? 'User' : 'User / Email')"
                     formControlName="user"
                     [isLoading]="isLoading()"
                     [isInvalid]="form.IsInvalidControl('user')"
                     marginTop="35px"
-                    (onKeyupEnter)="passwordRef.Focus()"
+                    (onKeyupEnter)="(view() === 'RECOVERY' ? loginRef.Click() : passwordRef.Focus())"
                 ></coer-textbox>
 
                 <!-- password -->

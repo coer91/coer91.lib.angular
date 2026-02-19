@@ -19,6 +19,20 @@ export class AuthService {
     }); 
 
 
+    /** HTTP POST */
+    public RecoveryPassword = (userEmail: string) => HTTP.POST<ILogin>({
+        url: `${this.AuthController}/RecoveryPasswordEmail/${userEmail}` 
+    });
+
+
+    /** HTTP PUT */
+    public SetPassword = (login: ILogin) => HTTP.PUT<string>({
+        url: `${this.AuthController}/SetPassword`,
+        body: login,
+        responseType: 'text'  
+    });
+
+
     /** HTTP PUT */
     public UpdateJWT = () => HTTP.PUT<string>({
         url: `${this.AuthController}/UpdateJWT`,
