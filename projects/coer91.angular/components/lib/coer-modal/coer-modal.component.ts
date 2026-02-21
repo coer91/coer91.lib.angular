@@ -87,7 +87,6 @@ export class CoerModal implements AfterViewInit, OnDestroy {
 
     //Computed
     protected _modalFooter = computed<any>(() => { 
-        console.log(this.contentElements().find(x => x.templateRef().equals('modal-footer')))
         return this.contentElements().find(x => x.templateRef().equals('modal-footer')) || null;
     });
 

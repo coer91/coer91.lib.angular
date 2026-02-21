@@ -47,11 +47,11 @@ div.coer-textbox {
 
         i { 
             font-size: 20px !important;
+            cursor: pointer !important;
         }
 
         i.i91-search, i.i91-mark, i.i91-eye-fill, i.i91-eye-slash-fill { 
-            color: color-mix(in srgb, var(--gray), var(--light) 50%);
-            cursor: pointer !important;
+            color: color-mix(in srgb, var(--gray), var(--light) 50%); 
         }
 
         i.i91-search:hover, i.i91-mark:hover, i.i91-eye-fill:hover, i.i91-eye-slash-fill:hover { 
@@ -64,6 +64,15 @@ div.coer-textbox {
 
         i.i91-check-circle-fill { 
             color: var(--success); 
+        }
+
+        i.i91-angle {
+            transition: all 0.3s ease !important;
+            color: var(--gray);
+        }
+
+        i.i91-270deg {
+            color: var(--primary);
         }
     }
 
@@ -80,7 +89,7 @@ div.coer-textbox {
         transition: transform 0.3s ease !important;
 
         span {
-            padding: 0px 5px !important;
+            padding: 0px 10px !important;
             border-radius: 10px !important;
             background-color: var(--input);
         }
@@ -103,6 +112,10 @@ div.coer-textbox {
 
     label.focus.isInvalid {
         color: var(--danger) !important;
+    }
+
+    label.no-empty.readonly {
+        color: var(--dark) !important;
     }
 
     label.external-button {
@@ -138,5 +151,58 @@ div.coer-textbox {
 
     div.line.isInvalid {
         border-color: var(--danger) !important;
+    }
+
+    ul {
+        list-style: none !important;
+        padding-left: 0 !important;
+        background-color: var(--ghost) !important;
+        border-radius: 0px 0px 5px 5px !important;
+        box-shadow: 0px 5px 10px -3px var(--dark) !important;
+        position: absolute !important;
+        top: var(--input-height) !important;
+        left: 0px !important;
+        right: 0px !important;
+        overflow: auto !important;
+        transition: max-height 0.3s ease-in-out !important;
+        z-index: var(--z-index-items) !important; 
+
+        li { 
+            min-height: 24.2px !important;
+            border-bottom: 1px solid var(--loading) !important; 
+            display: flex !important;
+            align-items: center !important;
+            padding: 5px 10px !important;
+            overflow: hidden !important;            
+            cursor: pointer !important;
+            gap: 5px !important;
+
+            span.icon-container-option {
+                width: 25px !important;
+                max-width: 25px !important;
+                display: inherit !important;
+                align-items: inherit !important;
+                justify-content: center !important;
+            }
+
+            span.display-property-option {  
+                display: flex !important;
+                align-items: center !important;
+                word-break: break-all !important;
+            }
+        } 
+
+        li:last-child { 
+            border-bottom-color: transparent !important;
+            border-radius: 0px 0px 5px 5px !important;
+        }
+  
+        li:not(.focus):hover {
+            background-color: var(--item-hover); 
+        }
+
+        li.focus {
+            background-color: var(--item-focus); 
+        }
     }
 }

@@ -28,6 +28,7 @@ export class Toolbar implements AfterViewInit {
     protected readonly _isCollapsed = signal<boolean>(true); 
     protected readonly _password = signal<string>(''); 
     protected readonly _confirm = signal<string>(''); 
+    protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
 
     //Inputs
     public readonly menu                = input.required<IToolbarMenu[]>();
@@ -79,10 +80,11 @@ export class Toolbar implements AfterViewInit {
 
     //Computed
     protected _disableUpdatePassword = computed(() => {
-        return !this.passwordRef()!.isTouched() 
-            || !this.confirmRef()!.isTouched()
-            || this._isInvalidPassword() 
-            || this._isInvalidConfirm();
+        return this._isInvalidPassword() 
+            || this._isInvalidConfirm()
+            || this._password().length <= 5
+            || this._confirm().length <= 5
+            || this._confirm() != this._password();
     });
 
 

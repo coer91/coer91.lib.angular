@@ -7,6 +7,7 @@ import { ROUTER_PAGE } from "coer91.angular/tools";
 import { CoerButtonPage } from "./pages/coer-button/coer-button.page";  
 import { CoerModalPage  } from "./pages/coer-modal/coer-modal.page";
 import { CoerSecretBoxPage } from "./pages/coer-secretbox/coer-secretbox.page";
+import { CoerSelectBoxPage } from "./pages/coer-selectbox/coer-selectbox.page";
 import { CoerTextBoxPage } from "./pages/coer-textbox/coer-textbox.page";
 
 export const routes: Routes = [{
@@ -15,6 +16,7 @@ export const routes: Routes = [{
         ROUTER_PAGE('coer-button',    CoerButtonPage),  
         ROUTER_PAGE('coer-modal' ,    CoerModalPage),
         ROUTER_PAGE('coer-secretbox', CoerSecretBoxPage),  
+        ROUTER_PAGE('coer-selectbox', CoerSelectBoxPage),  
         ROUTER_PAGE('coer-textbox',   CoerTextBoxPage), 
     ]
 }];
@@ -24,6 +26,7 @@ export const routes: Routes = [{
         CoerButtonPage, 
         CoerModalPage,
         CoerSecretBoxPage,
+        CoerSelectBoxPage,
         CoerTextBoxPage,
     ],
     imports: [SharedModule, RouterModule.forChild(routes)],

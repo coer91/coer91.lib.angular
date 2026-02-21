@@ -23,7 +23,7 @@
                     [isLoading]="isLoading()"
                     marginTop="35px"
                     [isInvisible]="view() === 'RECOVERY'"
-                    (onKeyupEnter)="loginRef.Click()"
+                    (onKeyupEnter)="loginRef.Click()" 
                 ></coer-secretbox>
 
                 <!-- Login -->
@@ -51,7 +51,7 @@
         <div class="login-background"></div>
     }
 
-    @else if (background.toLowerCase().endsWith('.png') || background.toLowerCase().endsWith('.jpeg')) {
+    @else if (background.toLowerCase().endsWith('.png') || background.toLowerCase().endsWith('.jpeg') || background.toLowerCase().endsWith('.jpg')) {
         <div class="login-background-image" [ngStyle]="{ backgroundImage: `url('${background}')` }"></div>
     }
 

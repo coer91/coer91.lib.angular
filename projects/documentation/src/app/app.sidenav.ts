@@ -14,6 +14,7 @@ export const NAVIGATION: IMenu[] = [
             { label: 'coer-button'   , icon: 'i91-hand-pointer-fill', path: '/components/coer-button'    },  
             { label: 'coer-modal'    , icon: 'i91-modal-fill',        path: '/components/coer-modal'     },
             { label: 'coer-secretbox', icon: 'i91-eye-slash-fill',    path: '/components/coer-secretbox' },
+            { label: 'coer-selectbox', icon: 'i91-angle i91-90deg',  path: '/components/coer-selectbox' },
             { label: 'coer-textbox'  , icon: 'i91-input-text',        path: '/components/coer-textbox'   },  
         ]}  
     ]},  

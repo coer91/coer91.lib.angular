@@ -31,8 +31,8 @@ export class LoginPage implements AfterViewInit {
 
     //form
     protected formGroup: FormGroup = this.formBulder.group({
-        user:     ['', Validators.required],
-        password: ['', Validators.required], 
+        user:     ['', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(6)]], 
     });
 
     //Outputs 

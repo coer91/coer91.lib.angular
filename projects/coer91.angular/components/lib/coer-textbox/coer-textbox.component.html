@@ -1,4 +1,4 @@
-<div class="coer-textbox" 
+<div [id]="_id + '-container'" class="coer-textbox" 
     [ngClass]="{ 
         'background-color-readonly': isReadonly(),
         'invisible': isInvisible(),
@@ -28,11 +28,12 @@
     <input [type]="_inputType()" 
         [id]="_id" 
         [name]="_id" 
-        [value]="_value()"
+        [placeholder]="_placeholder()"
+        [value]="_ValueByComponent()"
         [disabled]="!_isEnabled()"
         [minLength]="minLength()"
         [maxLength]="maxLength()"
-        (input)="_SetValue($event.target.value)"
+        (input)="_InputByComponent($event.target.value)"
         [ngStyle]="{ 
             width: _widtht(),
             paddingLeft:  _paddingLeft(),
@@ -75,7 +76,18 @@
     
             @else if(_showSecretOpen()) {
                 <i class="i91-eye-fill" (click)="_showSecret.set(true); Focus();"></i>
-            }  
+            } 
+            
+            @if(_isSelectComponent()) {
+                <i [ngClass]="{
+                    'i91-angle'    : true,
+                    'i91-90deg'    : _isCollapsed(),
+                    'i91-270deg'   : !_isCollapsed(),
+                    'color-primary': !_isCollapsed() && !isValid() && !isInvalid(),
+                    'color-success': !_isCollapsed() && isValid()  && !isInvalid(),
+                    'color-danger' : !_isCollapsed() && isInvalid(),
+                }" (click)="_isCollapsed.set(!_isCollapsed())"></i>
+            } 
         </div>
     }
 
@@ -89,6 +101,7 @@
                 'display-none'   : isLoading(),
                 'isValid'        : isValid(), 
                 'isInvalid'      : isInvalid(),
+                'readonly'       : isReadonly(),
             }">
             <span [ngClass]="{ 'background-color-readonly': isReadonly() }"> {{ _label() }} </span>
         </label>
@@ -109,4 +122,20 @@
             }" 
         ></div>
     }
-</div>     
+
+    @if(_isSelectComponent()) {
+        <ul [id]="_id + '-options'" [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
+            @for(item of _dataSource(); track item.index) {
+                <li [id]="_id + '-index' + item.index" [ngClass]="{ 'focus': _index() == item.index }" (click)="_SetValue(item)"> 
+                    @if(IsNotOnlyWhiteSpace(_GetIconBySelect(item))) {
+                        <span class="icon-container-option">
+                            <i [class]="_GetIconBySelect(item)"></i> 
+                        </span>
+                    }
+    
+                    <span class="display-property-option">{{ _GetDisplayBySelect(item) }}</span>    
+                </li>
+            }
+        </ul> 
+    }
+</div>      

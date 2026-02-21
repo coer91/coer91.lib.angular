@@ -12,7 +12,7 @@ export const CONTROL_VALUE = <T>(component: T) => {
 
 
 @Component({ template: '' })
-export abstract class ControlValue<T> implements AfterViewInit, OnDestroy { 
+export abstract class ControlValue implements AfterViewInit, OnDestroy { 
 
     //Variables 
     protected readonly _id = Tools.GetGuid();
@@ -29,7 +29,7 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
     protected readonly IsBooleanFalse      = Tools.IsBooleanFalse;  
     
     //Input
-    public value        = input<T>();
+    public value        = input<any>('');
     public label        = input<string>('');
     public isLoading    = input<boolean>(false); 
     public isReadonly   = input<boolean>(false);
@@ -84,7 +84,7 @@ export abstract class ControlValue<T> implements AfterViewInit, OnDestroy {
 
 
     /** Sets the value of the component */
-    protected _SetValue(value: any): void {   
+    protected _SetValue(value: any): void {    
         if(this._useModelBinding()) {
             this._UpdateValue()!(value); 
         } 

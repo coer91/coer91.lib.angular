@@ -36,8 +36,7 @@ export class Access {
                     userNumber: String(JWT.claims?.UserNumber || ''),
                     role:       String(JWT.claims?.Role       || ''),
                     partner:    String(JWT.claims?.Partner    || ''),
-                    fullName:   String(JWT.claims?.FullName   || ''),
-                    nickname:   String(JWT.claims?.Nickname   || ''),
+                    fullName:   String(JWT.claims?.FullName   || ''), 
                     email:      String(JWT.claims?.Email      || ''),
                     jwt:        JWT.jwt,
                     roles:      String(JWT.claims?.Roles || '').replaceAll('[', '').replaceAll(']', '').split(',')

@@ -9,15 +9,26 @@ import { IExternalButton } from 'coer91.angular/interfaces';
     providers: [CONTROL_VALUE(CoerTextBox)],
     standalone: false
 })
-export class CoerTextBox extends ControlValue<string> {  
+export class CoerTextBox extends ControlValue {  
 
     //Variables
     protected readonly _isFocused = signal<boolean>(false); 
-    protected readonly _isSecretComponent = signal<boolean>(false);
-    protected readonly _showSecret = signal<boolean>(true);
-    protected _htmlElement!: HTMLInputElement; 
+    protected readonly _isHoverElement = signal<boolean>(false);
+    protected _htmlElement: HTMLInputElement | null = null;
+    protected _htmlElementContainer: HTMLInputElement | null = null;  
     
-    //Input
+    //secretbox
+    protected readonly _isSecretComponent = signal<boolean>(false);
+    protected readonly _showSecret = signal<boolean>(true); 
+
+    //selectbox
+    protected readonly _isSelectComponent = signal<boolean>(false); 
+    protected readonly _dataSource = signal<any[]>([]);
+    protected readonly _isCollapsed = signal<boolean>(true);
+    protected readonly _index = signal<number>(-1);
+    protected readonly _search = signal<string>('');
+    
+    //Input 
     public placeholder      = input<string>(''); 
     public selectOnFocus    = input<boolean>(false);  
     public textPosition     = input<'left' | 'center' | 'right'>('left'); 
@@ -43,7 +54,11 @@ export class CoerTextBox extends ControlValue<string> {
         this._htmlElement?.addEventListener('keyup', this._onKeyup);
         this._htmlElement?.addEventListener('paste', this._onPaste);
         this._htmlElement?.addEventListener('focus', this._onFocus);
-        this._htmlElement?.addEventListener('blur', this._onBlur);    
+        this._htmlElement?.addEventListener('blur', this._onBlur);   
+        
+        this._htmlElementContainer = HTMLElements.SelectElementById(`${this._id}-container`) as HTMLInputElement; 
+        this._htmlElementContainer?.addEventListener('mouseenter', this._onMouseEnter);    
+        this._htmlElementContainer?.addEventListener('mouseleave', this._onMouseLeave);    
     }
 
 
@@ -53,11 +68,20 @@ export class CoerTextBox extends ControlValue<string> {
         this._htmlElement?.removeEventListener('paste', this._onPaste);
         this._htmlElement?.removeEventListener('focus', this._onFocus); 
         this._htmlElement?.removeEventListener('blur', this._onBlur); 
+        this._htmlElementContainer?.removeEventListener('mouseenter', this._onMouseEnter);    
+        this._htmlElementContainer?.removeEventListener('mouseleave', this._onMouseLeave); 
     } 
 
 
     //Function
-    private _onKeyup = (event: KeyboardEvent) => {
+    protected _onMouseEnter = () => this._isHoverElement.set(true);  
+
+    //Function
+    protected _onMouseLeave = () => this._isHoverElement.set(false);
+
+
+    //Function
+    protected _onKeyup = (event: KeyboardEvent) => {
         if(!this._isEnabled()) return;
 
         if (event.key === 'Enter') {
@@ -69,13 +93,13 @@ export class CoerTextBox extends ControlValue<string> {
 
 
     //Function
-    private _onPaste = () => { 
+    protected _onPaste = () => { 
         Tools.Sleep().then(() => this._SetValue(String(this._value()).trim()));        
     }
 
 
     //Function
-    private _onFocus = () => {
+    protected _onFocus = () => {
         if(this._isEnabled()) {
             if(this.selectOnFocus() === true) this._htmlElement?.select();
             this._isFocused.set(true);
@@ -86,7 +110,7 @@ export class CoerTextBox extends ControlValue<string> {
 
 
     //Function
-    private _onBlur = () => this.Blur(); 
+    protected _onBlur = () => this.Blur(); 
     
     
     //Computed
@@ -154,8 +178,11 @@ export class CoerTextBox extends ControlValue<string> {
         
         if(this.isValid() || this.isInvalid()) padding += 20; 
 
+        if(this._isSelectComponent()) padding += 20;
+
         if(padding == 30) padding += 5; 
         if(padding == 50) padding += 10; 
+        if(padding == 70) padding += 15; 
         
         return `${padding}px`;
     });
@@ -191,7 +218,7 @@ export class CoerTextBox extends ControlValue<string> {
         return this.showClearButton()
             && this._isEnabled() 
             && this.IsNotOnlyWhiteSpace(this._value()) 
-    })
+    });
 
 
     //Computed
@@ -199,18 +226,51 @@ export class CoerTextBox extends ControlValue<string> {
         return this.showSearchButton()
             && !this._showClearButton()
             && this._isEnabled()
-    });   
+    }); 
+    
+    
+    //Computed
+    protected _placeholder = computed<string>(() => '');  
 
 
     //Function
-    protected _ClickSearch(): void {         
-        if (Tools.IsOnlyWhiteSpace(this._value())) {
+    protected _ClickSearch(): void {  
+        if (Tools.IsOnlyWhiteSpace(this._value())) { 
             this.Focus();
         }
 
         else this.Blur();
         this.onClickSearch.emit(this._value()); 
     } 
+
+
+    //Function
+    protected _GetIconBySelect = (item: any): string => item; 
+    protected _GetDisplayBySelect = (item: any): string => item;  
+    protected _ResetSearch(value: any): void {} 
+
+
+    //Computed
+    protected _ValueByComponent = computed(() => {
+        if(this._isSelectComponent()) {
+            return this._search();
+        }
+
+        return this._value();
+    }); 
+
+
+    //Function
+    protected _InputByComponent = (value: any): void => { 
+        if(this._isSelectComponent()) { 
+            this._index.set(0);
+            this._search.set(value); 
+        } 
+
+        else {
+            this._SetValue(value);
+        }
+    }
 
 
     /** */
@@ -237,5 +297,5 @@ export class CoerTextBox extends ControlValue<string> {
         this._htmlElement?.blur();  
         this._isFocused.set(false);
         if(!this.isTouched()) this.SetTouched(true);
-    }
+    } 
 }

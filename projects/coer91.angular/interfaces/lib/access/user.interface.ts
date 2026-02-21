@@ -4,8 +4,7 @@ export interface IUser {
     userNumber: string;
     role: string;
     partner: string;
-    fullName: string;
-    nickname: string;
+    fullName: string; 
     email: string;
     jwt: string; 
     roles: string[];

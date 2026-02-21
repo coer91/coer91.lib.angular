@@ -1,0 +1,28 @@
+<coer-page-title
+    title="Selectbox"
+    [breadcrumbs]="breadcrumbsPage"
+    [goBack]="goBackPage"
+></coer-page-title>
+ 
+<section class="container-section">
+    <coer-selectbox
+        label="Select"
+        [(ngModel)]="value1"
+        [dataSource]="[
+            { id: 1, name: 'option 1' },
+            { id: 2, name: 'option 2' },
+            { id: 3, name: 'option 3' },
+            { id: 4, name: 'option 4' },
+            { id: 5, name: 'option 5' },
+            { id: 6, name: 'option 6' },
+            { id: 7, name: 'option 7' },
+            { id: 8, name: 'option 8' },
+            { id: 9, name: 'option 9' },
+            { id: 10, name: 'option 10' },
+            { id: 11, name: 'option 11' },
+            { id: 12, name: 'option 12' }
+        ]" 
+        [isValid]="false"
+        [isInvalid]="false" 
+    ></coer-selectbox>
+</section> 

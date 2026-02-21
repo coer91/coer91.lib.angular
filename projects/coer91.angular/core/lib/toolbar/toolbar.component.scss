@@ -127,3 +127,26 @@ header {
         }
     }
 }
+
+div.user-profile { 
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 720px !important;
+    max-width: 720px !important;
+    margin: 20px 10px !important;
+    gap: 20px !important;
+
+    div.flex-basis {
+        width: calc(50% - 10px) !important;
+    } 
+}
+
+@media (min-width: 0px) and (max-width: 799px) {   
+    div.user-profile {  
+        width: calc(100% - 20px) !important; 
+
+        div.flex-basis {
+            width: 100% !important;
+        } 
+    }     
+}
