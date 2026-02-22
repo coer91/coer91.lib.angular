@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'; 
 import { HTTP } from 'coer91.angular/tools'; 
-import { ILogin, ILoginResponse, IMenu } from 'coer91.angular/interfaces';
+import { ILogin, ILoginResponse, IMenu, IUserRole } from 'coer91.angular/interfaces';
 import { appSettings } from '@appSettings';
 
 @Injectable({
@@ -8,7 +8,8 @@ import { appSettings } from '@appSettings';
 })
 export class AuthService {
 
-    private readonly AuthController = `${appSettings.webAPI.mySystem}/api/Auth`;  
+    private readonly AuthController = `${appSettings.webAPI.mySystem}/api/Auth`; 
+    private readonly UsersRoleController = `${appSettings.webAPI.mySystem}/api/UsersRole`;  
     private readonly NavigationController = `${appSettings.webAPI.mySystem}/api/Navigation`;
 
     
@@ -37,6 +38,12 @@ export class AuthService {
     public UpdateJWT = () => HTTP.PUT<string>({
         url: `${this.AuthController}/UpdateJWT`,
         responseType: 'text' 
+    });
+
+
+    /** HTTP PUT */
+    public SetMainUsersRole = (userId: number, roleId: number | string) => HTTP.PUT<IUserRole>({
+        url: `${this.UsersRoleController}/SetMainUsersRole/${userId}/${roleId}` 
     });
 
 

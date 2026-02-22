@@ -1,7 +1,7 @@
 import { SidenavAccordion } from './coer-sidenav-accordion/coer-sidenav-accordion.component'; 
 import { Component, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';  
-import { HTMLElements, Strings, Tools, Navigation, Collections, BreadcrumbsPage, Screen } from 'coer91.angular/tools';
-import { navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
+import { HTMLElements, Strings, Tools, Navigation, Collections, Screen } from 'coer91.angular/tools';
+import { isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';
 import { Router } from '@angular/router';
 declare const appSettings: any;
@@ -23,6 +23,7 @@ export class Sidenav {
     //Variables    
     protected readonly show = signal<boolean>(true); 
     protected readonly _navigation = navigationSIGNAL;
+    protected readonly _isLoading = isLoadingSIGNAL;
     protected readonly SetId = Collections.SetId;
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
 

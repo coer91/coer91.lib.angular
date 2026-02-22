@@ -1,5 +1,5 @@
 import { environmentSIGNAL, screenSizeSIGNAL, userSIGNAL, userImageSIGNAL, isLoadingSIGNAL } from 'coer91.angular/signals';
-import { AfterViewInit, Component, computed, input, output, signal, viewChild } from '@angular/core';  
+import { AfterViewInit, Component, computed, effect, input, output, signal, viewChild } from '@angular/core';  
 import { Access, Collections, HTMLElements, Tools } from 'coer91.angular/tools';
 import { IToolbarMenu } from 'coer91.angular/interfaces';
 import { CoerButton, CoerModal, CoerSecretBox } from 'coer91.angular/components';
@@ -28,6 +28,7 @@ export class Toolbar implements AfterViewInit {
     protected readonly _isCollapsed = signal<boolean>(true); 
     protected readonly _password = signal<string>(''); 
     protected readonly _confirm = signal<string>(''); 
+    protected readonly _role = signal<any>(null); 
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
 
     //Inputs
@@ -43,6 +44,17 @@ export class Toolbar implements AfterViewInit {
     protected readonly onClickToogle = output<void>(); 
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
     protected readonly onUpdatePassword  = output<string>();
+    protected readonly onUpdateRole = output<string>();
+
+
+    constructor() {
+        const e = effect(() => {
+            const USER = userSIGNAL();
+            this._role.set(USER?.role);
+
+        });
+    }
+
 
     ngAfterViewInit(): void {
         Tools.Sleep().then(() => {
@@ -51,7 +63,13 @@ export class Toolbar implements AfterViewInit {
             });
         });
     } 
-    
+     
+     
+    //Computed
+    protected _roleList = computed<any[]>(() => {  
+        return this.user()?.roles || [];
+    });
+
     
     //Computed
     protected _icon = computed(() => { 
@@ -130,6 +148,14 @@ export class Toolbar implements AfterViewInit {
             
             this.onClickToolbarMenu.emit(menu);
         }
+    }
+
+
+    //Function
+    protected _UpdateRole(role: string) { 
+        if(Tools.IsNotOnlyWhiteSpace(role) && Tools.IsNotNull(this.user())) { 
+            if(this.user()?.role != role) this.onUpdateRole.emit(role);
+        }       
     }
 
 

@@ -1,3 +1,5 @@
+import { CoerAlert } from "./coer-alert/coer-alert.component";
+
 class _Transactions {
     static transactions = new Map<string, ReturnType<typeof setTimeout>>();
 }
@@ -121,4 +123,18 @@ export const Tools = {
             } 
         });                 
     },
+
+
+    /** Send text to the computer's clipboard */
+    Clipboard: (text: string, message: string = '', title: string = 'Copied'): void => {
+        try {
+            navigator.clipboard.writeText(text.trim()).then(() => {
+                new CoerAlert().Information(message, title, 'i91-clipboard-fill');
+            }); 
+        } 
+        
+        catch {  
+            new CoerAlert().Warning('Unable to copy to clipboard', 'Quick Implement', 'i91-clipboard-fill');
+        }        
+    }
 };

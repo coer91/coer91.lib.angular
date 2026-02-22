@@ -33,7 +33,7 @@
                     }
                 </a>
 
-                @for(breadcrumb of _breadcrumbs().setIndex(); track breadcrumb.index) {
+                @for(breadcrumb of _breadcrumbs().setIndex(); track breadcrumb.__index__) {
                     <span class="slash">/</span>
                     <a [routerLink]='(breadcrumb.path && breadcrumb.path.length > 0) ? breadcrumb.path : null'
                        [queryParams]='breadcrumb.queryParams' 

@@ -2,8 +2,8 @@
 export class Numbers {  
 
     /** */
-    public static IsNumber(value: any): boolean {
-        return !Number.isNaN(Number(value));
+    public static IsNumber(value: any, validType: boolean = false): boolean {
+        return !Number.isNaN(Number(value)) && (validType ? ['number', 'bigint'].includes(typeof value) : true);
     }
 
 

@@ -44,8 +44,7 @@
         <section [ngStyle]="{ 
             'width'     : _width(), 
             'max-width' : _maxWidth(),
-            'height'    : height(), 
-            'max-height': _maxHeight() 
+            'height'    : height() 
         }"> 
             @if(_modalBody()?.template && _modalBody()?.show()) {
                 <ng-container [ngTemplateOutlet]="_modalBody().template"></ng-container>

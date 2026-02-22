@@ -5,7 +5,7 @@ export class Collections {
     
     /** Set an index and concat more arrays of the same type */
     public static SetIndex<T>(array: T[], ...args: T[][]): T[] {  
-        return [...array].concat(...args).map((item, index) => ({ ...item, index }));
+        return [...array].concat(...args).map((item, index) => ({ ...item, __index__: index }));
     }
     
     

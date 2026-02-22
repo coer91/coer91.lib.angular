@@ -86,7 +86,7 @@
                     'color-primary': !_isCollapsed() && !isValid() && !isInvalid(),
                     'color-success': !_isCollapsed() && isValid()  && !isInvalid(),
                     'color-danger' : !_isCollapsed() && isInvalid(),
-                }" (click)="_isCollapsed.set(!_isCollapsed())"></i>
+                }" (click)="_isCollapsed() ? Focus() : Blur()"></i>
             } 
         </div>
     }
@@ -125,8 +125,8 @@
 
     @if(_isSelectComponent()) {
         <ul [id]="_id + '-options'" [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
-            @for(item of _dataSource(); track item.index) {
-                <li [id]="_id + '-index' + item.index" [ngClass]="{ 'focus': _index() == item.index }" (click)="_SetValue(item)"> 
+            @for(item of _dataSource(); track item.__index__) {
+                <li [id]="_id + '-index' + item.__index__" [ngClass]="{ 'focus': _index() == item.__index__ }" (click)="_SetValue(item)"> 
                     @if(IsNotOnlyWhiteSpace(_GetIconBySelect(item))) {
                         <span class="icon-container-option">
                             <i [class]="_GetIconBySelect(item)"></i> 

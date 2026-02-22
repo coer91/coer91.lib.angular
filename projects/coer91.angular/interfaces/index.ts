@@ -2,6 +2,7 @@
 export * from './lib/access/jwt.interface';
 export * from './lib/access/login-response.interface';
 export * from './lib/access/login.interface';
+export * from './lib/access/user-role.interface';
 export * from './lib/access/user.interface';
 
 //app

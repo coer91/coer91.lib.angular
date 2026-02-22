@@ -35,6 +35,29 @@ header {
             }
         }
 
+        div.user-loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            
+            span {
+                color: var(--loading) !important;
+                animation: __KeyOpacity50 0.8s ease-in-out infinite alternate !important;
+            }
+
+            div.user-loading-image {
+                min-width: 30px !important;
+                max-width: 30px !important; 
+                min-height: 30px !important;
+                max-height: 30px !important;
+                border-radius: 25px !important;
+                background: transparent;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+                background-position: center !important; 
+            }
+        }
+
         div.user {
             height: inherit !important;  
             user-select: none !important; 

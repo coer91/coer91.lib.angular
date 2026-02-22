@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, forwardRef, input, OnDestroy, output, signal } from "@angular/core";  
+import { AfterViewInit, Component, computed, effect, EffectRef, forwardRef, input, OnDestroy, output, signal } from "@angular/core";  
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Tools } from "./generic";
 
@@ -15,11 +15,12 @@ export const CONTROL_VALUE = <T>(component: T) => {
 export abstract class ControlValue implements AfterViewInit, OnDestroy { 
 
     //Variables 
+    protected effectControlValueRef!: EffectRef;
     protected readonly _id = Tools.GetGuid();
     protected readonly _value = signal<any>(null);
-    private readonly _isTouched = signal<boolean>(false);
-    private readonly _IsTouchedFunction = signal<Function | null>(null);
-    private readonly _UpdateValue = signal<Function | null>(null);
+    protected readonly _isTouched = signal<boolean>(false);
+    protected readonly _IsTouchedFunction = signal<Function | null>(null);
+    protected readonly _UpdateValue = signal<Function | null>(null);
     
     protected readonly IsNull              = Tools.IsNull;
     protected readonly IsNotNull           = Tools.IsNotNull;
@@ -43,9 +44,17 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
     public marginLeft   = input<string>('0px');
 
     //Output
-    protected readonly onValueChange = output<string>();
+    protected readonly onValueChange = output<any>();
     protected readonly onDestroy     = output<void>();
     protected onReady = output<void>(); 
+
+
+    constructor() {
+        this.effectControlValueRef = effect(() => {
+            const value = this.value();
+            if(!this._useModelBinding()) this._SetValue(value);
+        });
+    }
 
 
     //AfterViewInit
@@ -67,7 +76,9 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
     } 
 
 
-    protected Destructor() {}
+    protected Destructor() {
+        this.effectControlValueRef?.destroy();
+    }
 
 
     /** */
@@ -95,7 +106,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
 
 
     //Computed
-    private _useModelBinding = computed<boolean>(() => Tools.IsFunction(this._UpdateValue()));
+    protected _useModelBinding = computed<boolean>(() => Tools.IsFunction(this._UpdateValue()));
 
 
     //Function

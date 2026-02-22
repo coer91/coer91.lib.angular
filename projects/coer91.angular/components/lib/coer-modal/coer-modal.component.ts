@@ -135,17 +135,7 @@ export class CoerModal implements AfterViewInit, OnDestroy {
     //Computed
     protected _maxWidth = computed(() => { 
         return `calc(${this.maxWidth()} - 20px)`;
-    });
-    
-    
-    //Computed
-    protected _maxHeight = computed(() => {
-        const BREAKPOINT = screenSizeSIGNAL().breakpoint;
-        let compensation = ['mv', 'xs', 'sm'].includes(BREAKPOINT) ? 20 : 80; 
-        if(this._showHeader()) compensation += 40;
-        if(this._showFooter()) compensation += 50;
-        return `calc(100vh - ${compensation}px)`;
-    });  
+    }); 
 
 
     //Function

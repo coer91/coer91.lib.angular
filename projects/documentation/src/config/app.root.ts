@@ -17,6 +17,7 @@ import { appSettings, AuthService } from '@appSettings';
             (onLogin)="Login($event)"
             (onRecoveryPassword)="RecoveryPassword($event)"
             (onUpdatePassword)="SetPassword($event)"
+            (onUpdateRole)="UpdateRole($event)"
             (onUpdateJWT)="UpdateJWT()"
         ></coer91>
     `
@@ -35,7 +36,7 @@ export class AppRoot {
          
         if(Access.IsLogin()) {  
             isLoadingSIGNAL.set(true);
-            userSIGNAL.set(Access.GetUser());
+            userSIGNAL.set(Access.GetUser()); 
             this.GetNavigation().then(() => isLoadingSIGNAL.set(false));  
         }  
     }
@@ -43,19 +44,21 @@ export class AppRoot {
 
     /** */
     protected async GetNavigation(): Promise<void> {
+        this.navigation.set([]);
+
         if(appSettings.navigation.static) {
             this.navigation.set(NAVIGATION);
         }                     
 
         else {
-            const project = appSettings.appInfo.project;   
+            const project = appSettings.appInfo.project;
             const role = userSIGNAL()?.role || '';
-            const navigation = await this.authService.GetNavigationByRole(project, role);   
+            const response = await this.authService.GetNavigationByRole(project, role);   
             
-            if(navigation.ok) this.navigation.set(navigation.body);
+            if(response.ok) this.navigation.set(response.body);
              
             else {
-                console.error(navigation.message);
+                console.error(response.message);
                 this._coer91().alert.Error('GetNavigation');
             }
         } 
@@ -103,6 +106,29 @@ export class AppRoot {
 
 
     /** */
+    protected async UpdateRole(roleId: string): Promise<void> {   
+        isLoadingSIGNAL.set(true); 
+
+        const userId = userSIGNAL()?.userId || 0;
+        const response = await this.authService.SetMainUsersRole(userId, roleId);   
+
+        if(response.ok) {
+            await this.UpdateJWT();
+            userSIGNAL.set(Access.GetUser());
+            this._coer91().CloseModal();
+            this._coer91().alert.Success('The rol has been updated', response.body.role); 
+            await this.GetNavigation(); 
+        }
+
+        else {
+            this._coer91().alert.Warning(response.message);
+        } 
+
+        isLoadingSIGNAL.set(false);
+    }
+
+
+    /** */
     protected async UpdateJWT(): Promise<void> {      
         const JWT = await this.authService.UpdateJWT();   
         if(JWT.ok) Access.SetUser(JWT.body);
@@ -133,7 +159,4 @@ export class AppRoot {
 
         isLoadingSIGNAL.set(false);
     } 
-
-
-    
 }

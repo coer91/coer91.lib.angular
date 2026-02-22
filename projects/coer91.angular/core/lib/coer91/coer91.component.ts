@@ -45,6 +45,7 @@ export class Coer91 {
     protected readonly onUpdateJWT        = output<void>();
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
     protected readonly onUpdatePassword   = output<string>();
+    protected readonly onUpdateRole       = output<string>();
  
     constructor() {    
         Screen.Resize.subscribe(screenSizeSIGNAL.set);  

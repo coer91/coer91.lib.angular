@@ -18,32 +18,41 @@
             </span>
         </div> 
 
-        <div id="coer91-toolbar-user" class="user" (click)="_isCollapsed.set(!_isCollapsed())"> 
-            <figure>
-                <div class="user-image" [ngStyle]="{ backgroundImage: `url('${userImage() | noImage: 'USER'}')` }"></div>
-                
-                @if(_showIdentity()) {
-                    <div class="user-identity">
-                        <p>{{ user()?.fullName }}</p>
-                        <p>{{ user()?.role     }}</p>
-                    </div>
-                }
-            </figure>
+        @if(_isLoading()) {
+            <div class="user-loading">
+                <span>Loading</span>
+                <div class="user-loading-image" [ngStyle]="{ backgroundImage: `url('coer91/images/loading.gif')` }"></div>
+            </div>
+        }
 
-            <ul [ngClass]="{ 'absolute-menu': !_showIdentity() }" [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
-                @for(item of _menu(); track item.index) {
-                    <li (click)="_SelectMenu(item)"> 
-                        @if((item?.icon || '').length > 0) {
-                            <span class="icon-container-option">
-                                <i [class]="item?.icon"></i> 
-                            </span>
-                        } 
-
-                        <span class="display-property-option">{{ item?.label || '' }}</span>    
-                    </li>
-                }
-            </ul>
-        </div>
+        @else {
+            <div id="coer91-toolbar-user" class="user" (click)="_isCollapsed.set(!_isCollapsed())"> 
+                <figure>
+                    <div class="user-image" [ngStyle]="{ backgroundImage: `url('${userImage() | noImage: 'USER'}')` }"></div>
+                    
+                    @if(_showIdentity()) {
+                        <div class="user-identity">
+                            <p>{{ user()?.fullName }}</p>
+                            <p>{{ user()?.role     }}</p>
+                        </div>
+                    }
+                </figure>
+    
+                <ul [ngClass]="{ 'absolute-menu': !_showIdentity() }" [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
+                    @for(item of _menu(); track item.__index__) {
+                        <li (click)="_SelectMenu(item)"> 
+                            @if((item?.icon || '').length > 0) {
+                                <span class="icon-container-option">
+                                    <i [class]="item?.icon"></i> 
+                                </span>
+                            } 
+    
+                            <span class="display-property-option">{{ item?.label || '' }}</span>    
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
     </h2>
 </header> 
 
@@ -97,13 +106,17 @@
         }
 
         <!-- Role --> 
-        <div class="flex-basis">
-            <coer-textbox 
-                label="Role"
-                [ngModel]="user()?.role" 
-                [isLoading]="_isLoading()" 
-            ></coer-textbox> 
-        </div>  
+        @if(_roleList().length > 0) {
+            <div class="flex-basis">
+                <coer-selectbox 
+                    label="Role"
+                    [(ngModel)]="_role" 
+                    [isLoading]="_isLoading()" 
+                    [dataSource]="_roleList()"
+                    (onValueChange)="_UpdateRole($event)"
+                ></coer-selectbox> 
+            </div>
+        }   
     </div>
 </coer-modal>
 

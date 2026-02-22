@@ -15,7 +15,7 @@ export class CoerTextBox extends ControlValue {
     protected readonly _isFocused = signal<boolean>(false); 
     protected readonly _isHoverElement = signal<boolean>(false);
     protected _htmlElement: HTMLInputElement | null = null;
-    protected _htmlElementContainer: HTMLInputElement | null = null;  
+    protected _htmlElementContainer: HTMLElement | null = null;   
     
     //secretbox
     protected readonly _isSecretComponent = signal<boolean>(false);
@@ -28,7 +28,7 @@ export class CoerTextBox extends ControlValue {
     protected readonly _index = signal<number>(-1);
     protected readonly _search = signal<string>('');
     
-    //Input 
+    //Input  
     public placeholder      = input<string>(''); 
     public selectOnFocus    = input<boolean>(false);  
     public textPosition     = input<'left' | 'center' | 'right'>('left'); 
@@ -42,7 +42,7 @@ export class CoerTextBox extends ControlValue {
     public maxWidth         = input<string>('100%');  
 
 
-    //Output 
+    //Output     
     protected readonly onKeyupEnter  = output<string>();
     protected readonly onClickClear  = output<void>();
     protected readonly onClickSearch = output<string>(); 
@@ -56,14 +56,15 @@ export class CoerTextBox extends ControlValue {
         this._htmlElement?.addEventListener('focus', this._onFocus);
         this._htmlElement?.addEventListener('blur', this._onBlur);   
         
-        this._htmlElementContainer = HTMLElements.SelectElementById(`${this._id}-container`) as HTMLInputElement; 
+        this._htmlElementContainer = HTMLElements.SelectElementById(`${this._id}-container`) as HTMLElement; 
         this._htmlElementContainer?.addEventListener('mouseenter', this._onMouseEnter);    
-        this._htmlElementContainer?.addEventListener('mouseleave', this._onMouseLeave);    
+        this._htmlElementContainer?.addEventListener('mouseleave', this._onMouseLeave);  
     }
 
 
     //Destroy
     protected override Destructor() {   
+        super.Destructor();
         this._htmlElement?.removeEventListener('keyup', this._onKeyup);
         this._htmlElement?.removeEventListener('paste', this._onPaste);
         this._htmlElement?.removeEventListener('focus', this._onFocus); 
@@ -226,11 +227,7 @@ export class CoerTextBox extends ControlValue {
         return this.showSearchButton()
             && !this._showClearButton()
             && this._isEnabled()
-    }); 
-    
-    
-    //Computed
-    protected _placeholder = computed<string>(() => '');  
+    });  
 
 
     //Function
@@ -241,13 +238,7 @@ export class CoerTextBox extends ControlValue {
 
         else this.Blur();
         this.onClickSearch.emit(this._value()); 
-    } 
-
-
-    //Function
-    protected _GetIconBySelect = (item: any): string => item; 
-    protected _GetDisplayBySelect = (item: any): string => item;  
-    protected _ResetSearch(value: any): void {} 
+    }  
 
 
     //Computed
@@ -298,4 +289,11 @@ export class CoerTextBox extends ControlValue {
         this._isFocused.set(false);
         if(!this.isTouched()) this.SetTouched(true);
     } 
+
+
+    //Functions For selectbox
+    protected _placeholder = computed<string>(() => '');  
+    protected _GetIconBySelect = (item: any): string => item; 
+    protected _GetDisplayBySelect = (item: any): string => item;  
+    protected _ResetSearch(value: any): void { value } 
 }

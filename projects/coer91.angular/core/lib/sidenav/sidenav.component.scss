@@ -21,6 +21,21 @@ nav {
             div.option {
                 min-height: $item-height !important;
             }
+
+            div.loading-option { 
+                i {
+                    display: inline-block !important;
+                    min-width: 30px !important;
+                    max-width: 30px !important; 
+                    min-height: 30px !important;
+                    max-height: 30px !important;
+                    border-radius: 25px !important;
+                    background: transparent;
+                    background-size: cover !important;
+                    background-repeat: no-repeat !important;
+                    background-position: center !important; 
+                } 
+            } 
         }
     }
 
@@ -66,7 +81,7 @@ nav {
                     i {  
                         font-size: 30px !important;
                     }
-                }
+                } 
             }
 
             div.lv2-option {
@@ -79,7 +94,7 @@ nav {
 
             div.option.selected {
                 color: var(--navigation) !important;
-            }
+            }  
         }
 
         div.option:hover {

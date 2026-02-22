@@ -1,7 +1,16 @@
 <nav [class]="_width()" (click)="show() ? null : Open()">
     <ul class="lv1">
-        @for(lv1 of SetId(_navigation()); let i1 = $index; track `${lv1.id}-${i1}`) {
+        @if(_isLoading()) {
             <li class="lv1">
+                <div class="option loading-option lv1-option">  
+                    <i  [ngStyle]="{ backgroundImage: `url('coer91/images/loading.gif')` }"></i>
+                    <span> Loading </span>  
+                </div>
+            </li>
+        }
+
+        @for(lv1 of SetId(_navigation()); let i1 = $index; track `${lv1.id}-${i1}`) {
+            <li class="lv1" [ngClass]="{ 'display-none': _isLoading() }">
                 @if(_IsOption(lv1)) {
                     <div [id]="_IdGenerate(lv1.id, 0, 0, i1)" class="option lv1-option" (click)="_ClickOptionLv1(lv1, _IdGenerate(lv1.id, 0, 0, i1))">
                         @if(IsNotOnlyWhiteSpace(lv1.icon)) {
