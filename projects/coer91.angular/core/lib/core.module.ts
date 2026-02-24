@@ -10,12 +10,13 @@ import { CoerAlert } from 'coer91.angular/tools';
 
 //Components
 import { MenuPage         } from './menu/menu.component';
-import { Coer91           } from './coer91/coer91.component'; 
+import { Coer91Component  } from './coer91/coer91.component'; 
 import { HomePage         } from './home/home.component';
 import { LoginPage        } from './login/login.component';
 import { Sidenav          } from './sidenav/sidenav.component';
 import { SidenavAccordion } from './sidenav/coer-sidenav-accordion/coer-sidenav-accordion.component'; 
 import { Toolbar          } from './toolbar/toolbar.component';  
+import { Coer91Root       } from './coer91/coer91-root';
 
 //Routes
 export const ROUTES_91: any = [  
@@ -37,13 +38,14 @@ export const ROUTES_91: any = [
     ],
     declarations: [  
         MenuPage,
-        Coer91,
+        Coer91Component,
+        Coer91Root, 
         HomePage, 
         LoginPage,
         Sidenav,
         SidenavAccordion,
         Toolbar,
     ],
-    exports: [Coer91]
+    exports: [Coer91Root]
 })
 export class CoreModule { }

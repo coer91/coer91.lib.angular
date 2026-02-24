@@ -33,6 +33,7 @@ export class Toolbar implements AfterViewInit {
 
     //Inputs
     public readonly menu                = input.required<IToolbarMenu[]>();
+    public readonly showUserData        = input.required<boolean>();
     public readonly showProfileMenu     = input.required<boolean>(); 
     public readonly preventProfileMenu  = input.required<boolean>(); 
     public readonly showPasswordMenu    = input.required<boolean>(); 
@@ -48,10 +49,9 @@ export class Toolbar implements AfterViewInit {
 
 
     constructor() {
-        const e = effect(() => {
+        effect(() => {
             const USER = userSIGNAL();
-            this._role.set(USER?.role);
-
+            this._role.set(USER?.role); 
         });
     }
 

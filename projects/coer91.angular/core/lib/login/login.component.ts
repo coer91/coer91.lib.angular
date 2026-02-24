@@ -24,7 +24,7 @@ export class LoginPage implements AfterViewInit {
     protected readonly _loginButton   = viewChild.required<CoerButton>('loginRef');
 
     //Variables
-    protected readonly title      = appSettings.appInfo.title;
+    protected readonly title      = appSettings?.appInfo?.title || '';
     protected readonly isLoading  = isLoadingSIGNAL; 
     protected readonly background = ''; 
     protected readonly view       = signal<'LOGIN' | 'RECOVERY'>('LOGIN');  

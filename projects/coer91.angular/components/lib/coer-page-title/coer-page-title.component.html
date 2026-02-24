@@ -33,11 +33,11 @@
                     }
                 </a>
 
-                @for(breadcrumb of _breadcrumbs().setIndex(); track breadcrumb.__index__) {
+                @for(breadcrumb of _breadcrumbs(); track breadcrumb.__index__) {
                     <span class="slash">/</span>
-                    <a [routerLink]='(breadcrumb.path && breadcrumb.path.length > 0) ? breadcrumb.path : null'
+                    <a [routerLink]='(breadcrumb.path && breadcrumb.path.length > 0 && !_isLoading()) ? breadcrumb.path : null'
                        [queryParams]='breadcrumb.queryParams' 
-                       (click)="(breadcrumb.click) ? breadcrumb.click() : null"
+                       (click)="(breadcrumb.click && !_isLoading()) ? breadcrumb.click() : null"
                        draggable="false">
                        {{ breadcrumb.page }}
                    </a>
@@ -48,7 +48,7 @@
             <!-- Go Back -->
             @if(goBack().show) {
                 <a  class="go-back"
-                    [routerLink]="goBack().path"
+                    [routerLink]="!_isLoading() ? goBack().path : null"
                     [queryParams]='goBack().queryParams'
                     (click)="_ClickGoBack()"
                     draggable="false">

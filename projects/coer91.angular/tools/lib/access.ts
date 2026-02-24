@@ -7,7 +7,7 @@ declare const appSettings: any;
 /** Controls user information in localStorage */
 export class Access {
       
-    private static readonly useJWT  = Tools.IsBooleanTrue(appSettings.security.useJWT);
+    private static readonly useJWT  = Tools.IsBooleanTrue(appSettings?.security?.useJWT);
     private static readonly storage = (appSettings?.appInfo?.project as string).replaceAll(' ', '') || 'coer91';
     
     /** */    
@@ -88,7 +88,7 @@ export class Access {
      
 
     /** */
-    public static IsLogin(): boolean {
+    public static IsLogin(): boolean { 
         if(this.useJWT) {
             const JWT = Access.GetJWTInfo();
             return Tools.IsNotOnlyWhiteSpace(JWT.claims?.User) 

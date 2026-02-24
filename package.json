@@ -1,11 +1,12 @@
 {
   "name": "coer91.angular",
-  "version": "0.0.0",
+  "version": "0.0.0", 
   "scripts": {
     "ng": "ng", 
     "server": "ng serve documentation",
     "copy:styles": "sass --no-source-map --style=compressed projects/coer91.angular/styles/index.scss ./dist/coer91.angular/styles/lib/coer91.css",
     "build:lib": "ng build coer91.angular & npm run copy:styles", 
+    "publish:npm": "npm run build:lib && npm publish --access public",
     "test": "ng test"
   },
   "prettier": {
@@ -19,8 +20,7 @@
         }
       }
     ]
-  },
-  "private": true,
+  }, 
   "packageManager": "npm@11.6.2",
   "dependencies": {
     "@angular/common": "^21.0.0",
@@ -40,5 +40,5 @@
     "ng-packagr": "^21.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
-  }
+  } 
 }

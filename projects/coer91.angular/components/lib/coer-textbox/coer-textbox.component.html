@@ -78,7 +78,7 @@
                 <i class="i91-eye-fill" (click)="_showSecret.set(true); Focus();"></i>
             } 
             
-            @if(_isSelectComponent()) {
+            @if(_isSelectComponent() && _isEnabled()) {
                 <i [ngClass]="{
                     'i91-angle'    : true,
                     'i91-90deg'    : _isCollapsed(),

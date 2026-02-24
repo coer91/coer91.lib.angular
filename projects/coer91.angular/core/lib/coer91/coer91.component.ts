@@ -8,12 +8,12 @@ import { Router } from '@angular/router';
 declare const appSettings: any;
 
 @Component({
-    selector: 'coer91',
+    selector: 'coer91-component',
     templateUrl: './coer91.component.html', 
     styleUrl: './coer91.component.scss', 
     standalone: false
 })
-export class Coer91 {   
+export class Coer91Component {   
 
     //Injection
     protected readonly _alert  = inject(CoerAlert); 
@@ -32,12 +32,13 @@ export class Coer91 {
     public readonly navigation = input.required<IMenu[]>();
     public readonly navigationShowHomeOption = input<boolean>(true);
     public readonly toolbarMenu = input<IToolbarMenu[]>([]);
+    public readonly toolbarShowUserData = input<boolean>(false);
     public readonly toolbarShowProfileMenu = input<boolean>(true); 
     public readonly toolbarPreventProfileMenu = input<boolean>(false); 
     public readonly toolbarShowPasswordMenu = input<boolean>(true); 
     public readonly toolbarPreventPasswordMenu = input<boolean>(false);  
     public readonly toolbarShowLogOutMenu = input<boolean>(true);  
-    public readonly toolbarPreventLogOutMenu = input<boolean>(false);
+    public readonly toolbarPreventLogOutMenu = input<boolean>(false); 
 
     //Output
     protected readonly onLogin            = output<ILogin>();
@@ -104,10 +105,10 @@ export class Coer91 {
     public SetAccess(response: ILoginResponse | IUser): boolean {  
         const _response = response as ILoginResponse;
         Access.SetUser(null);
-        userSIGNAL.set(null);
+        userSIGNAL.set(null);  
 
         //Set Response
-        if(Tools.IsBooleanTrue(appSettings.security.useJWT)) {
+        if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) {
             if(Tools.IsNotOnlyWhiteSpace(_response?.jwt)) {
                 Access.SetUser(_response.jwt);
                 userSIGNAL.set(_response);  
@@ -115,6 +116,7 @@ export class Coer91 {
         }
 
         else {
+            console.log(_response)
             if(Tools.IsNotOnlyWhiteSpace(_response?.user)) {
                 Access.SetUser(_response);
                 userSIGNAL.set(_response);  
@@ -144,7 +146,7 @@ export class Coer91 {
         const VALIDATE_EVERY: number = 60000;
         const DIFERENCE_TO_UPDATE: number = 30;
 
-        if(Tools.IsBooleanTrue(appSettings.security.useJWT)) {
+        if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) {
             let JWT = Access.GetJWTInfo(); 
     
             if(Tools.IsOnlyWhiteSpace(JWT.claims?.ExpirationDate)) {

@@ -1,4 +1,5 @@
 //access
+export * from './lib/access/auth-service.interface';
 export * from './lib/access/jwt.interface';
 export * from './lib/access/login-response.interface';
 export * from './lib/access/login.interface';

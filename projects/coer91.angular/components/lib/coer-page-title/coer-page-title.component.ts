@@ -1,7 +1,7 @@
 import { Component, computed, input, output } from '@angular/core';
 import { ITitleBreadcrumb, ITitleGoBack, ITitleInformation } from 'coer91.angular/interfaces';
-import { screenSizeSIGNAL } from 'coer91.angular/signals'; 
-import { Navigation, Tools } from 'coer91.angular/tools'; 
+import { isLoadingSIGNAL, screenSizeSIGNAL } from 'coer91.angular/signals'; 
+import { Collections, Navigation, Tools } from 'coer91.angular/tools';  
 
 @Component({
     selector: 'coer-page-title',
@@ -12,6 +12,7 @@ import { Navigation, Tools } from 'coer91.angular/tools';
 export class CoerPageTitle {
     
     //Variables
+    protected readonly _isLoading = isLoadingSIGNAL;
     protected _iconRoot: string = 'i91-house-door-fill';
     protected _labelRoot: string | null = null;
 
@@ -56,7 +57,7 @@ export class CoerPageTitle {
     
     //computed
     protected _breadcrumbs = computed<any[]>(() =>  
-        this.breadcrumbs().slice(0, (screenSizeSIGNAL().breakpoint == 'mv' ? 1 : this.breadcrumbs().length))
+        Collections.SetIndex(this.breadcrumbs().slice(0, (screenSizeSIGNAL().breakpoint == 'mv' ? 1 : this.breadcrumbs().length)))
     );  
 
 

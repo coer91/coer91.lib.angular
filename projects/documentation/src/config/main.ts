@@ -1,11 +1,12 @@
-import { bootstrapApplication } from '@angular/platform-browser'; 
-import { provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router'; 
+import { bootstrapApplication } from '@angular/platform-browser'; 
 import { ROUTES } from '../app/app.routing';
-import { AppRoot } from './app.root';
+import { AppRoot } from './app-root';
 
 bootstrapApplication(AppRoot, {
     providers: [
+        provideZonelessChangeDetection(),
         provideBrowserGlobalErrorListeners(),
         provideRouter(ROUTES, withHashLocation()), 
     ]

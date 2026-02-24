@@ -1,4 +1,4 @@
-import { Component, computed, effect, EffectRef, input, output, OutputEmitterRef, signal } from '@angular/core';
+import { Component, computed, effect, EffectRef, input, output, signal } from '@angular/core';
 import { Collections, CONTROL_VALUE, HTMLElements, Numbers, Tools } from 'coer91.angular/tools';
 import { CoerTextBox } from '../coer-textbox/coer-textbox.component';
 

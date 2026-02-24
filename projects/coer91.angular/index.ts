@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';   
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router'; 
-//import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import 'coer91.angular/extensions';  
 
 //Modules    
@@ -10,7 +10,6 @@ import * as core       from 'coer91.angular/core';
 import * as directives from 'coer91.angular/directives'; 
 import * as pipes      from 'coer91.angular/pipes'; 
 import * as tools      from 'coer91.angular/tools';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({    
     imports: [  
@@ -41,7 +40,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         components.CoerSecretBox,
         components.CoerSelectBox,
         components.CoerTextBox,
-        core.Coer91,
+        core.Coer91Root,
         directives.TemplateRefDirective,  
         pipes.DatePipe,
         pipes.DateTimePipe,

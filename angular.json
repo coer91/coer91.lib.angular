@@ -13,10 +13,10 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular/build:ng-packagr", 
           "configurations": {
             "production": {
-              "tsConfig": "projects/coer91.angular/tsconfig.lib.json"
+              "tsConfig": "./tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -31,14 +31,14 @@
         }
       },
       "root": "projects/documentation",
-      "sourceRoot": "projects/documentation/src",
+      "sourceRoot": "projects/documentation/src/config",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/documentation/src/config/main.ts",
-            "tsConfig": "projects/documentation/src/config/tsconfig.app.json",
+            "tsConfig": "./tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               { "glob": "**/*", "input": "./projects/documentation/public" },
@@ -53,11 +53,7 @@
             }
           },
           "configurations": {
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            },
+            "development": { "optimization": false, "extractLicenses": false, "sourceMap": true },
             "staging": {
               "budgets": [
                 { "type": "initial", "maximumWarning": "10mb", "maximumError": "10mb" },

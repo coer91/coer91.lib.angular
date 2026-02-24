@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, computed, contentChildren, input, OnDestroy, output, signal, } from '@angular/core';
 import { TemplateRefDirective } from 'coer91.angular/directives';
 import { screenSizeSIGNAL } from 'coer91.angular/signals';
-import { HTMLElements, Tools } from 'coer91.angular/tools';
+import { HTMLElements, Strings, Tools } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-modal',
@@ -81,13 +81,13 @@ export class CoerModal implements AfterViewInit, OnDestroy {
     
     //Computed
     protected _modalBody = computed<any>(() => { 
-        return this.contentElements().find(x => x.templateRef().equals('modal-body')) || null;
+        return this.contentElements().find(x => Strings.Equals(x.templateRef(), 'modal-body')) || null;
     }); 
 
 
     //Computed
     protected _modalFooter = computed<any>(() => { 
-        return this.contentElements().find(x => x.templateRef().equals('modal-footer')) || null;
+        return this.contentElements().find(x => Strings.Equals(x.templateRef(), 'modal-footer')) || null;
     });
 
 
@@ -99,7 +99,7 @@ export class CoerModal implements AfterViewInit, OnDestroy {
 
     //Computed
     protected _gridTemplateRows = computed(() => 
-        `${(this._showHeader() ? '40px' : '')} 1fr ${(this._showFooter() ? '50px' : '')}`.cleanUpBlanks()
+        Strings.CleanUpBlanks(`${(this._showHeader() ? '40px' : '')} 1fr ${(this._showFooter() ? '50px' : '')}`)
     ); 
 
 

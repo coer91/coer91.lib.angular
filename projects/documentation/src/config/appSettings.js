@@ -4,7 +4,6 @@ const appSettings = {
         project: 'coer91',
         title: 'COER 91',
         version: '1.0.0', 
-        imageURL: '',
         forCompany: 'COER 91'
     },
     webAPI: {
