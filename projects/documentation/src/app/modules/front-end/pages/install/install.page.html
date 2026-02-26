@@ -1,0 +1,51 @@
+<coer-page-title
+    title="Install"
+    [breadcrumbs]="breadcrumbsPage"
+    [goBack]="goBackPage"
+></coer-page-title> 
+
+
+@for(step of stepList(); let index = $index; track index) {
+    <section class="container-section">
+        <h3>
+            <span></span>
+            <small>{{ step.title }}</small>
+        </h3>
+    
+        <p class="target">{{ step.target }}</p>
+    
+        <div class="directions">
+            @if(IsNotOnlyWhiteSpace(step.image)) {
+                <img [src]="step.image">
+            }
+    
+            @if(step.directions.length) {
+                <ul class="directions">
+                    @for(direction of step.directions; let index2 = $index; track index2) {
+                        <li>
+                            <div [innerHTML]="direction | html"></div>
+                        </li>
+                    } 
+                </ul> 
+            }
+
+            @if(step.codes.length > 0) {
+                <div class="codes">
+                    @for(code of step.codes; let index3 = $index; track index3) {
+                        @if(IsNotOnlyWhiteSpace(code.code)) { 
+                            <div class="code">
+                                @if(IsNotOnlyWhiteSpace(code.description)) {
+                                    <p class="code-description">{{ code.description }}</p>
+                                }
+<pre class="container-code cursor-pointer" (click)="Clipboard(code.code, code.copyMessage)">
+{{ code.code }}
+</pre>                
+                            </div>
+                        }
+                    }
+                </div>
+            }
+
+        </div>
+    </section>
+}  

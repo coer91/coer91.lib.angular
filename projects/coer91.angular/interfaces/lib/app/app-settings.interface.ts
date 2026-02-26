@@ -22,5 +22,7 @@ export interface IAppSettings {
     },
     navigation: {
         static: boolean; 
+        showHome: boolean; 
+        redirectTo: string;
     }
 }

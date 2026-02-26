@@ -1,0 +1,33 @@
+section.container-section {
+    h3 {
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid color-mix(in srgb, var(--secondary), var(--light) 80%);
+        color: var(--blue);
+    }
+
+    p.target {
+        padding: 5px;
+    }
+
+    div.directions {
+        display: flex;
+        justify-content: space-between;
+
+        img {
+            max-width: 300px;
+            max-height: 600px;
+        }
+
+        ul.directions {
+            margin-left: 25px; 
+        }
+
+        div.codes {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 5px; 
+        }
+    } 
+}  

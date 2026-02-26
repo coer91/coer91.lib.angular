@@ -1,12 +1,9 @@
 import { Routes } from '@angular/router';
-import { ROUTES_91 } from 'coer91.angular/core';
-import { InstallPage } from './pages/install/install.page';
-import { ROUTER_PAGE } from 'coer91.angular/tools';
+import { ROUTES_91 } from 'coer91.angular/core'; 
 
-export const ROUTES: Routes = [
+export const ROUTES = ([ 
     {
-        path: 'components',
-        loadChildren: () => import('./modules/components/components.routing').then(module => module.ComponentsRouting)
-    },
-    ROUTER_PAGE('install', InstallPage) 
-].concat(ROUTES_91); 
+        path: 'front-end',
+        loadChildren: () => import('./modules/front-end/front-end.routing').then(module => module.FrontEndRouting)
+    }, 
+] as Routes).concat(ROUTES_91); 

@@ -2,7 +2,7 @@ import { Component, computed, effect, signal } from '@angular/core';
 import { navigationSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { Collections, Page, Strings, Tools } from 'coer91.angular/tools';
 import { IMenu } from 'coer91.angular/interfaces';  
-
+declare const appSettings: any;
 
 @Component({
     selector: 'menu-page',
@@ -36,6 +36,10 @@ export class MenuPage extends Page {
                 }
 
                 else Tools.Sleep().then(() => this.menu.set(MENU));
+
+                if(this.menu().length <= 0) {
+                    this.GoToSource();
+                }
             } 
         }); 
     }  

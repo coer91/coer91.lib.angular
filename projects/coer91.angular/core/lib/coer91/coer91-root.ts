@@ -1,5 +1,5 @@
 import { IAuthService, IHttpResponse, ILogin, ILoginResponse, IMenu, IToolbarMenu, IUserRole } from 'coer91.angular/interfaces'; 
-import { Component, computed, input, output, signal, viewChild } from '@angular/core'; 
+import { Component, input, output, signal, viewChild } from '@angular/core'; 
 import { isLoadingSIGNAL, userSIGNAL } from 'coer91.angular/signals';  
 import { Access, Tools } from 'coer91.angular/tools'; 
 import { Coer91Component } from './coer91.component';
@@ -11,7 +11,7 @@ declare const appSettings: any;
     template: `
         <coer91-component
             #coer91Component 
-            [navigation]="_navigation()" 
+            [navigation]="_navigation()"  
             [toolbarShowUserData]="IsFunction(this.authService().Login)"
             [toolbarShowProfileMenu]="true"
             [toolbarShowPasswordMenu]="IsNotNull(authService().RecoveryPassword)"
@@ -37,7 +37,7 @@ export class Coer91Root {
 
     //Inputs
     public authService = input.required<IAuthService>(); 
-    public staticNavigation = input<IMenu[]>([]);
+    public staticNavigation = input<IMenu[]>([]); 
 
     //Output
     protected readonly onLogin            = output<ILogin>();

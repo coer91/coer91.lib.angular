@@ -26,21 +26,6 @@ export class AppRoot {
     
     protected staticNavigation = NAVIGATION; 
 
-    // protected authService: IAuthService = { 
-    //     Login: {
-    //         userId: 1,
-    //         user: 'COER',
-    //         userNumber: '',
-    //         role: 'Developer',
-    //         partner: '',
-    //         fullName: 'Christian',
-    //         email: '',
-    //         jwt: '',
-    //         roles: ['Developer'],
-    //         message: ''
-    //     } 
-    // }
-
     protected authService: IAuthService = { 
             
         /** HTTP POST */

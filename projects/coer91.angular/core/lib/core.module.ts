@@ -1,12 +1,13 @@
 //Modules
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; 
+import { RouterModule, Routes } from '@angular/router'; 
 import { ComponentsModule } from 'coer91.angular/components';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectivesModule } from 'coer91.angular/directives';
 import { PipesModule } from 'coer91.angular/pipes';
-import { CoerAlert } from 'coer91.angular/tools';
+import { CoerAlert, ROUTER_PAGE, Tools } from 'coer91.angular/tools';
+declare const appSettings: any;
 
 //Components
 import { MenuPage         } from './menu/menu.component';
@@ -19,11 +20,13 @@ import { Toolbar          } from './toolbar/toolbar.component';
 import { Coer91Root       } from './coer91/coer91-root';
 
 //Routes
-export const ROUTES_91: any = [  
-    { path: 'home', component: HomePage, data: { activeKey: '' }},
-    { path: 'menu', component: MenuPage, data: { activeKey: '' }},
-    { path: '**'  , redirectTo: 'home' }     
-]; 
+const redirectTo = Tools.IsNotOnlyWhiteSpace(appSettings?.navigation?.redirectTo) ? appSettings?.navigation?.redirectTo : 'home';
+
+export const ROUTES_91 = ([] as Routes)
+    .concat([ROUTER_PAGE('menu', MenuPage)])
+    .concat(!Tools.IsBooleanFalse(appSettings?.navigation?.showHome) ? [ROUTER_PAGE('home', HomePage)] : [])
+    .concat([{ path: '**', redirectTo }]); 
+  
 
 @NgModule({
     imports: [

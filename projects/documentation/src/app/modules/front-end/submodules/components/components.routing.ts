@@ -1,13 +1,13 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router"; 
-import { SharedModule } from "../../shared/shared.module";
 import { ROUTER_PAGE } from "coer91.angular/tools";
+import { SharedModule } from "@appShared";
 
 //Pages 
 import { CoerButtonPage } from "./pages/coer-button/coer-button.page";  
 import { CoerModalPage  } from "./pages/coer-modal/coer-modal.page";
 import { CoerSecretBoxPage } from "./pages/coer-secretbox/coer-secretbox.page";
-import { CoerSelectBoxPage } from "./pages/coer-selectbox/coer-selectbox.page";
+import { CoerSelectBoxPage } from "./pages/coer-selectbox/coer-selectbox.page"; 
 import { CoerTextBoxPage } from "./pages/coer-textbox/coer-textbox.page";
 
 export const routes: Routes = [{

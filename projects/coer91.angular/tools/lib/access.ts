@@ -226,6 +226,8 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
         },
         navigation: {
             static: true, 
+            showHome: true, 
+            redirectTo: 'home',
             ...appSettings?.navigation
         }
     } 

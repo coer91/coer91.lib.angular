@@ -4,7 +4,10 @@ import { Access, CoerAlert, Dates, Screen, Tools } from 'coer91.angular/tools';
 import { screenSizeSIGNAL, userSIGNAL } from 'coer91.angular/signals';
 import { Toolbar } from '../toolbar/toolbar.component';
 import { LoginPage } from '../login/login.component';
-import { Router } from '@angular/router'; 
+import { ResolveEnd, Router } from '@angular/router'; 
+import { map } from 'rxjs/operators';
+import { filter } from 'rxjs';
+import { Sidenav } from '../sidenav/sidenav.component';
 declare const appSettings: any;
 
 @Component({
@@ -21,6 +24,7 @@ export class Coer91Component {
 
     //Elements
     protected readonly _toolbar = viewChild<Toolbar>('toolbar');
+    protected readonly _sidenav = viewChild<Sidenav>('sidenav');
     protected readonly _login = viewChild<LoginPage>('login');
 
     //Variables
@@ -29,8 +33,7 @@ export class Coer91Component {
     protected _watchJWT$!: any; 
 
     //Inputs  
-    public readonly navigation = input.required<IMenu[]>();
-    public readonly navigationShowHomeOption = input<boolean>(true);
+    public readonly navigation = input.required<IMenu[]>(); 
     public readonly toolbarMenu = input<IToolbarMenu[]>([]);
     public readonly toolbarShowUserData = input<boolean>(false);
     public readonly toolbarShowProfileMenu = input<boolean>(true); 
@@ -50,6 +53,19 @@ export class Coer91Component {
  
     constructor() {    
         Screen.Resize.subscribe(screenSizeSIGNAL.set);  
+
+        this._router.events
+            .pipe(
+                filter(event => event instanceof ResolveEnd),
+                map((event: ResolveEnd) => ({ requested: event.url, resolved: event.urlAfterRedirects })) 
+            )            
+            .subscribe(url => { 
+                if(url.requested != url.resolved) { 
+                    this._sidenav()?.ResetStorage();
+                    this._sidenav()?.SetSelectedMenu();
+                }  
+            }
+        );
 
         effect(() => { 
             if(this._isLogin()) this._WatchJWT(); 
@@ -116,7 +132,6 @@ export class Coer91Component {
         }
 
         else {
-            console.log(_response)
             if(Tools.IsNotOnlyWhiteSpace(_response?.user)) {
                 Access.SetUser(_response);
                 userSIGNAL.set(_response);  
@@ -127,12 +142,23 @@ export class Coer91Component {
         if(Access.IsLogin()) {
             if(Tools.HasProperty(_response, 'message')) { 
                 this._alert.Information(_response.message, 'Welcome', 'i91-logo-coer91');
-                this._router.navigateByUrl('/home'); 
+
+                let path = '/home';
+                if(Tools.IsBooleanFalse(appSettings?.navigation?.showHome)) {
+                    if(Tools.IsNotOnlyWhiteSpace(appSettings?.navigation?.redirectTo)) {
+                        path = appSettings?.navigation?.redirectTo;
+                        if(!path.startsWith('/')) path = `/${path}`;
+                    }
+
+                    else path = '/';
+                }  
+
+                this._router.navigateByUrl(path); 
             } 
         }
 
         else {
-            this._alert.Warning(_response.message, 'No access', 'i91-hand-stop-fill');
+            this._alert.Warning(_response.message, 'No access', 'i91-hand-stop-fill'); 
             this._login()?.FocusPassword();
         }
 

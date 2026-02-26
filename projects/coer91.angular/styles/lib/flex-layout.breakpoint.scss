@@ -1,0 +1,81 @@
+@mixin mixin($breakpoint) {
+    @each $key, $value in (
+        'top'   : flex-start, 
+        'middle': center, 
+        'bottom': flex-end
+        ) {
+
+        .#{$breakpoint}flex-#{$key}-left {
+            display: flex !important;
+            align-items: $value !important;
+            justify-content: flex-start !important;
+        }  
+
+        .#{$breakpoint}flex-#{$key}-center {
+            display: flex !important;
+            align-items: $value !important;
+            justify-content: center !important;
+        }   
+
+        .#{$breakpoint}flex-#{$key}-right {
+            display: flex !important;
+            align-items: $value !important;
+            justify-content: flex-end !important;
+        } 
+
+        .#{$breakpoint}flex-#{$key}-between {
+            display: flex !important;
+            align-items: $value !important;
+            justify-content: space-between !important;
+        }
+
+        .#{$breakpoint}flex-#{$key}-around {
+            display: flex !important;
+            align-items: $value !important;
+            justify-content: space-around !important;
+        } 
+
+        .#{$breakpoint}flex-#{$key}-evenly {
+            display: flex !important;
+            align-items: $value !important;
+            justify-content: space-evenly !important;
+        } 
+    } 
+
+    // flex align-items
+    @each $key, $value in (
+        'top'   : flex-start, 
+        'middle': center, 
+        'bottom': flex-end
+    ) {
+        .#{$breakpoint}align-items-#{$key} { 
+            align-items: $value !important;              
+        } 
+    }  
+
+    // flex justify-content
+    @each $key, $value in (
+        'left'   : flex-start, 
+        'center' : center, 
+        'right'  : flex-end, 
+        'between': space-between, 
+        'around' : space-around, 
+        'evenly' : space-evenly
+    ) {
+        .#{$breakpoint}justify-content-#{$key} { 
+            justify-content: $value !important;              
+        } 
+    }
+
+    // flex direction
+    @each $key, $value in (
+        'row'           : row, 
+        'row-reverse'   : row-reverse, 
+        'column'        : column, 
+        'column-reverse': column-reverse
+    ) {
+        .#{$breakpoint}flex-direction-#{$key} {   
+            flex-direction: $value !important; 
+        }  
+    }  
+}

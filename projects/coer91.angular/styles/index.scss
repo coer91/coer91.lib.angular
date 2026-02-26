@@ -14,6 +14,7 @@
 @use "./lib/display.breakpoint.scss" as _display;
 @use "./lib/flex-basis.breakpoint.scss" as _flex-basis;
 @use "./lib/flex-grow-shrink.breakpoint.scss" as _flex-grow-shrink; 
+@use "./lib/flex-layout.breakpoint.scss" as _flex-layout; 
 @use "./lib/flex-wrap.scss";
 @use "./lib/font-family.scss";
 @use "./lib/font-size.breakpoint.scss" as _font-size; 
@@ -32,6 +33,7 @@
     @else if $module == '_display'          { @include _display.mixin($breakpoint)          }
     @else if $module == '_flex-basis'       { @include _flex-basis.mixin($breakpoint)       }
     @else if $module == '_flex-grow-shrink' { @include _flex-grow-shrink.mixin($breakpoint) }
+    @else if $module == '_flex-layout'      { @include _flex-layout.mixin($breakpoint)      }
     @else if $module == '_font-size'        { @include _font-size.mixin($breakpoint)        }
     @else if $module == '_gap'              { @include _gap.mixin($breakpoint)              } 
     @else if $module == '_margin'           { @include _margin.mixin($breakpoint)           }
@@ -73,6 +75,7 @@
 @include ApplyBreakpoints('_display');
 @include ApplyBreakpoints('_flex-basis');
 @include ApplyBreakpoints('_flex-grow-shrink'); 
+@include ApplyBreakpoints('_flex-layout'); 
 @include ApplyBreakpoints('_font-size');
 @include ApplyBreakpoints('_gap');
 @include ApplyBreakpoints('_margin');

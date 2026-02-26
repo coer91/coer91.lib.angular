@@ -1,13 +1,15 @@
 <header>
     <h2>
         <div class="title">
-            <coer-button
-                type="icon-rounded"
-                icon="i91-menu"
-                height="20px"
-                color="navigation"
-                (onClick)="onClickToogle.emit()"
-            ></coer-button>
+            @if(_showButtonSidenav()) {
+                <coer-button
+                    type="icon-rounded"
+                    icon="i91-menu"
+                    height="20px"
+                    color="navigation"
+                    (onClick)="onClickToogle.emit()"
+                ></coer-button>
+            }
 
             <span class="title-project">
                 <span>{{ title }}</span>

@@ -16,35 +16,35 @@
         .border-#{$key}-#{$size}px {
             border-width: ($size * 1px) !important;
             border-style: $value !important;
-            border-color: var(--gray);
+            border-color: color-mix(in srgb, var(--secondary), var(--light) 80%);
         }
 
         //TOP
-        .border-#{$key}-top-#{$size}px {
+        .border-top-#{$key}-#{$size}px {
             border-top-width: ($size * 1px) !important;
             border-top-style: $value !important;
-            border-top-color: var(--gray); 
+            border-top-color: color-mix(in srgb, var(--secondary), var(--light) 80%); 
         }
 
         //RIGHT
-        .border-#{$key}-right-#{$size}px { 
+        .border-right-#{$key}-#{$size}px { 
             border-right-width: ($size * 1px) !important;
             border-right-style: $value !important;
-            border-right-color: var(--gray);
+            border-right-color: color-mix(in srgb, var(--secondary), var(--light) 80%);
         }
 
         //BOTTOM
-        .border-#{$key}-bottom-#{$size}px {
+        .border-bottom-#{$key}-#{$size}px {
             border-bottom-width: ($size * 1px) !important;
             border-bottom-style: $value !important;
-            border-bottom-color: var(--gray);
+            border-bottom-color: color-mix(in srgb, var(--secondary), var(--light) 80%);
         }
 
         //LEFT
-        .border-#{$key}-left-#{$size}px {
+        .border-left-#{$key}-#{$size}px {
             border-left-width: ($size * 1px) !important;
             border-left-style: $value !important;
-            border-left-color: var(--gray); 
+            border-left-color: color-mix(in srgb, var(--secondary), var(--light) 80%); 
         } 
     } 
 }

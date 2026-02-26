@@ -28,6 +28,8 @@ const appSettings = {
         format: 'MDY'
     },
     navigation: {
-        static: true 
+        static: true,
+        showHome: true,
+        redirectTo: 'home' 
     }
 }

@@ -1,7 +1,7 @@
 @if(_isLogin()) {
     <coer-toolbar 
         #toolbar
-        [menu]="toolbarMenu()"
+        [menu]="toolbarMenu()" 
         [showUserData]="toolbarShowUserData()"
         [showProfileMenu]="toolbarShowProfileMenu()"    
         [preventProfileMenu]="toolbarPreventProfileMenu()"
@@ -19,8 +19,7 @@
     <div class="coer91">
         <sidenav 
             #sidenav
-            [navigation]="navigation()"
-            [showHomeOption]="navigationShowHomeOption()"
+            [navigation]="navigation()" 
             (onOpen)="isOpenSidenav.set(true)"
             (onClose)="isOpenSidenav.set(false)">
             <div></div>

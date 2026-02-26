@@ -3,7 +3,7 @@ import { Component, computed, effect, inject, input, output, signal, viewChildre
 import { HTMLElements, Strings, Tools, Navigation, Collections, Screen } from 'coer91.angular/tools';
 import { isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'; 
 declare const appSettings: any;
 
 @Component({
@@ -27,10 +27,8 @@ export class Sidenav {
     protected readonly SetId = Collections.SetId;
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
 
-
     //Inputs 
-    public readonly navigation     = input.required<IMenu[]>(); 
-    public readonly showHomeOption = input.required<boolean>(); 
+    public readonly navigation = input.required<IMenu[]>();  
 
     //Output 
     protected readonly onOpen  = output<void>();
@@ -41,20 +39,24 @@ export class Sidenav {
         Screen.ClickBrowserButton.subscribe(() => this._ClickBrowserButton()); 
 
         effect(() => {  
-            this._navigation.set(
-                this.showHomeOption() 
-                    ? [{ id: 1, label: 'Home', icon: 'i91-home-door-fill', path: '/home', items: null } as any].concat(this.navigation()) 
-                    : this.navigation()
-            ); 
+            const navigation = this.navigation();
 
-            Tools.Sleep().then(() => this._SetSelectedMenu());
+            if(navigation.length > 0) {
+                this._navigation.set(
+                    !Tools.IsBooleanFalse(appSettings?.navigation?.showHome) 
+                        ? [{ id: 1, label: 'Home', icon: 'i91-home-door-fill', path: '/home', items: null } as any].concat(this.navigation()) 
+                        : this.navigation()
+                );  
+                 
+                Tools.Sleep().then(() => this.SetSelectedMenu());
+            }
         });
 
         effect(() => {
             const breakpoint = screenSizeSIGNAL().breakpoint; 
             if(breakpoint === 'xxl') this.Open();
             else this.Close();           
-        });
+        }); 
     }   
 
 
@@ -67,23 +69,77 @@ export class Sidenav {
 
 
     //Function
-    protected async _SetSelectedMenu(): Promise<void> {
+    public async SetSelectedMenu(): Promise<void> {
         await Tools.Sleep();
         const navigation = this._navigation();
+
+        
+        this._GetSelectedMenuByPath("/install")
         
         if(navigation.length > 0) {                 
-            const menu = Navigation.GetSelectedMenu() || {
-                id: this._IdGenerate(1, 0, 0, 0),
-                menu: { ...navigation[0] },
-                level: 'LV1',
-                action: 'NONE',
-                tree: [{ id: this._IdGenerate(1, 0, 0, 0), label: navigation[0].label, icon: navigation[0].icon! }]
-            };    
+
+            const menu = Navigation.GetSelectedMenu() || this._GetSelectedMenuByPath(appSettings?.navigation?.redirectTo || 'home');   
              
-            await Tools.Sleep(); 
-            this._NavigateTo(menu, false);   
+            if(menu) {
+                await Tools.Sleep(); 
+                this._NavigateTo(menu, false);   
+            }
         } 
     } 
+
+
+    //Function
+    protected _GetSelectedMenuByPath = (path: string): IMenuSelected | null => {
+        if(!path.startsWith('/')) path = `/${path}`;
+        const navigation = this._navigation();
+
+        if(navigation.length > 0) { 
+            
+            let id     : any = this._IdGenerate(1, 0, 0, 0);
+            let menu   : any = { ...navigation[0] };
+            let level  : any = 'LV1';
+            let action : any = 'NONE';
+            let tree   : any = [{ id, label: navigation[0]?.label, icon: navigation[0]?.icon }]
+    
+            const ELEMENT = HTMLElements.SelectElement(`.${path?.replaceAll('/', '__')}`);
+    
+            if(ELEMENT) {
+                const ID = ELEMENT.getAttribute('id');
+    
+                if(ID) {
+                    id = ID;
+
+                    //GET LEVEL
+                    let [LV1, LV2, LV3, INDEX] = ID.split('-');
+                    LV1 = LV1.split('id')[1]; 
+                    LV2 = LV2.split('id')[1]; 
+                    LV3 = LV3.split('id')[1]; 
+                    INDEX = LV3.split('index')[0];
+
+                    if(Number(LV3) > 0) level = 'LV3';
+                    else if(Number(LV2) > 0) level = 'LV2'; 
+                    else if(Number(LV1) > 0) level = 'LV1'; 
+
+                    //GET MENU
+                    const MENU = navigation.find(x => x.path === path); 
+
+                    if(MENU) {
+                        switch(level) {
+                            case 'LV1': {
+                                menu = { id: ID, label: MENU.label, icon: MENU.icon, path: MENU.path };
+                                tree = [{ id: menu.id, label: menu.label, icon: menu?.icon }];
+                                break;
+                            }
+                        }
+                    }  
+                }  
+            }
+    
+            return { id, menu, level, action, tree }
+        }
+
+        return null;
+    };
 
 
     //Function
@@ -108,7 +164,7 @@ export class Sidenav {
     protected _ClickOptionLv1(lv1: IMenu, lv1Id: string): void {
         if(!this.show()) return;
 
-        this._Reset(); 
+        this.ResetStorage(); 
 
         this._NavigateTo({
             id: lv1Id,
@@ -126,7 +182,7 @@ export class Sidenav {
     protected _ClickOptionLv2(lv2: IMenu, lv1: IMenu, lv2Id: string, lv1Id: string): void {
         if(!this.show()) return;
 
-        this._Reset();
+        this.ResetStorage();
 
         this._NavigateTo({
             id: lv2Id,
@@ -145,7 +201,7 @@ export class Sidenav {
     protected _ClickOptionLv3(lv3: IMenu, lv2: IMenu, lv1: IMenu, lv3Id: string, lv2Id: string, lv1Id: string): void {
         if(!this.show()) return;
 
-        this._Reset();
+        this.ResetStorage();
 
         this._NavigateTo({
             id: lv3Id,
@@ -202,7 +258,7 @@ export class Sidenav {
     protected _ClickMenuGrid(lv1: IMenu, lv1Id: string): void {
         if(!this.show()) return;
         
-        this._Reset();
+        this.ResetStorage();
 
         this._NavigateTo({
             id: lv1Id,
@@ -220,7 +276,7 @@ export class Sidenav {
     protected _ClickSubmenuGrid(lv2: IMenu, lv1: IMenu, lv2Id: string, lv1Id: string): void {
         if(!this.show()) return;
         
-        this._Reset();
+        this.ResetStorage();
 
         this._NavigateTo({
             id: lv1Id,
@@ -261,6 +317,7 @@ export class Sidenav {
                 Navigation.SetSelectedMenu(OPTION);   
                 selectedMenuSIGNAL.set(OPTION); 
                   
+                console.log(OPTION.tree[0].id)
                 HTMLElements.ScrollToElement(OPTION.tree[0].id, 'start');
                 document.querySelectorAll<HTMLElement>('.selected').forEach(item => item.classList.remove('selected'));
                 OPTION.tree.forEach(({ id }) => HTMLElements.AddClass(`#${id}`, 'selected')); 
@@ -315,7 +372,7 @@ export class Sidenav {
 
 
     //Function
-    protected _Reset(): void {
+    public ResetStorage(): void {
         const storage = (appSettings?.appInfo?.project as string).replaceAll(' ', '') || 'coer91';
         sessionStorage.removeItem(storage);
     }

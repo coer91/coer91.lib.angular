@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { ITitleBreadcrumb, ITitleGoBack, ITitleInformation } from 'coer91.angular/interfaces';
 import { isLoadingSIGNAL, screenSizeSIGNAL } from 'coer91.angular/signals'; 
 import { Collections, Navigation, Tools } from 'coer91.angular/tools';  
@@ -13,8 +13,8 @@ export class CoerPageTitle {
     
     //Variables
     protected readonly _isLoading = isLoadingSIGNAL;
-    protected _iconRoot: string = 'i91-house-door-fill';
-    protected _labelRoot: string | null = null;
+    protected readonly _iconRoot = signal<string>('i91-house-door-fill');
+    protected readonly _labelRoot = signal<string | null>(null);
 
     //Inputs 
     public readonly title           = input<string | null>(null);
@@ -29,23 +29,38 @@ export class CoerPageTitle {
 
 
     //Constructor
-    constructor() {
-        const MENU = Navigation.GetSelectedMenu();
-
-        if(MENU) {             
-            const MENU_SELECTED = MENU.tree.shift();
-
-            if(Tools.IsNotNull(MENU_SELECTED)) {                
-                if(Tools.IsNotOnlyWhiteSpace(MENU_SELECTED!.icon)) {
-                    this._iconRoot = MENU_SELECTED!.icon;
-                }
-
-                else if(Tools.IsNotOnlyWhiteSpace(MENU_SELECTED!.label)) {
-                    this._labelRoot = MENU_SELECTED!.label;
-                }
-            }
-        }
+    constructor() { 
+        this._GetSelectedMenu();
     } 
+
+
+    /** */
+    protected async _GetSelectedMenu() {
+        let counter = 10;
+
+        do {  
+            const MENU = Navigation.GetSelectedMenu();
+
+            if(MENU) {             
+                const MENU_SELECTED = MENU.tree.shift();
+
+                if(Tools.IsNotNull(MENU_SELECTED)) {                
+                    if(Tools.IsNotOnlyWhiteSpace(MENU_SELECTED!.icon)) {
+                        this._iconRoot.set(MENU_SELECTED!.icon);
+                    }
+
+                    else if(Tools.IsNotOnlyWhiteSpace(MENU_SELECTED!.label)) {
+                        this._labelRoot.set(MENU_SELECTED!.label);
+                    }
+                }
+
+                break;
+            } 
+
+            counter--;
+            await Tools.Sleep(250);
+        } while(counter  > 0) 
+    }
 
 
     // //computed

@@ -1,4 +1,4 @@
-import { environmentSIGNAL, screenSizeSIGNAL, userSIGNAL, userImageSIGNAL, isLoadingSIGNAL } from 'coer91.angular/signals';
+import { environmentSIGNAL, screenSizeSIGNAL, userSIGNAL, userImageSIGNAL, isLoadingSIGNAL, navigationSIGNAL } from 'coer91.angular/signals';
 import { AfterViewInit, Component, computed, effect, input, output, signal, viewChild } from '@angular/core';  
 import { Access, Collections, HTMLElements, Tools } from 'coer91.angular/tools';
 import { IToolbarMenu } from 'coer91.angular/interfaces';
@@ -32,7 +32,7 @@ export class Toolbar implements AfterViewInit {
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
 
     //Inputs
-    public readonly menu                = input.required<IToolbarMenu[]>();
+    public readonly menu                = input.required<IToolbarMenu[]>(); 
     public readonly showUserData        = input.required<boolean>();
     public readonly showProfileMenu     = input.required<boolean>(); 
     public readonly preventProfileMenu  = input.required<boolean>(); 
@@ -62,9 +62,12 @@ export class Toolbar implements AfterViewInit {
                 if(!this._isCollapsed()) this._isCollapsed.set(true);
             });
         });
-    } 
+    }       
      
-     
+    //Computed
+    protected _showButtonSidenav = computed<boolean>(() => navigationSIGNAL().length > 1);
+
+
     //Computed
     protected _roleList = computed<any[]>(() => {  
         return this.user()?.roles || [];

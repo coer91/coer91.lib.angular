@@ -1,6 +1,5 @@
-:root {
-    //Fixed colors
-    --blue    :#0d6efd;
+:root { //Fixed Colors
+    --blue    :#0b44e0;
     --sky     :#0d6efd;
     --cyan    :#00ffff;
     --green   :#198754;
@@ -14,52 +13,52 @@
     --light   :#ffffff; 
     --smoke   :#f5f5f5;
     --ghost   :#f8f8ff;
-    --backdrop:#5a5a5ae6;  
+    --backdrop:#5a5a5ae6;   
+}
 
-    //Action Colors
-    --primary:           var(--blue  );
-    --secondary:         var(--gray  ); 
-    --success:           var(--green ); 
-    --warning:           var(--yellow); 
-    --danger:            var(--red   ); 
-    --navigation:        var(--orange); 
-    --information:       var(--blue  ); 
+:root { //Action Colors
+    --primary:     var(--blue  );
+    --secondary:   var(--gray  ); 
+    --success:     var(--green ); 
+    --warning:     var(--yellow); 
+    --danger:      var(--red   ); 
+    --navigation:  var(--orange); 
+    --information: var(--blue  );
+} 
 
-    //App Colors 
-    --toolbar:      var(--light); 
-    --sidenav:      var(--dark);
-    --sidenav-item: var(--body);  
-    --breadcrumbs:  var(--sky  ); 
+:root { //App Colors  
     --body:         var(--smoke); 
-
-    //Item Colors
-    --containers:  var(--light); 
-    --item-hover:  color-mix(in srgb, var(--primary), transparent 93%);
-    --item-focus:  color-mix(in srgb, var(--primary), transparent 75%);
-    --loading:     color-mix(in srgb, var(--gray), var(--light) 50%); 
-    --readonly:    color-mix(in srgb, var(--gray), var(--light) 60%); 
-    --input:       color-mix(in srgb, var(--gray), var(--light) 85%);
-    --input-focus: var(--primary);
+    --toolbar:      var(--light); 
+    --sidenav:      var(--dark );
+    --sidenav-item: var(--body );  
+    --breadcrumbs:  var(--sky  );  
+    --item-hover:   color-mix(in srgb, var(--primary), transparent 93%);
+    --item-focus:   color-mix(in srgb, var(--primary), transparent 75%);
+    --loading:      color-mix(in srgb, var(--gray), var(--light) 50%); 
+    --readonly:     color-mix(in srgb, var(--gray), var(--light) 60%); 
+    --input:        color-mix(in srgb, var(--gray), var(--light) 85%);
+    --input-focus:  var(--primary);
+    --containers:   var(--light); 
 } 
 
 
 @each $key, $value in ( 
     //Fixed colors 
     'transparent': transparent,  
-    'blue'    : var(--blue    ), 
-    'cyan'    : var(--cyan    ), 
-    'green'   : var(--green   ), 
-    'yellow'  : var(--yellow  ), 
-    'orange'  : var(--orange  ), 
-    'red'     : var(--red     ), 
-    'purple'  : var(--purple  ),
-    'black'   : var(--black   ),
-    'dark'    : var(--dark    ), 
-    'gray'    : var(--gray    ), 
-    'light'   : var(--light   ),
-    'smoke'   : var(--smoke   ), 
-    'ghost'   : var(--ghost   ), 
-    'backdrop': var(--backdrop),
+    'blue'       : var(--blue    ), 
+    'cyan'       : var(--cyan    ), 
+    'green'      : var(--green   ), 
+    'yellow'     : var(--yellow  ), 
+    'orange'     : var(--orange  ), 
+    'red'        : var(--red     ), 
+    'purple'     : var(--purple  ),
+    'black'      : var(--black   ),
+    'dark'       : var(--dark    ), 
+    'gray'       : var(--gray    ), 
+    'light'      : var(--light   ),
+    'smoke'      : var(--smoke   ), 
+    'ghost'      : var(--ghost   ), 
+    'backdrop'   : var(--backdrop),
 
     //Action Colors 
     'primary'    : var(--primary    ),  
@@ -80,20 +79,20 @@
     'information-light': color-mix(in srgb, var(--information), var(--light) 80%),
 
     //App Colors
-    'toolbar'      : var(--toolbar      ), 
-    'sidenav'      : var(--sidenav      ), 
-    'sidenav-item' : var(--sidenav-item), 
-    'breadcrumbs'  : var(--breadcrumbs  ),  
-    'body'         : var(--body         ),   
+    'body'        : var(--body        ),   
+    'toolbar'     : var(--toolbar     ), 
+    'sidenav'     : var(--sidenav     ), 
+    'sidenav-item': var(--sidenav-item), 
+    'breadcrumbs' : var(--breadcrumbs ),  
     
     //Item Colors
-    'containers' : var(--containers ),
     'item-hover' : var(--item-hover ),  
     'item-focus' : var(--item-focus ),  
     'loading'    : var(--loading    ),  
     'readonly'   : var(--readonly   ),  
     'input'      : var(--input      ),
     'input-focus': var(--input-focus),
+    'containers' : var(--containers ),
 ) {  
     // Text  
     .color-#{$key} {  
@@ -108,49 +107,18 @@
 
     // Borders 
     .border-color-#{$key} { border-color: $value !important; }  
-    .border-color-#{$key}-top { border-top-color: $value !important; } 
-    .border-color-#{$key}-right { border-right-color: $value !important; } 
-    .border-color-#{$key}-bottom { border-bottom-color: $value !important; } 
-    .border-color-#{$key}-left { border-left-color: $value !important; }  
+    .border-color-top-#{$key} { border-top-color: $value !important; } 
+    .border-color-right-#{$key} { border-right-color: $value !important; } 
+    .border-color-bottom-#{$key} { border-bottom-color: $value !important; } 
+    .border-color-left-#{$key} { border-left-color: $value !important; }  
 
-    // Borders X - Y 
-    .border-color-#{$key}-y { 
+    .border-color-y-#{$key} { 
         border-top-color: $value !important; 
         border-bottom-color: $value !important; 
     } 
     
-    .border-color-#{$key}-x { 
+    .border-color-x-#{$key} { 
         border-left-color: $value !important; 
         border-right-color: $value !important; 
-    } 
-
-    @for $i from 0 through 10 { 
-        @if($i == 0) {
-            .#{$key}-lightning-5 { 
-                background-color: color-mix(in srgb, $value, var(--light) 5%) !important;
-            }
-
-            .#{$key}-darkness-5 { 
-                background-color: color-mix(in srgb, $value, var(--dark) 5%) !important;
-            } 
-        }
-
-        @else {
-            .#{$key}-lightning-#{($i * 10) - 5} { 
-                background-color: color-mix(in srgb, $value, var(--light) (($i * 10%) - 5%)) !important;
-            } 
-
-            .#{$key}-lightning-#{($i * 10)} { 
-                background-color: color-mix(in srgb, $value, var(--light) ($i * 10%)) !important;
-            }
-
-            .#{$key}-darkness-#{($i * 10) - 5} { 
-                background-color: color-mix(in srgb, $value, var(--dark) (($i * 10%) - 5%)) !important;
-            }
-
-            .#{$key}-darkness-#{($i * 10)} { 
-                background-color: color-mix(in srgb, $value, var(--dark) ($i * 10%)) !important;
-            }
-        }
-    } 
+    }     
 }    
