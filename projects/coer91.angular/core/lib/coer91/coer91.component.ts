@@ -4,9 +4,8 @@ import { Access, CoerAlert, Dates, Screen, Tools } from 'coer91.angular/tools';
 import { screenSizeSIGNAL, userSIGNAL } from 'coer91.angular/signals';
 import { Toolbar } from '../toolbar/toolbar.component';
 import { LoginPage } from '../login/login.component';
-import { ResolveEnd, Router } from '@angular/router'; 
-import { map } from 'rxjs/operators';
-import { filter } from 'rxjs';
+import { Router } from '@angular/router'; 
+
 import { Sidenav } from '../sidenav/sidenav.component';
 declare const appSettings: any;
 
@@ -54,18 +53,7 @@ export class Coer91Component {
     constructor() {    
         Screen.Resize.subscribe(screenSizeSIGNAL.set);  
 
-        this._router.events
-            .pipe(
-                filter(event => event instanceof ResolveEnd),
-                map((event: ResolveEnd) => ({ requested: event.url, resolved: event.urlAfterRedirects })) 
-            )            
-            .subscribe(url => { 
-                if(url.requested != url.resolved) { 
-                    this._sidenav()?.ResetStorage();
-                    this._sidenav()?.SetSelectedMenu();
-                }  
-            }
-        );
+        
 
         effect(() => { 
             if(this._isLogin()) this._WatchJWT(); 

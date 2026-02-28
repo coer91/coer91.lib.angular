@@ -3,7 +3,9 @@ import { Component, computed, effect, inject, input, output, signal, viewChildre
 import { HTMLElements, Strings, Tools, Navigation, Collections, Screen } from 'coer91.angular/tools';
 import { isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';
-import { Router } from '@angular/router'; 
+import { ResolveEnd, Router } from '@angular/router'; 
+import { map } from 'rxjs/operators';
+import { filter } from 'rxjs';
 declare const appSettings: any;
 
 @Component({
@@ -39,16 +41,19 @@ export class Sidenav {
         Screen.ClickBrowserButton.subscribe(() => this._ClickBrowserButton()); 
 
         effect(() => {  
-            const navigation = this.navigation();
+            const NAVIGATION = this.navigation();
 
-            if(navigation.length > 0) {
+            if(NAVIGATION.length > 0) {
+                const NAVIGATION_HOME: IMenu[] = !Tools.IsBooleanFalse(appSettings?.navigation?.showHome) 
+                    ? [{ id: 1, label: 'Home', icon: 'i91-home-door-fill', path: '/home' }] : []; 
+
                 this._navigation.set(
-                    !Tools.IsBooleanFalse(appSettings?.navigation?.showHome) 
-                        ? [{ id: 1, label: 'Home', icon: 'i91-home-door-fill', path: '/home', items: null } as any].concat(this.navigation()) 
-                        : this.navigation()
+                    ([] as IMenu[]) 
+                    .concat(NAVIGATION_HOME)
+                    .concat(NAVIGATION)
                 );  
                  
-                Tools.Sleep().then(() => this.SetSelectedMenu());
+                Tools.Sleep().then(() => this._SetSelectedMenu());
             }
         });
 
@@ -57,6 +62,19 @@ export class Sidenav {
             if(breakpoint === 'xxl') this.Open();
             else this.Close();           
         }); 
+
+        this._router.events
+            .pipe(
+                filter(event => event instanceof ResolveEnd),
+                map((event: ResolveEnd) => ({ requested: event.url, resolved: event.urlAfterRedirects })) 
+            )            
+            .subscribe(url => { 
+                if(url.requested != url.resolved) { 
+                    this._ResetStorage();
+                    this._SetSelectedMenu();
+                }  
+            }
+        );
     }   
 
 
@@ -69,20 +87,17 @@ export class Sidenav {
 
 
     //Function
-    public async SetSelectedMenu(): Promise<void> {
+    protected async _SetSelectedMenu(): Promise<void> {
         await Tools.Sleep();
-        const navigation = this._navigation();
-
+        const NAVIGATION = this._navigation(); 
         
-        this._GetSelectedMenuByPath("/install")
-        
-        if(navigation.length > 0) {                 
+        if(NAVIGATION.length > 0) {                 
 
-            const menu = Navigation.GetSelectedMenu() || this._GetSelectedMenuByPath(appSettings?.navigation?.redirectTo || 'home');   
+            const PATH = appSettings?.navigation?.redirectTo || 'home';
+            const SELECTED_MENU = Navigation.GetSelectedMenu() || this._GetSelectedMenuByPath(PATH);   
              
-            if(menu) {
-                await Tools.Sleep(); 
-                this._NavigateTo(menu, false);   
+            if(SELECTED_MENU) { 
+                this._NavigateTo(SELECTED_MENU, false);   
             }
         } 
     } 
@@ -91,47 +106,121 @@ export class Sidenav {
     //Function
     protected _GetSelectedMenuByPath = (path: string): IMenuSelected | null => {
         if(!path.startsWith('/')) path = `/${path}`;
-        const navigation = this._navigation();
+        const NAVIGATION = this._navigation();
 
-        if(navigation.length > 0) { 
+        if(NAVIGATION.length > 0) { 
             
-            let id     : any = this._IdGenerate(1, 0, 0, 0);
-            let menu   : any = { ...navigation[0] };
+            let id     : any = this._IdGenerated(1, 0, 0, 0);
+            let menu   : any = { ...NAVIGATION[0] };
             let level  : any = 'LV1';
             let action : any = 'NONE';
-            let tree   : any = [{ id, label: navigation[0]?.label, icon: navigation[0]?.icon }]
+            let tree   : any = [{ id, label: NAVIGATION[0]?.label, icon: NAVIGATION[0]?.icon }]
     
             const ELEMENT = HTMLElements.SelectElement(`.${path?.replaceAll('/', '__')}`);
     
             if(ELEMENT) {
-                const ID = ELEMENT.getAttribute('id');
+                const ELEMENT_ID = ELEMENT.getAttribute('id');
     
-                if(ID) {
-                    id = ID;
+                if(ELEMENT_ID) {
+                    id = ELEMENT_ID; 
+
+                    const GET_FATHER = (ELEMENT: HTMLElement | null): HTMLElement | null => {
+                        if(ELEMENT) {
+                            let times = 10;  
+                            let FATHER: HTMLElement | null = ELEMENT.getFather();
+    
+                            do { 
+                                if(FATHER && HTMLElements.HasClass(FATHER, 'accordion-body')) {
+                                    return FATHER.getFather()?.getChildren().find(x => HTMLElements.HasClass(x, 'accordion-header')) || null; 
+                                }
+    
+                                else if(FATHER) {
+                                    FATHER = FATHER.getFather();
+                                    times--;
+                                }
+    
+                                else break;
+                            } while(times > 0);
+                        }
+
+                        return null;
+                    } 
 
                     //GET LEVEL
-                    let [LV1, LV2, LV3, INDEX] = ID.split('-');
+                    let [LV1, LV2, LV3] = ELEMENT_ID.split('-');
                     LV1 = LV1.split('id')[1]; 
                     LV2 = LV2.split('id')[1]; 
                     LV3 = LV3.split('id')[1]; 
-                    INDEX = LV3.split('index')[0];
 
-                    if(Number(LV3) > 0) level = 'LV3';
-                    else if(Number(LV2) > 0) level = 'LV2'; 
-                    else if(Number(LV1) > 0) level = 'LV1'; 
 
-                    //GET MENU
-                    const MENU = navigation.find(x => x.path === path); 
+                    if(Number(LV3) > 0) {
+                        level = 'LV3';
 
-                    if(MENU) {
-                        switch(level) {
-                            case 'LV1': {
-                                menu = { id: ID, label: MENU.label, icon: MENU.icon, path: MENU.path };
-                                tree = [{ id: menu.id, label: menu.label, icon: menu?.icon }];
-                                break;
-                            }
+                        const SELECTED_MENU_LV1 = NAVIGATION
+                            .filter(x => x.items && x.items.length > 0)
+                            .find(x => x.items!.some(x => x.items?.some(x => x!.path === path)));  
+
+                        const SELECTED_MENU_LV2 = NAVIGATION
+                            .filter(x => x.items && x.items.length > 0).flatMap(x => x.items)
+                            .find(x => x!.items!.some(x => x!.path === path)); 
+
+                        const SELECTED_MENU_LV3 = NAVIGATION
+                            .filter(x => x.items && x.items.length > 0).flatMap(x => x.items)
+                            .filter(x => x && x.items && x.items.length > 0).flatMap(x => x!.items)
+                            .find(x => x!.path === path);
+                            
+                        const ID_LV3 = ELEMENT_ID;
+
+                        const ELEMENT_LV2 = GET_FATHER(ELEMENT);
+                        const ID_LV2 = ELEMENT_LV2?.getAttribute('id');  
+
+                        const ELEMENT_LV1 = GET_FATHER(ELEMENT_LV2);
+                        const ID_LV1 = ELEMENT_LV1?.getAttribute('id'); 
+
+                        if(SELECTED_MENU_LV1 && SELECTED_MENU_LV2 && SELECTED_MENU_LV3 && ID_LV1 && ID_LV2 && ID_LV3) { 
+                            menu = { id: ID_LV3, label: SELECTED_MENU_LV3.label, icon: SELECTED_MENU_LV3.icon, path: SELECTED_MENU_LV3.path };
+                            tree = [
+                                { id: ID_LV1, label: SELECTED_MENU_LV1.label, icon: SELECTED_MENU_LV1?.icon },
+                                { id: ID_LV2, label: SELECTED_MENU_LV2.label, icon: SELECTED_MENU_LV2?.icon },
+                                { id: ID_LV3, label: SELECTED_MENU_LV3.label, icon: SELECTED_MENU_LV3?.icon }
+                            ]; 
+                        } 
+                    }
+
+                    else if(Number(LV2) > 0) {
+                        level = 'LV2';
+                        
+                        const SELECTED_MENU_LV1 = NAVIGATION
+                            .filter(x => x.items && x.items.length > 0)
+                            .find(x => x.items!.some(x => x.items?.some(x => x!.path === path))); 
+
+                        const SELECTED_MENU_LV2 = NAVIGATION
+                            .filter(x => x.items && x.items.length > 0).flatMap(x => x.items)
+                            .find(x => x!.path === path);
+                            
+                        const ID_LV2 = ELEMENT_ID;
+
+                        const ELEMENT_LV1 = GET_FATHER(ELEMENT);
+                        const ID_LV1 = ELEMENT_LV1?.getAttribute('id');
+
+                        if(SELECTED_MENU_LV1 && SELECTED_MENU_LV2 && ID_LV1 && ID_LV2) { 
+                            menu = { id: ID_LV2, label: SELECTED_MENU_LV2.label, icon: SELECTED_MENU_LV2.icon, path: SELECTED_MENU_LV2.path };
+                            tree = [
+                                { id: ID_LV1, label: SELECTED_MENU_LV1.label, icon: SELECTED_MENU_LV1?.icon },
+                                { id: ID_LV2, label: SELECTED_MENU_LV2.label, icon: SELECTED_MENU_LV2?.icon } 
+                            ]; 
+                        } 
+                    }
+
+                    else {
+                        level = 'LV1';
+                        const SELECTED_MENU = NAVIGATION.find(x => x.path === path);
+
+                        if(SELECTED_MENU) { 
+                            menu =  { id: ELEMENT_ID, label: SELECTED_MENU.label, icon: SELECTED_MENU.icon, path: SELECTED_MENU.path };
+                            tree = [{ id: ELEMENT_ID, label: SELECTED_MENU.label, icon: SELECTED_MENU?.icon }]; 
                         }
-                    }  
+                    };  
                 }  
             }
     
@@ -143,7 +232,7 @@ export class Sidenav {
 
 
     //Function
-    protected _IdGenerate = (lv1?: number, lv2?: number, lv3?: number, index?: number): string => {
+    protected _IdGenerated = (lv1?: number, lv2?: number, lv3?: number, index?: number): string => {
         return `lv1id${lv1 || 0}-lv2id${lv2 || 0}-lv3id${lv3 || 0}-index${index || 0}`;
     };
 
@@ -164,7 +253,7 @@ export class Sidenav {
     protected _ClickOptionLv1(lv1: IMenu, lv1Id: string): void {
         if(!this.show()) return;
 
-        this.ResetStorage(); 
+        this._ResetStorage(); 
 
         this._NavigateTo({
             id: lv1Id,
@@ -182,7 +271,7 @@ export class Sidenav {
     protected _ClickOptionLv2(lv2: IMenu, lv1: IMenu, lv2Id: string, lv1Id: string): void {
         if(!this.show()) return;
 
-        this.ResetStorage();
+        this._ResetStorage();
 
         this._NavigateTo({
             id: lv2Id,
@@ -201,7 +290,7 @@ export class Sidenav {
     protected _ClickOptionLv3(lv3: IMenu, lv2: IMenu, lv1: IMenu, lv3Id: string, lv2Id: string, lv1Id: string): void {
         if(!this.show()) return;
 
-        this.ResetStorage();
+        this._ResetStorage();
 
         this._NavigateTo({
             id: lv3Id,
@@ -258,7 +347,7 @@ export class Sidenav {
     protected _ClickMenuGrid(lv1: IMenu, lv1Id: string): void {
         if(!this.show()) return;
         
-        this.ResetStorage();
+        this._ResetStorage();
 
         this._NavigateTo({
             id: lv1Id,
@@ -276,7 +365,7 @@ export class Sidenav {
     protected _ClickSubmenuGrid(lv2: IMenu, lv1: IMenu, lv2Id: string, lv1Id: string): void {
         if(!this.show()) return;
         
-        this.ResetStorage();
+        this._ResetStorage();
 
         this._NavigateTo({
             id: lv1Id,
@@ -317,7 +406,6 @@ export class Sidenav {
                 Navigation.SetSelectedMenu(OPTION);   
                 selectedMenuSIGNAL.set(OPTION); 
                   
-                console.log(OPTION.tree[0].id)
                 HTMLElements.ScrollToElement(OPTION.tree[0].id, 'start');
                 document.querySelectorAll<HTMLElement>('.selected').forEach(item => item.classList.remove('selected'));
                 OPTION.tree.forEach(({ id }) => HTMLElements.AddClass(`#${id}`, 'selected')); 
@@ -372,7 +460,7 @@ export class Sidenav {
 
 
     //Function
-    public ResetStorage(): void {
+    protected _ResetStorage(): void {
         const storage = (appSettings?.appInfo?.project as string).replaceAll(' ', '') || 'coer91';
         sessionStorage.removeItem(storage);
     }

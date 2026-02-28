@@ -8,7 +8,7 @@
 @for(step of stepList(); let index = $index; track index) {
     <section class="container-section">
         <h3>
-            <span></span>
+            <span> {{ index + 1 }} </span>
             <small>{{ step.title }}</small>
         </h3>
     
@@ -35,7 +35,7 @@
                         @if(IsNotOnlyWhiteSpace(code.code)) { 
                             <div class="code">
                                 @if(IsNotOnlyWhiteSpace(code.description)) {
-                                    <p class="code-description">{{ code.description }}</p>
+                                    <p class="code-description" [innerHTML]="code.description | html"></p>
                                 }
 <pre class="container-code cursor-pointer" (click)="Clipboard(code.code, code.copyMessage)">
 {{ code.code }}

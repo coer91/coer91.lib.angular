@@ -30,6 +30,6 @@ const appSettings = {
     navigation: {
         static: true,
         showHome: true,
-        redirectTo: 'home' 
+        redirectTo: '/home' 
     }
 }

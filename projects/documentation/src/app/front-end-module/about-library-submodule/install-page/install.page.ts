@@ -19,13 +19,11 @@ export class InstallPage extends Page {
         super('Install')
     }   
 
-
     protected stepList = computed<IStep[]>(() => [
         this.createProject(),
         this.installLibrary(),
         this.projectStructure(),
-        this.sharedModule(),
-        this.appModule(),
+        this.sharedModule(), 
         this.appRouting(), 
         this.appSidenav(),  
         this.environmentTS(),
@@ -33,12 +31,7 @@ export class InstallPage extends Page {
         this.appSettings(),
         this.indexHTML(), 
         this.mainTS(),
-        // {
-        //     subject: 'angular.json',
-        //     target: 'El objetivo es configurar los estilos, ambientes y assets',
-        //     directions: ['Identifica las propiedades "sourceRoot", "options", "configurations" y "serve"'],
-        //     code: 'angular.json'
-        // }, 
+        this.angularJSON(),
         this.tsconfigJSON(),
     ]);
 
@@ -87,8 +80,8 @@ export class InstallPage extends Page {
         image: 'structure-coer91.png',
         directions: [
             `Puedes descargar la carpeta <a href="src.zip" download="src.zip">src</a> previamente configurada y solo sustituirla`,
-            `Si lo prefieres puedes estructurar las carpetas y archivos manualmente como la imagen`,
-            `Si optas por descargar la carpeta <a href="src.zip" download="src.zip">src</a> puedes pasarte hasta el <b>Step 13</b>`
+            `Si lo prefieres puedes estructurar las carpetas y archivos manualmente como la <a href="structure-coer91.png" download="structure-coer91.png">imagen</a>`,
+            `Si optas por descargar la carpeta <a href="src.zip" download="src.zip">src</a> puedes pasarte hasta el <b>Step angular.json</b>`
         ],
         codes: []
     }));
@@ -116,35 +109,7 @@ export class SharedModule { }
     `.trim()
             }
         ] 
-    })); 
-
-
-    /** */
-    protected appModule = computed<IStep>(() => ({
-        title: 'app.module.ts',
-        target: 'El objetivo es crear el módulo principal',
-        image: '',
-        directions: [],
-        codes: [
-            {
-                copyMessage: 'app.module.ts',
-                description: '',
-                code: ` 
-import { NgModule } from '@angular/core';   
-import { SharedModule } from './shared/shared.module';
-
-@NgModule({ 
-    declarations: [
-        
-    ],
-    imports: [SharedModule],
-    exports: [SharedModule]
-})
-export class AppModule { }
-    `.trim()
-            }
-        ] 
-    }));  
+    }));    
 
 
     /** */
@@ -159,11 +124,22 @@ export class AppModule { }
                 description: '',
                 code: `
 import { Routes } from '@angular/router';
-import { ROUTES_91 } from 'coer91.angular/core';
+import { NgModule } from '@angular/core';   
+import { ROUTES_91 } from 'coer91.angular/core'; 
+import { SharedModule } from './shared/shared.module';
 
 export const ROUTES = ([
 
 ] as Routes).concat(ROUTES_91);
+
+@NgModule({ 
+    declarations: [
+        
+    ],
+    imports: [SharedModule],
+    exports: [SharedModule]
+})
+export class AppModule { }
     `.trim()
             }
         ] 
@@ -248,7 +224,7 @@ export const appSettings = GetAppSettings<IAppEnvironment>(ENVIRONMENT);
 import { environmentSIGNAL } from 'coer91.angular/signals';
 import { IAuthService } from 'coer91.angular/interfaces';
 import { NAVIGATION } from '../app/app.sidenav';
-import { AppModule } from '../app/app.module';
+import { AppModule } from '../app/app.routing';
 import { appSettings } from '@appSettings';
 import { Component } from '@angular/core';
 
@@ -385,12 +361,21 @@ bootstrapApplication(AppRoot, {
 
 
     /** */
-    protected angularSourceRootJSON = computed<string>(() => `"sourceRoot": "src/config",`);
-
-
-    /** */
-    protected angularOptionsJSON = computed<string>(() => 
-    `
+    protected angularJSON = computed<IStep>(() => ({
+        title: 'angular.json',
+        target: 'El objetivo es configurar los estilos, ambientes y assets',
+        image: '',
+        directions: [],
+        codes: [
+            {
+                copyMessage: 'sourceRoot',
+                description: 'Identifica las propiedad "sourceRoot"',
+                code: `"sourceRoot": "src/config",`
+            },
+            {
+                copyMessage: 'options',
+                description: 'Identifica las propiedad "options"',
+                code: `
 "options": {
     "browser": "src/config/main.ts",
     "tsConfig": "tsconfig.app.json",
@@ -405,12 +390,12 @@ bootstrapApplication(AppRoot, {
         "includePaths": ["."]
     }
 },
-    `.trim());
-
-
-    /** */
-    protected angularConfigurationsJSON = computed<string>(() => 
-    `
+    `.trim()
+            },
+            {
+                copyMessage: 'configurations',
+                description: 'Identifica las propiedad "configurations"',
+                code: `
 "configurations": {
     "development": { 
         "optimization": false, 
@@ -441,12 +426,12 @@ bootstrapApplication(AppRoot, {
     }            
 },
 "defaultConfiguration": "staging"
-    `.trim());
-
-
-    /** */
-    protected angularServeJSON = computed<string>(() => 
-    `
+    `.trim()
+            },
+            {
+                copyMessage: 'serve',
+                description: 'Identifica las propiedad "serve", remplaza <b>[YOUR_PROJECT_NAME]</b> por el nombre de tu proyecto',
+                code: `
 "serve": {
     "builder": "@angular/build:dev-server",
     "configurations": {
@@ -456,8 +441,11 @@ bootstrapApplication(AppRoot, {
     },
     "defaultConfiguration": "development"
 },
-    `.trim()); 
-
+    `.trim()
+            }
+        ] 
+    }));   
+ 
 
     /** */
     protected tsconfigJSON = computed<IStep>(() => ({
@@ -471,8 +459,10 @@ bootstrapApplication(AppRoot, {
                 description: 'Dentro de la propiedad "compilerOptions" agrega el objeto "paths"',
                 code: `
 "paths": { 
-    "@appShared":   ["./src/app/shared/shared.module.ts"],
-    "@appSettings": ["./src/config/environments/index.ts"],  
+    "@appShared":   ["./src/app/shared/shared.module.ts"   ],
+    "@interfaces":  ["./src/app/shared/interfaces/index.ts"],
+    "@services":    ["./src/app/shared/services/index.ts"  ],
+    "@appSettings": ["./src/config/environments/index.ts"  ],  
 },
     `.trim()
             }

@@ -12,10 +12,10 @@
         @for(lv1 of SetId(_navigation()); let i1 = $index; track `${lv1.id}-${i1}`) {
             <li class="lv1" [ngClass]="{ 'display-none': _isLoading() }">
                 @if(_IsOption(lv1)) {
-                    <div [id]="_IdGenerate(lv1.id, 0, 0, i1)" 
+                    <div [id]="_IdGenerated(lv1.id, 0, 0, i1)" 
                         class="option lv1-option" 
                         [class]="lv1.path?.replaceAll('/', '__')" 
-                        (click)="_ClickOptionLv1(lv1, _IdGenerate(lv1.id, 0, 0, i1))">
+                        (click)="_ClickOptionLv1(lv1, _IdGenerated(lv1.id, 0, 0, i1))">
                         
                         @if(IsNotOnlyWhiteSpace(lv1.icon)) {
                             <i [class]="lv1.icon"></i>
@@ -35,17 +35,17 @@
                         [icon]="lv1.icon" 
                         [title]="lv1.label" 
                         [showSidenav]="show()"
-                        [id]="_IdGenerate(lv1.id, 0, 0, i1)" 
-                        (onOpen)="_ClickMenu(lv1, 'OPEN', _IdGenerate(lv1.id, 0, 0, i1))">
+                        [id]="_IdGenerated(lv1.id, 0, 0, i1)" 
+                        (onOpen)="_ClickMenu(lv1, 'OPEN', _IdGenerated(lv1.id, 0, 0, i1))">
                         
                         <ul class="lv2">
                             @for(lv2 of SetId(lv1.items!); let i2 = $index; track `${lv2.id}-${i2}`) {
                                 <li class="lv2">
                                     @if(_IsOption(lv2)) {
-                                        <div [id]="_IdGenerate(lv1.id, lv2.id, 0, i2)" 
+                                        <div [id]="_IdGenerated(lv1.id, lv2.id, 0, i2)" 
                                             class="option lv2-option" 
                                             [class]="lv2.path?.replaceAll('/', '__')" 
-                                            (click)="_ClickOptionLv2(lv2, lv1, _IdGenerate(lv1.id, lv2.id, 0, i2), _IdGenerate(lv1.id, 0, 0, i1))">
+                                            (click)="_ClickOptionLv2(lv2, lv1, _IdGenerated(lv1.id, lv2.id, 0, i2), _IdGenerated(lv1.id, 0, 0, i1))">
                                             
                                             @if(IsNotOnlyWhiteSpace(lv2.icon)) {
                                                 <i [class]="lv2.icon"></i>
@@ -60,16 +60,16 @@
                                             [icon]="lv2.icon" 
                                             [title]="lv2.label"  
                                             [showSidenav]="show()"
-                                            [id]="_IdGenerate(lv1.id, lv2.id, 0, i2)" 
-                                            (onOpen)="_ClickSubmenu(lv2, lv1, 'OPEN', _IdGenerate(lv1.id, lv2.id, 0, i2), _IdGenerate(lv1.id, 0, 0, i1))">
+                                            [id]="_IdGenerated(lv1.id, lv2.id, 0, i2)" 
+                                            (onOpen)="_ClickSubmenu(lv2, lv1, 'OPEN', _IdGenerated(lv1.id, lv2.id, 0, i2), _IdGenerated(lv1.id, 0, 0, i1))">
                                             
                                             <ul class="lv3">
                                                 @for(lv3 of SetId(lv2.items!); let i3 = $index; track `${lv3.id}-${i3}`) {
                                                     @if(_IsOption(lv3)) {
-                                                        <div [id]="_IdGenerate(lv1.id, lv2.id, lv3.id, i3)" 
+                                                        <div [id]="_IdGenerated(lv1.id, lv2.id, lv3.id, i3)" 
                                                             class="option lv3-option" 
                                                             [class]="lv3.path?.replaceAll('/', '__')" 
-                                                            (click)="_ClickOptionLv3(lv3, lv2, lv1, _IdGenerate(lv1.id, lv2.id, lv3.id, i3), _IdGenerate(lv1.id, lv2.id, 0, i2), _IdGenerate(lv1.id, 0, 0, i1))">
+                                                            (click)="_ClickOptionLv3(lv3, lv2, lv1, _IdGenerated(lv1.id, lv2.id, lv3.id, i3), _IdGenerated(lv1.id, lv2.id, 0, i2), _IdGenerated(lv1.id, 0, 0, i1))">
                                                             
                                                             <i [class]="IsNotOnlyWhiteSpace(lv3.icon) ? lv3.icon : 'width-16px'"></i> 
                                                             <span>{{ lv3.label }}</span>
@@ -81,10 +81,10 @@
                                     }
 
                                     @else {
-                                        <div [id]="_IdGenerate(lv1.id, lv2.id, 0, i2)" 
+                                        <div [id]="_IdGenerated(lv1.id, lv2.id, 0, i2)" 
                                             class="option lv2-option padding-right-10px" 
                                             [class]="lv2.path?.replaceAll('/', '__')"
-                                            (click)="_ClickSubmenuGrid(lv2, lv1, _IdGenerate(lv1.id, lv2.id, 0, i2), _IdGenerate(lv1.id, 0, 0, i1))">
+                                            (click)="_ClickSubmenuGrid(lv2, lv1, _IdGenerated(lv1.id, lv2.id, 0, i2), _IdGenerated(lv1.id, 0, 0, i1))">
 
                                             @if(IsNotOnlyWhiteSpace(lv2.icon)) {
                                                 <i [class]="lv2.icon"></i>
@@ -103,10 +103,10 @@
                 }
 
                 @else {
-                    <div [id]="_IdGenerate(lv1.id, 0, 0, i1)" 
+                    <div [id]="_IdGenerated(lv1.id, 0, 0, i1)" 
                         class="option lv1-option padding-right-10px" 
                         [class]="lv1.path" 
-                        (click)="_ClickMenuGrid(lv1, _IdGenerate(lv1.id, 0, 0, i1))">
+                        (click)="_ClickMenuGrid(lv1, _IdGenerated(lv1.id, 0, 0, i1))">
 
                         @if(IsNotOnlyWhiteSpace(lv1.icon)) {
                             <i [class]="lv1.icon"></i>

@@ -1,4 +1,3 @@
-//Modules
 import { NgModule } from '@angular/core'; 
 import { coer91Module } from 'coer91.angular'; 
  

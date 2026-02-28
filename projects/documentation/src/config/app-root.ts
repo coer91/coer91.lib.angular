@@ -1,10 +1,10 @@
 import { IAuthService, ILogin, ILoginResponse, IMenu, IUserRole } from 'coer91.angular/interfaces';
 import { environmentSIGNAL } from 'coer91.angular/signals';
-import { NAVIGATION } from '../app/app.sidenav'; 
-import { AppModule } from '../app/app.module'; 
+import { NAVIGATION } from '../app.sidenav'; 
 import { HTTP } from 'coer91.angular/tools';
 import { appSettings } from '@appSettings';
 import { Component } from '@angular/core';   
+import { AppModule } from '../app/app.routing';
 
 environmentSIGNAL.set(appSettings.environment); 
 

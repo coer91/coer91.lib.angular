@@ -12,7 +12,7 @@
       "coer91.angular/pipes":      ["./projects/coer91.angular/pipes/index.ts"     ],
       "coer91.angular/signals":    ["./projects/coer91.angular/signals/index.ts"   ],  
       "coer91.angular/tools":      ["./projects/coer91.angular/tools/index.ts"     ],
-      "@appShared":                ["./projects/documentation/src/app/shared/shared.module.ts" ],
+      "@appShared":                ["./projects/documentation/src/shared/shared.module.ts" ],
       "@appSettings":              ["./projects/documentation/src/config/environments/index.ts"],
     },
     "strict": true,
