@@ -6,11 +6,11 @@ import { SharedModule } from '../shared/shared.module';
 export const ROUTES = ([ 
     {
         path: 'back-end',
-        loadChildren: () => import('./back-end-module/back-end.routing').then(routing => routing.BackEndRouting)
+        loadChildren: () => import('./back-end.module/back-end.module').then(module => module.BackEndModule)
     }, 
     {
         path: 'front-end',
-        loadChildren: () => import('./front-end-module/front-end.routing').then(routing => routing.FrontEndRouting)
+        loadChildren: () => import('./front-end.module/front-end.module').then(module => module.FrontEndModule)
     }, 
 ] as Routes).concat(ROUTES_91); 
 

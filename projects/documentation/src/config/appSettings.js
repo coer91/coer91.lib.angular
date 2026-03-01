@@ -1,7 +1,7 @@
 const appSettings = { 
     appInfo: {
         id: 0,
-        project: 'coer91',
+        project: 'MySystem',
         title: 'COER 91',
         version: '1.0.0', 
         forCompany: 'COER 91'
@@ -28,7 +28,7 @@ const appSettings = {
         format: 'MDY'
     },
     navigation: {
-        static: true,
+        static: false,
         showHome: true,
         redirectTo: '/home' 
     }

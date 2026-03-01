@@ -4,7 +4,7 @@ import { ROUTER_PAGE } from "coer91.angular/tools";
 import { SharedModule } from "../../../shared/shared.module";
 
 //Pages  
-import { InstallPage } from "./install-page/install.page";
+import { InstallPage } from "./install/install.page";
 
 export const routes: Routes = [{
     path: '',
@@ -20,4 +20,4 @@ export const routes: Routes = [{
     imports: [SharedModule, RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class AboutLibraryRouting { }
+export class AboutSubmodule { }

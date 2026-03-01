@@ -199,7 +199,7 @@ export class HTTP {
         }
 
         return {
-            body: response,
+            data: response,
             status: fetchResponse.status,
             message: fetchResponse.statusText,  
             ok: fetchResponse.ok
@@ -235,7 +235,7 @@ export class HTTP {
         } 
         
         return {
-            body: response as T,
+            data: response as T,
             status,
             message, 
             ok: false

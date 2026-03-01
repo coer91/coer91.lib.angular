@@ -57,18 +57,14 @@ export class AppRoot {
     
     
         /** HTTP PUT */
-        SetMainUsersRole: (userId: number, roleId: number | string) => HTTP.PUT<IUserRole>({
-            url: `${this.UsersRoleController}/SetMainUsersRole/${userId}/${roleId}` 
+        SetUserRoleMain: (userId: number, roleId: number | string) => HTTP.PUT<IUserRole>({
+            url: `${this.UsersRoleController}/SetUserRoleMain/${userId}/${roleId}` 
         }),
     
     
         /** HTTP GET */
         GetNavigationByRole: (project: string, role: string) => HTTP.GET<IMenu[]>({
-            url: `${this.NavigationController}/GetNavigationByRole`,
-            queryParams: [
-                { param: 'project', value: project },
-                { param: 'role',    value: role    }
-            ]
+            url: `${this.NavigationController}/GetNavigationByRole/${project}/${role}` 
         }),
     }
 }

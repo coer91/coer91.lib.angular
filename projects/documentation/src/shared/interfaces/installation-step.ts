@@ -1,4 +1,4 @@
-export interface IStep {
+export interface IInstallationStep {
     title: string;
     target: string;
     image: string;

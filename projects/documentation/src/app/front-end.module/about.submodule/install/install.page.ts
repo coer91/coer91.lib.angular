@@ -1,6 +1,6 @@
 import { Component, computed } from '@angular/core';   
 import { Page, Tools } from 'coer91.angular/tools';
-import { IStep } from './interface';
+import { IInstallationStep } from '@appShared/interfaces';
 
 @Component({
     selector: 'install-page',
@@ -19,7 +19,7 @@ export class InstallPage extends Page {
         super('Install')
     }   
 
-    protected stepList = computed<IStep[]>(() => [
+    protected stepList = computed<IInstallationStep[]>(() => [
         this.createProject(),
         this.installLibrary(),
         this.projectStructure(),
@@ -37,7 +37,7 @@ export class InstallPage extends Page {
 
 
     /** */
-    protected createProject = computed<IStep>(() => ({
+    protected createProject = computed<IInstallationStep>(() => ({
         title: 'Crea el proyecto',
         target: 'El primer paso es crear el proyecto angular',
         image: '',
@@ -55,7 +55,7 @@ export class InstallPage extends Page {
 
 
     /** */
-    protected installLibrary = computed<IStep>(() => ({
+    protected installLibrary = computed<IInstallationStep>(() => ({
         title: 'Descargar la libreria',
         target: 'El siguiente paso es descargar e instalar la libreria',
         image: '',
@@ -74,7 +74,7 @@ export class InstallPage extends Page {
 
 
     /** */
-    protected projectStructure = computed<IStep>(() => ({
+    protected projectStructure = computed<IInstallationStep>(() => ({
         title: 'Estructura del proyecto',
         target: 'El objetivo es crear una arquitectura limpia y escalable',
         image: 'structure-coer91.png',
@@ -88,7 +88,7 @@ export class InstallPage extends Page {
 
 
     /** */
-    protected sharedModule = computed<IStep>(() => ({
+    protected sharedModule = computed<IInstallationStep>(() => ({
         title: 'shared.module.ts',
         target: 'El objetivo es crear un modulo para gestionar componentes y librerias',
         image: '',
@@ -113,7 +113,7 @@ export class SharedModule { }
 
 
     /** */
-    protected appRouting = computed<IStep>(() => ({
+    protected appRouting = computed<IInstallationStep>(() => ({
         title: 'app.routing.ts',
         target: 'El objetivo es incorporar las rutas y paginas que provee la libreria',
         image: '',
@@ -147,7 +147,7 @@ export class AppModule { }
     
     
     /** */
-    protected appSidenav = computed<IStep>(() => ({
+    protected appSidenav = computed<IInstallationStep>(() => ({
         title: 'app.sidenav.ts',
         target: 'El objetivo es configurar el sidenav',
         image: '',
@@ -169,7 +169,7 @@ export const NAVIGATION: IMenu[] = [
 
 
     /** */
-    protected environmentTS = computed<IStep>(() => ({
+    protected environmentTS = computed<IInstallationStep>(() => ({
         title: 'Environments',
         target: 'El objetivo es configurar los ambientes de la aplicación',
         image: '',
@@ -211,7 +211,7 @@ export const appSettings = GetAppSettings<IAppEnvironment>(ENVIRONMENT);
 
 
     /** */
-    protected appRoot = computed<IStep>(() => ({
+    protected appRoot = computed<IInstallationStep>(() => ({
         title: 'app-root.ts',
         target: 'El objetivo es generar un usuario dummy para poder ingresar a la aplicación',
         image: '',
@@ -266,7 +266,7 @@ export class AppRoot {
 
 
     /** */
-    protected appSettings = computed<IStep>(() => ({
+    protected appSettings = computed<IInstallationStep>(() => ({
         title: 'appSetings.js',
         target: 'El objetivo es configurar los parametros generales de la aplicación',
         image: '',
@@ -297,7 +297,7 @@ const appSettings = {
 
 
     /** */
-    protected indexHTML = computed<IStep>(() => ({
+    protected indexHTML = computed<IInstallationStep>(() => ({
         title: 'index.html',
         target: 'El objetivo es incorporar el objeto appSettings a nivel global',
         image: '',
@@ -331,7 +331,7 @@ const appSettings = {
 
 
     /** */
-    protected mainTS = computed<IStep>(() => ({
+    protected mainTS = computed<IInstallationStep>(() => ({
         title: 'main.ts',
         target: 'El objetivo es configurar los providers de la aplicación',
         image: '',
@@ -361,7 +361,7 @@ bootstrapApplication(AppRoot, {
 
 
     /** */
-    protected angularJSON = computed<IStep>(() => ({
+    protected angularJSON = computed<IInstallationStep>(() => ({
         title: 'angular.json',
         target: 'El objetivo es configurar los estilos, ambientes y assets',
         image: '',
@@ -448,7 +448,7 @@ bootstrapApplication(AppRoot, {
  
 
     /** */
-    protected tsconfigJSON = computed<IStep>(() => ({
+    protected tsconfigJSON = computed<IInstallationStep>(() => ({
         title: 'tsconfig.json',
         target: 'El objetivo es configurar el typescript',
         image: '',

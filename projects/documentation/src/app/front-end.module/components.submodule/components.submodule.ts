@@ -4,11 +4,11 @@ import { ROUTER_PAGE } from "coer91.angular/tools";
 import { SharedModule } from "../../../shared/shared.module";
 
 //Pages 
-import { CoerButtonPage } from "./coer-button-page/coer-button.page";  
-import { CoerModalPage  } from "./coer-modal-page/coer-modal.page";
-import { CoerSecretBoxPage } from "./coer-secretbox-page/coer-secretbox.page";
-import { CoerSelectBoxPage } from "./coer-selectbox-page/coer-selectbox.page"; 
-import { CoerTextBoxPage } from "./coer-textbox-page/coer-textbox.page";
+import { CoerButtonPage } from "./coer-button/coer-button.page";  
+import { CoerModalPage  } from "./coer-modal/coer-modal.page";
+import { CoerSecretBoxPage } from "./coer-secretbox/coer-secretbox.page";
+import { CoerSelectBoxPage } from "./coer-selectbox/coer-selectbox.page"; 
+import { CoerTextBoxPage } from "./coer-textbox/coer-textbox.page";
 
 export const routes: Routes = [{
     path: '',
@@ -32,4 +32,4 @@ export const routes: Routes = [{
     imports: [SharedModule, RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class ComponentsRouting { }
+export class ComponentsSubmodule { }

@@ -2,8 +2,8 @@ import { Component, computed, effect, signal } from '@angular/core';
 import { navigationSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { Collections, Page, Strings, Tools } from 'coer91.angular/tools';
 import { IMenu } from 'coer91.angular/interfaces';  
-declare const appSettings: any;
-
+import { IMenuSelected } from '../../../../../dist/coer91.angular/types/coer91.angular-interfaces';
+ 
 @Component({
     selector: 'menu-page',
     templateUrl: './menu.component.html', 
@@ -19,28 +19,8 @@ export class MenuPage extends Page {
     constructor() { 
         super('Menu');
 
-        effect(() => { 
-            const TREE = selectedMenuSIGNAL()?.tree.filter(x => !Strings.Equals(x.id, 'GRID')) || [];
-
-            if(TREE.length > 0) { 
-                this.menu.set([]);
-                this.title.set(TREE[0].label); 
-                this.SetPageName(TREE[TREE.length - 1].label); 
-                const INDEX_MENU = Number(TREE[0].id.split('index')[1]);
-                const MENU = navigationSIGNAL()[INDEX_MENU]?.items || [];
-                                    
-                if(TREE.length > 1) {
-                    const INDEX_SUBMENU = Number(TREE[1].id.split('index')[1]);
-                    const SUBMENU = MENU[INDEX_SUBMENU]?.items || [];
-                    this.menu.set(SUBMENU);
-                }
-
-                else Tools.Sleep().then(() => this.menu.set(MENU));
-
-                if(this.menu().length <= 0) {
-                    this.GoToSource();
-                }
-            } 
+        effect(() => {  
+            this._GetNavigation(selectedMenuSIGNAL())
         }); 
     }  
 
@@ -67,4 +47,31 @@ export class MenuPage extends Page {
     protected _submenu = computed<IMenu[]>(() => {
         return Collections.SetId(this.menu().filter(item => !this._isPage(item)));
     }); 
+
+
+    //Function
+    protected async _GetNavigation(selectedMenu: IMenuSelected | null): Promise<void> {
+        const TREE = selectedMenu?.tree.filter(x => !Strings.Equals(x.id, 'GRID')) || [];
+
+        if(TREE.length > 0) { 
+            this.menu.set([]);
+            this.title.set(TREE[0].label); 
+            this.SetPageName(TREE[TREE.length - 1].label); 
+            const INDEX_MENU = Number(TREE[0].id.split('index')[1]);
+            const MENU = navigationSIGNAL()[INDEX_MENU]?.items || [];
+                                
+            if(TREE.length > 1) {
+                const INDEX_SUBMENU = Number(TREE[1].id.split('index')[1]);
+                const SUBMENU = MENU[INDEX_SUBMENU]?.items || [];
+                this.menu.set(SUBMENU);
+            }
+
+            else Tools.Sleep().then(() => this.menu.set(MENU));
+
+            await Tools.Sleep();
+            if(this.menu().length <= 0) {
+                this.GoToSource();
+            }
+        } 
+    }
 }

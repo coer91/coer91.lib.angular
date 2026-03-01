@@ -9,20 +9,20 @@ const routes: Routes = [{
     children: [
         {
             path: 'about-library',
-            loadChildren: () => import('./about-library-submodule/about-library.routing').then(routing => routing.AboutLibraryRouting)
+            loadChildren: () => import('./about.submodule/about.submodule').then(submodule => submodule.AboutSubmodule)
         },   
         {
             path: 'components',
-            loadChildren: () => import('./components-submodule/components.routing').then(routing => routing.ComponentsRouting)
+            loadChildren: () => import('./components.submodule/components.submodule').then(submodule => submodule.ComponentsSubmodule)
         }, 
     ]
 }];  
 
 @NgModule({
-    imports: [SharedModule, RouterModule.forChild(routes)],
     declarations: [   
          
     ],
+    imports: [SharedModule, RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class FrontEndRouting { }
+export class FrontEndModule { }

@@ -72,7 +72,7 @@ export class Coer91Root {
             const loginResponse = await FUNCTION(login); 
     
             if(loginResponse.ok) {
-                const access = this._coer91().SetAccess(loginResponse.body);
+                const access = this._coer91().SetAccess(loginResponse.data);
     
                 if(access) {
                     this.GetNavigation();
@@ -102,6 +102,7 @@ export class Coer91Root {
     protected async GetNavigation(): Promise<void> {
         this._navigation.set([]);
 
+        await Tools.Sleep(); 
         if(!Tools.IsBooleanFalse(appSettings?.navigation?.static) || !Tools.IsFunction(this.authService()?.GetNavigationByRole)) { 
             await Tools.Sleep();
             this._navigation.set(this.staticNavigation());
@@ -114,7 +115,7 @@ export class Coer91Root {
             const role = userSIGNAL()?.role || '';
             const response = await FUNCTION(project, role);   
             
-            if(response.ok) this._navigation.set(response.body);
+            if(response.ok) this._navigation.set(response.data);
              
             else {
                 console.error(response.message);
@@ -133,7 +134,7 @@ export class Coer91Root {
             const response = await FUNCTION(user);   
     
             if(response.ok) {
-                this._coer91().alert.Information(response.body.password);
+                this._coer91().alert.Information(response.data.password);
                 this._coer91().Show('LOGIN'); 
             }
     
@@ -159,7 +160,7 @@ export class Coer91Root {
             const response = await FUNCTION({ user, password });   
     
             if(response.ok) {
-                this._coer91().alert.Success(response.body, 'Change Password', 'i91-lock-fill');
+                this._coer91().alert.Success(response.data, 'Change Password', 'i91-lock-fill');
                 this._coer91().CloseModal();
             }
     
@@ -176,8 +177,8 @@ export class Coer91Root {
 
     /** */
     protected async UpdateRole(roleId: string): Promise<void> {
-        if(Tools.IsFunction(this.authService()?.SetMainUsersRole)) {
-            const FUNCTION = this.authService().SetMainUsersRole as (userId: number, roleId: string | number) => Promise<IHttpResponse<IUserRole>>;
+        if(Tools.IsFunction(this.authService()?.SetUserRoleMain)) {
+            const FUNCTION = this.authService().SetUserRoleMain as (userId: number, roleId: string | number) => Promise<IHttpResponse<IUserRole>>;
             
             isLoadingSIGNAL.set(true); 
             const userId = userSIGNAL()?.userId || 0;
@@ -187,7 +188,7 @@ export class Coer91Root {
                 await this.UpdateJWT();
                 userSIGNAL.set(Access.GetUser());
                 this._coer91().CloseModal();
-                this._coer91().alert.Success('The rol has been updated', response.body.role); 
+                this._coer91().alert.Success('The rol has been updated', response.data.role); 
                 await this.GetNavigation(); 
             }
     
@@ -208,7 +209,7 @@ export class Coer91Root {
             const FUNCTION = this.authService().UpdateJWT as () => Promise<IHttpResponse<string>>;
     
             const JWT = await FUNCTION();   
-            if(JWT.ok) Access.SetUser(JWT.body);
+            if(JWT.ok) Access.SetUser(JWT.data);
             
             else {
                 console.error(JWT.message);

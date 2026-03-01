@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, inject } from "@angular/core"; 
+import { AfterViewInit, Component, Inject, inject, signal } from "@angular/core"; 
 import { CoerAlert } from "./coer-alert/coer-alert.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IAppSource, ITitleBreadcrumb, ITitleGoBack } from "coer91.angular/interfaces";
@@ -17,28 +17,31 @@ export abstract class Page implements AfterViewInit {
     private readonly _activatedRoute = inject(ActivatedRoute); 
 
     /** */
-    protected isUpdatingPage: boolean = false;
+    protected readonly isUpdating = signal<boolean>(false);
 
     /** */
-    protected isLoadingPage: boolean = false;
+    protected readonly isLoading = signal<boolean>(false);
 
     /** */
-    protected isReadonlyPage: boolean = true;
+    protected readonly canCreate = signal<boolean>(false);
+    
+    /** */
+    protected readonly canUpdate = signal<boolean>(false);
 
     /** */
-    protected isReadyPage: boolean = false;   
+    protected readonly canDelete = signal<boolean>(false);
 
     /** */
-    protected breadcrumbsPage: ITitleBreadcrumb[] = [];
+    protected breadcrumbs: ITitleBreadcrumb[] = [];
 
     /** */
-    protected responsePage: any = null;
+    protected readonly responsePage = signal<any>(null);
 
     /** */
-    protected filtersPage: any = {};
+    protected readonly filters = signal<any>({});
 
     /** */
-    protected goBackPage: ITitleGoBack = { show: false };  
+    protected goBack: ITitleGoBack = { show: false };  
    
 
     //Private Variables
@@ -56,16 +59,13 @@ export abstract class Page implements AfterViewInit {
         this._sourcePage = SourcePage.Get();
         this._SetBreadcrumbs();
         this._SetGoBack();
-        this.filtersPage = FiltersPage.Get(this._path);
+        this.filters.set(FiltersPage.Get(this._path));
         this._GetResponsePage(); 
     } 
 
 
     ngAfterViewInit(): void {  
-        Tools.Sleep().then(() => {
-            this.isReadyPage = true;
-            this.StartPage(); 
-        });
+        Tools.Sleep().then(() => this.StartPage());
     } 
 
 
@@ -95,9 +95,9 @@ export abstract class Page implements AfterViewInit {
             this._path = PATH_ARRAY.join('/');
         }
          
-        if (this.breadcrumbsPage.length > 0) { 
-            this.breadcrumbsPage[this.breadcrumbsPage.length - 1].page = pageName;
-            this.breadcrumbsPage[this.breadcrumbsPage.length - 1].path = this._path;
+        if (this.breadcrumbs.length > 0) { 
+            this.breadcrumbs[this.breadcrumbs.length - 1].page = pageName;
+            this.breadcrumbs[this.breadcrumbs.length - 1].path = this._path;
             BreadcrumbsPage.UpdateLast(pageName, this._path); 
         } 
 
@@ -107,21 +107,21 @@ export abstract class Page implements AfterViewInit {
 
     //Function
     private _SetBreadcrumbs(): void {       
-        this.breadcrumbsPage = BreadcrumbsPage.Get().map(item => ({
+        this.breadcrumbs = BreadcrumbsPage.Get().map(item => ({
             page: item.page,
             path: item.path,
             click: () => BreadcrumbsPage.RemoveByPath(item.path)
         }));  
 
-        if(this.breadcrumbsPage.length <= 0) { 
-            this.breadcrumbsPage = [{ page: this._pageName, path: this._path }];
+        if(this.breadcrumbs.length <= 0) { 
+            this.breadcrumbs = [{ page: this._pageName, path: this._path }];
         }
     }
 
 
     //Function
     private _SetGoBack(): void { 
-        this.goBackPage = {
+        this.goBack = {
             show: Tools.IsNotNull(this._sourcePage),
             path: this._sourcePage?.path,
             click: () => BreadcrumbsPage.RemoveLast()
@@ -142,13 +142,13 @@ export abstract class Page implements AfterViewInit {
         if(Tools.IsNotOnlyWhiteSpace(responsePage?.sender)) {
             if(responsePage.sender != this._path) { 
                 ResponsePage.Set('', this._path, responsePage.response); 
-                this.responsePage = { ...responsePage.response }; 
+                this.responsePage.set({ ...responsePage.response }); 
             }
         } 
         
         else if(Tools.IsNotOnlyWhiteSpace(responsePage?.receiver)) {
             if(responsePage.receiver == this._path) {  
-                this.responsePage = { ...responsePage.response }; 
+                this.responsePage.set({ ...responsePage.response }); 
             }
 
             else {
@@ -171,7 +171,7 @@ export abstract class Page implements AfterViewInit {
 
     /** */
     protected ReloadPage(): void {
-        this.isLoadingPage = true; 
+        this.isLoading.set(true); 
         BreadcrumbsPage.RemoveLast(); 
         Tools.Sleep().then(() => window.location.reload());
     }
@@ -179,15 +179,15 @@ export abstract class Page implements AfterViewInit {
 
     /** */
     protected SetPageFilters<T>(filters: T): void {
-        this.filtersPage = Tools.BreakReference<T>(filters);
-        FiltersPage.Set(this._path, this.filtersPage); 
+        this.filters.set(Tools.BreakReference<T>(filters));
+        FiltersPage.Set(this._path, this.filters); 
     }
 
 
     /** */
     protected RemovePageFilter(): void { 
         FiltersPage.Remove(this._path); 
-        this.filtersPage = {};
+        this.filters.set({});
     }
 
 

@@ -127,15 +127,15 @@ export class Sidenav {
                     const GET_FATHER = (ELEMENT: HTMLElement | null): HTMLElement | null => {
                         if(ELEMENT) {
                             let times = 10;  
-                            let FATHER: HTMLElement | null = ELEMENT.getFather();
+                            let FATHER: HTMLElement | null = HTMLElements.GetFather(ELEMENT);  
     
                             do { 
                                 if(FATHER && HTMLElements.HasClass(FATHER, 'accordion-body')) {
-                                    return FATHER.getFather()?.getChildren().find(x => HTMLElements.HasClass(x, 'accordion-header')) || null; 
+                                    return HTMLElements.GetChildren(HTMLElements.GetFather(FATHER) as any).find(x => HTMLElements.HasClass(x, 'accordion-header')) || null; 
                                 }
     
                                 else if(FATHER) {
-                                    FATHER = FATHER.getFather();
+                                    FATHER = HTMLElements.GetFather(FATHER);
                                     times--;
                                 }
     

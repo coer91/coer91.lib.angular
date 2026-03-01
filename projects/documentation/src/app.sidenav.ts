@@ -2,10 +2,7 @@ import { IMenu } from "coer91.angular/interfaces";
 
 export const NAVIGATION: IMenu[] = [   
     { label: 'Back End', icon: 'i91-logo-csharp-fill', show: 'LIST', items: [ 
-        //About
-        { label: 'About Library', icon: 'i91-logo-coer91', show: 'LIST', items: [ 
-             
-        ]},
+        
     ]},
 
     { label: 'Front End', icon: 'i91-logo-angular-fill', show: 'LIST', items: [   

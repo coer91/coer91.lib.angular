@@ -4,8 +4,10 @@ export interface IMenu {
     icon?: string;
     path?: string;
     show?: 'LIST' | 'GRID';
-    isReadonly?: boolean;
-    sequence?: number; 
+    canCreate?: boolean;
+    canUpdate?: boolean;
+    canDelete?: boolean;
     activeKey?: string;
+    sequence?: number; 
     items?: IMenu[];
 }
