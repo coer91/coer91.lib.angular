@@ -1,0 +1,41 @@
+<section class="coer-grid-body">
+    <table>
+        <thead>
+            <tr></tr>
+        </thead>
+
+        @for(group of dataSourceGroup(); track group.index) {
+            <tbody>
+                @for(row of group.rows; let index = $index; track row.__index__) {
+                    <tr [id]="IdCalculated()(row.__index__, -1, 'row')" 
+                        [ngClass]="{ 
+                            'striped'   : _showStriped(index), 
+                            'no-striped': !_showStriped(index),
+                            'hover'     : !IsBooleanFalse(bodySettings().showHover)
+                        }">
+                        @for(column of columns(); track column.__index__) {
+                            <td class="td-content"
+                                [ngStyle]="{ 
+                                    'border-bottom' : (!IsBooleanFalse(this.bodySettings().showBorders) ? '1px solid var(--readonly)' : ''), 
+                                    'vertical-align': column.config.textAlignY!,
+                                     
+                                }"> 
+                                <coer-grid-cell
+                                    [id]="IdCalculated()(row.__index__, column.__index__, 'cell')"
+                                    [ApplyFormat]="ApplyFormat()"
+                                    [column]="column"
+                                    [row]="row" 
+                                    [bodySettings]="bodySettings()"
+                                    [isLoading]="isLoading()"
+                                    [isEnabled]="isEnabled()"
+                                    (onClickRow)="null"
+                                    (onDoubleClickRow)="null"
+                                ></coer-grid-cell>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        }
+    </table>
+</section> 

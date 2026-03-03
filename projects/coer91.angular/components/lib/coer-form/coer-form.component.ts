@@ -43,8 +43,8 @@ export class CoerForm implements AfterViewInit, OnDestroy {
 
     //Computed
     protected _isEnabled = computed<boolean>(() => {
-        return this.isLoading()   === false 
-            && this.isReadonly()  === false 
+        return this.isLoading()  === false 
+            && this.isReadonly() === false 
     }); 
 
 

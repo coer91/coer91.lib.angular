@@ -1,0 +1,30 @@
+section.coer-grid-body {
+    table {
+        width: 100% !important;
+        table-layout: auto !important;
+        border-collapse: separate !important;
+        border-spacing: 1px 0px !important;
+        margin: 0px !important;
+        font-size: 14px; 
+
+        tbody {  
+            tr td {
+                text-overflow: ellipsis !important;                 
+                padding: 0px !important;  
+                background-color: var(--ligth); 
+            }
+
+            tr.striped td {
+                background-color: var(--input) !important;
+            }
+
+            tr.no-striped td {
+                background-color: var(--light) !important;
+            }
+
+            tr.hover:hover td {
+                background-color: var(--item-hover) !important;
+            }
+        }
+    }
+}

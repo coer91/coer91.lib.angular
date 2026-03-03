@@ -1,0 +1,22 @@
+<div class="coer-grid">
+    <!-- Header -->
+    <coer-grid-header
+    
+    ></coer-grid-header>
+   
+    <!-- Body -->
+    <coer-grid-body
+        [IdCalculated]="_IdCalculated"
+        [ApplyFormat]="_ApplyFormat"
+        [columns]="_columns()"
+        [dataSourceGroup]="_dataSourceGroup()"
+        [bodySettings]="bodySettings()"
+        [isLoading]="_isLoading"
+        [isEnabled]="_isEnabled()"
+    ></coer-grid-body>
+    
+    <!-- Footer -->
+    <coer-grid-footer
+    
+    ></coer-grid-footer>
+</div>

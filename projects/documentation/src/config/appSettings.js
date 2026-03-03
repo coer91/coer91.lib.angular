@@ -22,13 +22,13 @@ const appSettings = {
         login: 'clip.mp4'
     },
     security: {
-        useJWT: true
+        useJWT: false
     },
     dateTime: {
         format: 'MDY'
     },
     navigation: {
-        static: false,
+        static: true,
         showHome: true,
         redirectTo: '/home' 
     }

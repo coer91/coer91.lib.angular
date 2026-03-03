@@ -1,5 +1,6 @@
-//import { Dates } from "./dates";
+//import { Dates } from "./dates"; 
 import { Tools } from "./generic";
+import { Strings } from "./strings";
  
 export class Collections { 
     
@@ -203,35 +204,34 @@ export class Collections {
     // }
 
 
-    // /** */
-    // public static Search<T>(array: T[], text: string, properties: string[] = []): T[] {
-    //     try {
-    //         if(!Array.isArray(array) || array.length <= 0) return [];  
+    /** */
+    public static Search<T>(array: T[], text: string, properties: string[] = []): T[] {
+        try {
+            if(!Array.isArray(array) || array.length <= 0) return [];  
 
-    //         const TYPE = typeof array[0];
-    //         text = text.cleanUpBlanks().toUpperCase().removeAccents();
+            const TYPE = typeof array[0];
+            text = Strings.RemoveAccents(Strings.CleanUpBlanks(text.toUpperCase()));
+            const CLEAN = (value: any): string => Tools.IsNotOnlyWhiteSpace(value) ?  Strings.RemoveAccents(Strings.CleanUpBlanks(`${value}`.toUpperCase())) : '';
 
-    //         const CLEAN = (value: any): string => Tools.IsNotOnlyWhiteSpace(value) ? String(value).cleanUpBlanks().removeAccents().toUpperCase() : '';
-
-    //         if(TYPE === 'object') { 
-    //             if(properties.length <= 0 && array.length > 0) {
-    //                 properties = Tools.GetPropertyList(array[0]);
-    //             }
+            if(TYPE === 'object') { 
+                if(properties.length <= 0 && array.length > 0) {
+                    properties = Tools.GetPropertyList(array[0]);
+                }
                 
-    //             return [...array].filter((item: any) => properties.some(property => CLEAN(item[property]).includes(text)));    
-    //         } 
+                return [...array].filter((item: any) => properties.some(property => CLEAN(item[property]).includes(text)));    
+            } 
 
-    //         else if(['string', 'number', 'bigint', 'boolean'].includes(TYPE)) { 
-    //             return [...array].filter((item: any) => CLEAN(item).includes(text));
-    //         } 
+            else if(['string', 'number', 'bigint', 'boolean'].includes(TYPE)) { 
+                return [...array].filter((item: any) => CLEAN(item).includes(text));
+            } 
 
-    //         console.warn('Search: unsupported data type');
-    //         return array;  
-    //     } 
+            console.warn('Search: unsupported data type');
+            return array;  
+        } 
 
-    //     catch (error) {
-    //         console.warn(error);
-    //         return array;
-    //     }
-    // } 
+        catch (error) {
+            console.warn(error);
+            return array;
+        }
+    } 
 }

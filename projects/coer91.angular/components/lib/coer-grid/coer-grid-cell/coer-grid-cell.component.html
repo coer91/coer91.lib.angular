@@ -1,0 +1,15 @@
+@switch(_input()) {
+    @default {
+        <div class="default-cell" 
+            [ngStyle]="{ 
+                'justify-content': _GetTextAlignX(),
+                'word-break'     : _GetTextBreak(),
+                'white-space'    : _GetSpaceBreak(),
+                'min-height'     : _minHeight()  
+            }"
+            (click)="isEnabled() ? onClickRow.emit(row()) : null"
+            (dblclick)="isEnabled() ? onDoubleClickRow.emit(row()) : null">  
+            <div [innerHTML]="_GetCellValue() | html"></div>          
+        </div>
+    }
+}

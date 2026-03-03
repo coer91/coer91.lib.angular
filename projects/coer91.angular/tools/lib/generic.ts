@@ -50,7 +50,7 @@ export const Tools = {
       
 
     /** Get properties of an object */
-    GetPropertyList: (object: object | null | undefined): string[] => {
+    GetPropertyList: (object: any): string[] => {
         return Tools.IsNotNull(object) && typeof object === 'object' && !Array.isArray(object) 
             ? Object.keys(object!) 
             : [];

@@ -1,0 +1,13 @@
+<coer-page-title
+    title="Grid"
+    [breadcrumbs]="breadcrumbs"
+    [goBack]="goBack"
+></coer-page-title>
+
+<section class="container-section">
+    <coer-grid
+        [(ngModel)]="dataSource"
+    ></coer-grid>
+</section> 
+
+{{ dataSource() | json }}
