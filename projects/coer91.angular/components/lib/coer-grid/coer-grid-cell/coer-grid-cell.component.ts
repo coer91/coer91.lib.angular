@@ -15,7 +15,7 @@ export class CoerGridCell<T> {
     public readonly ApplyFormat  = input.required<(value: any, type: 'string' | 'number' | 'currency' | 'date' | 'datetime' | 'time') => string>();
     public readonly column       = input.required<IColumnConfig<T>>();
     public readonly row          = input.required<any>();
-    public readonly bodySettings = input.required<IBodySettings>();
+    public readonly bodySettings = input.required<IBodySettings<T>>();
     public readonly isLoading    = input.required<WritableSignal<boolean>>();
     public readonly isEnabled    = input.required<boolean>();
 

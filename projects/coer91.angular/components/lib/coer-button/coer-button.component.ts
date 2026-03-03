@@ -133,14 +133,14 @@ export class CoerButton implements AfterViewInit, OnDestroy {
         if(Tools.IsOnlyWhiteSpace(this.icon()) && !['filled', 'outline'].includes(this.type())) return 'i91-hand-pointer-fill';
 
         switch(this.icon()) {
-            case 'add'   : return 'i91-plus font-size-20px';
-            case 'save'  : return 'i91-floppy-disk-fill font-size-20px';
-            case 'excel' : return 'i91-file-xls-fill font-size-17px';
-            case 'import': return 'i91-file-arrow-up-fill font-size-17px';
-            case 'delete': return 'i91-trash-can-fill font-size-17px';
-            case 'edit'  : return 'i91-pen-fill font-size-17px';
-            case 'modal' : return 'i91-modal-fill font-size-17px';
-            case 'go'    : return 'i91-arrow-from-bracket font-size-17px';
+            case 'add'     : return 'i91-plus font-size-20px';
+            case 'save'    : return 'i91-floppy-disk-fill font-size-20px';
+            case 'excel'   : return 'i91-file-xls-fill font-size-17px';
+            case 'import'  : return 'i91-file-arrow-up-fill font-size-17px';
+            case 'delete'  : return 'i91-trash-can font-size-17px';
+            case 'edit'    : return 'i91-pen font-size-17px';
+            case 'modal'   : return 'i91-modal-fill font-size-17px';
+            case 'navigate': return 'i91-arrow-from-bracket font-size-17px';
             default: return this.icon();
         } 
     });

@@ -1,8 +1,5 @@
-// import { IGridNumberBox } from "./grid-coer-numberbox.interface";
-// import { IGridSelectBox } from "./grid-coer-selectbox.interface";
-// import { IGridSwitch } from "./grid-coer-switch.interface";
-// import { IGridTextBox } from "./grid-coer-textbox.interface";
-// import { IGridItem } from "./grid-item.interface"; 
+import { ICallbackItem } from "./callback-item.interface";
+import { ICellSwitch } from "./cell-switch.interface";
 
 export interface IColumnConfig<T> {
     __index__: number;
@@ -14,16 +11,16 @@ export interface IColumnConfig<T> {
 export interface IColumn<T> {
     property:       string;
     alias?:         string;
-    // short?:         boolean;
-    // width?:         string;
+    short?:         boolean;
+    width?:         string;
     height?:        string;
     textBreak?:     boolean;
     textAlignX?:    'left' | 'center' | 'right';
     textAlignY?:    'top'  | 'middle' | 'bottom';
-    // color?:         'primary' | 'secondary' | 'success' | 'warning'  | 'danger' | 'navigation' | 'information' | 'dark' | 'light' | ((item: IGridItem<T>) => 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light');
+    color?:         'primary' | 'secondary' | 'success' | 'warning'  | 'danger' | 'navigation' | 'information' | 'dark' | 'light' | ((item: ICallbackItem<T>) => 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light');
     type?:          'string' | 'number' | 'currency' | 'date' | 'time' | 'datetime';
-    // template?:      null    | string  | ((item: IGridItem<T>) => string);
-    // coerSwitch?:    null    | boolean | ((item: IGridItem<T>) => IGridSwitch);
+    template?:      null | string  | ((item: ICallbackItem<T>) => string);
+    coerSwitch?:    null | boolean | ((item: ICallbackItem<T>) => ICellSwitch);
     // coerTextbox?:   null    | boolean | ((item: IGridItem<T>) => IGridTextBox);
     // coerNumberbox?: null    | boolean | ((item: IGridItem<T>) => IGridNumberBox);
     // coerSelectbox?: null    | boolean | ((item: IGridItem<T>) => IGridSelectBox);

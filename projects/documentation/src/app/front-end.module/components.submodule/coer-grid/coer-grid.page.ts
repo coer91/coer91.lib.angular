@@ -1,5 +1,5 @@
 import { Component, signal, viewChild } from '@angular/core';   
-import { CoerModal } from 'coer91.angular/components';
+import { CoerModal, ICallbackItem } from 'coer91.angular/components';
 import { Page } from 'coer91.angular/tools';
 
 @Component({
@@ -12,13 +12,19 @@ export class CoerGridPage extends Page {
     protected readonly grid = viewChild<CoerModal>('grid');
 
     //Variables 
-    protected readonly dataSource = signal<any[]>([
-        { id: 1, name: 'One'   },
-        { id: 2, name: 'Two'   },
-        { id: 3, name: 'Three' }
-    ]);
+    protected readonly dataSource = signal<any[]>([]);
 
     constructor() { 
-        super('coer-grid')
+        super('coer-grid');
+
+        for(let i = 1; i <= 5; i++) { 
+            this.dataSource.update(x => x.concat([{ id: i, name: `item ${i}` }]));
+        }
+    }
+
+
+    protected Show = (item: ICallbackItem<any>) => {
+        console.log(item);
+        return item.__index__ % 2 != 0
     }
 }

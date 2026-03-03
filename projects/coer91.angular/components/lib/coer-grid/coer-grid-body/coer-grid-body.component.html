@@ -1,7 +1,37 @@
-<section class="coer-grid-body">
+<section class="coer-grid-body"
+    [ngStyle]="{ 
+        'height'    : height(), 
+        'min-height': minHeight(), 
+        'max-height': maxHeight()
+    }">
     <table>
         <thead>
-            <tr></tr>
+            <tr>
+                @for(header of columns(); track header.__index__) {
+                    <th scope="col" 
+                        (dblclick)="null"
+                        [ngStyle]="{ 
+                            'width'     : `calc(${header.config.width} - 10px)`,
+                            'text-align': header.config.textAlignX
+                        }">                       
+                        <div class="th-content">
+                            <span>
+                                <span> {{ header.name }} </span> 
+                                <!-- <i [class]="_IconShortHeader(header.config.property)"></i> -->
+                            </span>
+
+                            <!-- <i [class]="_IconSearchHeader(header.config)"></i> -->
+                        </div>
+                    </th>
+                }
+
+
+                @for(button of _buttonsByRow(); track button.property) {
+                    @if(_ShowButton(button.property)) {
+                        <th class="action-column" scope="col"></th>
+                    }
+                }
+            </tr>
         </thead>
 
         @for(group of dataSourceGroup(); track group.index) {
@@ -13,12 +43,12 @@
                             'no-striped': !_showStriped(index),
                             'hover'     : !IsBooleanFalse(bodySettings().showHover)
                         }">
+
                         @for(column of columns(); track column.__index__) {
                             <td class="td-content"
                                 [ngStyle]="{ 
-                                    'border-bottom' : (!IsBooleanFalse(this.bodySettings().showBorders) ? '1px solid var(--readonly)' : ''), 
-                                    'vertical-align': column.config.textAlignY!,
-                                     
+                                    'border-bottom' : _borderButtom(), 
+                                    'vertical-align': column.config.textAlignY!,                                     
                                 }"> 
                                 <coer-grid-cell
                                     [id]="IdCalculated()(row.__index__, column.__index__, 'cell')"
@@ -32,6 +62,24 @@
                                     (onDoubleClickRow)="null"
                                 ></coer-grid-cell>
                             </td>
+                        }
+
+
+                        @for(button of _buttonsByRow(); track button.property) {
+                            @if(_ShowButton(button.property)) {
+                                <td class="action-column" [ngStyle]="{ 'border-bottom' : _borderButtom() }">
+                                    @if(_ShowButton(button.property, row)) {
+                                        <div class="action-column-content">
+                                            <coer-button
+                                                type="icon-rounded"
+                                                [color]="button.color"
+                                                [icon]="button.icon"  
+                                                (onClick)="button.event.emit(row)"
+                                            ></coer-button>
+                                        </div>
+                                    }
+                                </td>
+                            }
                         }
                     </tr>
                 }

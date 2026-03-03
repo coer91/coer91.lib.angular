@@ -13,6 +13,9 @@
         [bodySettings]="bodySettings()"
         [isLoading]="_isLoading"
         [isEnabled]="_isEnabled()"
+        [height]="`calc(${height()} - ${_heightCompensation()})`"
+        [minHeight]="`calc(${minHeight()} - ${_heightCompensation()})`"
+        [maxHeight]="`calc(${maxHeight()} - ${_heightCompensation()})`"
     ></coer-grid-body>
     
     <!-- Footer -->

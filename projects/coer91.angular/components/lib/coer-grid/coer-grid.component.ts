@@ -19,7 +19,13 @@ export class CoerGrid<T> extends ControlValue {
     //Input 
     public readonly columns      = input<IColumn<T>[]>([]);
     public readonly search       = input<ISearch>({ show: false }); 
-    public readonly bodySettings = input<IBodySettings>({}); 
+    public readonly bodySettings = input<IBodySettings<T>>({}); 
+    public readonly width        = input<string>('100%');
+    public readonly minWidth     = input<string>('100px');
+    public readonly maxWidth     = input<string>('100%');
+    public readonly height       = input<string>('350px');
+    public readonly minHeight    = input<string>('150px');
+    public readonly maxHeight    = input<string>('100%');
 
 
     /** Sets the value of the component */
@@ -55,35 +61,26 @@ export class CoerGrid<T> extends ControlValue {
 
     /** */
     protected _GetColumnConfig = (property: string): IColumn<T> | null => {
-        const COLUMN_CONFIG = this.columns().find(x => x.property === property) || {} as any; 
-        
-        // let short      = Tools.IsNotNull(COLUMN_CONFIG?.short) ? COLUMN_CONFIG?.short : true;
-        // let width      = COLUMN_CONFIG?.width      || 'auto';
-        let height     = COLUMN_CONFIG?.height     || '20px';
-        let textBreak  = Tools.IsNotNull(COLUMN_CONFIG?.textBreak) ? COLUMN_CONFIG?.textBreak : false;
-        let textAlignX = COLUMN_CONFIG?.textAlignX || 'left';
-        let textAlignY = COLUMN_CONFIG?.textAlignY || 'middle';
-        // let color      = COLUMN_CONFIG?.color      || 'dark';
-        let type       = COLUMN_CONFIG?.type       || 'string';
+        const COLUMN_CONFIG = this.columns().find(x => x.property === property);  
 
-        // //coer-switch
-        // if(Tools.IsNotNull(COLUMN_CONFIG?.coerSwitch)) {
-        //     if (Tools.IsNull(COLUMN_CONFIG?.short))                short      = false;
-        //     if (Tools.IsOnlyWhiteSpace(COLUMN_CONFIG?.width))      width      = '100px';
-        //     if (Tools.IsOnlyWhiteSpace(COLUMN_CONFIG?.textAlignX)) textAlignX = 'center';
-        // } 
+        //coer-switch
+        if(COLUMN_CONFIG?.coerSwitch) {
+            COLUMN_CONFIG.short = false;
+            COLUMN_CONFIG.width = '100px';
+            COLUMN_CONFIG.textAlignX = 'center';
+        } 
 
         return {
             property, 
             ...COLUMN_CONFIG,
-            // short,
-            // width,
-            height,
-            textBreak,
-            textAlignX,
-            textAlignY,  
-            // color,
-            type
+            short:      !Tools.IsBooleanFalse(COLUMN_CONFIG?.short),
+            width:      COLUMN_CONFIG?.width      || 'auto',
+            height:     COLUMN_CONFIG?.height     || '20px',
+            textBreak:  Tools.IsBooleanTrue(COLUMN_CONFIG?.textBreak),
+            textAlignX: COLUMN_CONFIG?.textAlignX || 'left',
+            textAlignY: COLUMN_CONFIG?.textAlignY || 'middle',  
+            color:      COLUMN_CONFIG?.color      || 'dark',
+            type:       COLUMN_CONFIG?.type       || 'string'
         }  
     }
 
@@ -148,4 +145,24 @@ export class CoerGrid<T> extends ControlValue {
     protected _IdCalculated = (indexRow: number, indexColumn: number, suffix: string = ''): string => { 
         return `${this._id}${indexRow > -1 ? '-row' + indexRow : ''}${indexColumn > -1 ? '-column' + indexColumn : ''}${suffix.length > 0 ? '-' + suffix : ''}`;
     }   
+
+
+    //computed
+    protected _heightCompensation = computed<string>(() => { 
+        let COMPENSATION = 0;
+
+        //HEADER
+        // if(this._headerReady) {
+        //     COMPENSATION += this._coerGridHeader()?.marginBottom() 
+        //         ? Number(HTMLElements.GetElementHeight(`#${this._id}-coer-grid-header`).split('px')[0]) + 5 
+        //         : 0;
+        // } else COMPENSATION += 40;
+
+        //FOOTER
+        // if(this._footerReady) {
+        //     COMPENSATION += this.footer().show ? 30 : 0; 
+        // } else COMPENSATION += 30;
+         
+        return `${COMPENSATION}px`;
+    });
 }
