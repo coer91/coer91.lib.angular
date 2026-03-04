@@ -7,22 +7,19 @@ export interface IBodySettings<T> {
     deleteButton?: IRowButtonDelete<T>;
     editButton?: IRowButton<T>;
     modalButton?: IRowButton<T>;
-    navigateButton?: IRowButtonDeleteNavigation<T>;
+    navigateButton?: IRowButton<T>;
 }
 
 
 export interface IRowButton<T> {
     show?:   boolean | ((item: ICallbackItem<T>) => boolean); 
     color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light'; 
-    preventDefault?: boolean;
+    path?: (item: ICallbackItem<T>) => string; 
 }
 
 
 export interface IRowButtonDelete<T> extends IRowButton<T> {
     showAlert?: boolean;
-}
-
-
-export interface IRowButtonDeleteNavigation<T> extends IRowButton<T> { 
-    path?: (item: ICallbackItem<T>) => string; 
-}
+    alertProperty?: string;
+    preventDefault?: boolean;
+}  

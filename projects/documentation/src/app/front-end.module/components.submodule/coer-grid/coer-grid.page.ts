@@ -23,8 +23,7 @@ export class CoerGridPage extends Page {
     }
 
 
-    protected Show = (item: ICallbackItem<any>) => {
-        console.log(item);
-        return item.__index__ % 2 != 0
+    path = (item: ICallbackItem<any>) => { 
+        return `/home/${item.row.id}`;
     }
 }

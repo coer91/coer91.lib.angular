@@ -1,6 +1,7 @@
 import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, ISearch } from './coer-grid-interfaces';
-import { Collections, CONTROL_VALUE, ControlValue, Strings, Tools } from 'coer91.angular/tools'; 
-import { Component, computed, input, signal } from '@angular/core'; 
+import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, Strings, Tools } from 'coer91.angular/tools'; 
+import { Component, computed, inject, input, output, signal } from '@angular/core'; 
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'coer-grid',
@@ -10,6 +11,10 @@ import { Component, computed, input, signal } from '@angular/core';
     standalone: false
 })
 export class CoerGrid<T> extends ControlValue {    
+
+    //Injects
+    protected readonly _router = inject(Router);
+    protected readonly _alert = inject(CoerAlert);
     
     //Variables 
     protected override readonly _value = signal<T[]>([]);
@@ -27,11 +32,17 @@ export class CoerGrid<T> extends ControlValue {
     public readonly minHeight    = input<string>('150px');
     public readonly maxHeight    = input<string>('100%');
 
+    //Outputs
+    protected readonly onClickDeleteRow   = output<T>();
+    protected readonly onClickEditRow     = output<T>();
+    protected readonly onClickModalRow    = output<T>();
+    protected readonly onClickNavigateRow = output<T>();
+
 
     /** Sets the value of the component */
     protected override _SetValue(value: T[]): void {
         if(Tools.IsNull(value)) value = [];
-        value = [...value!].map((item, index) => ({ checked: false, ...item, __index__: index }));          
+        value = [...value!].map((item, index) => ({ __checked__: false, ...item, __index__: index }));          
         super._SetValue(value); 
     }
 
@@ -39,8 +50,8 @@ export class CoerGrid<T> extends ControlValue {
     //computed
     protected _columns = computed<IColumnConfig<T>[]>(() => {
         const COLUMNS = this.columns().length > 0
-            ? new Set<string>(this.columns().map(item => item.property).filter(x => !['__index__', 'checked'].includes(x)))
-            : new Set<string>(Tools.GetPropertyList(this._value()[0]).filter(x => !['__index__', 'checked'].includes(x)));
+            ? new Set<string>(this.columns().map(item => item.property).filter(x => !['__index__', '__checked__'].includes(x)))
+            : new Set<string>(Tools.GetPropertyList(this._value()[0]).filter(x => !['__index__', '__checked__'].includes(x)));
          
         return [...COLUMNS].map<IColumnConfig<T>>((property, index) => ({
             __index__: index, 
@@ -165,4 +176,51 @@ export class CoerGrid<T> extends ControlValue {
          
         return `${COMPENSATION}px`;
     });
+
+
+    //Function
+    protected async _ClickDeleteRow(row: T): Promise<void> {
+        const ROW = { ...row } as any;
+        delete ROW['__index__'];
+        delete ROW['__checked__'];
+         
+        const USE_DEFAULT_FUNCTION = Tools.IsNull(this.bodySettings().deleteButton?.path)
+            && !Tools.IsBooleanTrue(this.bodySettings().deleteButton?.preventDefault);
+
+        if(USE_DEFAULT_FUNCTION) {
+
+            let deleteItem = true;
+            if(!Tools.IsBooleanFalse(this.bodySettings().deleteButton?.showAlert)) {
+                
+                let displayProperty = '';
+                const ALERT_PROPERTY = this.bodySettings().deleteButton?.alertProperty || '';
+                
+                if(Tools.IsNotOnlyWhiteSpace(ALERT_PROPERTY)) {
+                    if(Tools.HasProperty(ROW, ALERT_PROPERTY)) {
+                        displayProperty = ROW[ALERT_PROPERTY];
+                    }
+                }
+
+                if(Tools.IsOnlyWhiteSpace(displayProperty)) {
+                    if(Tools.HasProperty(ROW, 'name')) displayProperty = ROW['name']; 
+                    else if(Tools.HasProperty(ROW, 'option')) displayProperty = ROW['option']; 
+                    else displayProperty = 'row';
+                }
+
+                deleteItem = await this._alert.DangerConfirm(`Delete ${displayProperty} ?`, 'i91-trash-can');
+            }
+
+            if(deleteItem) {
+                const DATA_SOURCE = [...this._value()];
+                const INDEX = DATA_SOURCE.findIndex(item => JSON.stringify(item) === JSON.stringify(row));
+
+                if(INDEX >= 0) {
+                    DATA_SOURCE.splice(INDEX, 1);
+                    this._SetValue(DATA_SOURCE);
+                }
+            }
+        }  
+
+        this.onClickDeleteRow.emit(ROW);
+    } 
 }

@@ -81,7 +81,7 @@ export class Coer91Root {
     
             else {
                 console.error(loginResponse.message);
-                this._coer91().alert.Error('Login');
+                this._coer91().alert.Danger('Login');
             } 
     
             isLoadingSIGNAL.set(false);
@@ -119,7 +119,7 @@ export class Coer91Root {
              
             else {
                 console.error(response.message);
-                this._coer91().alert.Error('GetNavigation');
+                this._coer91().alert.Danger('GetNavigation');
             }
         } 
     }
@@ -213,7 +213,7 @@ export class Coer91Root {
             
             else {
                 console.error(JWT.message);
-                this._coer91().alert.Error('UpdateJWT');
+                this._coer91().alert.Danger('UpdateJWT');
             }
         } 
 

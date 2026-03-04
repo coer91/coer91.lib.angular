@@ -74,6 +74,7 @@
                                                 type="icon-rounded"
                                                 [color]="button.color"
                                                 [icon]="button.icon"  
+                                                [path]="_Path(button.property, row)"
                                                 (onClick)="button.event.emit(row)"
                                             ></coer-button>
                                         </div>

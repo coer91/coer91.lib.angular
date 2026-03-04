@@ -8,8 +8,11 @@
     <coer-grid
         [(ngModel)]="dataSource"
         [bodySettings]="{
-            deleteButton: { show: true, color: 'success' },
-            editButton: { show: Show, color: 'warning' },
+            showStriped: true,
+            showBorders: false,
+            showHover: false,
+            deleteButton: { show: true, color: 'success', preventDefault: true },
+            editButton: { show: true, color: 'warning' },
             modalButton: { show: true, color: 'dark' },
             navigateButton: { show: true, color: 'secondary' },
         }"

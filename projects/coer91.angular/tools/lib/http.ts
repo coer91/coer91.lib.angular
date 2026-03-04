@@ -80,7 +80,7 @@ export class HTTP {
         } 
         
         catch {   
-            Tools.Sleep(5000, 'Offline_API').then(() => new CoerAlert().Error(null, 'Offline API', '', 0));  
+            Tools.Sleep(5000, 'Offline_API').then(() => new CoerAlert().Danger(null, 'Offline API', '', 0));  
             return this._BuildError(0, 'Offline API', request.responseType);
         } 
     }

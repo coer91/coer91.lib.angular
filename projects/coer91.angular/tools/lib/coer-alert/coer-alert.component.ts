@@ -62,7 +62,7 @@ export class CoerAlert implements AfterViewInit {
 
 
     /** */
-    public async Error(message: string | null = null, title: string | null = null, icon: string | null = null, autohide: number | null = 3000): Promise<HTMLElement> {
+    public async Danger(message: string | null = null, title: string | null = null, icon: string | null = null, autohide: number | null = 3000): Promise<HTMLElement> {
         while(Tools.IsNull(CoerAlert._alert)) await Tools.Sleep(100);
         
         message  = Tools.IsNotOnlyWhiteSpace(message) ? message  : '';
@@ -179,8 +179,8 @@ export class CoerAlert implements AfterViewInit {
 
 
     /** */
-    public async ErrorOk(message: string | null = null, icon: string | null = null): Promise<boolean> {
-        return await this._ConfirmError(message, icon, true);  
+    public async DangerOk(message: string | null = null, icon: string | null = null): Promise<boolean> {
+        return await this._ConfirmDanger(message, icon, true);  
     }
 
 
@@ -203,8 +203,8 @@ export class CoerAlert implements AfterViewInit {
 
 
     /** */
-    public async ErrorConfirm(message: string | null = null, icon: string | null = null): Promise<boolean> { 
-        return await this._ConfirmError(message, icon, false);  
+    public async DangerConfirm(message: string | null = null, icon: string | null = null): Promise<boolean> { 
+        return await this._ConfirmDanger(message, icon, false);  
     }
 
 
@@ -236,7 +236,7 @@ export class CoerAlert implements AfterViewInit {
 
 
     /** */
-    private async _ConfirmError(message: string | null = null, icon: string | null = null, onlyInformation: boolean = false): Promise<boolean> {
+    private async _ConfirmDanger(message: string | null = null, icon: string | null = null, onlyInformation: boolean = false): Promise<boolean> {
         while(Tools.IsNull(CoerAlert._confirm)) await Tools.Sleep(100);        
         message = Tools.IsNotOnlyWhiteSpace(message) ? message : 'Confirm action';
         icon    = Tools.IsNotOnlyWhiteSpace(icon)    ? icon    : 'i91-exclamation-octagon';
@@ -276,22 +276,23 @@ export class CoerAlert implements AfterViewInit {
         let response: boolean | null = null; 
         const FOOTER = document.createElement('footer'); 
 
+        const BUTTON_OK = document.createElement('button');
+        const BUTTON_CONFIRM = document.createElement('button');
+        const BUTTON_REJECT = document.createElement('button');
+
         if(onlyInformation) {
-            const BUTTON_OK = document.createElement('button');
             BUTTON_OK.type = 'button'; 
             BUTTON_OK.innerText = 'OK';
             BUTTON_OK.onclick = () => (response = true);
             
             FOOTER.appendChild(BUTTON_OK);
-        }
-
+        } 
+        
         else {
-            const BUTTON_CONFIRM = document.createElement('button');
             BUTTON_CONFIRM.type = 'button'; 
             BUTTON_CONFIRM.innerText = 'YES';
             BUTTON_CONFIRM.onclick = () => (response = true);
             
-            const BUTTON_REJECT = document.createElement('button');
             BUTTON_REJECT.type = 'button'; 
             BUTTON_REJECT.innerText = 'NO';
             BUTTON_REJECT.onclick = () => (response = false);
@@ -309,8 +310,12 @@ export class CoerAlert implements AfterViewInit {
         COER_CONFIRM.style.transform = 'scale(1)';
          
         //Wait
-        while(response === null) await Tools.Sleep(500); 
+        while(response === null) await Tools.Sleep(100); 
         COER_CONFIRM.style.transform = 'scale(0)';   
+        BUTTON_CONFIRM.style.display = 'none';
+        BUTTON_REJECT.style.display = 'none';
+        BUTTON_OK.style.display = 'none';
+        
         CoerAlert._transactions.delete(id);
 
         Tools.Sleep(400).then(() => {                        

@@ -58,6 +58,7 @@ export class CoerGridBody<T> {
                 
                 const ROW = { ...row };
                 delete ROW['__index__'];
+                delete ROW['__checked__'];
 
                 response = CALLBACK({ 
                     __index__: row.__index__, 
@@ -74,7 +75,7 @@ export class CoerGridBody<T> {
 
     //Computed
     protected _borderButtom = computed<string>(() => {
-        return !Tools.IsBooleanFalse(this.bodySettings().showBorders) ? '1px solid var(--readonly)' : ''
+        return Tools.IsBooleanTrue(this.bodySettings().showBorders) ? '1px solid var(--readonly)' : ''
     });
 
 
@@ -82,27 +83,52 @@ export class CoerGridBody<T> {
     protected _buttonsByRow = computed<any[]>(() => [   
         { 
             property: 'deleteButton',
-            icon: 'delete', 
+            icon: 'delete',  
             color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.color) ? this.bodySettings()?.deleteButton?.color : 'danger', 
             event: this.onClickDeleteRow 
         },
         { 
             property: 'editButton', 
-            icon: 'edit', 
+            icon: 'edit',  
             color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.color) ? this.bodySettings()?.editButton?.color : 'primary', 
             event: this.onClickEditRow 
         },
         { 
             property: 'modalButton', 
-            icon: 'modal', 
+            icon: 'modal',  
             color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.color) ? this.bodySettings()?.modalButton?.color : 'primary', 
             event: this.onClickModalRow 
         },
         { 
             property: 'navigateButton', 
-            icon: 'navigate', 
+            icon: 'navigate',  
             color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.color) ? this.bodySettings()?.navigateButton?.color : 'navigation', 
             event: this.onClickNavigateRow 
         }
     ]);
+
+
+    //Function
+    protected _Path(property: 'deleteButton' | 'editButton' | 'modalButton' | 'navigateButton', row: any): string {
+        let response = '';
+        
+        const PATH_BUTTON = (this.bodySettings() as any)[property]?.path; 
+
+        if (Tools.IsFunction(PATH_BUTTON)) {
+            const CALLBACK = PATH_BUTTON as ((item: ICallbackItem<T>) => string);
+            
+            const ROW = { ...row };
+            delete ROW['__index__'];
+            delete ROW['__checked__'];
+
+            response = CALLBACK({ 
+                __index__: row.__index__, 
+                property, 
+                row: ROW, 
+                value: null 
+            });
+        } 
+
+        return response;  
+    }
 }
