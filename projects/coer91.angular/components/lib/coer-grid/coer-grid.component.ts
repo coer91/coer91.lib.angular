@@ -1,4 +1,4 @@
-import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, ISearch } from './coer-grid-interfaces';
+import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IElementOutput, IHeaderSettings, IImportButton, ISearch } from './coer-grid-interfaces';
 import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, Strings, Tools } from 'coer91.angular/tools'; 
 import { Component, computed, inject, input, output, signal } from '@angular/core'; 
 import { Router } from '@angular/router';
@@ -22,17 +22,26 @@ export class CoerGrid<T> extends ControlValue {
     protected readonly _isLoading = signal<boolean>(false); 
 
     //Input 
-    public readonly columns      = input<IColumn<T>[]>([]);
-    public readonly search       = input<ISearch>({ show: false }); 
-    public readonly bodySettings = input<IBodySettings<T>>({}); 
-    public readonly width        = input<string>('100%');
-    public readonly minWidth     = input<string>('100px');
-    public readonly maxWidth     = input<string>('100%');
-    public readonly height       = input<string>('350px');
-    public readonly minHeight    = input<string>('150px');
-    public readonly maxHeight    = input<string>('100%');
+    public readonly columns        = input<IColumn<T>[]>([]);
+    public readonly headerSettings = input<IHeaderSettings>({}); 
+    public readonly bodySettings   = input<IBodySettings<T>>({}); 
+    public readonly width          = input<string>('100%');
+    public readonly minWidth       = input<string>('100px');
+    public readonly maxWidth       = input<string>('100%');
+    public readonly height         = input<string>('350px');
+    public readonly minHeight      = input<string>('150px');
+    public readonly maxHeight      = input<string>('100%');
 
     //Outputs
+    protected readonly onClickExport      = output<T[]>();
+    protected readonly onClickImport      = output<IImportButton<T>>();
+    protected readonly onClickAdd         = output<void>();
+    protected readonly onClickSave        = output<void>();
+    protected readonly onKeyupEnter       = output<IElementOutput>();
+    protected readonly onClickClear       = output<IElementOutput>();
+    protected readonly onClickSearch      = output<IElementOutput>();
+    protected readonly onClickRow         = output<T>();
+    protected readonly onDoubleClickRow   = output<T>();
     protected readonly onClickDeleteRow   = output<T>();
     protected readonly onClickEditRow     = output<T>();
     protected readonly onClickModalRow    = output<T>();
@@ -111,17 +120,17 @@ export class CoerGrid<T> extends ControlValue {
 
     //computed
     protected _dataSourceFiltered = computed<T[]>(() => { 
-        const DATA_SOURCE = this._value();
-        const SEARCH_TEXT = this._search().trim().toUpperCase();
+        const DATA_SOURCE = this._value(); 
+        const SEARCH_TEXT = this._search()?.trim()?.toUpperCase() || '';
 
         //Ignore Filter
-        if (Tools.IsOnlyWhiteSpace(SEARCH_TEXT) || Tools.IsBooleanTrue(this.search()?.ignore)) {
+        if (Tools.IsOnlyWhiteSpace(SEARCH_TEXT) || Tools.IsBooleanTrue(this.headerSettings()?.search?.preventDefault)) {
             return DATA_SOURCE;
         } 
 
         //Filter by search   
-        const SEARCH_PROPERTIES = this.search()?.properties
-            ? this.search().properties! : this.columns().map(item => item.property);  
+        const SEARCH_PROPERTIES = this.headerSettings().search?.properties
+            ? this.headerSettings().search?.properties! : this.columns().map(item => item.property);  
 
         //Data Formated
         let DATA_SOURCE_FORMAT = DATA_SOURCE.map((data: any) => 

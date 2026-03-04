@@ -13,6 +13,7 @@ export class CoerGridPage extends Page {
 
     //Variables 
     protected readonly dataSource = signal<any[]>([]);
+    protected readonly drop = signal<any>(null);
 
     constructor() { 
         super('coer-grid');
@@ -20,10 +21,17 @@ export class CoerGridPage extends Page {
         for(let i = 1; i <= 5; i++) { 
             this.dataSource.update(x => x.concat([{ id: i, name: `item ${i}` }]));
         }
+
+        this.dataSource.update(x => x.concat([{ id: 99, name: `dfg` }]));
     }
 
 
     path = (item: ICallbackItem<any>) => { 
         return `/home/${item.row.id}`;
+    }
+
+
+    Log(event: string, value: any) {
+        console.log({ event, value })
     }
 }

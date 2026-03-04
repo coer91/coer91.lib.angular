@@ -1,0 +1,16 @@
+header.coer-grid-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: wrap !important;
+    gap: 5px; 
+
+    div.buttons {
+        display: flex !important;
+        gap: 5px !important;
+    }
+
+    div.search {
+
+    }
+}

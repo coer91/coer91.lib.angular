@@ -58,8 +58,8 @@
                                     [bodySettings]="bodySettings()"
                                     [isLoading]="isLoading()"
                                     [isEnabled]="isEnabled()"
-                                    (onClickRow)="null"
-                                    (onDoubleClickRow)="null"
+                                    (onClickRow)="_ClickOnRow(row)"
+                                    (onDoubleClickRow)="onDoubleClickRow.emit(row)"
                                 ></coer-grid-cell>
                             </td>
                         }

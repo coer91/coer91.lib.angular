@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { RouterModule } from '@angular/router'; 
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectivesModule } from 'coer91.angular/directives';
 import { PipesModule } from 'coer91.angular/pipes';
 
@@ -23,6 +23,7 @@ import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
     imports: [
         CommonModule,  
         RouterModule,
+        FormsModule,
         ReactiveFormsModule,
         DirectivesModule,
         PipesModule

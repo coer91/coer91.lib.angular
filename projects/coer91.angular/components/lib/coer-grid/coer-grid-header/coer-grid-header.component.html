@@ -1,1 +1,53 @@
+<header class="coer-grid-header" [ngStyle]="{ marginBottom: _marginBottom(slotRef) }">
  
+    <div #slotRef [class]="_slotPosition()">
+        <ng-content></ng-content>
+    </div>
+
+    @if(_buttons().length > 0) {
+        <div class="buttons"> 
+            @for(button of _buttons(); track button.icon) {
+                <coer-button
+                    type="icon-filled-rounded" 
+                    [icon]="button.icon"
+                    [color]="button.color"
+                    [path]="button.path"      
+                    [isLoading]="button.isLoading"
+                    (onClick)="button.event.emit()"
+                ></coer-button>
+            }
+        </div>
+    }
+
+    @if(_showSearch()) {
+        <div class="search">
+            <coer-textbox
+                #searchRef
+                [id]="IdCalculated()(-1, -1, 'search')" 
+                [ngModel]="search()()"
+                minWidth="250px"
+                placeholder="Search" 
+                [selectOnFocus]="true"
+                [showSearchButton]="true"
+                [showClearButton]="true"
+                [isLoading]="isLoading()"
+                (onValueChange)="search().set($event)"
+                (onKeyupEnter)="onKeyupEnter.emit({
+                    position: 'HEADER',
+                    element: 'search',
+                    value: ($event || '')
+                })"
+                (onClickClear)="onClickClear.emit({
+                    position: 'HEADER',
+                    element: 'search',
+                    value: $event
+                })"
+                (onClickSearch)="onClickSearch.emit({
+                    position: 'HEADER',
+                    element: 'search',
+                    value: ($event || '')
+                })"
+            ></coer-textbox> 
+        </div>
+    }
+</header>

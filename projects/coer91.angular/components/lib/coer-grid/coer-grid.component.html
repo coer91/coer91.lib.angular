@@ -1,8 +1,30 @@
-<div class="coer-grid">
+<div class="coer-grid" 
+    [ngStyle]="{ 
+        'width'        : width(),
+        'min-width'    : minWidth(),
+        'max-width'    : maxWidth(),
+        'margin-top'   : marginTop(),
+        'margin-right' : marginRight(),
+        'margin-bottom': marginBottom(),
+        'margin-left'  : marginLeft()  
+    }">
+    
     <!-- Header -->
     <coer-grid-header
-    
-    ></coer-grid-header>
+        [IdCalculated]="_IdCalculated"
+        [search]="_search"
+        [headerSettings]="headerSettings()"
+        [isLoading]="isLoading()"
+        [isEnabled]="_isEnabled()"
+        (onClickExport)="onClickExport.emit($event)"
+        (onClickImport)="onClickImport.emit($event)"
+        (onClickAdd)="onClickAdd.emit($event)"
+        (onClickSave)="onClickSave.emit($event)"
+        (onKeyupEnter)="onKeyupEnter.emit($event)"
+        (onClickClear)="onClickClear.emit($event)"
+        (onClickSearch)="onClickSearch.emit($event)">
+        <ng-content></ng-content>
+    </coer-grid-header>
    
     <!-- Body -->
     <coer-grid-body
@@ -16,6 +38,8 @@
         [height]="`calc(${height()} - ${_heightCompensation()})`"
         [minHeight]="`calc(${minHeight()} - ${_heightCompensation()})`"
         [maxHeight]="`calc(${maxHeight()} - ${_heightCompensation()})`"
+        (onClickRow)="onClickRow.emit($event)"
+        (onDoubleClickRow)="onDoubleClickRow.emit($event)"
         (onClickDeleteRow)="_ClickDeleteRow($event)"
         (onClickEditRow)="onClickEditRow.emit($event)"
         (onClickModalRow)="onClickModalRow.emit($event)"

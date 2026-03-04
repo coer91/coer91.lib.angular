@@ -7,16 +7,40 @@
 <section class="container-section">
     <coer-grid
         [(ngModel)]="dataSource"
+        [isLoading]="false"
+        [isReadonly]="true"
+        [headerSettings]="{
+            exportButton: { show: true, color: 'danger'    },
+            importButton: { show: true, color: 'warning'    },
+            addButton:    { show: true, color: 'success', path: '/home' },
+            saveButton:   { show: true, color: 'navigation' },
+            search:       { show: true, properties: ['name'], preventDefault: false },
+        }"
         [bodySettings]="{
             showStriped: true,
             showBorders: false,
             showHover: false,
-            deleteButton: { show: true, color: 'success', preventDefault: true },
-            editButton: { show: true, color: 'warning' },
-            modalButton: { show: true, color: 'dark' },
-            navigateButton: { show: true, color: 'secondary' },
-        }"
-    ></coer-grid>
+            deleteButton:   { show: false, color: 'success', preventDefault: true },
+            editButton:     { show: false, color: 'warning' },
+            modalButton:    { show: false, color: 'dark' },
+            navigateButton: { show: false, color: 'secondary' },
+        }" 
+       
+    >
+
+        <coer-selectbox 
+            [(ngModel)]="drop"
+            [dataSource]="[
+                { id: 1, name: 'one' },
+                { id: 2, name: 'two' },
+                { id: 3, name: 'three' },
+                { id: 4, name: 'four' },
+                { id: 5, name: 'five' },
+                { id: 6, name: 'six' },
+                { id: 7, name: 'seven' }
+            ]"
+        ></coer-selectbox>
+    </coer-grid>
 </section> 
 
 {{ dataSource() | json }}

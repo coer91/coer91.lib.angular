@@ -26,6 +26,8 @@ export class CoerGridBody<T> {
     public readonly maxHeight       = input.required<string>();
 
     //Outputs
+    protected readonly onClickRow         = output<T>();
+    protected readonly onDoubleClickRow   = output<T>();
     protected readonly onClickDeleteRow   = output<T>();
     protected readonly onClickEditRow     = output<T>();
     protected readonly onClickModalRow    = output<T>();
@@ -131,4 +133,16 @@ export class CoerGridBody<T> {
 
         return response;  
     }
+
+
+    /** */
+    protected _ClickOnRow(row: T): void { 
+        if(!this.isEnabled()) return;
+
+        // if(this._checkOnRow()) {
+        //     this.CheckBy((x: any) => x.indexRow == (row as any).indexRow);
+        // }
+
+        this.onClickRow.emit(row);
+    } 
 }
