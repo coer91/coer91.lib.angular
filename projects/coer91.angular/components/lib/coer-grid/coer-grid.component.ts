@@ -1,7 +1,8 @@
 import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IElementOutput, IHeaderSettings, IImportButton, ISearch } from './coer-grid-interfaces';
-import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, Strings, Tools } from 'coer91.angular/tools'; 
-import { Component, computed, inject, input, output, signal } from '@angular/core'; 
+import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, HTMLElements, Screen, Strings, Tools } from 'coer91.angular/tools'; 
+import { AfterContentChecked, Component, computed, inject, input, output, signal, viewChild } from '@angular/core'; 
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'coer-grid',
@@ -10,7 +11,8 @@ import { Router } from '@angular/router';
     providers: [CONTROL_VALUE(CoerGrid)],
     standalone: false
 })
-export class CoerGrid<T> extends ControlValue {    
+export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
+       
 
     //Injects
     protected readonly _router = inject(Router);
@@ -18,8 +20,11 @@ export class CoerGrid<T> extends ControlValue {
     
     //Variables 
     protected override readonly _value = signal<T[]>([]);
-    protected readonly _search    = signal<string>('');
+    protected readonly _search = signal<string>('');
     protected readonly _isLoading = signal<boolean>(false); 
+    protected readonly _headerHeight = signal<number>(0);
+    protected readonly _footerHeight = signal<number>(0);
+    protected _resize$!: Subscription;
 
     //Input 
     public readonly columns        = input<IColumn<T>[]>([]);
@@ -56,6 +61,19 @@ export class CoerGrid<T> extends ControlValue {
     }
 
 
+    ngAfterContentChecked(): void {
+        const ID = this._IdCalculated(-1, -1, 'header-container');
+        const ELEMENT = HTMLElements.SelectElementById(ID);
+
+        if(ELEMENT) { 
+            let height = 0;
+            height += Number(HTMLElements.GetCssValue(ELEMENT, 'margin-bottom').split('px')[0]);
+            height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
+            this._headerHeight.set(height); 
+        }
+    } 
+
+
     //computed
     protected _columns = computed<IColumnConfig<T>[]>(() => {
         const COLUMNS = this.columns().length > 0
@@ -76,10 +94,10 @@ export class CoerGrid<T> extends ControlValue {
 
         return COLUMN_CONFIG?.alias ? COLUMN_CONFIG.alias 
             : property.replace(/([A-Z])/g, ' $1').replace(/^./, x => x.toUpperCase()).trim();   
-    }
+    } 
 
 
-    /** */
+    //Function
     protected _GetColumnConfig = (property: string): IColumn<T> | null => {
         const COLUMN_CONFIG = this.columns().find(x => x.property === property);  
 
@@ -167,25 +185,23 @@ export class CoerGrid<T> extends ControlValue {
     }   
 
 
+    //Function
+    protected _CalculateFootertHeight = () => {
+        const ID = this._IdCalculated(-1, -1, 'footer-container');
+        const ELEMENT = HTMLElements.SelectElementById(ID);
+
+        if(ELEMENT) { 
+            let height = 0;
+            height += Number(HTMLElements.GetCssValue(ELEMENT, 'margin-bottom').split('px')[0]);
+            height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
+            this._footerHeight.set(height); 
+        }
+    }
+
+
     //computed
-    protected _heightCompensation = computed<string>(() => { 
-        let COMPENSATION = 0;
-
-        //HEADER
-        // if(this._headerReady) {
-        //     COMPENSATION += this._coerGridHeader()?.marginBottom() 
-        //         ? Number(HTMLElements.GetElementHeight(`#${this._id}-coer-grid-header`).split('px')[0]) + 5 
-        //         : 0;
-        // } else COMPENSATION += 40;
-
-        //FOOTER
-        // if(this._footerReady) {
-        //     COMPENSATION += this.footer().show ? 30 : 0; 
-        // } else COMPENSATION += 30;
-         
-        return `${COMPENSATION}px`;
-    });
-
+    protected _heightCompensation = computed<string>(() => `${this._headerHeight() + this._footerHeight()}px`);
+  
 
     //Function
     protected async _ClickDeleteRow(row: T): Promise<void> {

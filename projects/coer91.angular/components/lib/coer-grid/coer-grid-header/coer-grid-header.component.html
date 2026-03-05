@@ -1,11 +1,10 @@
-<header class="coer-grid-header" [ngStyle]="{ marginBottom: _marginBottom(slotRef) }">
- 
-    <div #slotRef [class]="_slotPosition()">
+<header [id]="IdCalculated()(-1, -1, 'header-container')" [class]="'flex-wrap-middle-right gap-5px' + _marginBottom(slotRef)"> 
+    <div #slotRef [class]="_slotClass()">
         <ng-content></ng-content>
     </div>
 
     @if(_buttons().length > 0) {
-        <div class="buttons"> 
+        <div class="flex-basis-min-content display-flex gap-5px"> 
             @for(button of _buttons(); track button.icon) {
                 <coer-button
                     type="icon-filled-rounded" 
@@ -20,7 +19,7 @@
     }
 
     @if(_showSearch()) {
-        <div class="search">
+        <div class="mv-flex-basis-100 mv-flex-grow-1 xs-flex-basis-100 md-flex-basis-min-content">
             <coer-textbox
                 #searchRef
                 [id]="IdCalculated()(-1, -1, 'search')" 

@@ -1,14 +1,13 @@
-import { AfterViewInit, Component, computed, input, output, OutputEmitterRef, WritableSignal } from '@angular/core'; 
+import { Component, computed, input, output, OutputEmitterRef, WritableSignal } from '@angular/core'; 
 import { IElementOutput, IHeaderSettings, IImportButton } from '../coer-grid-interfaces';
 import { Tools } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-grid-header',
-    templateUrl: './coer-grid-header.component.html', 
-    styleUrl: './coer-grid-header.component.scss', 
+    templateUrl: './coer-grid-header.component.html',
     standalone: false
 })
-export class CoerGridHeader<T> implements AfterViewInit { 
+export class CoerGridHeader<T> {  
     
     //Input
     public readonly IdCalculated   = input.required<(indexRow: number, indexColumn: number, suffix?: string) => string>();
@@ -24,15 +23,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
     protected readonly onClickSave   = output<void>();
     protected readonly onKeyupEnter  = output<IElementOutput>();
     protected readonly onClickClear  = output<IElementOutput>();
-    protected readonly onClickSearch = output<IElementOutput>();
-
-
-    ngAfterViewInit(): void {
-        Tools.Sleep().then(() => {
-            
-             
-        });
-    }
+    protected readonly onClickSearch = output<IElementOutput>(); 
 
     //Computed
     protected _buttons = computed(() => {
@@ -104,9 +95,10 @@ export class CoerGridHeader<T> implements AfterViewInit {
 
 
     //Computed
-    protected _slotPosition = computed(() => {
-        const margin = Tools.IsNotOnlyWhiteSpace(this.headerSettings()?.slotPosition) ? this.headerSettings().slotPosition! : 'left';
-        return margin === 'right' ? 'margin-left-auto' : 'margin-right-auto';    
+    protected _slotClass = computed(() => { 
+        const position = Tools.IsNotOnlyWhiteSpace(this.headerSettings()?.slotPosition) ? this.headerSettings().slotPosition! : 'left';
+        const margin = position === 'right' ? 'margin-left-auto' : 'margin-right-auto';   
+        return `display-flex gap-5px ${margin}`;
     }); 
 
 
@@ -115,6 +107,6 @@ export class CoerGridHeader<T> implements AfterViewInit {
         return this._buttons().length > 0 
             || this._showSearch()
             || slot.childElementCount > 0
-            ? '5px' : '0px';
+            ? ' margin-bottom-5px ' : ' margin-bottom-0px ';
     };
 }
