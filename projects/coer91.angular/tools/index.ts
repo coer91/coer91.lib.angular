@@ -3,6 +3,7 @@ export * from './lib/access';
 export * from './lib/collections';
 export * from './lib/control-value';
 export * from './lib/dates'; 
+export * from './lib/files'; 
 export * from './lib/generic'; 
 export * from './lib/html';
 export * from './lib/http';

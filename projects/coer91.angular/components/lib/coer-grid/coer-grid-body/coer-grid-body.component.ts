@@ -19,7 +19,8 @@ export class CoerGridBody<T> {
     public readonly columns         = input.required<IColumnConfig<T>[]>();
     public readonly dataSourceGroup = input.required<IDataSourceGroup[]>();
     public readonly bodySettings    = input.required<IBodySettings<T>>();
-    public readonly isLoading       = input.required<WritableSignal<boolean>>();
+    public readonly isLoadingInner  = input.required<WritableSignal<boolean>>();
+    public readonly isLoading       = input.required<boolean>();
     public readonly isEnabled       = input.required<boolean>();   
     public readonly height          = input.required<string>();
     public readonly minHeight       = input.required<string>();
@@ -44,7 +45,7 @@ export class CoerGridBody<T> {
     protected _ShowButton(property: 'deleteButton' | 'editButton' | 'modalButton' | 'navigateButton', row: any = null) {
         let response = false;
 
-        if(this.isEnabled() && !this.isLoading()() && this.dataSourceGroup().length > 0) { 
+        if(this.isEnabled() && !this.isLoadingInner()() && this.dataSourceGroup().length > 0) { 
             const SHOW_BUTTON = (this.bodySettings() as any)[property]?.show;
             
             if (Tools.IsNull(row)) {

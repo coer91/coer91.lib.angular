@@ -1,13 +1,24 @@
-<header [id]="IdCalculated()(-1, -1, 'header-container')" [class]="'flex-wrap-middle-right gap-5px' + _marginBottom(slotRef)"> 
-    <div #slotRef [class]="_slotClass()">
+<header [id]="IdCalculated()(-1, -1, 'header-container')"     
+    [ngClass]="{ 'margin-bottom-5px': (_buttons().length > 0 || _showSearch() || slotRef.childElementCount > 0) }" 
+    class="flex-wrap-middle-right gap-5px">
+
+    <div #slotRef [class]="_slotPosition()">
         <ng-content></ng-content>
     </div>
 
-    @if(_buttons().length > 0) {
+    @if(_buttons().length > 0) { 
         <div class="flex-basis-min-content display-flex gap-5px"> 
+            <input type="file" 
+                #inputFileRef 
+                class="display-none"
+                [multiple]="false" 
+                (change)="_Import($event)" 
+                (cancel)="isLoadingInner().set(false)"
+                [accept]="_importAccept()">
+
             @for(button of _buttons(); track button.icon) {
                 <coer-button
-                    type="icon-filled-rounded" 
+                    [type]="headerSettings().buttonType || 'icon-outline'" 
                     [icon]="button.icon"
                     [color]="button.color"
                     [path]="button.path"      
@@ -29,7 +40,7 @@
                 [selectOnFocus]="true"
                 [showSearchButton]="true"
                 [showClearButton]="true"
-                [isLoading]="isLoading()"
+                [isLoading]="isLoading() || isLoadingInner()()"
                 (onValueChange)="search().set($event)"
                 (onKeyupEnter)="onKeyupEnter.emit({
                     position: 'HEADER',

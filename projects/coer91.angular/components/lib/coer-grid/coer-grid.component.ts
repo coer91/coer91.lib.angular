@@ -1,6 +1,6 @@
-import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IElementOutput, IHeaderSettings, IImportButton, ISearch } from './coer-grid-interfaces';
-import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, HTMLElements, Screen, Strings, Tools } from 'coer91.angular/tools'; 
-import { AfterContentChecked, Component, computed, inject, input, output, signal, viewChild } from '@angular/core'; 
+import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IElementOutput, IHeaderSettings, IImportButton } from './coer-grid-interfaces';
+import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, HTMLElements, Strings, Tools } from 'coer91.angular/tools'; 
+import { AfterContentChecked, Component, computed, inject, input, output, signal } from '@angular/core'; 
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -21,15 +21,16 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     //Variables 
     protected override readonly _value = signal<T[]>([]);
     protected readonly _search = signal<string>('');
-    protected readonly _isLoading = signal<boolean>(false); 
+    protected readonly _isLoadingInner = signal<boolean>(false); 
     protected readonly _headerHeight = signal<number>(0);
-    protected readonly _footerHeight = signal<number>(0);
+    protected readonly _footerHeight = signal<number>(0); 
     protected _resize$!: Subscription;
 
     //Input 
     public readonly columns        = input<IColumn<T>[]>([]);
     public readonly headerSettings = input<IHeaderSettings>({}); 
     public readonly bodySettings   = input<IBodySettings<T>>({}); 
+    public readonly useContainer   = input<boolean>(true);
     public readonly width          = input<string>('100%');
     public readonly minWidth       = input<string>('100px');
     public readonly maxWidth       = input<string>('100%');
@@ -166,6 +167,30 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     });
 
 
+    //computed
+    protected _dataSourceExport = computed<T[]>(() => {  
+        let DATA_SOURCE: any[] = [...this._value()]; 
+
+        if(Tools.IsBooleanTrue(this.headerSettings().exportButton?.onlyRowFiltered)) {
+            DATA_SOURCE = [...this._dataSourceFiltered()];  
+        }
+
+        if (Tools.IsBooleanTrue(this.headerSettings().exportButton?.onlySelectedItem)) {
+            DATA_SOURCE = [...DATA_SOURCE].filter(item => item['__checked__']);
+        } 
+
+        const COLUMNS = this.columns().length > 0 && !Tools.IsBooleanFalse(this.headerSettings().exportButton?.onlyColumnFiltered)
+            ? Collections.Except(this.columns().map(item => item.property), ['__index__', '__checked__'])
+            : Collections.Except(Tools.GetPropertyList(DATA_SOURCE[0]), ['__index__', '__checked__']);
+
+        return DATA_SOURCE.map(row =>
+            Object.fromEntries(
+                COLUMNS.map(property => [this._GetColumnName(property), row[property]])
+            )
+        ) as T[];
+    });
+
+
     //Function
     protected _ApplyFormat = (value: string | number | Date | boolean, type?: 'string' | 'number' | 'currency' | 'date' | 'time' | 'datetime'): string => {
         switch(type) { 
@@ -196,11 +221,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
             height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
             this._footerHeight.set(height); 
         }
-    }
-
-
-    //computed
-    protected _heightCompensation = computed<string>(() => `${this._headerHeight() + this._footerHeight()}px`);
+    } 
   
 
     //Function
@@ -215,10 +236,10 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
         if(USE_DEFAULT_FUNCTION) {
 
             let deleteItem = true;
-            if(!Tools.IsBooleanFalse(this.bodySettings().deleteButton?.showAlert)) {
+            if(!Tools.IsBooleanFalse(this.bodySettings().deleteButton?.showConfirmation)) {
                 
                 let displayProperty = '';
-                const ALERT_PROPERTY = this.bodySettings().deleteButton?.alertProperty || '';
+                const ALERT_PROPERTY = this.bodySettings().deleteButton?.confirmationProperty || '';
                 
                 if(Tools.IsNotOnlyWhiteSpace(ALERT_PROPERTY)) {
                     if(Tools.HasProperty(ROW, ALERT_PROPERTY)) {
@@ -247,5 +268,41 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
         }  
 
         this.onClickDeleteRow.emit(ROW);
+    } 
+
+
+    //computed
+    protected _height = computed<string>(() => { 
+        if(this.height() === 'full') {
+            let height = 0;
+            height += 50; //Toolbar
+            height += 50; //Page Title
+            height += 35; //Container
+            height += 15; //Margin Bottom
+            return `calc(100vh - ${height}px)`;
+        } 
+
+        return this.height();
+    });
+
+
+    //Function
+    protected _Import(value: IImportButton<T>) {
+        this.onClickImport.emit(value);   
+
+        if(value.autofill) {            
+            const SET = new Set(value.data.concat(this._value()).flatMap(item => Tools.GetPropertyList(item)));
+            
+            const DATA = value.data.concat(this._value()).map(item => ({
+                ...item,
+                ...Object.fromEntries(
+                    [...SET].filter(x => !Tools.HasProperty(item, x)).map(property => [property, ''])
+                )
+            }));  
+             
+            this._SetValue(DATA); 
+        } 
+
+        this._isLoadingInner.set(false);
     } 
 }

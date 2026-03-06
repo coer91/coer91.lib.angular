@@ -5,13 +5,14 @@ export interface IHeaderSettings {
     saveButton?: IButton;
     search?: ISearch;
     slotPosition?: 'left' | 'right';
+    buttonType?: 'icon' | 'icon-rounded' | 'icon-filled' | 'icon-filled-rounded' | 'icon-outline'  | 'icon-outline-rounded'; 
 }
 
 
 export interface IButton {
     show: boolean;
     path?: string;
-    tooltip?: string; 
+    tooltip?: string;  
     color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light'; 
 }
 
@@ -41,4 +42,4 @@ export interface ISearch {
     show: boolean;  
     preventDefault?: boolean;
     properties?: string[] | null;
-}
+} 

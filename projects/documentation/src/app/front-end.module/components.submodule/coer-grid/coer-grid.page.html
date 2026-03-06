@@ -4,16 +4,19 @@
     [goBack]="goBack"
 ></coer-page-title>
 
-<section class="container-section">
+
     <coer-grid
         [(ngModel)]="dataSource"
         [isLoading]="false"
-        [isReadonly]="true"
-        [headerSettings]="{
-            exportButton: { show: true, color: 'danger'    },
-            importButton: { show: true, color: 'warning'    },
-            addButton:    { show: true, color: 'success', path: '/home' },
-            saveButton:   { show: true, color: 'navigation' },
+        [isReadonly]="false"
+        height="full"
+        [columns]="[
+        ]"
+        [headerSettings]="{   
+            exportButton: { show: true  },
+            importButton: { show: true, },
+            addButton:    { show: true  },
+            saveButton:   { show: true, },
             search:       { show: true, properties: ['name'], preventDefault: false },
             slotPosition: 'left'
         }"
@@ -21,10 +24,10 @@
             showStriped: true,
             showBorders: false,
             showHover: false,
-            deleteButton:   { show: false, color: 'success', preventDefault: true },
-            editButton:     { show: false, color: 'warning' },
-            modalButton:    { show: false, color: 'dark' },
-            navigateButton: { show: false, color: 'secondary' },
+            deleteButton:   { show: true, showConfirmation: false },
+            editButton:     { show: true, },
+            modalButton:    { show: true, },
+            navigateButton: { show: true, },
         }" 
        
     >
@@ -42,6 +45,5 @@
             ]"
         ></coer-selectbox>
     </coer-grid>
-</section> 
 
 {{ dataSource() | json }}

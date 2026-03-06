@@ -1,20 +1,28 @@
-import { Component, computed, input, output, OutputEmitterRef, WritableSignal } from '@angular/core'; 
+import { Component, computed, ElementRef, input, output, signal, viewChild, WritableSignal } from '@angular/core'; 
 import { IElementOutput, IHeaderSettings, IImportButton } from '../coer-grid-interfaces';
-import { Tools } from 'coer91.angular/tools';
+import { CoerAlert, Files, Tools } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-grid-header',
     templateUrl: './coer-grid-header.component.html',
     standalone: false
 })
-export class CoerGridHeader<T> {  
-    
+export class CoerGridHeader<T> { 
+
+    //Elements
+    protected readonly _inputFile = viewChild.required<ElementRef>('inputFileRef');
+
+    //Variables
+    protected readonly _isLoadingExport = signal<boolean>(false); 
+         
     //Input
-    public readonly IdCalculated   = input.required<(indexRow: number, indexColumn: number, suffix?: string) => string>();
-    public readonly search         = input.required<WritableSignal<string>>();
-    public readonly headerSettings = input.required<IHeaderSettings>({}); 
-    public readonly isLoading      = input.required<boolean>();
-    public readonly isEnabled      = input.required<boolean>();
+    public readonly IdCalculated     = input.required<(indexRow: number, indexColumn: number, suffix?: string) => string>();
+    public readonly search           = input.required<WritableSignal<string>>();
+    public readonly headerSettings   = input.required<IHeaderSettings>({}); 
+    public readonly isLoadingInner   = input.required<WritableSignal<boolean>>();
+    public readonly isLoading        = input.required<boolean>();
+    public readonly isEnabled        = input.required<boolean>();
+    public readonly dataSourceExport = input.required<T[]>();
 
     //Output     
     protected readonly onClickExport = output<T[]>();
@@ -25,11 +33,12 @@ export class CoerGridHeader<T> {
     protected readonly onClickClear  = output<IElementOutput>();
     protected readonly onClickSearch = output<IElementOutput>(); 
 
+
     //Computed
     protected _buttons = computed(() => {
-        const COLOR = (property: string) => Tools.IsNotOnlyWhiteSpace((this.headerSettings() as any)[property]?.color)   
+        const COLOR = (property: string, defaultColor: string) => Tools.IsNotOnlyWhiteSpace((this.headerSettings() as any)[property]?.color)   
             ? (this.headerSettings() as any)[property].color   
-            : 'primary';
+            : defaultColor;
 
         const PATH = (property: string) => Tools.IsNotOnlyWhiteSpace((this.headerSettings() as any)[property]?.path)    
             ? (this.headerSettings() as any)[property].path    
@@ -40,7 +49,7 @@ export class CoerGridHeader<T> {
             : ''; 
 
         const LOADING = (property: string) => Tools.IsOnlyWhiteSpace((this.headerSettings() as any)[property]?.path) 
-            ? this.isLoading() : false;
+            ? (this.isLoading() || this.isLoadingInner()()) : false;
 
         const SHOW = (property: string) => Tools.IsBooleanTrue((this.headerSettings() as any)[property]?.show) 
             && (Tools.IsOnlyWhiteSpace((this.headerSettings() as any)[property]?.path) ? this.isEnabled() : true) 
@@ -51,27 +60,34 @@ export class CoerGridHeader<T> {
             path:       string,
             tooltip:    string, 
             isLoading:  boolean,
-            event:     OutputEmitterRef<T[] | IImportButton<T> | void>
+            event:      any
         }[]) 
-        .concat(SHOW('exportButton') ? [{
+        .concat((SHOW('exportButton') && this.dataSourceExport().length > 0) ? [{
             icon:       'excel',
-            color:      COLOR('exportButton'),
+            color:      COLOR('exportButton', 'success'),
             path:       PATH('exportButton'),
             tooltip:    TOOLTIP('exportButton'), 
-            isLoading:  LOADING('exportButton'),
-            event:      this.onClickExport
+            isLoading:  LOADING('exportButton') || this._isLoadingExport(),
+            event: {
+                emit: (() => {{ 
+                    if (Tools.IsNotOnlyWhiteSpace(this.headerSettings().exportButton?.path)) this.Export(false);            
+                    else this.Export(!Tools.IsBooleanTrue(this.headerSettings().exportButton?.preventDefault));
+                }})
+            }
         }] : [])
         .concat(SHOW('importButton') ? [{
             icon:       'import',
-            color:      COLOR('importButton'),
+            color:      COLOR('importButton', 'primary'),
             path:       PATH('importButton'),
             tooltip:    TOOLTIP('importButton'), 
             isLoading:  LOADING('importButton'),
-            event:      this.onClickImport
+            event: {
+                emit: (() => this.Import())
+            }
         }] : [])       
         .concat(SHOW('addButton') ? [{
             icon:       'add',
-            color:      COLOR('addButton'),
+            color:      COLOR('addButton', 'primary'),
             path:       PATH('addButton'),
             tooltip:    TOOLTIP('addButton'), 
             isLoading:  LOADING('addButton'),
@@ -79,7 +95,7 @@ export class CoerGridHeader<T> {
         }] : [])
         .concat(SHOW('saveButton') ? [{
             icon:       'save',
-            color:      COLOR('saveButton'),
+            color:      COLOR('saveButton', 'primary'),
             path:       PATH('saveButton'),
             tooltip:    TOOLTIP('saveButton'), 
             isLoading:  LOADING('saveButton'),
@@ -95,18 +111,90 @@ export class CoerGridHeader<T> {
 
 
     //Computed
-    protected _slotClass = computed(() => { 
+    protected _slotPosition = computed(() => { 
         const position = Tools.IsNotOnlyWhiteSpace(this.headerSettings()?.slotPosition) ? this.headerSettings().slotPosition! : 'left';
-        const margin = position === 'right' ? 'margin-left-auto' : 'margin-right-auto';   
+        const margin = position === 'left' ? 'margin-right-auto' : 'margin-left-auto';   
         return `display-flex gap-5px ${margin}`;
-    }); 
+    });   
+    
+
+    /** */
+    public Export(exportFile: boolean = true): void {  
+        this.isLoadingInner().set(true);
+        this._isLoadingExport.set(true);
+        
+        //Export File
+        if (exportFile) {
+            const FILE_NAME = (Tools.IsNotOnlyWhiteSpace(this.headerSettings().exportButton?.fileName) 
+                ? this.headerSettings().exportButton?.fileName 
+                : 'Report') + '.xlsx'; 
+        
+            Files.ExportExcel(this.dataSourceExport(), FILE_NAME);
+            this.onClickExport.emit(this.dataSourceExport()); 
+            Tools.Sleep(3000).then(() => this._isLoadingExport.set(false)); 
+        } 
+
+        else {
+            this.onClickExport.emit(this.dataSourceExport());
+            this._isLoadingExport.set(false);
+        } 
+               
+        this.isLoadingInner().set(false);
+    }  
 
 
     //Computed
-    protected _marginBottom = (slot: HTMLDivElement) => { 
-        return this._buttons().length > 0 
-            || this._showSearch()
-            || slot.childElementCount > 0
-            ? ' margin-bottom-5px ' : ' margin-bottom-0px ';
-    };
+    protected _importAccept = computed(() => Array.from(Files.EXCEL_EXTENSIONS.values()).join(','));
+
+
+    /** */
+    public Import = () => this._Import(null);
+
+
+    //Function
+    protected async _Import(event: any = null): Promise<void> {
+        try {
+            if (Tools.IsBooleanTrue(this.headerSettings().importButton?.preventDefault) || Tools.IsNotOnlyWhiteSpace(this.headerSettings().importButton?.path)) {
+                this.onClickImport.emit({ data: [], file: null, autofill: false });
+                return;
+            }
+
+            if (event === null) {
+                this._inputFile().nativeElement.value = [];
+                this._inputFile().nativeElement.click();
+                this.isLoadingInner().set(true);
+                return;
+            }
+
+            else if (event.target!.files.length > 0) {  
+                const [selectedFile] = event.target.files as File[];
+
+                if(Files.IsExcel(selectedFile)) {
+                    const { rows } = await Files.ReadExcel<T>(selectedFile);  
+                
+                    this.onClickImport.emit({ 
+                        data: rows, 
+                        file: selectedFile, 
+                        autofill: rows.length > 0 && !Tools.IsBooleanFalse(this.headerSettings().importButton?.Autofill)
+                    });
+                }
+
+                else {
+                    let message = 'Allowed extensions:';
+                    for(const extension of Files.EXCEL_EXTENSIONS.keys()) {
+                        message += ` <b>${extension}</b>,`
+                    }
+
+                    message = message.substring(0, message.length - 1); 
+                    new CoerAlert().Warning(message, 'Invalid File Type', 'i91-file-xls-fill');
+                }
+
+                this._inputFile().nativeElement.value = []; 
+            }    
+        } 
+
+        catch (error) {
+            console.error(`coer-grid: ${error}`);
+        }
+    }
 }

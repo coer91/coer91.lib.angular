@@ -1,4 +1,8 @@
 <section class="coer-grid-body"
+    [ngClass]="{
+        'background-color-input': dataSourceGroup().length <= 0,
+        'radius-bottom-5px': dataSourceGroup().length <= 0 || isLoading()
+    }"
     [ngStyle]="{ 
         'height'    : height(), 
         'min-height': minHeight(), 
@@ -56,7 +60,7 @@
                                     [column]="column"
                                     [row]="row" 
                                     [bodySettings]="bodySettings()"
-                                    [isLoading]="isLoading()"
+                                    [isLoadingInner]="isLoadingInner()"
                                     [isEnabled]="isEnabled()"
                                     (onClickRow)="_ClickOnRow(row)"
                                     (onDoubleClickRow)="onDoubleClickRow.emit(row)"
@@ -87,4 +91,20 @@
             </tbody>
         }
     </table>
+
+    <!-- Loading / Empty -->
+    @if(isLoading()) {
+        <div class="loading">
+            <div class="loading-content">
+                <i class="i91-arrows-rotate animation-spin animation-speed-15"></i>
+                <span class="fa-fade">Loading</span>
+            </div>
+        </div> 
+    } 
+
+    @else if(isEnabled() && dataSourceGroup().length <= 0) {
+        <div class="empty-data">
+            <div class="empty-data-content"> No Data </div>
+        </div>
+    } 
 </section> 

@@ -26,7 +26,7 @@ const appSettings = {
     },
     dateTime: {
         format: 'MDY'
-    },
+    }, 
     navigation: {
         static: true,
         showHome: true,

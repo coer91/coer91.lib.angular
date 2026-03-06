@@ -19,7 +19,7 @@ export interface IRowButton<T> {
 
 
 export interface IRowButtonDelete<T> extends IRowButton<T> {
-    showAlert?: boolean;
-    alertProperty?: string;
+    showConfirmation?: boolean;
+    confirmationProperty?: string;
     preventDefault?: boolean;
 }  
