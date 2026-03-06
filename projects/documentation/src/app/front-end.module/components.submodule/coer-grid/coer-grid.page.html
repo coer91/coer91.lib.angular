@@ -10,8 +10,7 @@
         [isLoading]="false"
         [isReadonly]="false"
         height="full"
-        [columns]="[
-        ]"
+        [columns]="[]"
         [headerSettings]="{   
             exportButton: { show: true  },
             importButton: { show: true, },
@@ -29,7 +28,8 @@
             modalButton:    { show: true, },
             navigateButton: { show: true, },
         }" 
-       
+        (onClickAdd)="Log('onClickAdd', $event)"
+        (onClickSave)="Log('onClickSave', $event)"
     >
 
         <coer-selectbox 

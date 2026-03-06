@@ -34,7 +34,7 @@ export interface IButtonImport extends IButtonAdd {
 
 export interface IButtonAdd extends IButton {  
     preventDefault?: boolean;
-    addTo?: 'START' | 'END';
+    addTo?: 'start' | 'end';
 } 
 
 

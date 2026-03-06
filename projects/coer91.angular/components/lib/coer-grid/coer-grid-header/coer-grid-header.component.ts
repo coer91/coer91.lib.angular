@@ -64,7 +64,7 @@ export class CoerGridHeader<T> {
         }[]) 
         .concat((SHOW('exportButton') && this.dataSourceExport().length > 0) ? [{
             icon:       'excel',
-            color:      COLOR('exportButton', 'success'),
+            color:      COLOR('exportButton', 'primary'),
             path:       PATH('exportButton'),
             tooltip:    TOOLTIP('exportButton'), 
             isLoading:  LOADING('exportButton') || this._isLoadingExport(),

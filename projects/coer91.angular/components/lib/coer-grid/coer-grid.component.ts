@@ -41,7 +41,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     //Outputs
     protected readonly onClickExport      = output<T[]>();
     protected readonly onClickImport      = output<IImportButton<T>>();
-    protected readonly onClickAdd         = output<void>();
+    protected readonly onClickAdd         = output<T | null>();
     protected readonly onClickSave        = output<void>();
     protected readonly onKeyupEnter       = output<IElementOutput>();
     protected readonly onClickClear       = output<IElementOutput>();
@@ -304,5 +304,47 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
         } 
 
         this._isLoadingInner.set(false);
+    }
+    
+    
+    /** */
+    protected _Add() {
+        let row: any = null; 
+
+        if(!Tools.IsBooleanTrue(this.headerSettings().addButton?.preventDefault && Tools.IsOnlyWhiteSpace(this.headerSettings().addButton?.path))) {
+            row = {}; 
+
+            if(this._value().length > 0) {
+                row = { 
+                    ...Object.fromEntries(
+                        Tools.GetPropertyList(this._value()[0]).map(property => [property, null])
+                    )
+                }
+            }
+
+            else if(this.columns().length > 0) { 
+                row = { 
+                    ...Object.fromEntries(
+                        [...this.columns()].map(column => [column.property, null])
+                    )
+                }
+            }  
+            
+            const DATA_SOURCE = this.headerSettings().addButton?.addTo === 'start'
+                ? [{ ...row, __checked__: false  }].concat([...this._value()])
+                : [...this._value()].concat([{ ...row, __checked__: false  }]); 
+                        
+
+            if(Tools.GetPropertyList(row).length > 0) { 
+                this._SetValue(DATA_SOURCE);
+
+                delete row['__index__'];
+                delete row['__checked__'];
+            } 
+
+            else row = null;
+        }
+
+        this.onClickAdd.emit(row);
     } 
 }

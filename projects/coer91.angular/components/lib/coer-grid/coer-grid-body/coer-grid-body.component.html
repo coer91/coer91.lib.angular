@@ -1,7 +1,7 @@
 <section class="coer-grid-body"
     [ngClass]="{
         'background-color-input': dataSourceGroup().length <= 0,
-        'radius-bottom-5px': dataSourceGroup().length <= 0 || isLoading()
+        'radius-5px': dataSourceGroup().length <= 0 || isLoading()
     }"
     [ngStyle]="{ 
         'height'    : height(), 
