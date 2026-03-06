@@ -9,6 +9,7 @@ import { CoerGridPage      } from "./coer-grid/coer-grid.page";
 import { CoerModalPage     } from "./coer-modal/coer-modal.page";
 import { CoerSecretBoxPage } from "./coer-secretbox/coer-secretbox.page";
 import { CoerSelectBoxPage } from "./coer-selectbox/coer-selectbox.page"; 
+import { CoerSwitchPage    } from "./coer-switch/coer-switch.page";
 import { CoerTextBoxPage   } from "./coer-textbox/coer-textbox.page";
 
 export const routes: Routes = [{
@@ -19,6 +20,7 @@ export const routes: Routes = [{
         ROUTER_PAGE('coer-modal'    , CoerModalPage),
         ROUTER_PAGE('coer-secretbox', CoerSecretBoxPage),  
         ROUTER_PAGE('coer-selectbox', CoerSelectBoxPage),  
+        ROUTER_PAGE('coer-switch'   , CoerSwitchPage),  
         ROUTER_PAGE('coer-textbox'  , CoerTextBoxPage), 
     ]
 }];
@@ -30,6 +32,7 @@ export const routes: Routes = [{
         CoerModalPage,
         CoerSecretBoxPage,
         CoerSelectBoxPage,
+        CoerSwitchPage,
         CoerTextBoxPage,
     ],
     imports: [SharedModule, RouterModule.forChild(routes)],

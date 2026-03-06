@@ -40,6 +40,7 @@ import * as tools      from 'coer91.angular/tools';
         components.CoerPageTitle, 
         components.CoerSecretBox,
         components.CoerSelectBox,
+        components.CoerSwitch,
         components.CoerTextBox,
         core.Coer91Root,
         directives.TemplateRefDirective,  

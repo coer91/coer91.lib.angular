@@ -17,6 +17,7 @@ import { CoerModal      } from './coer-modal/coer-modal.component';
 import { CoerPageTitle  } from './coer-page-title/coer-page-title.component';
 import { CoerSecretBox  } from './coer-secretbox/coer-secretbox.component'; 
 import { CoerSelectBox  } from './coer-selectbox/coer-selectbox.component'; 
+import { CoerSwitch     } from './coer-switch/coer-switch.component';
 import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
 
 @NgModule({
@@ -40,6 +41,7 @@ import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
         CoerPageTitle,
         CoerSecretBox,
         CoerSelectBox,
+        CoerSwitch,
         CoerTextBox,
     ],
     exports: [   
@@ -50,6 +52,7 @@ import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
         CoerPageTitle,
         CoerSecretBox,
         CoerSelectBox,
+        CoerSwitch,
         CoerTextBox,
     ]
 })
