@@ -47,11 +47,11 @@ export class CoerGridBody<T> {
 
 
     //Function
-    protected _ShowButton(property: 'deleteButton' | 'editButton' | 'modalButton' | 'navigateButton', row: any = null) {
+    protected _ShowButton(button: any, position: 'left' | 'right', row: any = null) {
         let response = false;
 
-        if(this.isEnabled() && !this.isLoadingInner()() && this.dataSourceGroup().length > 0) { 
-            const SHOW_BUTTON = (this.bodySettings() as any)[property]?.show;
+        if(position === button.position && this.isEnabled() && !this.isLoadingInner()() && this.dataSourceGroup().length > 0) { 
+            const SHOW_BUTTON = (this.bodySettings() as any)[button.property]?.show;
             
             if (Tools.IsNull(row)) {
                 response = Tools.IsBooleanTrue(SHOW_BUTTON) || Tools.IsFunction(SHOW_BUTTON);
@@ -69,7 +69,7 @@ export class CoerGridBody<T> {
                 delete ROW['__checked__'];
 
                 response = CALLBACK({  
-                    property, 
+                    property: button.property, 
                     row: ROW, 
                     value: null 
                 });
@@ -91,24 +91,28 @@ export class CoerGridBody<T> {
         { 
             property: 'deleteButton',
             icon: 'delete',  
+            position: this.bodySettings()?.deleteButton?.position || 'right',
             color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.color) ? this.bodySettings()?.deleteButton?.color : 'danger', 
             event: this.onClickDeleteRow 
         },
         { 
             property: 'editButton', 
             icon: 'edit',  
+            position: this.bodySettings()?.editButton?.position || 'right',
             color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.color) ? this.bodySettings()?.editButton?.color : 'primary', 
             event: this.onClickEditRow 
         },
         { 
             property: 'modalButton', 
             icon: 'modal',  
+            position: this.bodySettings()?.modalButton?.position || 'right',
             color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.color) ? this.bodySettings()?.modalButton?.color : 'primary', 
             event: this.onClickModalRow 
         },
         { 
             property: 'navigateButton', 
             icon: 'navigate',  
+            position: this.bodySettings()?.navigateButton?.position || 'right',
             color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.color) ? this.bodySettings()?.navigateButton?.color : 'navigation', 
             event: this.onClickNavigateRow 
         }
@@ -174,7 +178,10 @@ export class CoerGridBody<T> {
             } 
         }
 
-        this.onClickRow.emit(row);
+        const ROW = { ...row };
+        delete ROW["__index__"];
+        delete ROW["__checked__"];
+        this.onClickRow.emit(ROW);
     } 
 
 

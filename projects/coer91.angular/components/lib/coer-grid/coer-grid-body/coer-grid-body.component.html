@@ -25,6 +25,14 @@
                     </th>
                 }
 
+
+                @for(button of _buttonsByRow(); track button.property) {
+                    @if(_ShowButton(button, 'left')) {
+                        <th class="action-column" scope="col"></th>
+                    }
+                }
+
+
                 @for(header of columns(); track header.__index__) {
                     <th scope="col" 
                         (dblclick)="null"
@@ -45,7 +53,7 @@
 
 
                 @for(button of _buttonsByRow(); track button.property) {
-                    @if(_ShowButton(button.property)) {
+                    @if(_ShowButton(button, 'right')) {
                         <th class="action-column" scope="col"></th>
                     }
                 }
@@ -76,6 +84,26 @@
                             </td>
                         }
 
+
+                        @for(button of _buttonsByRow(); track button.property) {
+                            @if(_ShowButton(button, 'left')) {
+                                <td class="action-column" [ngStyle]="{ 'border-bottom' : _borderButtom() }">
+                                    @if(_ShowButton(button, 'left', row)) {
+                                        <div class="action-column-content">
+                                            <coer-button
+                                                type="icon-rounded"
+                                                [color]="button.color!"
+                                                [icon]="button.icon"  
+                                                [path]="_Path(button.property, row)"
+                                                (onClick)="button.event.emit(row)"
+                                            ></coer-button>
+                                        </div>
+                                    }
+                                </td>
+                            }
+                        }
+
+
                         @for(column of columns(); track column.__index__) {
                             <td class="td-content"
                                 [ngStyle]="{ 
@@ -91,8 +119,8 @@
                                     [bodySettings]="bodySettings()"
                                     [isLoadingInner]="isLoadingInner()"
                                     [isEnabled]="isEnabled()"
-                                    (onClickRow)="_ClickOnRow(row)"
-                                    (onDoubleClickRow)="onDoubleClickRow.emit(row)"
+                                    (onClickRow)="_ClickOnRow($event)"
+                                    (onDoubleClickRow)="onDoubleClickRow.emit($event)"
                                     (onInputChange)="onInputChange.emit($event)"
                                 ></coer-grid-cell>
                             </td>
@@ -100,9 +128,9 @@
 
 
                         @for(button of _buttonsByRow(); track button.property) {
-                            @if(_ShowButton(button.property)) {
+                            @if(_ShowButton(button, 'right')) {
                                 <td class="action-column" [ngStyle]="{ 'border-bottom' : _borderButtom() }">
-                                    @if(_ShowButton(button.property, row)) {
+                                    @if(_ShowButton(button, 'right', row)) {
                                         <div class="action-column-content">
                                             <coer-button
                                                 type="icon-rounded"

@@ -14,6 +14,7 @@ export interface IBodySettings<T> {
 
 export interface IRowButton<T> {
     show?:   boolean | ((item: ICallbackItem<T>) => boolean); 
+    position?: 'left' | 'right';
     color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light'; 
     path?: (item: ICallbackItem<T>) => string; 
 }

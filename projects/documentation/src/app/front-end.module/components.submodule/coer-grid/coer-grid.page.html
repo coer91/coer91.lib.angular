@@ -13,7 +13,9 @@
         [columns]="[
             { property: 'id'  , width: '100px',  textBreak: true,    },
             { property: 'name', color, textAlignY: 'top'  },
-            { property: 'is'  , inputSwitch: true, textAlignY: 'top' }
+            { property: 'create'  , inputSwitch: true },
+            { property: 'update'  , inputSwitch: true },
+            { property: 'delete'  , inputSwitch: true } 
         ]" 
         [headerSettings]="{   
             exportButton: { show: true, onlySelectedRows: true  },
@@ -27,7 +29,7 @@
             showStriped: true,
             showBorders: false,
              
-            selectionRows:  { show: true, selectOverRow: true, selectAllowed: 0 },
+            selectionRows:  { show: true, selectOverRow: true, selectAllowed: 2 },
             deleteButton:   { show: true, showConfirmation: false },
             editButton:     { show: true, },
             modalButton:    { show: true, },
@@ -35,6 +37,8 @@
         }" 
         (onSelectedRow)="Log('onSelectedRow', $event)"
         (onInputChange)="Log('onInputChange', $event)"
+        (onClickRow)="Log('onClickRow', $event)",
+        (onDoubleClickRow)="Log('onDoubleClickRow', $event)"
     >
 
         <coer-selectbox 

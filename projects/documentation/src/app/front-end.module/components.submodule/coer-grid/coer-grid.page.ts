@@ -19,10 +19,16 @@ export class CoerGridPage extends Page {
         super('coer-grid');
 
         for(let i = 1; i <= 5; i++) { 
-            this.dataSource.update(x => x.concat([{ id: i, name: `item ${i}`, is: true }]));
+            this.dataSource.update(x => x.concat([{ 
+                id: i, 
+                name: `item ${i}`, 
+                create: true,
+                update: true,
+                delete: true 
+            }]));
         }
 
-        this.dataSource.update(x => x.concat([{ id: 999999, name: `dfg` }]));
+        //this.dataSource.update(x => x.concat([{ id: 999999, name: `dfg` }]));
     }
 
 
@@ -37,6 +43,6 @@ export class CoerGridPage extends Page {
 
 
     color = (item: ICallbackItem<any>) => {
-        return item.row.id % 2 == 0 ? 'danger' : 'success';
+        return item.row.id % 2 == 0 ? 'dark' : null;
     }
 }

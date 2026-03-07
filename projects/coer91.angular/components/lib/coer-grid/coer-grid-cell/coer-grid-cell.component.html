@@ -4,7 +4,7 @@
             <coer-switch 
                 [id]="id()"
                 [ngModel]="row()[column().config.property]"
-                [isReadonly]="!_isElementReady() || _GetAttributeValue('isReadonly', false)" 
+                [isReadonly]="!isEnabled() ||!_isElementReady() || _GetAttributeValue('isReadonly', false)" 
                 [type]="_GetAttributeValue('type', 'switch')"
                 [color]="_GetAttributeValue('color', 'primary')"
                 [tooltip]="_GetAttributeValue('tooltip', '')"
@@ -33,7 +33,7 @@
                 'min-height'     : _minHeight()  
             }"
             (click)="isEnabled() ? onClickRow.emit(row()) : null"
-            (dblclick)="isEnabled() ? onDoubleClickRow.emit(row()) : null">  
+            (dblclick)="_DoubleClick()">  
             <div [innerHTML]="_GetCellValue() | html"></div>          
         </div> 
     }
