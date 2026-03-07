@@ -65,13 +65,14 @@ section.coer-grid-body {
             padding: 0px !important;
             overflow: hidden !important;
             vertical-align: middle !important;
+            z-index: 2 !important;
 
-            div.action-column-content,
-            div.action-column-content-checkbox { 
+            div.action-column-content { 
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
-                height: 25px !important;
+                height: 25px !important; 
+                z-index: 1 !important;
             }
         } 
     }

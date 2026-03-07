@@ -10,7 +10,7 @@
         [isLoading]="false"
         [isReadonly]="false"
         height="full"
-        [columns]="[]"
+        [columns]="[]" 
         [headerSettings]="{   
             exportButton: { show: true  },
             importButton: { show: true, },
@@ -22,14 +22,14 @@
         [bodySettings]="{
             showStriped: true,
             showBorders: false,
-            showHover: false,
+             
+            selectionRows:  { show: true, selectOverRow: true, selectAllowed: 2 },
             deleteButton:   { show: true, showConfirmation: false },
             editButton:     { show: true, },
             modalButton:    { show: true, },
             navigateButton: { show: true, },
         }" 
-        (onClickAdd)="Log('onClickAdd', $event)"
-        (onClickSave)="Log('onClickSave', $event)"
+        (onSelectedRow)="Log('onSelectedRow', $event)"
     >
 
         <coer-selectbox 

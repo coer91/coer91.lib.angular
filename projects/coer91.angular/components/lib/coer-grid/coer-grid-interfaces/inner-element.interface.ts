@@ -10,3 +10,10 @@ export interface IImportButton<T> {
     file: File | null;
     autofill: boolean;
 }
+
+
+export interface ISelectedRow<T> {
+    all: boolean;
+    checked: boolean;
+    rows: T[];
+}

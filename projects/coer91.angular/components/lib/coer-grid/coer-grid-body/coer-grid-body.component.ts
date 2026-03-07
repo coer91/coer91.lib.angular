@@ -1,6 +1,6 @@
+import { IBodySettings, ICallbackItem, IColumnConfig, IDataSourceGroup, ISelectedRow } from "../coer-grid-interfaces";
+import { Component, computed, input, output, signal, WritableSignal } from "@angular/core";
 import { Tools } from "coer91.angular/tools";
-import { IBodySettings, ICallbackItem, IColumnConfig, IDataSourceGroup } from "../coer-grid-interfaces";
-import { Component, computed, input, output, WritableSignal } from "@angular/core";
 
 @Component({
     selector: 'coer-grid-body',
@@ -11,9 +11,11 @@ import { Component, computed, input, output, WritableSignal } from "@angular/cor
 export class CoerGridBody<T> {  
 
     //Variables
-    protected IsBooleanFalse = Tools.IsBooleanFalse;
+    protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
+    protected readonly _checkAll = signal<boolean>(false);
 
     //Input
+    public readonly value           = input.required<T[]>();
     public readonly IdCalculated    = input.required<(indexRow: number, indexColumn: number, suffix?: string) => string>();
     public readonly ApplyFormat     = input.required<(value: any, type: 'string' | 'number' | 'currency' | 'date' | 'datetime' | 'time') => string>();
     public readonly columns         = input.required<IColumnConfig<T>[]>();
@@ -27,12 +29,14 @@ export class CoerGridBody<T> {
     public readonly maxHeight       = input.required<string>();
 
     //Outputs
-    protected readonly onClickRow         = output<T>();
-    protected readonly onDoubleClickRow   = output<T>();
-    protected readonly onClickDeleteRow   = output<T>();
-    protected readonly onClickEditRow     = output<T>();
-    protected readonly onClickModalRow    = output<T>();
-    protected readonly onClickNavigateRow = output<T>();
+    protected readonly onClickRow          = output<T>();
+    protected readonly onDoubleClickRow    = output<T>();
+    protected readonly onClickDeleteRow    = output<T>();
+    protected readonly onClickEditRow      = output<T>();
+    protected readonly onClickModalRow     = output<T>();
+    protected readonly onClickNavigateRow  = output<T>();
+    protected readonly onSelectedRowChange = output<T[]>();
+    protected readonly onSelectedRow       = output<ISelectedRow<T>>();
 
 
     //Function
@@ -136,14 +140,145 @@ export class CoerGridBody<T> {
     }
 
 
-    /** */
-    protected _ClickOnRow(row: T): void { 
-        if(!this.isEnabled()) return;
+    //Computed
+    protected _showCheckbox = computed(() => {
+        return this.bodySettings().selectionRows?.show 
+            && this.dataSourceGroup().length > 0  
+            && (this.bodySettings().selectionRows?.selectAllowed || 0) != 0
+            && this.isEnabled(); 
+    });
 
-        // if(this._checkOnRow()) {
-        //     this.CheckBy((x: any) => x.indexRow == (row as any).indexRow);
-        // }
+
+    //Function
+    protected _isReadonlySelection = (row: any, byClickRow: boolean): boolean => { 
+        const SELECT_ALLOWED = this.bodySettings().selectionRows?.selectAllowed || 0; 
+
+        if(SELECT_ALLOWED > 1) {
+            const SELECTED = (this.value() as any[]).filter(x => x.__checked__).length; 
+            
+            return byClickRow 
+                ? SELECTED >= SELECT_ALLOWED 
+                : SELECTED >= SELECT_ALLOWED && Tools.IsBooleanFalse(row.__checked__); 
+        }
+
+        return false; 
+    }
+
+
+    //Function
+    protected _ClickOnRow(row: any): void { 
+        if(!this.isEnabled()) return;
+         
+        if(this.bodySettings().selectionRows?.selectOverRow) {
+            if(!this._isReadonlySelection(row, true) && this._showCheckbox()) {
+                this.CheckBy((x: any) => x.__index__ == row.__index__);
+            } 
+        }
 
         this.onClickRow.emit(row);
+    } 
+
+
+    /** */
+    protected async _ClickCheckAll(checked: boolean): Promise<void> {   
+        this.isLoadingInner().set(true); 
+        const DATA_SOURCE: any[] = [...this.value()].map(item => ({ ...item, __checked__: checked }));
+
+        this.onSelectedRowChange.emit(DATA_SOURCE);            
+        
+        this.onSelectedRow.emit({ 
+            all: true, 
+            checked: checked, 
+            rows: DATA_SOURCE.map((item: any) => {
+                delete item["__index__"];
+                delete item["__checked__"];
+                return item;
+            })
+        }); 
+    } 
+
+
+    /** */
+    protected _ClickCheck(checked: boolean, row: any): void {  
+        if(checked) this.CheckBy((x: any) => x.__index__ == row.__index__);
+        else this.UncheckBy((x: any) => x.__index__ == row.__index__);
+    }
+
+
+    /** */
+    public CheckBy(callback: (row: T) => boolean): void { 
+        if(this.bodySettings().selectionRows?.show) {   
+            this.isLoadingInner().set(true);
+            
+            let SELECTED_ROWS: any[] = [];
+            const DATA_SOURCE: any[] = [...this.value()];
+            const SELECT_ALLOWED = this.bodySettings().selectionRows?.selectAllowed || 0;
+            
+            if(SELECT_ALLOWED > 0) {  
+                if(SELECT_ALLOWED == 1) {
+                    const SELECTED = DATA_SOURCE.find(callback);  
+                    SELECTED_ROWS = DATA_SOURCE.map(item => ({ ...item, __checked__: (item.__index__ == SELECTED.__index__) })); 
+                }
+
+                else {
+                    const CURRENT_SELECTED = [...DATA_SOURCE].filter(item => item.__checked__).map(item => item.__index__);
+                    
+                    if(CURRENT_SELECTED.length < SELECT_ALLOWED) {
+                        const SELECTED = DATA_SOURCE.filter(callback).map(item => item.__index__);  
+
+                        SELECTED_ROWS = DATA_SOURCE.map(item => ({
+                            ...item,
+                            __checked__: SELECTED.includes(item.__index__) || CURRENT_SELECTED.includes(item.__index__)
+                        }));
+                    }
+
+                    else SELECTED_ROWS = DATA_SOURCE;
+                }   
+            }
+
+            else {
+                SELECTED_ROWS = DATA_SOURCE.map(item => callback(item) ? { ...item, __checked__: true } : item);  
+            }
+
+            this.onSelectedRowChange.emit(SELECTED_ROWS);
+             
+            //Mark All checkbox
+            this._checkAll.set(SELECTED_ROWS.every((x: any) => x.__checked__));  
+            
+            //Event Checkbox Change
+            this.onSelectedRow.emit({ 
+                all: false, 
+                checked: true, 
+                rows: SELECTED_ROWS.filter(callback).map((item: any) => {
+                    delete item["__index__"];
+                    delete item["__checked__"];
+                    return item;
+                }) 
+            });   
+        }
+    } 
+
+
+    /** */
+    public UncheckBy(callback: (row: T) => boolean): void {
+        if(this.bodySettings().selectionRows?.show) {  
+            this.isLoadingInner().set(true);
+            const DATA_SOURCE: any[] = [...this.value()];
+            
+            const SELECTED_ROWS = DATA_SOURCE.map(item => callback(item) ? { ...item, __checked__: false } : item); 
+            this.onSelectedRowChange.emit(SELECTED_ROWS);     
+ 
+            this._checkAll.set(SELECTED_ROWS.every((x: any) => x.__checked__));
+
+            this.onSelectedRow.emit({ 
+                all: false, 
+                checked: false, 
+                rows: SELECTED_ROWS.filter(callback).map((item: any) => {
+                    delete item["__index__"];
+                    delete item["__checked__"];
+                    return item;
+                }) 
+            }); 
+        }
     } 
 }

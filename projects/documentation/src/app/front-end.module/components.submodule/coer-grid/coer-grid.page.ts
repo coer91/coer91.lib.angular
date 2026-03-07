@@ -18,7 +18,7 @@ export class CoerGridPage extends Page {
     constructor() { 
         super('coer-grid');
 
-        for(let i = 1; i <= 0; i++) { 
+        for(let i = 1; i <= 1000; i++) { 
             this.dataSource.update(x => x.concat([{ id: i, name: `item ${i}` }]));
         }
 

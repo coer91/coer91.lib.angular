@@ -1,0 +1,45 @@
+@mixin mixin($breakpoint) { 
+    @each $key, $value in ( 
+        'normal'   : normal, 
+        'nowrap'   : nowrap, 
+        'inherit'  : inherit,
+        'pre'      : pre,
+        'pre-line' : pre-line,
+        'pre-wrap' : pre-wrap 
+    ) {   
+        .#{$breakpoint}white-space-#{$key} {
+            white-space: $value !important;
+        }
+    } 
+
+    @each $key, $value in ( 
+        ''         : break-word,
+        '-none'    : keep-all, 
+        '-all'     : break-all, 
+        '-inherit' : inherit,
+        '-normal'  : normal
+    ) {   
+        .#{$breakpoint}word-break#{$key} {
+            word-break: $value !important; 
+        }
+    }   
+
+     
+    @each $key, $value in ( 
+        'left'    : left, 
+        'center'  : center, 
+        'right'   : right,
+        'justify' : justify 
+    ) {   
+        .#{$breakpoint}text-align-#{$key} {
+            text-align: $value; 
+        }
+    } 
+
+
+    @for $i from 0 through 50 {
+        .line-height-#{$i}px { 
+            line-height: $i * 1px !important;
+        } 
+    }
+}

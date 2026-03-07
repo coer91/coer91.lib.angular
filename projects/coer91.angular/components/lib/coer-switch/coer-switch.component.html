@@ -11,7 +11,7 @@
      
     <div class="coer-switch-container" [ngClass]="{ 'cursor-pointer': _isEnabled, 'cursor-loading': isLoading() }">
         @if(labelPosition() === 'left' && label().isNotOnlyWhiteSpace()) {
-            <label (click)="_Toggle()" [ngStyle]="{ 'color': _textColor() }"
+            <label [for]="_id" (click)="_Toggle()" [ngStyle]="{ 'color': _textColor() }"
                 [ngClass]="{ 
                     'white-space-nowrap': !breakLabel(),
                     'word-break-all'    : !breakLabel(),                
@@ -20,7 +20,8 @@
          
         @switch(type()) {
             @case('switch') {
-                <div (click)="_Toggle()" 
+                <div [id]="_id" 
+                    (click)="_Toggle()" 
                     class="coer-switch-base"
                     [ngClass]="{ 'animation-appear': isLoading() }" 
                     [ngStyle]="{ 
@@ -35,7 +36,8 @@
             }
 
             @case ('checkbox') {
-                <div (click)="_Toggle()" 
+                <div [id]="_id" 
+                    (click)="_Toggle()" 
                     class="coer-checkbox-base"
                     [ngClass]="{ 'animation-appear': isLoading() }"
                     [ngStyle]="{ 
@@ -49,7 +51,7 @@
         } 
         
         @if(labelPosition() === 'right' && label().isNotOnlyWhiteSpace()) {
-            <label (click)="_Toggle()" [ngStyle]="{ 'color': _textColor() }"
+            <label [for]="_id" (click)="_Toggle()" [ngStyle]="{ 'color': _textColor() }"
                 [ngClass]="{ 
                     'white-space-nowrap': !breakLabel(),
                     'word-break-all'    : !breakLabel(),                

@@ -11,6 +11,20 @@
     <table>
         <thead>
             <tr>
+                @if(_showCheckbox()) {
+                    <th class="action-column" scope="col">    
+                        <div class="action-column-content">
+                            <coer-switch 
+                                type="checkbox"
+                                [isLoading]="isLoadingInner()()"
+                                [isInvisible]="(bodySettings().selectionRows?.selectAllowed || 0) > 0"
+                                [(ngModel)]="_checkAll"
+                                (onClick)="_ClickCheckAll($event)"
+                            ></coer-switch> 
+                        </div> 
+                    </th>
+                }
+
                 @for(header of columns(); track header.__index__) {
                     <th scope="col" 
                         (dblclick)="null"
@@ -39,7 +53,7 @@
         </thead>
 
         @for(group of dataSourceGroup(); track group.index) {
-            <tbody>
+            <tbody> 
                 @for(row of group.rows; let index = $index; track row.__index__) {
                     <tr [id]="IdCalculated()(row.__index__, -1, 'row')" 
                         [ngClass]="{ 
@@ -48,11 +62,26 @@
                             'hover'     : !IsBooleanFalse(bodySettings().showHover)
                         }">
 
+                        @if(_showCheckbox()) {
+                            <td class="action-column" [ngStyle]="{ 'border-bottom' : _borderButtom() }">    
+                                <div class="action-column-content"> 
+                                    <coer-switch 
+                                        type="checkbox"
+                                        [isLoading]="isLoadingInner()()"
+                                        [isReadonly]="_isReadonlySelection(row, false)"
+                                        [ngModel]="row.__checked__"
+                                        (onClick)="_ClickCheck($event, row)"
+                                    ></coer-switch> 
+                                </div>
+                            </td>
+                        }
+
                         @for(column of columns(); track column.__index__) {
                             <td class="td-content"
                                 [ngStyle]="{ 
                                     'border-bottom' : _borderButtom(), 
-                                    'vertical-align': column.config.textAlignY!,                                     
+                                    'vertical-align': column.config.textAlignY!,   
+                                    'cursor'        : bodySettings().selectionRows?.selectOverRow ? 'pointer' : 'default'                                  
                                 }"> 
                                 <coer-grid-cell
                                     [id]="IdCalculated()(row.__index__, column.__index__, 'cell')"

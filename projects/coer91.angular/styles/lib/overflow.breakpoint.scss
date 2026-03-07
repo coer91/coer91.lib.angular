@@ -1,0 +1,31 @@
+@mixin mixin($breakpoint) {
+    @each $key, $value in (
+        'auto'      : auto, 
+        'visible'   : visible, 
+        'invisible' : hidden,  
+        'scroll'    : scroll, 
+        'inherit'   : inherit, 
+    ) {
+        .#{$breakpoint}overflow-#{$key} {  
+            overflow: $value !important;
+        } 
+
+        .#{$breakpoint}overflow-x-#{$key} {  
+            overflow-x: $value !important;
+        }
+
+        .#{$breakpoint}overflow-y-#{$key} {  
+            overflow-y: $value !important;   
+        }
+    }  
+
+    @each $key, $value in ( 
+        'clip'     : clip,
+        'ellipsis' : ellipsis, 
+        'inherit'  : inherit,  
+    ) {   
+        .#{$breakpoint}text-overflow-#{$key} {
+            text-overflow: $value !important; 
+        }
+    } 
+}

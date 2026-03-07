@@ -1,4 +1,4 @@
-import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IElementOutput, IHeaderSettings, IImportButton } from './coer-grid-interfaces';
+import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IElementOutput, IHeaderSettings, IImportButton, ISelectedRow } from './coer-grid-interfaces';
 import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, HTMLElements, Strings, Tools } from 'coer91.angular/tools'; 
 import { AfterContentChecked, Component, computed, inject, input, output, signal } from '@angular/core'; 
 import { Router } from '@angular/router';
@@ -39,26 +39,29 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     public readonly maxHeight      = input<string>('100%');
 
     //Outputs
-    protected readonly onClickExport      = output<T[]>();
-    protected readonly onClickImport      = output<IImportButton<T>>();
-    protected readonly onClickAdd         = output<T | null>();
-    protected readonly onClickSave        = output<void>();
-    protected readonly onKeyupEnter       = output<IElementOutput>();
-    protected readonly onClickClear       = output<IElementOutput>();
-    protected readonly onClickSearch      = output<IElementOutput>();
-    protected readonly onClickRow         = output<T>();
-    protected readonly onDoubleClickRow   = output<T>();
-    protected readonly onClickDeleteRow   = output<T>();
-    protected readonly onClickEditRow     = output<T>();
-    protected readonly onClickModalRow    = output<T>();
-    protected readonly onClickNavigateRow = output<T>();
+    protected readonly onClickExport       = output<T[]>();
+    protected readonly onClickImport       = output<IImportButton<T>>();
+    protected readonly onClickAdd          = output<T | null>();
+    protected readonly onClickSave         = output<void>();
+    protected readonly onKeyupEnter        = output<IElementOutput>();
+    protected readonly onClickClear        = output<IElementOutput>();
+    protected readonly onClickSearch       = output<IElementOutput>();
+    protected readonly onClickRow          = output<T>();
+    protected readonly onDoubleClickRow    = output<T>();
+    protected readonly onClickDeleteRow    = output<T>();
+    protected readonly onClickEditRow      = output<T>();
+    protected readonly onClickModalRow     = output<T>();
+    protected readonly onClickNavigateRow  = output<T>();
+    protected readonly onSelectedRow       = output<ISelectedRow<T>>();
 
 
     /** Sets the value of the component */
-    protected override _SetValue(value: T[]): void {
+    protected override _SetValue(value: T[], finishLoadingInner: boolean = false): void {
         if(Tools.IsNull(value)) value = [];
         value = [...value!].map((item, index) => ({ __checked__: false, ...item, __index__: index }));          
         super._SetValue(value); 
+
+        if(finishLoadingInner) this._isLoadingInner.set(false);
     }
 
 
@@ -188,7 +191,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
                 COLUMNS.map(property => [this._GetColumnName(property), row[property]])
             )
         ) as T[];
-    });
+    }); 
 
 
     //Function
@@ -347,4 +350,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
         this.onClickAdd.emit(row);
     } 
+
+
+    
 }

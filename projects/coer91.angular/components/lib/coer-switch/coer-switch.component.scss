@@ -1,4 +1,4 @@
-div.coer-switch {   
+div.coer-switch {    
     --primary-light: color-mix(in srgb, var(--primary), var(--light) 80%);
     --secondary-light: color-mix(in srgb, var(--secondary), var(--light) 80%); 
     --success-light: color-mix(in srgb, var(--success), var(--light) 80%); 
@@ -6,6 +6,8 @@ div.coer-switch {
     --danger-light: color-mix(in srgb, var(--danger), var(--light) 80%); 
     --navigation-light: color-mix(in srgb, var(--navigation), var(--light) 80%); 
     --information-light: color-mix(in srgb, var(--information), var(--light) 80%);  
+
+    display: inline-block !important;
 
     div.coer-switch-container {
         height: var(--input-height) !important;
@@ -50,6 +52,8 @@ div.coer-switch {
             font-weight: bold !important;
             overflow: hidden !important;
             transition: color 0.3s ease !important;
+            text-overflow: ellipsis !important;
+            max-width: calc(100% - 50px);
         }
     }
 }

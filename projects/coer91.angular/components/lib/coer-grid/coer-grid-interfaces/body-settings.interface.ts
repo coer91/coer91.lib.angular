@@ -4,6 +4,7 @@ export interface IBodySettings<T> {
     showStriped?: boolean;
     showBorders?: boolean;
     showHover?: boolean;
+    selectionRows?: ISelectionRow;
     deleteButton?: IRowButtonDelete<T>;
     editButton?: IRowButton<T>;
     modalButton?: IRowButton<T>;
@@ -23,3 +24,10 @@ export interface IRowButtonDelete<T> extends IRowButton<T> {
     confirmationProperty?: string;
     preventDefault?: boolean;
 }  
+
+
+export interface ISelectionRow {
+    show: boolean;
+    selectAllowed?: number;
+    selectOverRow?: boolean;
+}

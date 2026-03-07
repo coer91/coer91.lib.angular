@@ -24,7 +24,7 @@ export class CoerSwitch extends ControlValue {
     public readonly tooltip         = input<string>(''); 
     public readonly tooltipPosition = input<'top' | 'right' | 'bottom'| 'left'>('left');  
     public readonly width           = input<string>('fit-content'); 
-    public readonly maxWidth        = input<string>('fit-content');
+    public readonly maxWidth        = input<string>('250px');
 
     //output 
     protected readonly onClick = output<boolean>();
@@ -46,7 +46,8 @@ export class CoerSwitch extends ControlValue {
     protected _Toggle(): void { 
         if(this._value()) this.Uncheck();
         else this.Check();
-        this.onClick.emit(this._value());  
+        
+        if(this._isEnabled()) this.onClick.emit(this._value());  
     }
 
 
