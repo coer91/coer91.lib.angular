@@ -18,6 +18,7 @@
 @use "./lib/flex-wrap.scss";
 @use "./lib/font-family.scss";
 @use "./lib/font-size.breakpoint.scss" as _font-size; 
+@use "./lib/font-weight.breakpoint.scss" as _font-weight; 
 @use "./lib/gap.breakpoint.scss" as _gap; 
 @use "./lib/icons.scss"; 
 @use "./lib/margin.breakpoint.scss" as _margin; 
@@ -38,6 +39,7 @@
     @else if $module == '_flex-grow-shrink' { @include _flex-grow-shrink.mixin($breakpoint) }
     @else if $module == '_flex-layout'      { @include _flex-layout.mixin($breakpoint)      }
     @else if $module == '_font-size'        { @include _font-size.mixin($breakpoint)        }
+    @else if $module == '_font-weight'      { @include _font-weight.mixin($breakpoint)      }
     @else if $module == '_gap'              { @include _gap.mixin($breakpoint)              } 
     @else if $module == '_margin'           { @include _margin.mixin($breakpoint)           }
     @else if $module == '_order'            { @include _order.mixin($breakpoint)            }
@@ -83,6 +85,7 @@
 @include ApplyBreakpoints('_flex-grow-shrink'); 
 @include ApplyBreakpoints('_flex-layout'); 
 @include ApplyBreakpoints('_font-size');
+@include ApplyBreakpoints('_font-weight');
 @include ApplyBreakpoints('_gap');
 @include ApplyBreakpoints('_margin');
 @include ApplyBreakpoints('_order');

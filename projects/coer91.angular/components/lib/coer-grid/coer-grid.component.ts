@@ -1,4 +1,4 @@
-import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IElementOutput, IHeaderSettings, IImportButton, ISelectedRow } from './coer-grid-interfaces';
+import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IInputChange, IHeaderSettings, IImportButton, ISelectedRow } from './coer-grid-interfaces';
 import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, HTMLElements, Strings, Tools } from 'coer91.angular/tools'; 
 import { AfterContentChecked, Component, computed, inject, input, output, signal } from '@angular/core'; 
 import { Router } from '@angular/router';
@@ -21,7 +21,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     //Variables 
     protected override readonly _value = signal<T[]>([]);
     protected readonly _search = signal<string>('');
-    protected readonly _isLoadingInner = signal<boolean>(false); 
+    protected readonly _isLoadingInner = signal<boolean>(false);  
     protected readonly _headerHeight = signal<number>(0);
     protected readonly _footerHeight = signal<number>(0); 
     protected _resize$!: Subscription;
@@ -43,9 +43,9 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     protected readonly onClickImport       = output<IImportButton<T>>();
     protected readonly onClickAdd          = output<T | null>();
     protected readonly onClickSave         = output<void>();
-    protected readonly onKeyupEnter        = output<IElementOutput>();
-    protected readonly onClickClear        = output<IElementOutput>();
-    protected readonly onClickSearch       = output<IElementOutput>();
+    protected readonly onKeyupEnter        = output<IInputChange<T>>();
+    protected readonly onClickClear        = output<IInputChange<T>>();
+    protected readonly onClickSearch       = output<IInputChange<T>>();
     protected readonly onClickRow          = output<T>();
     protected readonly onDoubleClickRow    = output<T>();
     protected readonly onClickDeleteRow    = output<T>();
@@ -53,6 +53,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     protected readonly onClickModalRow     = output<T>();
     protected readonly onClickNavigateRow  = output<T>();
     protected readonly onSelectedRow       = output<ISelectedRow<T>>();
+    protected readonly onInputChange       = output<IInputChange<T>>();
 
 
     /** Sets the value of the component */
@@ -62,13 +63,41 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
         super._SetValue(value); 
 
         if(finishLoadingInner) this._isLoadingInner.set(false);
+    } 
+
+
+    //Function
+    protected _SetValueInput(input: IInputChange<T>): void {  
+        if(this._isElementReady() && input.property && input.before) {        
+            const ROW: any = { ...input.before };    
+
+            this._value.update(VALUE => {
+                const DATA_SOURCE: any = [...VALUE];
+                DATA_SOURCE[ROW.__index__][input.property!] = input.value; 
+
+                if(this._useModelBinding()) {
+                    this._UpdateValue()!(DATA_SOURCE); 
+                } 
+
+                return DATA_SOURCE;
+            }); 
+             
+            delete ROW['__index__'];
+            delete ROW['__checked__'];
+  
+            this.onInputChange.emit({ 
+                ...input, 
+                before: ROW,
+                after: { ...ROW, [input.property]: input.value }
+            }); 
+        }  
     }
 
 
     ngAfterContentChecked(): void {
         const ID = this._IdCalculated(-1, -1, 'header-container');
         const ELEMENT = HTMLElements.SelectElementById(ID);
-
+ 
         if(ELEMENT) { 
             let height = 0;
             height += Number(HTMLElements.GetCssValue(ELEMENT, 'margin-bottom').split('px')[0]);
@@ -106,7 +135,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
         const COLUMN_CONFIG = this.columns().find(x => x.property === property);  
 
         //coer-switch
-        if(COLUMN_CONFIG?.coerSwitch) {
+        if(COLUMN_CONFIG?.inputSwitch) {
             COLUMN_CONFIG.short = false;
             COLUMN_CONFIG.width = '100px';
             COLUMN_CONFIG.textAlignX = 'center';
@@ -121,7 +150,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
             textBreak:  Tools.IsBooleanTrue(COLUMN_CONFIG?.textBreak),
             textAlignX: COLUMN_CONFIG?.textAlignX || 'left',
             textAlignY: COLUMN_CONFIG?.textAlignY || 'middle',  
-            color:      COLUMN_CONFIG?.color      || 'dark',
+            color:      COLUMN_CONFIG?.color      || null,
             type:       COLUMN_CONFIG?.type       || 'string'
         }  
     }
@@ -164,7 +193,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
                 { ...data }
             )
         );  
-
+ 
         DATA_SOURCE_FORMAT = Collections.Search(DATA_SOURCE_FORMAT, SEARCH_TEXT, SEARCH_PROPERTIES);
         return Collections.Intercept(DATA_SOURCE, DATA_SOURCE_FORMAT, '__index__');  
     });
@@ -174,11 +203,11 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     protected _dataSourceExport = computed<T[]>(() => {  
         let DATA_SOURCE: any[] = [...this._value()]; 
 
-        if(Tools.IsBooleanTrue(this.headerSettings().exportButton?.onlyRowFiltered)) {
+        if(Tools.IsBooleanTrue(this.headerSettings().exportButton?.onlyFilteredRows)) {
             DATA_SOURCE = [...this._dataSourceFiltered()];  
         }
 
-        if (Tools.IsBooleanTrue(this.headerSettings().exportButton?.onlySelectedItem)) {
+        if (Tools.IsBooleanTrue(this.headerSettings().exportButton?.onlySelectedRows)) {
             DATA_SOURCE = [...DATA_SOURCE].filter(item => item['__checked__']);
         } 
 
@@ -349,8 +378,5 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
         }
 
         this.onClickAdd.emit(row);
-    } 
-
-
-    
+    }  
 }

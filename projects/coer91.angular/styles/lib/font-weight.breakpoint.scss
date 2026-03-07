@@ -1,0 +1,11 @@
+@mixin mixin($breakpoint) { 
+    @each $key, $value in (
+        'normal' : normal,
+        'bold'   : bold,
+        'light'  : lighter
+    ) {
+        .#{$breakpoint}font-weight-#{$key} {
+            font-weight: $value !important;
+        } 
+    } 
+} 

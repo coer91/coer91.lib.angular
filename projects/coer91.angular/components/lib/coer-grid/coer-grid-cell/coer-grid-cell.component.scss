@@ -1,5 +1,13 @@
+div.inputSwitch {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 20px !important;
+    padding: 5px;
+}
+
 div.default-cell {
-    display: flex !important; 
+    display: flex !important;  
+    align-items: center !important;
     padding: 5px !important; 
-    white-space: nowrap;
 }

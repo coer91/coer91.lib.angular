@@ -1,5 +1,5 @@
 import { Component, computed, ElementRef, input, output, signal, viewChild, WritableSignal } from '@angular/core'; 
-import { IElementOutput, IHeaderSettings, IImportButton } from '../coer-grid-interfaces';
+import { IInputChange, IHeaderSettings, IImportButton } from '../coer-grid-interfaces';
 import { CoerAlert, Files, Tools } from 'coer91.angular/tools';
 
 @Component({
@@ -29,9 +29,9 @@ export class CoerGridHeader<T> {
     protected readonly onClickImport = output<IImportButton<T>>();
     protected readonly onClickAdd    = output<void>();
     protected readonly onClickSave   = output<void>();
-    protected readonly onKeyupEnter  = output<IElementOutput>();
-    protected readonly onClickClear  = output<IElementOutput>();
-    protected readonly onClickSearch = output<IElementOutput>(); 
+    protected readonly onKeyupEnter  = output<IInputChange<T>>();
+    protected readonly onClickClear  = output<IInputChange<T>>();
+    protected readonly onClickSearch = output<IInputChange<T>>(); 
 
 
     //Computed

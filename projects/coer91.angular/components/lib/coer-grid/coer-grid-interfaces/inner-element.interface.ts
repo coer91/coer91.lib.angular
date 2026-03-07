@@ -1,7 +1,10 @@
-export interface IElementOutput {
+export interface IInputChange<T> {
     position: 'HEADER' | 'BODY' | 'FOOTER';
-    element: 'search' | 'coer-textbox';
-    value: any
+    element: 'inputSearch' | 'inputTextbox' | 'inputSwitch';
+    property?: string;
+    before?: T;
+    after?: T;
+    value: any;
 }
 
 

@@ -93,6 +93,7 @@
                                     [isEnabled]="isEnabled()"
                                     (onClickRow)="_ClickOnRow(row)"
                                     (onDoubleClickRow)="onDoubleClickRow.emit(row)"
+                                    (onInputChange)="onInputChange.emit($event)"
                                 ></coer-grid-cell>
                             </td>
                         }

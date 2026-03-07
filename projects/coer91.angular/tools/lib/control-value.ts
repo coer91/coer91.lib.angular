@@ -21,6 +21,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
     protected readonly _isTouched = signal<boolean>(false);
     protected readonly _IsTouchedFunction = signal<Function | null>(null);
     protected readonly _UpdateValue = signal<Function | null>(null);
+    protected readonly _isElementReady = signal<boolean>(false);
     
     protected readonly IsNull              = Tools.IsNull;
     protected readonly IsNotNull           = Tools.IsNotNull;
@@ -61,6 +62,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
     async ngAfterViewInit() {
         await Tools.Sleep(); 
         await this.Start();  
+        this._isElementReady.set(true);
         this.onReady?.emit();
     }
 

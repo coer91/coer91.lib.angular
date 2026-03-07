@@ -1,4 +1,4 @@
-import { IBodySettings, ICallbackItem, IColumnConfig, IDataSourceGroup, ISelectedRow } from "../coer-grid-interfaces";
+import { IBodySettings, ICallbackItem, IColumnConfig, IDataSourceGroup, IInputChange, ISelectedRow } from "../coer-grid-interfaces";
 import { Component, computed, input, output, signal, WritableSignal } from "@angular/core";
 import { Tools } from "coer91.angular/tools";
 
@@ -37,6 +37,7 @@ export class CoerGridBody<T> {
     protected readonly onClickNavigateRow  = output<T>();
     protected readonly onSelectedRowChange = output<T[]>();
     protected readonly onSelectedRow       = output<ISelectedRow<T>>();
+    protected readonly onInputChange       = output<IInputChange<T>>();
 
 
     //Function
@@ -67,8 +68,7 @@ export class CoerGridBody<T> {
                 delete ROW['__index__'];
                 delete ROW['__checked__'];
 
-                response = CALLBACK({ 
-                    __index__: row.__index__, 
+                response = CALLBACK({  
                     property, 
                     row: ROW, 
                     value: null 
@@ -128,8 +128,7 @@ export class CoerGridBody<T> {
             delete ROW['__index__'];
             delete ROW['__checked__'];
 
-            response = CALLBACK({ 
-                __index__: row.__index__, 
+            response = CALLBACK({  
                 property, 
                 row: ROW, 
                 value: null 
@@ -141,10 +140,10 @@ export class CoerGridBody<T> {
 
 
     //Computed
-    protected _showCheckbox = computed(() => {
+    protected _showCheckbox = computed(() => {  
         return this.bodySettings().selectionRows?.show 
             && this.dataSourceGroup().length > 0  
-            && (this.bodySettings().selectionRows?.selectAllowed || 0) != 0
+            && (this.bodySettings().selectionRows?.selectAllowed !== 0)
             && this.isEnabled(); 
     });
 
@@ -167,11 +166,11 @@ export class CoerGridBody<T> {
 
     //Function
     protected _ClickOnRow(row: any): void { 
-        if(!this.isEnabled()) return;
+        if(!this.isEnabled()) return; 
          
-        if(this.bodySettings().selectionRows?.selectOverRow) {
-            if(!this._isReadonlySelection(row, true) && this._showCheckbox()) {
-                this.CheckBy((x: any) => x.__index__ == row.__index__);
+        if(this._showCheckbox() && this.bodySettings().selectionRows?.selectOverRow) {
+            if(Tools.IsBooleanFalse(row.__checked__) && !this._isReadonlySelection(row, true)) {
+                this.CheckBy((x: any) => x.__index__ == row.__index__); 
             } 
         }
 
@@ -207,7 +206,7 @@ export class CoerGridBody<T> {
 
     /** */
     public CheckBy(callback: (row: T) => boolean): void { 
-        if(this.bodySettings().selectionRows?.show) {   
+        if(this.bodySettings().selectionRows?.show) {    
             this.isLoadingInner().set(true);
             
             let SELECTED_ROWS: any[] = [];

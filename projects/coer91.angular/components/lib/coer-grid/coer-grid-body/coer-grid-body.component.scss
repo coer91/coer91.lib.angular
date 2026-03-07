@@ -22,6 +22,7 @@ section.coer-grid-body {
                 min-width: 20px !important; 
                 padding: 5px !important;
                 user-select: none !important; 
+                z-index: 1 !important;
 
                 div.th-content {
                     display: flex !important;
@@ -40,6 +41,7 @@ section.coer-grid-body {
             tr td {
                 text-overflow: ellipsis !important;                 
                 padding: 0px !important;  
+                z-index: 1 !important;
                 background-color: var(--ligth); 
             }
 
@@ -64,15 +66,13 @@ section.coer-grid-body {
             max-width: 20px !important;               
             padding: 0px !important;
             overflow: hidden !important;
-            vertical-align: middle !important;
-            z-index: 2 !important;
+            vertical-align: middle !important; 
 
             div.action-column-content { 
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
-                height: 25px !important; 
-                z-index: 1 !important;
+                height: 25px !important;  
             }
         } 
     }

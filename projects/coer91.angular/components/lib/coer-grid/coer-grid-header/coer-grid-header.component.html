@@ -44,17 +44,17 @@
                 (onValueChange)="search().set($event)"
                 (onKeyupEnter)="onKeyupEnter.emit({
                     position: 'HEADER',
-                    element: 'search',
+                    element: 'inputSearch', 
                     value: ($event || '')
                 })"
                 (onClickClear)="onClickClear.emit({
                     position: 'HEADER',
-                    element: 'search',
+                    element: 'inputSearch', 
                     value: $event
                 })"
                 (onClickSearch)="onClickSearch.emit({
                     position: 'HEADER',
-                    element: 'search',
+                    element: 'inputSearch', 
                     value: ($event || '')
                 })"
             ></coer-textbox> 

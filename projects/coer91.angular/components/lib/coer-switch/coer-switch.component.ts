@@ -31,7 +31,7 @@ export class CoerSwitch extends ControlValue {
 
     /** Sets the value of the component */
     protected override _SetValue(value: boolean): void {
-        if(Tools.IsNull(value)) value = false;   
+        if(Tools.IsNull(value)) value = false;    
         super._SetValue(value);
     }
 
@@ -44,10 +44,11 @@ export class CoerSwitch extends ControlValue {
     
     //Function
     protected _Toggle(): void { 
-        if(this._value()) this.Uncheck();
-        else this.Check();
-        
-        if(this._isEnabled()) this.onClick.emit(this._value());  
+        if(this._isEnabled()) {
+            if(this._value()) this.Uncheck();
+            else this.Check();
+            this.onClick.emit(this._value());  
+        } 
     }
 
 

@@ -28,6 +28,6 @@ export interface IRowButtonDelete<T> extends IRowButton<T> {
 
 export interface ISelectionRow {
     show: boolean;
-    selectAllowed?: number;
+    selectAllowed?: number | null;
     selectOverRow?: boolean;
 }

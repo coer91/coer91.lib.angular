@@ -1,5 +1,4 @@
-export interface ICallbackItem<T> {
-    __index__: number;
+export interface ICallbackItem<T> { 
     property: string;
     value: any;
     row: T;

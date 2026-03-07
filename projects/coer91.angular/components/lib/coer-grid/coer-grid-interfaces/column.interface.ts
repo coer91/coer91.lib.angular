@@ -17,10 +17,10 @@ export interface IColumn<T> {
     textBreak?:     boolean;
     textAlignX?:    'left' | 'center' | 'right';
     textAlignY?:    'top'  | 'middle' | 'bottom';
-    color?:         'primary' | 'secondary' | 'success' | 'warning'  | 'danger' | 'navigation' | 'information' | 'dark' | 'light' | ((item: ICallbackItem<T>) => 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light');
+    color?:         null | 'primary' | 'secondary' | 'success' | 'warning'  | 'danger' | 'navigation' | 'information' | 'dark' | 'light' | ((item: ICallbackItem<T>) => 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light');
     type?:          'string' | 'number' | 'currency' | 'date' | 'time' | 'datetime';
     template?:      null | string  | ((item: ICallbackItem<T>) => string);
-    coerSwitch?:    null | boolean | ((item: ICallbackItem<T>) => ICellSwitch);
+    inputSwitch?:   null | boolean | ((item: ICallbackItem<T>) => ICellSwitch);
     // coerTextbox?:   null    | boolean | ((item: IGridItem<T>) => IGridTextBox);
     // coerNumberbox?: null    | boolean | ((item: IGridItem<T>) => IGridNumberBox);
     // coerSelectbox?: null    | boolean | ((item: IGridItem<T>) => IGridSelectBox);

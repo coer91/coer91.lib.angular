@@ -21,8 +21,8 @@ export interface IButtonExport extends IButtonAdd {
     preventDefault?: boolean;
     fileName?: string;
     onlyColumnFiltered?: boolean;
-    onlyRowFiltered?: boolean;
-    onlySelectedItem?: boolean;
+    onlyFilteredRows?: boolean;
+    onlySelectedRows?: boolean;
 }
 
 

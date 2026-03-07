@@ -1,15 +1,40 @@
 @switch(_input()) {
+    @case ('inputSwitch') {
+        <div class="inputSwitch"> 
+            <coer-switch 
+                [id]="id()"
+                [ngModel]="row()[column().config.property]"
+                [isReadonly]="!_isElementReady() || _GetAttributeValue('isReadonly', false)" 
+                [type]="_GetAttributeValue('type', 'switch')"
+                [color]="_GetAttributeValue('color', 'primary')"
+                [tooltip]="_GetAttributeValue('tooltip', '')"
+                [tooltipPosition]="_GetAttributeValue('tooltipPosition', 'left')" 
+                marginLeft="auto"
+                marginRight="auto"
+                [isLoading]="isLoadingInner()()" 
+                (onValueChange)="_isElementReady() ? onInputChange.emit({
+                    position: 'BODY',
+                    element: 'inputSwitch',
+                    property: column().config.property,
+                    before: row(),
+                    value: $event
+                }): null"
+            ></coer-switch> 
+        </div>
+    }
+    
     @default {
         <div class="default-cell" 
+            [class]="_GetTextColor()"
             [ngStyle]="{ 
                 'justify-content': _GetTextAlignX(),
                 'word-break'     : _GetTextBreak(),
-                'white-space'    : _GetSpaceBreak(),
+                'white-space'    : _GetSpaceBreak(), 
                 'min-height'     : _minHeight()  
             }"
             (click)="isEnabled() ? onClickRow.emit(row()) : null"
             (dblclick)="isEnabled() ? onDoubleClickRow.emit(row()) : null">  
             <div [innerHTML]="_GetCellValue() | html"></div>          
-        </div>
+        </div> 
     }
 }

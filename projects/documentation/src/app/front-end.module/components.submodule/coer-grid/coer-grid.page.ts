@@ -18,11 +18,11 @@ export class CoerGridPage extends Page {
     constructor() { 
         super('coer-grid');
 
-        for(let i = 1; i <= 1000; i++) { 
-            this.dataSource.update(x => x.concat([{ id: i, name: `item ${i}` }]));
+        for(let i = 1; i <= 5; i++) { 
+            this.dataSource.update(x => x.concat([{ id: i, name: `item ${i}`, is: true }]));
         }
 
-        //this.dataSource.update(x => x.concat([{ id: 99, name: `dfg` }]));
+        this.dataSource.update(x => x.concat([{ id: 999999, name: `dfg` }]));
     }
 
 
@@ -33,5 +33,10 @@ export class CoerGridPage extends Page {
 
     Log(event: string, value: any) {
         console.log({ event, value })
+    }
+
+
+    color = (item: ICallbackItem<any>) => {
+        return item.row.id % 2 == 0 ? 'danger' : 'success';
     }
 }
