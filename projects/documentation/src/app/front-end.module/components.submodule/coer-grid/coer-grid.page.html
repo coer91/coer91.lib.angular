@@ -9,7 +9,12 @@
         [(ngModel)]="dataSource"
         [isLoading]="false"
         [isReadonly]="false"
-        height="full"
+        [isInvisible]="false"
+        [isHidden]="false"
+        label="Componentes triple Action"
+        icon="i91-home-door-fill"
+        height="400px"
+        marginLeft="30px"
         [columns]="[
             { property: 'id'  , width: '100px',  textBreak: true,    },
             { property: 'name', color, textAlignY: 'top'  },
@@ -40,8 +45,14 @@
         (onClickRow)="Log('onClickRow', $event)",
         (onDoubleClickRow)="Log('onDoubleClickRow', $event)"
     >
+ 
+        
+    </coer-grid>
 
-        <coer-selectbox 
+{{ dataSource() | json }}
+
+
+<!-- <coer-selectbox 
             [(ngModel)]="drop"
             [dataSource]="[
                 { id: 1, name: 'one' },
@@ -52,7 +63,4 @@
                 { id: 6, name: 'six' },
                 { id: 7, name: 'seven' }
             ]"
-        ></coer-selectbox>
-    </coer-grid>
-
-{{ dataSource() | json }}
+        ></coer-selectbox> -->

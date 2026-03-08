@@ -24,4 +24,8 @@
             font-size: $i * 1px !important;
         }
     } 
+
+    .#{$breakpoint}font-size-inherit { 
+        font-size: inherit !important; 
+    } 
 } 

@@ -14,8 +14,11 @@ export class CoerGridHeader<T> {
 
     //Variables
     protected readonly _isLoadingExport = signal<boolean>(false); 
+    protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace; 
          
     //Input
+    public readonly label            = input.required<string>();
+    public readonly icon             = input.required<string>();
     public readonly IdCalculated     = input.required<(indexRow: number, indexColumn: number, suffix?: string) => string>();
     public readonly search           = input.required<WritableSignal<string>>();
     public readonly headerSettings   = input.required<IHeaderSettings>({}); 

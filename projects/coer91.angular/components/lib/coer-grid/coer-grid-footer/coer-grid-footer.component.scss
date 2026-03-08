@@ -1,0 +1,29 @@
+footer {
+    height: 25px !important;
+    max-height: 25px !important;
+    padding-top: 5px !important;
+    font-weight: bold !important;
+    color: var(--readonly) !important; 
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+
+    span.item-selected {
+        span {
+            margin-left: 5px !important;
+
+            i {
+                font-size: 18px !important;
+            }
+        }
+    }
+
+    span.quantity {
+        margin-right: 5px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+}

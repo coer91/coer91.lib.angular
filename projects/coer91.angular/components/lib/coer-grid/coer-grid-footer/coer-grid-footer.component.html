@@ -1,1 +1,27 @@
- 
+@if(!IsBooleanFalse(footerSettings().show)) {
+    <footer [id]="IdCalculated()(-1, -1, 'footer-container')">
+        <span class="item-selected">
+            @if(isLoadingInner()()) {
+                <span class="animation-fade"> Loading </span>
+            }
+
+            @else if(dataSourceSelected().length > 0) {
+                <span>
+                    <i class="i91-check-square"></i> 
+                    {{ dataSourceSelected().length | numericFormat }}
+                </span>
+            }
+        </span>
+
+        @if(IsNotOnlyWhiteSpace(search())) {
+            <span class="quantity">
+                <i class="i91-filter-fill"></i>
+                {{ dataSourceFiltered().length | numericFormat }} Rows 
+            </span>
+        } 
+
+        @else if(value().length > 0) {
+            <span class="quantity"> {{ value().length | numericFormat }} Rows </span>
+        }  
+    </footer>
+}  

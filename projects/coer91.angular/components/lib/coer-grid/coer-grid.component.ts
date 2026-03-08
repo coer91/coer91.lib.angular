@@ -1,4 +1,4 @@
-import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IInputChange, IHeaderSettings, IImportButton, ISelectedRow } from './coer-grid-interfaces';
+import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IInputChange, IHeaderSettings, IImportButton, ISelectedRow, IFooterSettings } from './coer-grid-interfaces';
 import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, HTMLElements, Strings, Tools } from 'coer91.angular/tools'; 
 import { AfterContentChecked, Component, computed, inject, input, output, signal } from '@angular/core'; 
 import { Router } from '@angular/router';
@@ -24,12 +24,14 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     protected readonly _isLoadingInner = signal<boolean>(false);  
     protected readonly _headerHeight = signal<number>(0);
     protected readonly _footerHeight = signal<number>(0); 
+    protected readonly _containerHeight = signal<number>(0);
     protected _resize$!: Subscription;
 
     //Input 
     public readonly columns        = input<IColumn<T>[]>([]);
     public readonly headerSettings = input<IHeaderSettings>({}); 
     public readonly bodySettings   = input<IBodySettings<T>>({}); 
+    public readonly footerSettings = input<IFooterSettings<T>>({}); 
     public readonly useContainer   = input<boolean>(true);
     public readonly width          = input<string>('100%');
     public readonly minWidth       = input<string>('100px');
@@ -37,6 +39,10 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     public readonly height         = input<string>('350px');
     public readonly minHeight      = input<string>('150px');
     public readonly maxHeight      = input<string>('100%');
+
+    public override readonly marginTop   = input<string>('15px');
+    public override readonly marginRight = input<string>('30px'); 
+    public override readonly marginLeft  = input<string>('30px');
 
     //Outputs
     protected readonly onClickExport       = output<T[]>();
@@ -95,8 +101,8 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
 
     ngAfterContentChecked(): void {
-        const ID = this._IdCalculated(-1, -1, 'header-container');
-        const ELEMENT = HTMLElements.SelectElementById(ID);
+        let ID = this._IdCalculated(-1, -1, 'header-container');
+        let ELEMENT = HTMLElements.SelectElementById(ID);
  
         if(ELEMENT) { 
             let height = 0;
@@ -104,6 +110,19 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
             height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
             this._headerHeight.set(height); 
         }
+
+
+        ID = this._IdCalculated(-1, -1, 'footer-container');
+        ELEMENT = HTMLElements.SelectElementById(ID);
+
+        if(ELEMENT) { 
+            let height = 0;
+            height += Number(HTMLElements.GetCssValue(ELEMENT, 'margin-bottom').split('px')[0]);
+            height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
+            this._footerHeight.set(height); 
+        }
+
+        this._containerHeight.set(this.useContainer() ? 20 : 0);
     } 
 
 
@@ -223,6 +242,17 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     }); 
 
 
+    //Computed
+    protected _dataSourceSelected = computed<T[]>(() => [...this._value() as any[]]
+        .filter(item => item.__checked__)
+        .map(({ ...item }) => {
+            delete item['__index__'];
+            delete item['__checked__'];
+            return item;
+        })
+    );
+
+
     //Function
     protected _ApplyFormat = (value: string | number | Date | boolean, type?: 'string' | 'number' | 'currency' | 'date' | 'time' | 'datetime'): string => {
         switch(type) { 
@@ -239,21 +269,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     //Function
     protected _IdCalculated = (indexRow: number, indexColumn: number, suffix: string = ''): string => { 
         return `${this._id}${indexRow > -1 ? '-row' + indexRow : ''}${indexColumn > -1 ? '-column' + indexColumn : ''}${suffix.length > 0 ? '-' + suffix : ''}`;
-    }   
-
-
-    //Function
-    protected _CalculateFootertHeight = () => {
-        const ID = this._IdCalculated(-1, -1, 'footer-container');
-        const ELEMENT = HTMLElements.SelectElementById(ID);
-
-        if(ELEMENT) { 
-            let height = 0;
-            height += Number(HTMLElements.GetCssValue(ELEMENT, 'margin-bottom').split('px')[0]);
-            height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
-            this._footerHeight.set(height); 
-        }
-    } 
+    }    
   
 
     //Function

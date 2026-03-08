@@ -31,18 +31,19 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
     protected readonly IsBooleanFalse      = Tools.IsBooleanFalse;  
     
     //Input
-    public value        = input<any>('');
-    public label        = input<string>('');
-    public isLoading    = input<boolean>(false); 
-    public isReadonly   = input<boolean>(false);
-    public isInvisible  = input<boolean>(false);
-    public isHidden     = input<boolean>(false);
-    public isValid      = input<boolean>(false); 
-    public isInvalid    = input<boolean>(false);
-    public marginTop    = input<string>('0px');
-    public marginRight  = input<string>('0px');
-    public marginBottom = input<string>('0px');
-    public marginLeft   = input<string>('0px');
+    public readonly value        = input<any>('');
+    public readonly icon         = input<string>('');
+    public readonly label        = input<string>('');
+    public readonly isLoading    = input<boolean>(false); 
+    public readonly isReadonly   = input<boolean>(false);
+    public readonly isInvisible  = input<boolean>(false);
+    public readonly isHidden     = input<boolean>(false);
+    public readonly isValid      = input<boolean>(false); 
+    public readonly isInvalid    = input<boolean>(false);
+    public readonly marginTop    = input<string>('0px');
+    public readonly marginRight  = input<string>('0px');
+    public readonly marginBottom = input<string>('0px');
+    public readonly marginLeft   = input<string>('0px');
 
     //Output
     protected readonly onValueChange = output<any>();

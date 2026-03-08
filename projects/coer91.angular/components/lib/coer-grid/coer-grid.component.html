@@ -1,18 +1,14 @@
-<section [ngClass]="{ 'container-section' : useContainer() }">
-    <div class="coer-grid" 
-        [ngStyle]="{ 
-            'width'        : width(),
-            'min-width'    : minWidth(),
-            'max-width'    : maxWidth(),
-            'margin-top'   : marginTop(),
-            'margin-right' : marginRight(),
-            'margin-bottom': marginBottom(),
-            'margin-left'  : marginLeft()  
-        }">
+<section 
+    [ngClass]="{ 'coer-grid-container': useContainer(), 'invisible': isInvisible(), 'display-none': isHidden() }" 
+    [ngStyle]="{ 'margin-top': marginTop(), 'margin-right' : marginRight(), 'margin-bottom': marginBottom(), 'margin-left': marginLeft() }">
+    
+    <div class="coer-grid" [ngStyle]="{ 'width' : width(), 'min-width': minWidth(), 'max-width': maxWidth() }">
         
         <!-- Header -->
         <coer-grid-header
             #header
+            [label]="label()"
+            [icon]="icon()"
             [IdCalculated]="_IdCalculated" 
             [search]="_search"
             [isLoadingInner]="_isLoadingInner"
@@ -41,9 +37,9 @@
             [isLoadingInner]="_isLoadingInner"
             [isLoading]="isLoading()"
             [isEnabled]="_isEnabled()"
-            [height]="`calc(${_height()} - ${this._headerHeight()}px - ${this._footerHeight()}px)`"
-            [minHeight]="`calc(${minHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px)`"
-            [maxHeight]="`calc(${ maxHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px)`"
+            [height]="`calc(${_height()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
+            [minHeight]="`calc(${minHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
+            [maxHeight]="`calc(${ maxHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             (onClickRow)="onClickRow.emit($event)"
             (onDoubleClickRow)="onDoubleClickRow.emit($event)"
             (onClickDeleteRow)="_ClickDeleteRow($event)"
@@ -57,7 +53,13 @@
         
         <!-- Footer -->
         <coer-grid-footer
-        
+            [value]="_value()"
+            [dataSourceSelected]="_dataSourceSelected()"
+            [dataSourceFiltered]="_dataSourceFiltered()"
+            [search]="_search()"
+            [IdCalculated]="_IdCalculated"
+            [footerSettings]="footerSettings()"
+            [isLoadingInner]="_isLoadingInner"
         ></coer-grid-footer>
     </div>
 </section>

@@ -2,9 +2,20 @@
     [ngClass]="{ 'margin-bottom-5px': (_buttons().length > 0 || _showSearch() || slotRef.childElementCount > 0) }" 
     class="flex-wrap-middle-right gap-5px">
 
-    <div #slotRef [class]="_slotPosition()">
+    @if(slotRef.childElementCount <= 0 && IsNotOnlyWhiteSpace(label())) {
+        <h3 class="margin-right-auto text-ellipsis flex-middle-left gap-5px">              
+            @if(IsNotOnlyWhiteSpace(icon())) {
+                <i [class]="icon()" class="min-width-20px font-size-20px"></i>
+            }
+
+            <span >{{ label() }}</span> 
+        </h3>
+    }
+
+    <div #slotRef [class]="_slotPosition()" [ngClass]="{ 'display-none': slotRef.childElementCount <= 0 }">
         <ng-content></ng-content>
-    </div>
+    </div> 
+     
 
     @if(_buttons().length > 0) { 
         <div class="flex-basis-min-content display-flex gap-5px"> 
