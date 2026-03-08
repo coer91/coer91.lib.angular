@@ -11,13 +11,14 @@
         [isReadonly]="false"
         [isInvisible]="false"
         [isHidden]="false"
+        [useContainer]="false"
         label="Componentes triple Action"
         icon="i91-home-door-fill"
         height="400px"
         marginLeft="30px"
         [columns]="[
             { property: 'id'  , width: '100px',  textBreak: true,    },
-            { property: 'name', color, textAlignY: 'top'  },
+            { property: 'name', inputTextbox },
             { property: 'create'  , inputSwitch: true },
             { property: 'update'  , inputSwitch: true },
             { property: 'delete'  , inputSwitch: true } 
@@ -34,7 +35,7 @@
             showStriped: true,
             showBorders: false,
              
-            selectionRows:  { show: true, selectOverRow: true, selectAllowed: 2 },
+            selectionRows:  { show: true, selectOverRow: true, selectAllowed: null },
             deleteButton:   { show: true, showConfirmation: false },
             editButton:     { show: true, },
             modalButton:    { show: true, },

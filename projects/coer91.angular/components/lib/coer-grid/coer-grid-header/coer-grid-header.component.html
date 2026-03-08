@@ -52,20 +52,24 @@
                 [showSearchButton]="true"
                 [showClearButton]="true"
                 [isLoading]="isLoading() || isLoadingInner()()"
-                (onValueChange)="search().set($event)"
+                (onValueChange)="search().set($event); onInputChange.emit({
+                    position: 'HEADER',
+                    input: 'inputSearch',
+                    value: ($event || '')
+                })"
                 (onKeyupEnter)="onKeyupEnter.emit({
                     position: 'HEADER',
-                    element: 'inputSearch', 
+                    input: 'inputSearch',
                     value: ($event || '')
                 })"
                 (onClickClear)="onClickClear.emit({
                     position: 'HEADER',
-                    element: 'inputSearch', 
+                    input: 'inputSearch', 
                     value: $event
                 })"
                 (onClickSearch)="onClickSearch.emit({
                     position: 'HEADER',
-                    element: 'inputSearch', 
+                    input: 'inputSearch', 
                     value: ($event || '')
                 })"
             ></coer-textbox> 

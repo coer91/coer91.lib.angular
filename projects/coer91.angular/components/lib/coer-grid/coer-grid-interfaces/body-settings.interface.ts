@@ -9,6 +9,7 @@ export interface IBodySettings<T> {
     editButton?: IRowButton<T>;
     modalButton?: IRowButton<T>;
     navigateButton?: IRowButton<T>;
+    focusNext?: boolean;
 }
 
 

@@ -33,6 +33,7 @@ export class CoerGridHeader<T> {
     protected readonly onClickAdd    = output<void>();
     protected readonly onClickSave   = output<void>();
     protected readonly onKeyupEnter  = output<IInputChange<T>>();
+    protected readonly onInputChange = output<IInputChange<T>>();
     protected readonly onClickClear  = output<IInputChange<T>>();
     protected readonly onClickSearch = output<IInputChange<T>>(); 
 

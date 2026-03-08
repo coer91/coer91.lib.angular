@@ -73,29 +73,34 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
 
     //Function
-    protected _SetValueInput(input: IInputChange<T>): void {  
-        if(this._isElementReady() && input.property && input.before) {        
-            const ROW: any = { ...input.before };    
+    protected _SetValueInput(event: IInputChange<T>): void {  
+        if(this._isElementReady() && event.property && event.before) {  
 
-            this._value.update(VALUE => {
-                const DATA_SOURCE: any = [...VALUE];
-                DATA_SOURCE[ROW.__index__][input.property!] = input.value; 
+            let delay = ['inputTextbox', 'inputNumberbox', 'inputSearch'].includes(event.input) ? 1000 : 0; 
 
-                if(this._useModelBinding()) {
-                    this._UpdateValue()!(DATA_SOURCE); 
-                } 
-
-                return DATA_SOURCE;
-            }); 
-             
-            delete ROW['__index__'];
-            delete ROW['__checked__'];
-  
-            this.onInputChange.emit({ 
-                ...input, 
-                before: ROW,
-                after: { ...ROW, [input.property]: input.value }
-            }); 
+            Tools.Sleep(delay, `gridUpdating${event.property}`).then(() => {                
+                const BEFORE: any = { ...event.before };    
+                
+                this._value.update(VALUE => {
+                    const DATA_SOURCE: any = [...VALUE];
+                    DATA_SOURCE[BEFORE.__index__][event.property!] = event.value; 
+    
+                    if(this._useModelBinding()) {
+                        this._UpdateValue()!(DATA_SOURCE); 
+                    } 
+    
+                    return DATA_SOURCE;
+                }); 
+                 
+                delete BEFORE['__index__'];
+                delete BEFORE['__checked__'];
+      
+                this.onInputChange.emit({ 
+                    ...event, 
+                    before: BEFORE,
+                    after: { ...BEFORE, [event.property!]: event.value }
+                }); 
+            });
         }  
     }
 
@@ -170,7 +175,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
             textAlignX: COLUMN_CONFIG?.textAlignX || 'left',
             textAlignY: COLUMN_CONFIG?.textAlignY || 'middle',  
             color:      COLUMN_CONFIG?.color      || null,
-            type:       COLUMN_CONFIG?.type       || 'string'
+            format:     COLUMN_CONFIG?.format       || 'string'
         }  
     }
 
@@ -207,7 +212,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
             this._columns().map(x => x.config).reduce(
                 (previousValue, currentValue) => ({
                     ...previousValue,
-                    [currentValue.property]: this._ApplyFormat(data[currentValue.property], currentValue.type)
+                    [currentValue.property]: this._ApplyFormat(data[currentValue.property], currentValue.format)
                 }), 
                 { ...data }
             )

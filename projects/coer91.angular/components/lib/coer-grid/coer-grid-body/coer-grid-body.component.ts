@@ -1,6 +1,7 @@
-import { IBodySettings, ICallbackItem, IColumnConfig, IDataSourceGroup, IInputChange, ISelectedRow } from "../coer-grid-interfaces";
-import { Component, computed, input, output, signal, WritableSignal } from "@angular/core";
+import { IBodySettings, ICallbackItem, IColumnConfig, IDataSourceGroup, IInputChange, IInputEnter, ISelectedRow } from "../coer-grid-interfaces";
+import { Component, computed, input, output, signal, viewChildren, WritableSignal } from "@angular/core";
 import { Tools } from "coer91.angular/tools";
+import { CoerGridCell } from "../coer-grid-cell/coer-grid-cell.component";
 
 @Component({
     selector: 'coer-grid-body',
@@ -8,7 +9,10 @@ import { Tools } from "coer91.angular/tools";
     styleUrl: './coer-grid-body.component.scss',
     standalone: false
 })
-export class CoerGridBody<T> {  
+export class CoerGridBody<T> { 
+    
+    //Elements
+    protected readonly _coerGridCellList = viewChildren(CoerGridCell<T>); 
 
     //Variables
     protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
@@ -24,9 +28,10 @@ export class CoerGridBody<T> {
     public readonly isLoadingInner  = input.required<WritableSignal<boolean>>();
     public readonly isLoading       = input.required<boolean>();
     public readonly isEnabled       = input.required<boolean>();   
+    public readonly useContainer    = input.required<boolean>();
     public readonly height          = input.required<string>();
     public readonly minHeight       = input.required<string>();
-    public readonly maxHeight       = input.required<string>();
+    public readonly maxHeight       = input.required<string>(); 
 
     //Outputs
     protected readonly onClickRow          = output<T>();
@@ -38,7 +43,8 @@ export class CoerGridBody<T> {
     protected readonly onSelectedRowChange = output<T[]>();
     protected readonly onSelectedRow       = output<ISelectedRow<T>>();
     protected readonly onInputChange       = output<IInputChange<T>>();
-
+    protected readonly onKeyupEnter        = output<IInputChange<T>>(); 
+    protected readonly onKeyupEnterLast    = output<IInputChange<T>>();
 
     //Function
     protected _showStriped = (index: number): boolean => {
@@ -287,4 +293,148 @@ export class CoerGridBody<T> {
             }); 
         }
     } 
+
+
+    /** */
+    protected _NextInput(indexRow: number, indexColumn: number, event: IInputEnter<T>): void {
+
+        const ROW = { ...event.row } as any;
+        delete ROW["__index__"];
+        delete ROW["__checked__"];
+
+        const KEYUP_ENTER: IInputChange<T> = {
+            position: 'BODY',
+            input: event.input, 
+            property: event.property,
+            before: ROW,
+            after: ROW,
+            value: event.value
+        };
+
+        this.onKeyupEnter.emit(KEYUP_ENTER);  
+
+        if(!Tools.IsBooleanFalse(this.bodySettings().focusNext)) {             
+            const INPUT_TEXTBOX     = this.columns().filter(item => Tools.IsNotNull(item.config?.inputTextbox)).map(item => item.config.property);
+            const INPUT_NUMBERBOX   = this.columns().filter(item => Tools.IsNotNull(item.config?.inputNumberbox)).map(item => item.config.property);
+            const INPUT_SELECTBOX   = this.columns().filter(item => Tools.IsNotNull(item.config?.inputSelectbox)).map(item => item.config.property);
+            const INPUT_DATETIMEBOX = this.columns().filter(item => Tools.IsNotNull(item.config?.inputDatebox)).map(item => item.config.property);
+            
+            let index = 0;
+            const COLUMNS = []; 
+            for (const { property } of this.columns().map(item => item.config)) {
+                if (INPUT_TEXTBOX.some(input => input == property)) {
+                    COLUMNS.push({ index, property, input: 'inputTextbox' }); 
+                }
+    
+                else if (INPUT_NUMBERBOX.some(input => input == property)) {
+                    COLUMNS.push({ index, property, input: 'inputNumberbox' });
+                }
+    
+                else if (INPUT_SELECTBOX.some(input => input == property)) {
+                    COLUMNS.push({ index, property, input: 'inputSelectbox' });
+                }
+
+                else if (INPUT_DATETIMEBOX.some(input => input == property)) {
+                    COLUMNS.push({ index, property, input: 'inputDatebox' });
+                }
+    
+                else {
+                    COLUMNS.push({ index, property, input: 'default' });
+                }
+    
+                ++index;
+            }      
+    
+            let lastRow = -1;
+            for(const { rows } of this.dataSourceGroup()) {
+                lastRow += rows.length;
+            } 
+    
+            const COLUMNS_INPUT = COLUMNS.filter(x => x.input != 'default');
+            const firstColumn = [...COLUMNS_INPUT].shift()?.index || -1;
+            const lastColumn  = [...COLUMNS_INPUT].pop()?.index   || -1;
+     
+            //Is Last Row & Last Input Column?
+            if (indexRow == lastRow && indexColumn == lastColumn) {
+                this.onKeyupEnterLast.emit(KEYUP_ENTER); 
+            }
+    
+            //Is Last Input Column?
+            else if (indexColumn == lastColumn) {
+                this.FocusInput((indexRow + 1), firstColumn); 
+            }
+    
+            //Next Column?
+            else {
+                console.log('other')
+        //         for (index = (indexColumn + 1); index < COLUMNS.length; index++) {
+        //             for(const input of COLUMNS) {
+        //                 if(index == input.indexColumn && ['coer-textbox', 'coer-numberbox', 'coer-selectbox'].includes(input.input)) {
+        //                     this.FocusInput(indexRow, input.indexColumn);
+        //                     return;
+        //                 }
+        //             }
+        //         }
+            }
+        }
+    }
+
+
+    /** */
+    public FocusInput(indexRow: number = -1, indexColumn: number = -1, onlyFocus: boolean = false): void {
+        Tools.Sleep().then(() => {
+            if (this.isEnabled()) {
+                indexRow = indexRow >= 0 ? indexRow : 0;
+
+                if (indexColumn < 0) { 
+                    const boxTypes = {
+                        inputTextbox  : this.columns().filter(item => Tools.IsNotNull(item.config?.inputTextbox)).map(item => item.config.property),
+                        inputNumberbox: this.columns().filter(item => Tools.IsNotNull(item.config?.inputNumberbox)).map(item => item.config.property),
+                        inputSelectbox: this.columns().filter(item => Tools.IsNotNull(item.config?.inputSelectbox)).map(item => item.config.property),
+                        inputDatebox:   this.columns().filter(item => Tools.IsNotNull(item.config?.inputDatebox)).map(item => item.config.property),
+                    }; 
+                
+                    const COLUMNS = this.columns().map(({ config }, index) => ({                           
+                        index, 
+                        property: config.property, 
+                        input: Object.entries(boxTypes).find(([_, props]) => props.includes(config.property))?.[0] ?? ''
+                    })); 
+                
+                    if (COLUMNS.length > 0) {
+                        this.FocusInput(indexRow, COLUMNS[0].index, onlyFocus);
+                    }
+                }
+                
+                else {
+                    const NEXT_INPUT = this._coerGridCellList().find(x => x.id() == this.IdCalculated()(indexRow, indexColumn, 'cell')); 
+                    NEXT_INPUT?.Focus(!onlyFocus); 
+                }
+            } 
+        });
+    }
+
+
+    /** */
+    public FocusLastInput(onlyFocus: boolean = false): void {
+    //     Tools.Sleep().then(() => {
+    //         const boxTypes = {
+    //             'coer-textbox'  : this.columns().filter(x => Tools.IsNotNull(x.config?.coerTextbox)).map(x => x.property.toUpperCase()),
+    //             'coer-numberbox': this.columns().filter(x => Tools.IsNotNull(x.config?.coerNumberbox)).map(x => x.property.toUpperCase()),
+    //             'coer-selectbox': this.columns().filter(x => Tools.IsNotNull(x.config?.coerSelectbox)).map(x => x.property.toUpperCase())
+    //         };
+            
+    //         const COLUMNS = this.columns().map(({ property }, index) => ({                           
+    //             indexColumn: index, 
+    //             property, 
+    //             input: Object.entries(boxTypes).find(([_, props]) => props.includes(property.toUpperCase()))?.[0] ?? ''
+    //         }));
+            
+    //         const indexRow    = (this.value().length > 0) ? (this.value().length - 1) : -1;
+    //         const indexColumn = COLUMNS.filter(x => x.input.length > 0).pop()?.indexColumn || -1;
+            
+    //         if(indexRow >= 0 && indexColumn >= 0) {
+    //             this.FocusInput(indexRow, indexColumn, onlyFocus);
+    //         }       
+    //     });
+    }
 }

@@ -21,6 +21,7 @@
             (onClickAdd)="_Add()"
             (onClickSave)="onClickSave.emit($event)"
             (onKeyupEnter)="onKeyupEnter.emit($event)"
+            (onInputChange)="onInputChange.emit($event)"
             (onClickClear)="onClickClear.emit($event)"
             (onClickSearch)="onClickSearch.emit($event)">
             <ng-content></ng-content>
@@ -37,6 +38,7 @@
             [isLoadingInner]="_isLoadingInner"
             [isLoading]="isLoading()"
             [isEnabled]="_isEnabled()"
+            [useContainer]="useContainer()"
             [height]="`calc(${_height()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [minHeight]="`calc(${minHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [maxHeight]="`calc(${ maxHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
@@ -49,6 +51,7 @@
             (onSelectedRowChange)="_SetValue($event, true)"
             (onSelectedRow)="onSelectedRow.emit($event)"
             (onInputChange)="_SetValueInput($event)"
+            (onKeyupEnter)="onKeyupEnter.emit($event)"
         ></coer-grid-body>
         
         <!-- Footer -->
@@ -60,6 +63,7 @@
             [IdCalculated]="_IdCalculated"
             [footerSettings]="footerSettings()"
             [isLoadingInner]="_isLoadingInner"
+            [isLoading]="isLoading()"
         ></coer-grid-footer>
     </div>
 </section>

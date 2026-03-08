@@ -1,6 +1,6 @@
 @switch(_input()) {
     @case ('inputSwitch') {
-        <div class="inputSwitch"> 
+        <div [class]="_input()"> 
             <coer-switch 
                 [id]="id()"
                 [ngModel]="row()[column().config.property]"
@@ -14,17 +14,67 @@
                 [isLoading]="isLoadingInner()()" 
                 (onValueChange)="_isElementReady() ? onInputChange.emit({
                     position: 'BODY',
-                    element: 'inputSwitch',
+                    input: _input(),
                     property: column().config.property,
                     before: row(),
                     value: $event
                 }): null"
             ></coer-switch> 
         </div>
+    } 
+
+    @case ('inputTextbox') {
+        <div [class]="_input()"> 
+            <coer-textbox
+                [id]="id()"
+                #inputTextbox
+                [ngModel]="row()[column().config.property]"  
+                [icon]="_GetAttributeValue('icon', '')"
+                [isValid]="_GetAttributeValue('isValid', false)"
+                [isInvalid]="_GetAttributeValue('isInvalid', false)"
+                [placeholder]="_GetAttributeValue('placeholder', 'Type...')"
+                [selectOnFocus]="_GetAttributeValue('selectOnFocus', false)"
+                [textPosition]="_GetAttributeValue('textPosition', 'left')"
+                [minLength]="_GetAttributeValue('minLength', 0)"
+                [maxLength]="_GetAttributeValue('maxLength', 50)"
+                (onValueChange)="_isElementReady() ? onInputChange.emit({
+                    position: 'BODY',
+                    input: _input(),
+                    property: column().config.property,
+                    before: row(),
+                    value: $event
+                }): null"
+                (onKeyupEnter)="onKeyupEnter.emit({ 
+                    id: id(),
+                    input: _input(), 
+                    property: column().config.property,
+                    row: row(), 
+                    value: $event
+                })"
+            ></coer-textbox>
+        </div>
+    }
+
+    @case ('inputNumberbox') {
+        <div [class]="_input()">  
+
+        </div>
+    }
+
+    @case ('inputSelectbox') {
+        <div [class]="_input()">  
+
+        </div>
+    }
+
+    @case ('inputDatebox') {
+        <div [class]="_input()">  
+
+        </div>
     }
     
     @default {
-        <div class="default-cell" 
+        <div class="default" 
             [class]="_GetTextColor()"
             [ngStyle]="{ 
                 'justify-content': _GetTextAlignX(),

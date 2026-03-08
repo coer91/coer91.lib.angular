@@ -1,4 +1,4 @@
-@if(!IsBooleanFalse(footerSettings().show)) {
+@if(!IsBooleanFalse(footerSettings().show) && !isLoading()) {
     <footer [id]="IdCalculated()(-1, -1, 'footer-container')">
         <span class="item-selected">
             @if(isLoadingInner()()) {

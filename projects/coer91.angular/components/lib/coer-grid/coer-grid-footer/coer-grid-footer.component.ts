@@ -22,4 +22,5 @@ export class CoerGridFooter<T> {
     public readonly IdCalculated       = input.required<(indexRow: number, indexColumn: number, suffix?: string) => string>();
     public readonly footerSettings     = input.required<IFooterSettings<T>>();
     public readonly isLoadingInner     = input.required<WritableSignal<boolean>>();  
+    public readonly isLoading          = input.required<boolean>();  
 }

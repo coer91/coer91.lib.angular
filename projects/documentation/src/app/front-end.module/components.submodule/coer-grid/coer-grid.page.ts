@@ -18,7 +18,7 @@ export class CoerGridPage extends Page {
     constructor() { 
         super('coer-grid');
 
-        for(let i = 1; i <= 5; i++) { 
+        for(let i = 1; i <= 10; i++) { 
             this.dataSource.update(x => x.concat([{ 
                 id: i, 
                 name: `item ${i}`, 
@@ -45,4 +45,11 @@ export class CoerGridPage extends Page {
     color = (item: ICallbackItem<any>) => {
         return item.row.id % 2 == 0 ? 'dark' : null;
     }
+
+    inputTextbox = (item: ICallbackItem<any>) => ({
+        showInput: true,
+        isValid: item.value.length > 5,
+        isInvalid: item.value.length < 5,
+        selectOnFocus: true
+    })
 }

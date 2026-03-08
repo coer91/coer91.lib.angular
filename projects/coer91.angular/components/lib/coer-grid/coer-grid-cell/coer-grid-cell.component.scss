@@ -6,7 +6,19 @@ div.inputSwitch {
     padding: 5px;
 }
 
-div.default-cell {
+div.inputTextbox {     
+    div.coer-textbox {  
+        border-radius: none !important;
+        background-color: transparent !important;
+        height: 30px !important; 
+
+        div.line {
+            border-color: transparent !important;
+        }
+    }
+}
+
+div.default {
     display: flex !important;  
     align-items: center !important;
     padding: 5px !important; 

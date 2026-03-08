@@ -1,5 +1,7 @@
-import { AfterViewInit, Component, computed, input, output, signal, WritableSignal } from "@angular/core";
-import { IBodySettings, ICallbackItem, IColumnConfig, IInputChange } from "../coer-grid-interfaces";
+import { AfterViewInit, Component, computed, input, output, signal, viewChild, WritableSignal } from "@angular/core";
+import { IBodySettings, ICallbackItem, IInputEnter, IColumnConfig, IInputChange } from "../coer-grid-interfaces";
+import { CoerTextBox } from "../../coer-textbox/coer-textbox.component";
+import { CoerSelectBox } from "../../coer-selectbox/coer-selectbox.component";
 import { Tools } from "coer91.angular/tools";
 
 @Component({
@@ -9,13 +11,19 @@ import { Tools } from "coer91.angular/tools";
     standalone: false
 })
 export class CoerGridCell<T> implements AfterViewInit {
+
+    //Elements   
+    protected readonly coerTextbox   = viewChild<CoerTextBox>('inputTextbox');
+    //protected readonly coerNumberbox = viewChild<CoerNumberBox>('inputNumberbox');
+    protected readonly coerSelectbox = viewChild<CoerSelectBox<T>>('inputSelectbox');
+    //protected readonly coerDatebox   = viewChild<CoerDateBox>('inputDatebox');
    
     //Variables
     protected readonly _isElementReady = signal<boolean>(false);
 
     //Inputs 
     public readonly id             = input.required<string>();
-    public readonly ApplyFormat    = input.required<(value: any, type: 'string' | 'number' | 'currency' | 'date' | 'datetime' | 'time') => string>();
+    public readonly ApplyFormat    = input.required<(value: any, format: 'string' | 'number' | 'currency' | 'date' | 'datetime' | 'time') => string>();
     public readonly column         = input.required<IColumnConfig<T>>();
     public readonly row            = input.required<any>();
     public readonly bodySettings   = input.required<IBodySettings<T>>();
@@ -25,7 +33,8 @@ export class CoerGridCell<T> implements AfterViewInit {
     //Outputs  
     protected readonly onClickRow       = output<T>();
     protected readonly onDoubleClickRow = output<T>(); 
-    protected readonly onInputChange    = output<IInputChange<T>>(); 
+    protected readonly onInputChange    = output<IInputChange<T>>();
+    protected readonly onKeyupEnter     = output<IInputEnter<T>>();  
 
 
     ngAfterViewInit(): void {
@@ -42,11 +51,11 @@ export class CoerGridCell<T> implements AfterViewInit {
  
             this.onDoubleClickRow.emit(ROW);
         }         
-    } 
+    }  
 
 
     /** */
-    public _input = computed<'HTML' | 'coerTextbox' | 'coerNumberbox' | 'coerSelectbox' | 'coerDatebox' | 'inputSwitch'>(() => {
+    public _input = computed<'inputTextbox' | 'inputNumberbox' | 'inputSelectbox' | 'inputDatebox' | 'inputSwitch'>(() => {
         const COLUMN_CONFIG = this.column().config;
         if(Tools.IsNull(COLUMN_CONFIG?.template)) {
             if(this._ShowInput(COLUMN_CONFIG?.inputSwitch)) {
@@ -54,25 +63,25 @@ export class CoerGridCell<T> implements AfterViewInit {
             }
 
             else if(this.isEnabled()) {
-                //     else if(this._ShowInput(COLUMN?.coerTextbox)) {
-                //         return 'coerTextbox';
-                //     }
+                if(this._ShowInput(COLUMN_CONFIG?.inputTextbox)) {
+                    return 'inputTextbox';
+                }
         
-                //     else if(this._ShowInput(COLUMN?.coerNumberbox)) {
-                //         return 'coerNumberbox';
-                //     }
+                else if(this._ShowInput(COLUMN_CONFIG?.inputNumberbox)) {
+                    return 'inputNumberbox';
+                }
         
-                //     else if(this._ShowInput(COLUMN?.coerSelectbox)) {
-                //         return 'coerSelectbox';
-                //     }
-        
-                //     // else if(this._dateboxAttributes()?.showInput) {
-                //     //     return 'coer-datebox';
-                //     // }
+                else if(this._ShowInput(COLUMN_CONFIG?.inputSelectbox)) {
+                    return 'inputSelectbox';
+                } 
+
+                else if(this._ShowInput(COLUMN_CONFIG?.inputDatebox)) {
+                    return 'inputDatebox';
+                } 
             } 
         }
 
-        return 'HTML';
+        return 'HTML' as any;
     });
 
 
@@ -112,7 +121,7 @@ export class CoerGridCell<T> implements AfterViewInit {
         //     }
         // }
 
-        return this.ApplyFormat()(value, this.column().config.type!); 
+        return this.ApplyFormat()(value, this.column().config.format!); 
     }); 
 
 
@@ -196,4 +205,30 @@ export class CoerGridCell<T> implements AfterViewInit {
 
         return 'color-dark';
     });
+
+
+    /** */
+    public Focus(onlyFocus: boolean = false): void {
+        switch(this._input()) {
+            case 'inputTextbox': {
+                this.coerTextbox()?.Focus(onlyFocus);
+                break;
+            }
+
+            case 'inputNumberbox': {
+                //this.coerNumberbox()?.Focus(onlyFocus);
+                break;
+            }
+
+            case 'inputSelectbox': { 
+                this.coerSelectbox()?.Focus(onlyFocus);
+                break;
+            }
+
+            case 'inputDatebox': { 
+                //Tools.Sleep(100).then(_ => this.coerDatebox());
+                break;
+            }
+        }
+    }
 }
