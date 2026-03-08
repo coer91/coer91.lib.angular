@@ -1,5 +1,5 @@
 import { Component, signal, viewChild } from '@angular/core';   
-import { CoerModal, ICallbackItem } from 'coer91.angular/components';
+import { CoerModal, ICallbackItem, ICellSelectBox } from 'coer91.angular/components';
 import { Page } from 'coer91.angular/tools';
 
 @Component({
@@ -15,16 +15,28 @@ export class CoerGridPage extends Page {
     protected readonly dataSource = signal<any[]>([]);
     protected readonly drop = signal<any>(null);
 
+     protected readonly dataSourceSELECTION = signal<any[]>([
+        { id: 1, name: 'option 1' },
+        { id: 2, name: 'option 2' },
+        { id: 3, name: 'option 3' },
+        { id: 4, name: 'option 4' },
+        { id: 5, name: 'option 5' },
+        { id: 6, name: 'option 6' },
+        { id: 7, name: 'option 7' },
+        { id: 8, name: 'option 8' },
+        { id: 9, name: 'option 9' },
+     ]);
+
     constructor() { 
         super('coer-grid');
 
-        for(let i = 1; i <= 100; i++) { 
+        for(let i = 1; i <= 1000; i++) { 
             this.dataSource.update(x => x.concat([{ 
                 id: i, 
                 name: `item ${i}`, 
                 create: true,
-                name2: `item ${i}`, 
                 update: true,
+                case: 'option 8',
                 delete: true 
             }]));
         }
@@ -52,5 +64,18 @@ export class CoerGridPage extends Page {
         isValid: item.value.length > 5,
         isInvalid: item.value.length < 5,
         selectOnFocus: true
+    })
+
+
+    inputSelectbox = (item: ICallbackItem<any>): ICellSelectBox<any> => ({
+        showInput: true,
+        dataSource: this.dataSourceSELECTION(),
+        // isValid: false,
+         isInvalid: item.value == null,
+        // placeholder: '',
+        // selectOnFocus: true,
+        // textPosition: 'center',
+        // displayProperty: 'name',
+        // useIconProperty: true,
     })
 }

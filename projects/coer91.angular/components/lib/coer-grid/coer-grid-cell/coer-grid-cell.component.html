@@ -28,8 +28,7 @@
             <coer-textbox
                 [id]="id()"
                 #inputTextbox
-                [ngModel]="row()[column().config.property]"  
-                [icon]="_GetAttributeValue('icon', '')"
+                [ngModel]="row()[column().config.property]"   
                 [isValid]="_GetAttributeValue('isValid', false)"
                 [isInvalid]="_GetAttributeValue('isInvalid', false)"
                 [placeholder]="_GetAttributeValue('placeholder', 'Type...')"
@@ -63,7 +62,27 @@
 
     @case ('inputSelectbox') {
         <div [class]="_input()">  
-
+            <coer-selectbox
+                [id]="id()"
+                #coerSelectbox
+                [ngModel]="row()[column().config.property]"   
+                [dataSource]="_GetAttributeValue('dataSource', [])"
+                [isValid]="_GetAttributeValue('isValid', false)"
+                [isInvalid]="_GetAttributeValue('isInvalid', false)"
+                [placeholder]="_GetAttributeValue('placeholder', '-- Select --')"
+                [selectOnFocus]="_GetAttributeValue('selectOnFocus', true)"
+                [textPosition]="_GetAttributeValue('textPosition', 'left')"
+                [displayProperty]="_GetAttributeValue('displayProperty', 'name')"
+                [useIconProperty]="_GetAttributeValue('useIconProperty', false)"
+                (onValueChange)="_SelectboxChange($event)"
+                (onKeyupEnter)="onKeyupEnter.emit({ 
+                    id: id(),
+                    input: _input(), 
+                    property: column().config.property,
+                    row: row(), 
+                    value: $event
+                })"
+            ></coer-selectbox>
         </div>
     }
 

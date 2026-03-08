@@ -51,12 +51,8 @@
                 [selectOnFocus]="true"
                 [showSearchButton]="true"
                 [showClearButton]="true"
-                [isLoading]="isLoading() || isLoadingInner()()"
-                (onValueChange)="search().set($event); onInputChange.emit({
-                    position: 'HEADER',
-                    input: 'inputSearch',
-                    value: ($event || '')
-                })"
+                [isLoading]="isLoading() || isLoadingInner()()" 
+                (onValueChange)="_SearchChange($event)"
                 (onKeyupEnter)="onKeyupEnter.emit({
                     position: 'HEADER',
                     input: 'inputSearch',

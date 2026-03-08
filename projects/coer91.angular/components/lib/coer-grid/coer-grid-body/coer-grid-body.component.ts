@@ -45,6 +45,7 @@ export class CoerGridBody<T> {
     protected readonly onInputChange       = output<IInputChange<T>>();
     protected readonly onKeyupEnter        = output<IInputChange<T>>(); 
     protected readonly onKeyupEnterLast    = output<IInputChange<T>>();
+    protected readonly onUpdateType        = output<IInputChange<T>>(); 
 
     //Function
     protected _showStriped = (index: number): boolean => {

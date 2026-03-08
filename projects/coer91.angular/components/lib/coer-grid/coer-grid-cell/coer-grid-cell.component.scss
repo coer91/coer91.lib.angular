@@ -6,14 +6,27 @@ div.inputSwitch {
     padding: 5px;
 }
 
-div.inputTextbox {     
+div.inputTextbox, 
+div.inputSelectbox {     
+    $height: 30px;
+
     div.coer-textbox {  
         border-radius: none !important;
         background-color: transparent !important;
-        height: 30px !important; 
+        height: $height !important; 
 
         div.line {
             border-color: transparent !important;
+        }
+
+        label {
+            span {
+                background-color: transparent !important;
+            }
+        }
+
+        ul {
+            top: $height !important;
         }
     }
 }

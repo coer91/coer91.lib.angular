@@ -197,21 +197,20 @@ export class CoerSelectBox<T> extends CoerTextBox {
         }
 
         finally {  
-            if(Tools.IsNotOnlyWhiteSpace(value)) {
-                let _value = value;
-                if(this._arrayType() === 'string') _value = String(value[this.displayProperty()]);
-                else if(this._arrayType() === 'number') _value = Number(value[this.displayProperty()]); 
+            if(Tools.IsNotOnlyWhiteSpace(value)) {                 
+                if(this._arrayType() === 'string') value = String(value[this.displayProperty()]);
+                else if(this._arrayType() === 'number') value = Number(value[this.displayProperty()]); 
 
                 if(this._useModelBinding()) {
-                    this._UpdateValue()!(_value); 
+                    this._UpdateValue()!(value); 
                 } 
                   
-                this.onValueChange.emit(_value); 
+                this.onValueChange.emit(value);  
             }
             
             this._value.set(value);  
             this._ResetSearch(value);
-            this.Blur();
+            this.Blur(); 
         }
     }
 
@@ -241,7 +240,7 @@ export class CoerSelectBox<T> extends CoerTextBox {
 
 
     /** */
-    public override async Focus(open: boolean = true) {  
+    public override async Focus(open: boolean = true) {   
         if(this._isLoading()) return;
 
         if(this._isEnabled()) {

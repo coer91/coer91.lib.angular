@@ -123,6 +123,7 @@
                                     (onDoubleClickRow)="onDoubleClickRow.emit($event)"
                                     (onInputChange)="onInputChange.emit($event)"
                                     (onKeyupEnter)="_NextInput(row.__index__, column.__index__, $event)"
+                                    (onUpdateType)="onUpdateType.emit($event)"
                                 ></coer-grid-cell>
                             </td>
                         }

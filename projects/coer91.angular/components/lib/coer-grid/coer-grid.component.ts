@@ -33,6 +33,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     public readonly bodySettings   = input<IBodySettings<T>>({}); 
     public readonly footerSettings = input<IFooterSettings<T>>({}); 
     public readonly useContainer   = input<boolean>(true);
+    public readonly icon           = input<string>('');
     public readonly width          = input<string>('100%');
     public readonly minWidth       = input<string>('100px');
     public readonly maxWidth       = input<string>('100%');
@@ -73,10 +74,9 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
 
     //Function
-    protected _SetValueInput(event: IInputChange<T>): void {  
-        if(this._isElementReady() && event.property && event.before) {  
-
-            let delay = ['inputTextbox', 'inputNumberbox', 'inputSearch'].includes(event.input) ? 1000 : 0; 
+    protected _SetValueInput(event: IInputChange<T>, updateType: boolean = false): void {                 
+        if(this._isElementReady() && event.property && event.before) {   
+            let delay = ['inputTextbox', 'inputNumberbox', 'inputSearch'].includes(event.input) ? 1000 : 0;  
 
             Tools.Sleep(delay, `gridUpdating${event.property}`).then(() => {                
                 const BEFORE: any = { ...event.before };    
@@ -102,6 +102,21 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
                 }); 
             });
         }  
+
+        else if(updateType) {
+            const BEFORE: any = { ...event.before }; 
+
+            this._value.update(VALUE => {
+                const DATA_SOURCE: any = [...VALUE];
+                DATA_SOURCE[BEFORE.__index__][event.property!] = event.value; 
+    
+                if(this._useModelBinding()) {
+                    this._UpdateValue()!(DATA_SOURCE); 
+                } 
+    
+                return DATA_SOURCE;
+            });
+        }
     }
 
 
@@ -158,12 +173,32 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     protected _GetColumnConfig = (property: string): IColumn<T> | null => {
         const COLUMN_CONFIG = this.columns().find(x => x.property === property);  
 
-        //coer-switch
+        //inputSwitch
         if(COLUMN_CONFIG?.inputSwitch) {
             COLUMN_CONFIG.short = false;
             COLUMN_CONFIG.width = '100px';
             COLUMN_CONFIG.textAlignX = 'center';
         } 
+
+        //inputTextbox
+        else if(COLUMN_CONFIG?.inputTextbox) { 
+            COLUMN_CONFIG.width = '250px'; 
+        }
+
+        //inputNumberbox
+        else if(COLUMN_CONFIG?.inputNumberbox) { 
+            COLUMN_CONFIG.width = '250px'; 
+        }
+
+        //inputSelectbox
+        else if(COLUMN_CONFIG?.inputSelectbox) { 
+            COLUMN_CONFIG.width = '250px'; 
+        }
+
+        //inputDatebox
+        else if(COLUMN_CONFIG?.inputDatebox) { 
+            COLUMN_CONFIG.width = '250px'; 
+        }
 
         return {
             property, 

@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, input, output, signal, viewChild, WritableSignal } from '@angular/core'; 
+import { AfterViewInit, Component, computed, ElementRef, input, output, signal, viewChild, WritableSignal } from '@angular/core'; 
 import { IInputChange, IHeaderSettings, IImportButton } from '../coer-grid-interfaces';
 import { CoerAlert, Files, Tools } from 'coer91.angular/tools';
 
@@ -7,13 +7,14 @@ import { CoerAlert, Files, Tools } from 'coer91.angular/tools';
     templateUrl: './coer-grid-header.component.html',
     standalone: false
 })
-export class CoerGridHeader<T> { 
+export class CoerGridHeader<T> implements AfterViewInit { 
 
     //Elements
     protected readonly _inputFile = viewChild.required<ElementRef>('inputFileRef');
 
     //Variables
     protected readonly _isLoadingExport = signal<boolean>(false); 
+    protected readonly _isElementReady = signal<boolean>(false);
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace; 
          
     //Input
@@ -37,6 +38,9 @@ export class CoerGridHeader<T> {
     protected readonly onClickClear  = output<IInputChange<T>>();
     protected readonly onClickSearch = output<IInputChange<T>>(); 
 
+    ngAfterViewInit(): void {
+        Tools.Sleep(1000).then(() => this._isElementReady.set(true));
+    } 
 
     //Computed
     protected _buttons = computed(() => {
@@ -199,6 +203,20 @@ export class CoerGridHeader<T> {
 
         catch (error) {
             console.error(`coer-grid: ${error}`);
+        }
+    }
+
+
+    //Function
+    protected _SearchChange(value: string) {  
+        if(this._isElementReady()) {
+            this.search().set(value);
+
+            this.onInputChange.emit({
+                position: 'HEADER',
+                input: 'inputSearch',
+                value: (value || '')
+            });
         }
     }
 }

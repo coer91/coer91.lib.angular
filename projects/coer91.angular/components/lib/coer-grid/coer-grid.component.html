@@ -52,6 +52,7 @@
             (onSelectedRow)="onSelectedRow.emit($event)"
             (onInputChange)="_SetValueInput($event)"
             (onKeyupEnter)="onKeyupEnter.emit($event)"
+            (onUpdateType)="_SetValueInput($event, true)"
         ></coer-grid-body>
         
         <!-- Footer -->

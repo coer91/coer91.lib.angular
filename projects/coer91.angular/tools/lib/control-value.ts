@@ -31,8 +31,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
     protected readonly IsBooleanFalse      = Tools.IsBooleanFalse;  
     
     //Input
-    public readonly value        = input<any>('');
-    public readonly icon         = input<string>('');
+    public readonly value        = input<any>(''); 
     public readonly label        = input<string>('');
     public readonly isLoading    = input<boolean>(false); 
     public readonly isReadonly   = input<boolean>(false);

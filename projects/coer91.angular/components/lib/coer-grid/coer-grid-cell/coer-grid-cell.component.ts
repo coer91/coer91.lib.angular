@@ -15,7 +15,7 @@ export class CoerGridCell<T> implements AfterViewInit {
     //Elements   
     protected readonly coerTextbox   = viewChild<CoerTextBox>('inputTextbox');
     //protected readonly coerNumberbox = viewChild<CoerNumberBox>('inputNumberbox');
-    protected readonly coerSelectbox = viewChild<CoerSelectBox<T>>('inputSelectbox');
+    protected readonly coerSelectbox = viewChild<CoerSelectBox<T>>('coerSelectbox');
     //protected readonly coerDatebox   = viewChild<CoerDateBox>('inputDatebox');
    
     //Variables
@@ -34,10 +34,11 @@ export class CoerGridCell<T> implements AfterViewInit {
     protected readonly onClickRow       = output<T>();
     protected readonly onDoubleClickRow = output<T>(); 
     protected readonly onInputChange    = output<IInputChange<T>>();
-    protected readonly onKeyupEnter     = output<IInputEnter<T>>();  
+    protected readonly onKeyupEnter     = output<IInputEnter<T>>();
+    protected readonly onUpdateType     = output<IInputChange<T>>();  
 
 
-    ngAfterViewInit(): void {
+    ngAfterViewInit(): void { 
         Tools.Sleep(1000).then(() => this._isElementReady.set(true));
     }  
 
@@ -220,8 +221,8 @@ export class CoerGridCell<T> implements AfterViewInit {
                 break;
             }
 
-            case 'inputSelectbox': { 
-                this.coerSelectbox()?.Focus(onlyFocus);
+            case 'inputSelectbox': {  
+                this.coerSelectbox()?.Focus(!onlyFocus);
                 break;
             }
 
@@ -229,6 +230,30 @@ export class CoerGridCell<T> implements AfterViewInit {
                 //Tools.Sleep(100).then(_ => this.coerDatebox());
                 break;
             }
+        }
+    }
+
+
+    /** */
+    protected _SelectboxChange(value: any): void { 
+        if(this._isElementReady()) {
+            this.onInputChange.emit({
+                position: 'BODY',
+                input: this._input(),
+                property: this.column().config.property,
+                before: this.row(),
+                value
+            });
+        }
+        
+        else if(`${value}` != `${this.row()[this.column().config.property]}`) {
+            this.onUpdateType.emit({
+                position: 'BODY',
+                input: this._input(),
+                property: this.column().config.property,
+                before: this.row(),
+                value
+            }); 
         }
     }
 }

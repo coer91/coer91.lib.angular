@@ -59,14 +59,13 @@ export interface ICellNumberBox {
 
 
 export interface ICellSelectBox<T> { 
-    showInput       : boolean; 
-    icon?           : string;
+    showInput       : boolean;  
+    dataSource      : T;
     isValid?        : boolean; 
     isInvalid?      : boolean;
     placeholder?    : string;
     selectOnFocus?  : boolean;
     textPosition?   :'left' | 'center' | 'right'; 
-    dataSource      : T;
     displayProperty?: string;
     useIconProperty?: boolean; 
 }

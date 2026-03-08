@@ -23,6 +23,6 @@ export interface IColumn<T> {
     inputSwitch?:    null | boolean | ((item: ICallbackItem<T>) => ICellSwitch);
     inputTextbox?:   null | boolean | ((item: ICallbackItem<T>) => ICellTextBox);
     inputNumberbox?: null | boolean | ((item: ICallbackItem<T>) => ICellNumberBox);
-    inputSelectbox?: null | boolean | ((item: ICallbackItem<T>) => ICellSelectBox<T>);
+    inputSelectbox?: null | ((item: ICallbackItem<T>) => ICellSelectBox<T>);
     inputDatebox?:   null | boolean | ((item: ICallbackItem<T>) => ICellDateBox);
 } 
