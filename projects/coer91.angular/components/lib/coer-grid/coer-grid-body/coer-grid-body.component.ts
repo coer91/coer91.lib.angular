@@ -365,16 +365,15 @@ export class CoerGridBody<T> {
             }
     
             //Next Column?
-            else {
-                console.log('other')
-        //         for (index = (indexColumn + 1); index < COLUMNS.length; index++) {
-        //             for(const input of COLUMNS) {
-        //                 if(index == input.indexColumn && ['coer-textbox', 'coer-numberbox', 'coer-selectbox'].includes(input.input)) {
-        //                     this.FocusInput(indexRow, input.indexColumn);
-        //                     return;
-        //                 }
-        //             }
-        //         }
+            else { 
+                for (index = (indexColumn + 1); index < COLUMNS.length; index++) {
+                    for(const input of COLUMNS) {
+                        if(index == input.index && ['inputTextbox', 'inputNumberbox', 'inputSelectbox', 'inputDatebox'].includes(input.input)) {
+                            this.FocusInput(indexRow, input.index);
+                            return;
+                        }
+                    }
+                }
             }
         }
     }
@@ -407,7 +406,7 @@ export class CoerGridBody<T> {
                 
                 else {
                     const NEXT_INPUT = this._coerGridCellList().find(x => x.id() == this.IdCalculated()(indexRow, indexColumn, 'cell')); 
-                    NEXT_INPUT?.Focus(!onlyFocus); 
+                    NEXT_INPUT?.Focus(onlyFocus); 
                 }
             } 
         });

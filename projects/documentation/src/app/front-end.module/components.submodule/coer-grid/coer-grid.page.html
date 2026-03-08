@@ -20,6 +20,7 @@
             { property: 'id'  , width: '100px',  textBreak: true,    },
             { property: 'name', inputTextbox },
             { property: 'create'  , inputSwitch: true },
+            { property: 'name2', inputTextbox },
             { property: 'update'  , inputSwitch: true },
             { property: 'delete'  , inputSwitch: true } 
         ]" 
@@ -34,7 +35,7 @@
         [bodySettings]="{
             showStriped: true,
             showBorders: false,
-             
+            focusNext: true,
             selectionRows:  { show: true, selectOverRow: true, selectAllowed: null },
             deleteButton:   { show: true, showConfirmation: false },
             editButton:     { show: true, },
