@@ -17,8 +17,11 @@ export interface IAppSettings {
     security: {
         useJWT: boolean;
     }
-    dateTime: {
-        format: 'MDY' | 'DMY';
+    region: {
+        dateTime: 'MDY' | 'DMY';
+        language: 'es' | 'en';
+        currencyCode: 'MXN' | 'USD' | 'CAD' | 'EUR' | 'KRW' | 'CNY';
+        currency: '$' | '€' | '₩' | '¥';
     },
     navigation: {
         static: boolean; 

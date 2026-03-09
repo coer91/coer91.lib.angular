@@ -90,7 +90,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
             tooltip:    TOOLTIP('importButton'), 
             isLoading:  LOADING('importButton'),
             event: {
-                emit: (() => this.Import())
+                emit: (() => this.Import(null))
             }
         }] : [])       
         .concat(SHOW('addButton') ? [{
@@ -127,17 +127,20 @@ export class CoerGridHeader<T> implements AfterViewInit {
     
 
     /** */
-    public Export(exportFile: boolean = true): void {  
+    public Export(exportFile: boolean = true, fileName: string = ''): void {  
         this.isLoadingInner().set(true);
         this._isLoadingExport.set(true);
         
         //Export File
-        if (exportFile) {
-            const FILE_NAME = (Tools.IsNotOnlyWhiteSpace(this.headerSettings().exportButton?.fileName) 
-                ? this.headerSettings().exportButton?.fileName 
-                : 'Report') + '.xlsx'; 
+        if (exportFile) { 
+            if(fileName.length <= 0) {
+                fileName = Tools.IsNotOnlyWhiteSpace(this.headerSettings().exportButton?.fileName) 
+                    ? this.headerSettings().exportButton?.fileName! : 'Report'; 
+            }
+
+            if(!fileName.endsWith('.xlsx')) fileName += '.xlsx';
         
-            Files.ExportExcel(this.dataSourceExport(), FILE_NAME);
+            Files.ExportExcel(this.dataSourceExport(), fileName);
             this.onClickExport.emit(this.dataSourceExport()); 
             Tools.Sleep(3000).then(() => this._isLoadingExport.set(false)); 
         } 
@@ -152,15 +155,11 @@ export class CoerGridHeader<T> implements AfterViewInit {
 
 
     //Computed
-    protected _importAccept = computed(() => Array.from(Files.EXCEL_EXTENSIONS.values()).join(','));
+    protected _importAccept = computed(() => Array.from(Files.EXCEL_EXTENSIONS.values()).join(',')); 
 
 
     /** */
-    public Import = () => this._Import(null);
-
-
-    //Function
-    protected async _Import(event: any = null): Promise<void> {
+    public async Import(event: any = null): Promise<void> {
         try {
             if (Tools.IsBooleanTrue(this.headerSettings().importButton?.preventDefault) || Tools.IsNotOnlyWhiteSpace(this.headerSettings().importButton?.path)) {
                 this.onClickImport.emit({ data: [], file: null, autofill: false });

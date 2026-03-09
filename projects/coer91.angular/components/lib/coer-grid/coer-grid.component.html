@@ -29,11 +29,14 @@
        
         <!-- Body -->
         <coer-grid-body
+            #body
             [value]="_value()"
             [IdCalculated]="_IdCalculated"
             [ApplyFormat]="_ApplyFormat"
             [columns]="_columns()"
             [dataSourceGroup]="_dataSourceGroup()"
+            [search]="_search()"
+            [headerSettings]="headerSettings()"
             [bodySettings]="bodySettings()"
             [isLoadingInner]="_isLoadingInner"
             [isLoading]="isLoading()"
@@ -53,12 +56,13 @@
             (onInputChange)="_SetValueInput($event)"
             (onKeyupEnter)="onKeyupEnter.emit($event)"
             (onUpdateType)="_SetValueInput($event, true)"
+            (onSort)="_SetValue($event, true); onSort.emit($event);"
         ></coer-grid-body>
         
         <!-- Footer -->
         <coer-grid-footer
             [value]="_value()"
-            [dataSourceSelected]="_dataSourceSelected()"
+            [dataSourceSelected]="selectedValue()"
             [dataSourceFiltered]="_dataSourceFiltered()"
             [search]="_search()"
             [IdCalculated]="_IdCalculated"

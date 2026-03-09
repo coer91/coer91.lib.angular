@@ -94,6 +94,9 @@ declare global {
 
         /** */
         getDiff(date: string | Date, unit?: 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days'): number;
+
+        /** */
+        getTimeSpan(): string;
     }
 }  
 
@@ -216,6 +219,10 @@ Date.prototype.getDiffNow = function(unit: 'milliseconds' | 'seconds' | 'minutes
 
 Date.prototype.getDiff = function(date: string | Date, unit: 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' = 'minutes'): number {
     return Dates.GetDiff(this, date, unit);
+}
+
+Date.prototype.getTimeSpan = function(): string {
+    return Dates.GetTimeSpan(this);
 }
 
 export {}; 

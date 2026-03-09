@@ -220,8 +220,11 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
             useJWT: false,
             ...appSettings?.security
         },
-        dateTime: {
-            format: 'MDY',
+        region: {
+            dateTime: 'MDY', 
+            language: 'en',
+            currencyCode: 'MXN',
+            currency: '$',
             ...appSettings?.dateTime
         },
         navigation: {

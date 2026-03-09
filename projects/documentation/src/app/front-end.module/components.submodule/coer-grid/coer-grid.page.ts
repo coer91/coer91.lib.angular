@@ -30,16 +30,23 @@ export class CoerGridPage extends Page {
     constructor() { 
         super('coer-grid');
 
-        for(let i = 1; i <= 1000; i++) { 
-            this.dataSource.update(x => x.concat([{ 
-                id: i, 
-                name: `item ${i}`, 
-                create: true,
-                update: true,
-                case: 'option 8',
-                delete: true 
-            }]));
-        }
+        // for(let i = 1; i <= 10; i++) { 
+        //     this.dataSource.update(x => x.concat([{ 
+        //         id: i, 
+        //         name: `item ${i}`,  
+        //         case: new Date(),
+        //         case2: new Date(),
+        //         case3: new Date(), 
+        //     }]));
+        // }
+
+        this.dataSource.set([
+            { id: 1, name: 'First',  case: '2026-03-01 00:00:00', case2: '2026-03-01 00:00:00', case3: '2026-03-01 00:00:00' },
+            { id: 2, name: 'Second', case: '2026-03-01 12:00:00', case2: '2026-03-01 12:00:00', case3: '2026-03-01 12:00:00' },
+            { id: 3, name: 'Third',  case: '2026-03-01 00:00:00', case2: '2026-03-01 00:00:00', case3: '2026-03-01 00:00:00' },
+            { id: 4, name: 'Fourth', case: '2026-04-01 00:00:00', case2: '2026-04-01 00:00:00', case3: '2026-04-01 00:00:00' },
+            { id: 5, name: 'Fifth',  case: '2026-03-01 00:00:00', case2: '2026-03-01 00:00:00', case3: '2026-03-01 00:00:00' }
+        ]);
 
         //this.dataSource.update(x => x.concat([{ id: 999999, name: `dfg` }]));
     }
@@ -73,7 +80,6 @@ export class CoerGridPage extends Page {
         // isValid: false,
          isInvalid: item.value == null,
         // placeholder: '',
-        // selectOnFocus: true,
         // textPosition: 'center',
         // displayProperty: 'name',
         // useIconProperty: true,

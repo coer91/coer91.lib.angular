@@ -24,8 +24,11 @@ const appSettings = {
     security: {
         useJWT: false
     },
-    dateTime: {
-        format: 'MDY'
+    region: {
+        dateTime: 'MDY',
+        language: 'en',
+        currencyCode: 'MXN',
+        currency: '$'
     }, 
     navigation: {
         static: true,

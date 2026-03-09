@@ -221,7 +221,7 @@ export class CoerGridCell<T> implements AfterViewInit {
                 break;
             }
 
-            case 'inputSelectbox': {  
+            case 'inputSelectbox': { 
                 this.coerSelectbox()?.Focus(!onlyFocus);
                 break;
             }

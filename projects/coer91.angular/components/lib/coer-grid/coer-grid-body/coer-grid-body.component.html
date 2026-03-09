@@ -35,18 +35,19 @@
 
                 @for(header of columns(); track header.__index__) {
                     <th scope="col" 
-                        (dblclick)="null"
+                        (dblclick)="_ToggleSort(header.config)"
                         [ngStyle]="{ 
                             'width'     : `calc(${header.config.width} - 10px)`,
-                            'text-align': header.config.textAlignX
+                            'text-align': header.config.textAlignX,
+                            'cursor'    : (!IsBooleanFalse(header.config.short) ? 'pointer' : 'default')                        
                         }">                       
                         <div class="th-content">
                             <span>
                                 <span> {{ header.name }} </span> 
-                                <!-- <i [class]="_IconShortHeader(header.config.property)"></i> -->
+                                <i [class]="_IconShortHeader(header.config.property)"></i>
                             </span>
-
-                            <!-- <i [class]="_IconSearchHeader(header.config)"></i> -->
+ 
+                            <i [class]="_IconSearchHeader(header.config)"></i>
                         </div>
                     </th>
                 }

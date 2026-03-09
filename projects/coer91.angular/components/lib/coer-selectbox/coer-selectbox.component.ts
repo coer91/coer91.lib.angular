@@ -86,6 +86,12 @@ export class CoerSelectBox<T> extends CoerTextBox {
         const { key } = event;
 
         if(['ArrowUp', 'ArrowDown'].includes(key)) {
+            if(this._isCollapsed()) {
+                this._isCollapsed.set(false); 
+                this.onOpen.emit(); 
+                return;
+            }
+
             if(key === 'ArrowUp') {
                 const firstIndex = (this._dataSource().length <= 0) ? -1 : 0;
 
@@ -100,7 +106,7 @@ export class CoerSelectBox<T> extends CoerTextBox {
                 } 
             }
     
-            if(key === 'ArrowDown') {
+            if(key === 'ArrowDown') { 
                 const lastIndex = (this._dataSource().length - 1);
 
                 if ((this._index() + 1) <= lastIndex) {
@@ -115,7 +121,12 @@ export class CoerSelectBox<T> extends CoerTextBox {
         const selectedItem = this._dataSource().find(x => x.__index__ == this._index()); 
         this._applySearch.set(true);
 
-        if(['ArrowLeft', 'ArrowRight'].includes(key)) {            
+        if(['ArrowLeft', 'ArrowRight'].includes(key)) {    
+            if(this._isCollapsed()) {
+                this._isCollapsed.set(false); 
+                this.onOpen.emit();
+            }
+
             if(Tools.IsNotOnlyWhiteSpace(this._value())) {
                 Tools.Sleep(0, 'ArrowLeftArrowRight').then(() => {
                     const value = this._value()[this.displayProperty()];
@@ -246,12 +257,13 @@ export class CoerSelectBox<T> extends CoerTextBox {
         if(this._isEnabled()) {
             this._isLoading.set(true);  
             
-            this._htmlElement?.select();
+            if(this.selectOnFocus()) this._htmlElement?.select();
+            else this._htmlElement?.focus();
+
             this._applySearch.set(false);  
             this._isFocused.set(true);
-            await Tools.Sleep();
-
-             
+            await Tools.Sleep(); 
+              
             if(open) {
                 this._isCollapsed.set(false); 
                 this.onOpen.emit(); 

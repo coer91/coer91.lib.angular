@@ -25,12 +25,19 @@ export class Dates {
 
     /** */
     public static ToDate(date: string | Date): Date {  
-        if (Tools.IsOnlyWhiteSpace(date)) return null as any as Date;
+        if (Tools.IsOnlyWhiteSpace(date)) return null as any as Date; 
 
-        if(typeof date === 'string') { 
-            date = Strings.CleanUpBlanks(date.replace(/(?:at|AT|t|T)/g, ' '));
-            date = /\b([01]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?\b/.test(date) ? new Date(date) : new Date(`${date} 00:00:00`);
-            return this.IsValidDate(date) ? date : null as any as Date;
+        if(typeof date === 'string') {              
+            if(this.IsValidDate(date)) { 
+                return /\b([01]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?\b/.test(date)
+                    ? new Date(date) : new Date(`${date} 00:00:00`); 
+            }
+
+            else {
+                date = Strings.CleanUpBlanks(date.replace(/(?:at|AT|t|T)/g, ' '));
+                date = /\b([01]?\d|2[0-3]):[0-5]\d(:[0-5]\d)?\b/.test(date) ? new Date(date) : new Date(`${date} 00:00:00`);
+                return this.IsValidDate(date) ? date : null as any as Date;
+            }            
         }
 
         else return date; 
@@ -93,7 +100,7 @@ export class Dates {
     /** MMM DD, YYYY */
     private static ToFormatDateMDY(date: string | Date): string {  
         const DATE = this.ToDate(date); 
-        if(Tools.IsNull(DATE)) return '';
+        if(Tools.IsNull(DATE)) return ''; 
 
         return `${this.MONTHS.get(DATE.getMonth() + 1)}` + ' ' 
             +  `${DATE.getDate()}`.padStart(2, '0') + ', ' 
@@ -113,15 +120,15 @@ export class Dates {
 
 
     /** */
-    public static ToFormatDate(date: string | Date, format?: 'MDY' | 'DMY'): string {  
-        const DATE = this.ToDate(date); 
-        if(Tools.IsNull(DATE)) return '';
+    public static ToFormatDate(date: string | Date, format?: 'MDY' | 'DMY'): string {          
+        const DATE = this.ToDate(date);  
+        if(Tools.IsNull(DATE)) return ''; 
 
         if(Tools.IsOnlyWhiteSpace(format)) {
             format = Tools.IsNotNull(appSettings)
-                && Tools.IsNotNull(appSettings?.dateTime)
-                && Tools.IsNotOnlyWhiteSpace(appSettings?.dateTime?.format)
-                ? appSettings?.dateTime?.format : 'MDY';
+                && Tools.IsNotNull(appSettings?.region?.dateTime)
+                && Tools.IsNotOnlyWhiteSpace(appSettings?.region?.dateTime)
+                ? appSettings?.region?.dateTime : 'MDY';
         } 
 
         if(format == 'DMY') return this.ToFormatDateDMY(date);
@@ -343,5 +350,16 @@ export class Dates {
             case 'hours':        return Number(Numbers.SetDecimals((this.ToDate(fromDate).getTime() - this.ToDate(toDate).getTime()) / (1000 * 60 * 60), 0));
             case 'days':         return Number(Numbers.SetDecimals((this.ToDate(fromDate).getTime() - this.ToDate(toDate).getTime()) / (1000 * 60 * 60 * 24), 0)); 
         }
+    } 
+
+
+    /** HH:mm:ss */ 
+    public static GetTimeSpan(date: string | Date): string { 
+        const DATE = this.ToDate(date);
+        if(Tools.IsNull(DATE)) return ''; 
+        
+        return `${DATE.getHours()}`.padStart(2, '0') + ':'
+            +  `${DATE.getMinutes()}`.padStart(2, '0') + ':'
+            +  `${DATE.getSeconds()}`.padStart(2, '0')
     } 
 }

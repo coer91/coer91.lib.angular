@@ -1,8 +1,10 @@
 import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IInputChange, IHeaderSettings, IImportButton, ISelectedRow, IFooterSettings } from './coer-grid-interfaces';
-import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, HTMLElements, Strings, Tools } from 'coer91.angular/tools'; 
-import { AfterContentChecked, Component, computed, inject, input, output, signal } from '@angular/core'; 
+import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, Dates, HTMLElements, Numbers, Strings, Tools } from 'coer91.angular/tools'; 
+import { AfterContentChecked, Component, computed, inject, input, output, signal, viewChild } from '@angular/core'; 
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CoerGridHeader } from './coer-grid-header/coer-grid-header.component';
+import { CoerGridBody } from './coer-grid-body/coer-grid-body.component';
 
 @Component({
     selector: 'coer-grid',
@@ -12,11 +14,14 @@ import { Subscription } from 'rxjs';
     standalone: false
 })
 export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
-       
 
     //Injects
     protected readonly _router = inject(Router);
     protected readonly _alert = inject(CoerAlert);
+
+    //Elements
+    protected readonly _header = viewChild<CoerGridHeader<T>>('header'); 
+    protected readonly _body = viewChild<CoerGridBody<T>>('body'); 
     
     //Variables 
     protected override readonly _value = signal<T[]>([]);
@@ -61,6 +66,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     protected readonly onClickNavigateRow  = output<T>();
     protected readonly onSelectedRow       = output<ISelectedRow<T>>();
     protected readonly onInputChange       = output<IInputChange<T>>();
+    protected readonly onSort             = output<T[]>();
 
 
     /** Sets the value of the component */
@@ -210,7 +216,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
             textAlignX: COLUMN_CONFIG?.textAlignX || 'left',
             textAlignY: COLUMN_CONFIG?.textAlignY || 'middle',  
             color:      COLUMN_CONFIG?.color      || null,
-            format:     COLUMN_CONFIG?.format       || 'string'
+            format:     COLUMN_CONFIG?.format     || 'string'
         }  
     }
 
@@ -218,6 +224,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     //Computed
     protected _dataSourceGroup = computed<IDataSourceGroup[]>(() => {
         const DATA_SOURCE = this._dataSourceFiltered(); 
+          
 
         //Response
         return DATA_SOURCE.length > 0 ? [{
@@ -251,8 +258,8 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
                 }), 
                 { ...data }
             )
-        );  
- 
+        );   
+
         DATA_SOURCE_FORMAT = Collections.Search(DATA_SOURCE_FORMAT, SEARCH_TEXT, SEARCH_PROPERTIES);
         return Collections.Intercept(DATA_SOURCE, DATA_SOURCE_FORMAT, '__index__');  
     });
@@ -282,8 +289,8 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     }); 
 
 
-    //Computed
-    protected _dataSourceSelected = computed<T[]>(() => [...this._value() as any[]]
+    /** */
+    public selectedValue = computed<T[]>(() => [...this._value() as any[]]
         .filter(item => item.__checked__)
         .map(({ ...item }) => {
             delete item['__index__'];
@@ -296,12 +303,12 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     //Function
     protected _ApplyFormat = (value: string | number | Date | boolean, type?: 'string' | 'number' | 'currency' | 'date' | 'time' | 'datetime'): string => {
         switch(type) { 
-            // case 'number'  : return Number(value).toNumericFormat();
-            // case 'currency': return Number(value).toCurrency();
-            // case 'date'    : return Dates.ToFormatDate(value);
-            // case 'datetime': return Dates.ToFormatDateTime(value, true);
-            // case 'time'    : return Dates.ToFormatTime(value, true); 
-            default: return Strings.CleanUpBlanks(`${value}`);
+            case 'number'  : return Numbers.ToNumericFormat(`${value}`);
+            case 'currency': return Numbers.ToCurrency(`${value}`);
+            case 'date'    : return Dates.ToFormatDate(`${value}`);
+            case 'datetime': return Dates.ToFormatDateTime(`${value}`, true);
+            case 'time'    : return Dates.ToFormatTime(`${value}`, true); 
+            default        : return Strings.CleanUpBlanks(`${value}`);
         }
     };
 
@@ -366,7 +373,6 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
             height += 50; //Toolbar
             height += 50; //Page Title
             height += 35; //Container
-            height += 15; //Margin Bottom
             return `calc(100vh - ${height}px)`;
         } 
 
@@ -395,7 +401,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     }
     
     
-    /** */
+    //Function
     protected _Add() {
         let row: any = null; 
 
@@ -435,4 +441,40 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
         this.onClickAdd.emit(row);
     }  
+
+
+    /** */
+    public Import(): void {
+        this._header()?.Import();
+    };
+
+
+    /** */
+    public Export(fileName: string = '', exportFile: boolean = true): void { 
+        this._header()?.Export(exportFile, fileName);
+    }
+
+
+    /** */
+    public CheckBy(callback: (row: T) => boolean): void {
+        this._body()?.CheckBy(callback);
+    }
+
+
+    /** */
+    public UncheckBy(callback: (row: T) => boolean): void {
+        this._body()?.UncheckBy(callback);
+    }
+
+
+    /** */
+    public FocusInput(indexRow: number = -1, indexColumn: number = -1, onlyFocus: boolean = false): void {
+        this._body()?.FocusInput(indexRow, indexColumn, onlyFocus);
+    }
+
+
+    /** */
+    public FocusLastInput(onlyFocus: boolean = false): void {
+        this._body()?.FocusLastInput(onlyFocus);
+    }
 }

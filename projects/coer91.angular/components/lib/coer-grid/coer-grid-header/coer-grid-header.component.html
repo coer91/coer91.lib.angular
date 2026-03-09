@@ -23,7 +23,7 @@
                 #inputFileRef 
                 class="display-none"
                 [multiple]="false" 
-                (change)="_Import($event)" 
+                (change)="Import($event)" 
                 (cancel)="isLoadingInner().set(false)"
                 [accept]="_importAccept()">
 

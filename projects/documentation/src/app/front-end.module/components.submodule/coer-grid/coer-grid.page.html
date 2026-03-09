@@ -11,55 +11,41 @@
         [isReadonly]="false"
         [isInvisible]="false"
         [isHidden]="false"
-        [useContainer]="false"
+        [useContainer]="true"
         label="Componentes triple Action"
         icon="i91-home-door-fill"
-        height="400px"
+        height="full"
         marginLeft="30px"
         [columns]="[
-            { property: 'id'  , width: '100px',  textBreak: true,    },
-            { property: 'name', inputTextbox },
-            { property: 'case' , inputSelectbox }, 
-            { property: 'create'  , inputSwitch: true },
-            { property: 'update'  , inputSwitch: true },
-            { property: 'delete'  , inputSwitch: true },
+            { property: 'id'  , width: '100px',  textBreak: true, format: 'currency'   },
+            { property: 'name' },
+            { property: 'case'    , format: 'date'  }, 
+            { property: 'case2'    , format: 'datetime'  }, 
+            { property: 'case3'    , format: 'time'  }, 
         ]" 
         [headerSettings]="{   
             exportButton: { show: true, fileName: 'ddddd' },
             importButton: { show: true, },
             addButton:    { show: true  },
             saveButton:   { show: true, },
-            search:       { show: true, properties: ['name'], preventDefault: false },
+            search:       { show: true, properties: null, preventDefault: false },
             slotPosition: 'left'
         }"
-        [bodySettings]="{
+        [bodySettings]="{            
             showStriped: true,
             showBorders: false,
             focusNext: true,
-            selectionRows:  { show: true, selectOverRow: true, selectAllowed: null },
-            deleteButton:   { show: true, showConfirmation: false },
-            editButton:     { show: true, },
-            modalButton:    { show: true, },
-            navigateButton: { show: true, },
+            selectionRows:  { show: false, selectOverRow: true, selectAllowed: null },
+            deleteButton:   { show: false, showConfirmation: false },
+            editButton:     { show: false, },
+            modalButton:    { show: false, },
+            navigateButton: { show: false, },
         }" 
+        [footerSettings]="{
+            show: true,
+        }"
       
     >
  
         
     </coer-grid>
-
-{{ dataSource() | json }}
-
-
-<!-- <coer-selectbox 
-            [(ngModel)]="drop"
-            [dataSource]="[
-                { id: 1, name: 'one' },
-                { id: 2, name: 'two' },
-                { id: 3, name: 'three' },
-                { id: 4, name: 'four' },
-                { id: 5, name: 'five' },
-                { id: 6, name: 'six' },
-                { id: 7, name: 'seven' }
-            ]"
-        ></coer-selectbox> -->

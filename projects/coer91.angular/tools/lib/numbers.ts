@@ -1,4 +1,5 @@
-/** Provides several methods for string manipulation */
+declare const appSettings: any;
+
 export class Numbers {  
 
     /** */
@@ -52,7 +53,8 @@ export class Numbers {
     
     
     /** */
-    public static ToCurrency(value: string | number | null | undefined, symbol: string = '$', currency: string = ''): string { 
-        return `${symbol}${this.ToNumericFormat(value, 2)}${currency.length > 0 ? ` ${currency}` : ''}`;
+    public static ToCurrency(value: string | number | null | undefined, currency: string = '', currencyCode: string = ''): string { 
+        if(currency.length <= 0) currency = appSettings?.region?.currency || '$';
+        return `${currency}${this.ToNumericFormat(value, 2)}${currencyCode.length > 0 ? ` ${currencyCode}` : ''}`;
     }
 }

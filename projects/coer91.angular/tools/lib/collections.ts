@@ -1,4 +1,5 @@
 //import { Dates } from "./dates"; 
+import { Dates } from "./dates";
 import { Tools } from "./generic";
 import { Strings } from "./strings";
  
@@ -117,91 +118,91 @@ export class Collections {
 
 
     /** */
-    // public static SortAsc<T>(array: T[], property: string | null = null): T[] {
-    //     return [...this._Sort(array, property, 'ascending')]; 
-    // }
-
-
-    // /** */
-    // public static SortDesc<T>(array: T[], property: string | null = null): T[] {
-    //     return [...this._Sort(array, property, 'descending')]; 
-    // }
+    public static SortAsc<T>(array: T[], property: string | null = null): T[] {
+        return [...this._Sort(array, property, 'ascending')]; 
+    }
 
 
     /** */
-    // private static _Sort<T>(array: T[], property: string | null = null, direction: 'ascending' | 'descending' = 'ascending'): T[] {
-    //     try {
-    //         if(!Array.isArray(array) || array.length <= 0) return [];  
+    public static SortDesc<T>(array: T[], property: string | null = null): T[] {
+        return [...this._Sort(array, property, 'descending')]; 
+    }
 
-    //         const TYPE = typeof array[0];
-    //         if(['string', 'number', 'bigint', 'boolean'].includes(TYPE)) {  
-    //             if(['string', 'boolean'].includes(TYPE)) {
-    //                 return direction == 'ascending' 
-    //                     ? array.sort((x: any, y: any) => String(x).localeCompare(String(y)))
-    //                     : array.sort((x: any, y: any) => String(y).localeCompare(String(x)));
-    //             }
 
-    //             else if(['number', 'bigint'].includes(TYPE)) {
-    //                 const CLEANER = (val: any) => Number.isNaN(Number(val)) ? 0: Number(val);
-    //                 return direction == 'ascending'
-    //                     ? array.sort((x: any, y: any) => CLEANER(x) - CLEANER(y))
-    //                     : array.sort((x: any, y: any) => CLEANER(y) - CLEANER(x));
-    //             }
-    //         } 
+    /** */
+    private static _Sort<T>(array: T[], property: string | null = null, direction: 'ascending' | 'descending' = 'ascending'): T[] {
+        try {
+            if(!Array.isArray(array) || array.length <= 0) return [];  
 
-    //         if(TYPE === 'object') {  
-    //             if(Dates.IsValidDate(String(array[0]))) {
-    //                 const CLEANER = (val: any) => Dates.IsValidDate(val) ? (Dates.ToDate(val)?.getTime() || 0) : 0;
-    //                 return direction === 'ascending'
-    //                     ? array.sort((x: any, y: any) => CLEANER(x) - CLEANER(y))
-    //                     : array.sort((x: any, y: any) => CLEANER(y) - CLEANER(x));
-    //             }                
+            const TYPE = typeof array[0];
+            if(['string', 'number', 'bigint', 'boolean'].includes(TYPE)) {  
+                if(['string', 'boolean'].includes(TYPE)) {
+                    return direction == 'ascending' 
+                        ? array.sort((x: any, y: any) => String(x).localeCompare(String(y)))
+                        : array.sort((x: any, y: any) => String(y).localeCompare(String(x)));
+                }
 
-    //             else if(Tools.IsNotOnlyWhiteSpace(property)) {
-    //                 const PROPERTY = String(property);
-    //                 const PROPERTY_TYPE = typeof (array[0] as any)[PROPERTY]; 
+                else if(['number', 'bigint'].includes(TYPE)) {
+                    const CLEANER = (val: any) => Number.isNaN(Number(val)) ? 0: Number(val);
+                    return direction == 'ascending'
+                        ? array.sort((x: any, y: any) => CLEANER(x) - CLEANER(y))
+                        : array.sort((x: any, y: any) => CLEANER(y) - CLEANER(x));
+                }
+            } 
 
-    //                 if(['string', 'number', 'bigint', 'boolean'].includes(PROPERTY_TYPE)) { 
-    //                     if(['string', 'boolean'].includes(PROPERTY_TYPE)) { 
-    //                         return direction == 'ascending'
-    //                             ? array.sort((x: any, y: any) => String(x[PROPERTY]).localeCompare(String(y[PROPERTY])))
-    //                             : array.sort((x: any, y: any) => String(y[PROPERTY]).localeCompare(String(x[PROPERTY])));
-    //                     }
+            if(TYPE === 'object') {  
+                if(Dates.IsValidDate(String(array[0]))) {
+                    const CLEANER = (val: any) => Dates.IsValidDate(val) ? (Dates.ToDate(val)?.getTime() || 0) : 0;
+                    return direction === 'ascending'
+                        ? array.sort((x: any, y: any) => CLEANER(x) - CLEANER(y))
+                        : array.sort((x: any, y: any) => CLEANER(y) - CLEANER(x));
+                }                
+
+                else if(Tools.IsNotOnlyWhiteSpace(property)) {
+                    const PROPERTY = String(property);
+                    const PROPERTY_TYPE = typeof (array[0] as any)[PROPERTY]; 
+
+                    if(['string', 'number', 'bigint', 'boolean'].includes(PROPERTY_TYPE)) { 
+                        if(['string', 'boolean'].includes(PROPERTY_TYPE)) { 
+                            return direction == 'ascending'
+                                ? array.sort((x: any, y: any) => String(x[PROPERTY]).localeCompare(String(y[PROPERTY])))
+                                : array.sort((x: any, y: any) => String(y[PROPERTY]).localeCompare(String(x[PROPERTY])));
+                        }
                     
-    //                     else if(['number', 'bigint'].includes(PROPERTY_TYPE)) {
-    //                         const CLEANER = (val: any) => Number.isNaN(Number(val)) ? 0: Number(val);
-    //                         return direction == 'ascending'
-    //                             ? array.sort((x: any, y: any) => CLEANER(x[PROPERTY]) - CLEANER(y[PROPERTY]))
-    //                             : array.sort((x: any, y: any) => CLEANER(y[PROPERTY]) - CLEANER(x[PROPERTY]));
-    //                     }
-    //                 } 
+                        else if(['number', 'bigint'].includes(PROPERTY_TYPE)) {
+                            const CLEANER = (val: any) => Number.isNaN(Number(val)) ? 0: Number(val);
+                            return direction == 'ascending'
+                                ? array.sort((x: any, y: any) => CLEANER(x[PROPERTY]) - CLEANER(y[PROPERTY]))
+                                : array.sort((x: any, y: any) => CLEANER(y[PROPERTY]) - CLEANER(x[PROPERTY]));
+                        }
+                    } 
 
-    //                 else if(PROPERTY_TYPE === 'object') {  
-    //                     if(Dates.IsValidDate(String((array[0] as any)[PROPERTY]))) {
-    //                         const CLEANER = (val: any) => Dates.IsValidDate(val) ? (Dates.ToDate(val)?.getTime() || 0) : 0;
-    //                         return direction === 'ascending'
-    //                             ? array.sort((x: any, y: any) => CLEANER(x[PROPERTY]) - CLEANER(y[PROPERTY]))
-    //                             : array.sort((x: any, y: any) => CLEANER(y[PROPERTY]) - CLEANER(x[PROPERTY]));
-    //                     } 
-    //                 }
-    //             } 
+                    else if(PROPERTY_TYPE === 'object') {  
+                        if(Dates.IsValidDate(String((array[0] as any)[PROPERTY]))) {
+                            const CLEANER = (val: any) => Dates.IsValidDate(val) ? (Dates.ToDate(val)?.getTime() || 0) : 0;
+                            return direction === 'ascending'
+                                ? array.sort((x: any, y: any) => CLEANER(x[PROPERTY]) - CLEANER(y[PROPERTY]))
+                                : array.sort((x: any, y: any) => CLEANER(y[PROPERTY]) - CLEANER(x[PROPERTY]));
+                        } 
+                    }
+                } 
 
-    //             else {
-    //                 console.warn('Sort: property is required');
-    //                 return array;  
-    //             }
-    //         }
+                else {
+                    console.warn('Sort: property is required');
+                    return array;  
+                }
+            }
 
-    //         console.warn('Sort: unsupported data type');
+            console.warn('Sort: unsupported data type');
              
-    //         return array;    
-    //     } 
+            return array;    
+        } 
 
-    //     catch (error) {
-    //         console.warn(error);
-    //         return array;
-    //     }
-    // }
+        catch (error) {
+            console.warn(error);
+            return array;
+        }
+    }
 
 
     /** */

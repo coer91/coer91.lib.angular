@@ -1,7 +1,7 @@
-import { IBodySettings, ICallbackItem, IColumnConfig, IDataSourceGroup, IInputChange, IInputEnter, ISelectedRow } from "../coer-grid-interfaces";
+import { IBodySettings, ICallbackItem, IColumn, IColumnConfig, IDataSourceGroup, IHeaderSettings, IInputChange, IInputEnter, ISelectedRow, ISort } from "../coer-grid-interfaces";
 import { Component, computed, input, output, signal, viewChildren, WritableSignal } from "@angular/core";
-import { Tools } from "coer91.angular/tools";
 import { CoerGridCell } from "../coer-grid-cell/coer-grid-cell.component";
+import { Collections, Dates, Tools } from "coer91.angular/tools"; 
 
 @Component({
     selector: 'coer-grid-body',
@@ -15,6 +15,7 @@ export class CoerGridBody<T> {
     protected readonly _coerGridCellList = viewChildren(CoerGridCell<T>); 
 
     //Variables
+    protected readonly _sort = signal<ISort>({ property: '', direction: 'none', icon: '' });
     protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
     protected readonly _checkAll = signal<boolean>(false);
 
@@ -24,11 +25,13 @@ export class CoerGridBody<T> {
     public readonly ApplyFormat     = input.required<(value: any, type: 'string' | 'number' | 'currency' | 'date' | 'datetime' | 'time') => string>();
     public readonly columns         = input.required<IColumnConfig<T>[]>();
     public readonly dataSourceGroup = input.required<IDataSourceGroup[]>();
+    public readonly headerSettings  = input.required<IHeaderSettings>();
     public readonly bodySettings    = input.required<IBodySettings<T>>();
     public readonly isLoadingInner  = input.required<WritableSignal<boolean>>();
     public readonly isLoading       = input.required<boolean>();
     public readonly isEnabled       = input.required<boolean>();   
     public readonly useContainer    = input.required<boolean>();
+    public readonly search          = input.required<string>();
     public readonly height          = input.required<string>();
     public readonly minHeight       = input.required<string>();
     public readonly maxHeight       = input.required<string>(); 
@@ -46,6 +49,7 @@ export class CoerGridBody<T> {
     protected readonly onKeyupEnter        = output<IInputChange<T>>(); 
     protected readonly onKeyupEnterLast    = output<IInputChange<T>>();
     protected readonly onUpdateType        = output<IInputChange<T>>(); 
+    protected readonly onSort              = output<T[]>();
 
     //Function
     protected _showStriped = (index: number): boolean => {
@@ -175,6 +179,23 @@ export class CoerGridBody<T> {
     }
 
 
+    //Computed
+    protected _IconShortHeader = (property: string) => {
+        return this._sort().property.equals(property) ? this._sort().icon : '';
+    }
+
+
+    //Computed
+    protected _IconSearchHeader = (column: IColumn<T>) => { 
+        return this.headerSettings().search?.show 
+            && !Tools.IsBooleanTrue(this.headerSettings().search?.preventDefault)
+            && Tools.IsNotOnlyWhiteSpace(this.search())
+            && Tools.IsNull(column?.inputSwitch)
+            && (Tools.IsNull(this.headerSettings().search?.properties) || this.headerSettings().search!.properties!.length <= 0 || this.headerSettings().search!.properties!.includes(column.property)) 
+            ? 'i91-search' : '';
+    }  
+
+
     //Function
     protected _ClickOnRow(row: any): void { 
         if(!this.isEnabled()) return; 
@@ -192,7 +213,7 @@ export class CoerGridBody<T> {
     } 
 
 
-    /** */
+    //Function
     protected async _ClickCheckAll(checked: boolean): Promise<void> {   
         this.isLoadingInner().set(true); 
         const DATA_SOURCE: any[] = [...this.value()].map(item => ({ ...item, __checked__: checked }));
@@ -211,7 +232,7 @@ export class CoerGridBody<T> {
     } 
 
 
-    /** */
+    //Function
     protected _ClickCheck(checked: boolean, row: any): void {  
         if(checked) this.CheckBy((x: any) => x.__index__ == row.__index__);
         else this.UncheckBy((x: any) => x.__index__ == row.__index__);
@@ -296,7 +317,7 @@ export class CoerGridBody<T> {
     } 
 
 
-    /** */
+    //Function
     protected _NextInput(indexRow: number, indexColumn: number, event: IInputEnter<T>): void {
 
         const ROW = { ...event.row } as any;
@@ -416,25 +437,110 @@ export class CoerGridBody<T> {
 
     /** */
     public FocusLastInput(onlyFocus: boolean = false): void {
-    //     Tools.Sleep().then(() => {
-    //         const boxTypes = {
-    //             'coer-textbox'  : this.columns().filter(x => Tools.IsNotNull(x.config?.coerTextbox)).map(x => x.property.toUpperCase()),
-    //             'coer-numberbox': this.columns().filter(x => Tools.IsNotNull(x.config?.coerNumberbox)).map(x => x.property.toUpperCase()),
-    //             'coer-selectbox': this.columns().filter(x => Tools.IsNotNull(x.config?.coerSelectbox)).map(x => x.property.toUpperCase())
-    //         };
+        Tools.Sleep().then(() => {
+            const boxTypes = {
+                inputTextbox  : this.columns().filter(item => Tools.IsNotNull(item.config?.inputTextbox)).map(item => item.config.property),
+                inputNumberbox: this.columns().filter(item => Tools.IsNotNull(item.config?.inputNumberbox)).map(item => item.config.property),
+                inputSelectbox: this.columns().filter(item => Tools.IsNotNull(item.config?.inputSelectbox)).map(item => item.config.property),
+                inputDatebox:   this.columns().filter(item => Tools.IsNotNull(item.config?.inputDatebox)).map(item => item.config.property),
+            }; 
             
-    //         const COLUMNS = this.columns().map(({ property }, index) => ({                           
-    //             indexColumn: index, 
-    //             property, 
-    //             input: Object.entries(boxTypes).find(([_, props]) => props.includes(property.toUpperCase()))?.[0] ?? ''
-    //         }));
+            const COLUMNS = this.columns().map(({ config }, index) => ({                           
+                index, 
+                property: config.property, 
+                input: Object.entries(boxTypes).find(([_, props]) => props.includes(config.property))?.[0] ?? ''
+            }));
             
-    //         const indexRow    = (this.value().length > 0) ? (this.value().length - 1) : -1;
-    //         const indexColumn = COLUMNS.filter(x => x.input.length > 0).pop()?.indexColumn || -1;
+            const indexRow    = (this.value().length > 0) ? (this.value().length - 1) : -1;
+            const indexColumn = COLUMNS.filter(x => x.input.length > 0).pop()?.index || -1;
             
-    //         if(indexRow >= 0 && indexColumn >= 0) {
-    //             this.FocusInput(indexRow, indexColumn, onlyFocus);
-    //         }       
-    //     });
+            if(indexRow >= 0 && indexColumn >= 0) {
+                this.FocusInput(indexRow, indexColumn, onlyFocus);
+            }       
+        });
+    }
+
+
+    /** */
+    protected async _ToggleSort(column: IColumn<T>): Promise<void> {        
+        if (!Tools.IsBooleanFalse(column?.short)) {   
+            if(this.isLoadingInner()()) return;
+
+            this.isLoadingInner().set(true);
+            const { direction } = this._sort(); 
+
+            let PROPERTY = column.property;
+            let DATA_SOURCE: any[] = [];
+
+            switch(column?.format) {
+                case 'number': {
+                    DATA_SOURCE = [...this.value()].map((item: any) => ({ 
+                        ...item, 
+                        [PROPERTY]: Number(item[PROPERTY]) 
+                    }));
+                    break
+                }
+
+                case 'currency': {
+                    DATA_SOURCE = [...this.value()].map((item: any) => ({ 
+                        ...item, 
+                        [PROPERTY]: Number(String(item[PROPERTY]).replace('$', '')) 
+                    }));
+                    break
+                }
+
+                case 'date': {
+                    DATA_SOURCE = [...this.value()].map((item: any) => ({ 
+                        ...item, 
+                        [PROPERTY]: Dates.IsValidDate(item[PROPERTY]) ? item[PROPERTY] : Dates.ToFormatDB(String(item[PROPERTY])) 
+                    }));
+                    break
+                }
+
+                case 'datetime': {
+                    DATA_SOURCE = [...this.value()].map((item: any) => ({ 
+                        ...item, 
+                        [PROPERTY]: Dates.IsValidDate(item[PROPERTY]) ? item[PROPERTY] : Dates.ToFormatDB(String(item[PROPERTY])) 
+                    }));
+                    break
+                }
+
+                case 'time': {
+                    DATA_SOURCE = [...this.value()].map((item: any) => ({ 
+                        ...item, 
+                        [PROPERTY]: Dates.IsValidDate(item[PROPERTY]) ? item[PROPERTY] : Dates.ToFormatDB(String(item[PROPERTY])), 
+                        __time__: Dates.IsValidDate(item[PROPERTY]) ? `2026-01-01 ${Dates.GetTimeSpan(item[PROPERTY])}` : `2026-01-01 ${Dates.GetTimeSpan(String(item[PROPERTY]))}`
+                    }));
+
+                    PROPERTY = '__time__';
+                    break
+                }
+
+                default: {
+                    DATA_SOURCE = [...this.value()].map((item: any) => ({ ...item, [PROPERTY]: String(item[PROPERTY]) }));
+                    break;
+                } 
+            } 
+
+            if (direction == 'descendant') {  
+                this.onSort.emit(Collections.SortAsc(DATA_SOURCE, PROPERTY));               
+
+                this._sort.set({ 
+                    property: column.property, 
+                    direction: 'ascendant', 
+                    icon: 'i91-sort-asc-arrow-down' 
+                });
+            }
+
+            else {
+                this.onSort.emit(Collections.SortDesc(DATA_SOURCE, PROPERTY));  
+
+                this._sort.set({ 
+                    property: column.property, 
+                    direction: 'descendant', 
+                    icon: 'i91-sort-desc-arrow-down' 
+                });
+            }  
+        }
     }
 }

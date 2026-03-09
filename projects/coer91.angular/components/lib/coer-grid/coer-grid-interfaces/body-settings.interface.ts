@@ -33,3 +33,10 @@ export interface ISelectionRow {
     selectAllowed?: number | null;
     selectOverRow?: boolean;
 }
+
+
+export interface ISort {
+    property: string;
+    direction: 'ascendant' | 'descendant' | 'none';
+    icon: string;
+}
