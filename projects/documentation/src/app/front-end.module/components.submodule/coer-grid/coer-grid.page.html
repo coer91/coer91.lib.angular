@@ -18,10 +18,8 @@
         marginLeft="30px"
         [columns]="[
             { property: 'id'  , width: '100px',  textBreak: true, format: 'currency'   },
+            { property: 'option'    , inputSelectbox  },  
             { property: 'name' },
-            { property: 'case'    , format: 'date'  }, 
-            { property: 'case2'    , format: 'datetime'  }, 
-            { property: 'case3'    , format: 'time'  }, 
         ]" 
         [headerSettings]="{   
             exportButton: { show: true, fileName: 'ddddd' },

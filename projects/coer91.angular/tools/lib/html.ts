@@ -74,7 +74,7 @@ export class HTMLElements {
 
     /** */
     public static ScrollToElement = (element: string | HTMLElement, toView: 'start' | 'center' | 'end' | 'nearest' = 'nearest'): HTMLElement | null => { 
-        const HTML_ELEMENT = this._QuerySelector(element);   
+        const HTML_ELEMENT = this._QuerySelector(element);    
         HTML_ELEMENT?.scrollIntoView({ block: toView, behavior: 'smooth' });
         return HTML_ELEMENT;
     }

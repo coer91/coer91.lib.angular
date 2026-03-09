@@ -74,6 +74,7 @@
                 [textPosition]="_GetAttributeValue('textPosition', 'left')"
                 [displayProperty]="_GetAttributeValue('displayProperty', 'name')"
                 [useIconProperty]="_GetAttributeValue('useIconProperty', false)"
+                (onOpen)="coerSelectbox.ScrollToElement(350, 'end')"
                 (onValueChange)="_SelectboxChange($event)"
                 (onKeyupEnter)="onKeyupEnter.emit({ 
                     id: id(),

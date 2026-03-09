@@ -327,5 +327,5 @@ export class CoerSelectBox<T> extends CoerTextBox {
         }
 
         return Tools.IsNotOnlyWhiteSpace(item) ? Tools.BreakReference(item) : null;
-    }  
+    }   
 }

@@ -291,6 +291,17 @@ export class CoerTextBox extends ControlValue {
     } 
 
 
+    /** */
+    public ScrollToElement(delay: number = 0, toView: 'start' | 'center' | 'end' | 'nearest' = 'nearest'): void { 
+        Tools.Sleep(delay).then(() => {
+            let element = HTMLElements.SelectElementById(`#${this._id}-options`);
+            if(Tools.IsNull(element)) element = HTMLElements.SelectElementById(`#${this._id}-container`); 
+            if(element) HTMLElements.ScrollToElement(element, toView);
+            
+        }); 
+    } 
+
+
     //Functions For selectbox
     protected _placeholder = computed<string>(() => '');  
     protected _GetIconBySelect = (item: any): string => item; 
