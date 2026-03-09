@@ -1,5 +1,5 @@
 import { Component, computed, effect, EffectRef, input, signal } from '@angular/core';
-import { CONTROL_VALUE, Tools } from 'coer91.angular/tools';
+import { CONTROL_VALUE, Numbers, Tools } from 'coer91.angular/tools';
 import { CoerTextBox } from '../coer-textbox/coer-textbox.component';
 
 @Component({
@@ -19,6 +19,7 @@ export class CoerNumberBox extends CoerTextBox {
     //Inputs
     public override readonly minLength = input<number | string>(0);
     public override readonly maxLength = input<number | string>(20);
+    public readonly format       = input<'none' | 'number' | 'currency'>('number'); 
     public readonly decimals     = input<number>(0); 
     public readonly step         = input<number>(1);
     public readonly showStepIcon = input<boolean>(true);
@@ -48,10 +49,31 @@ export class CoerNumberBox extends CoerTextBox {
     }); 
 
 
+    //Computed
+    protected override _ValueFormat = computed<string>(() => {
+        switch(this.format()) {
+            case 'number'  : return Numbers.ToNumericFormat(this._value());
+            case 'currency': return Numbers.ToCurrency(this._value());
+            default: return `${this._value()}`;
+        }
+    });
+
+
     //Function
     protected override _onKeydown = (event: KeyboardEvent) => {   
         if (event.key === 'ArrowUp')   this._IncrementStep();
         if (event.key === 'ArrowDown') this._DecrementStep();
+    } 
+
+
+    //Function
+    protected override _onBlur = () => {
+        const VALUE = String(this._value());
+        if(['-', '-0'].includes(VALUE) || VALUE.endsWith('.')) {
+            this._Input(0);  
+        }
+
+        this.Blur();
     } 
 
 
@@ -90,6 +112,7 @@ export class CoerNumberBox extends CoerTextBox {
     protected override _DecrementStep(): void { 
         if (this._isEnabled()) { 
             if(!this._isFocused()) this.Focus();
+            this._isFocused.set(true);
             let VALUE = !Number.isNaN(this._value()) ? Number(this._value()) : 0; 
  
             if(this.decimals() <= 0) VALUE -= this._step();

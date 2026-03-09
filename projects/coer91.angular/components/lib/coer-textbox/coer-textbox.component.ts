@@ -186,7 +186,7 @@ export class CoerTextBox extends ControlValue {
         if(this.isValid() || this.isInvalid()) padding += 20; 
 
         if(this._isSelectComponent()) padding += 20;
-        else if(this._isNumberComponent()) padding += 20;
+        else if(this._isNumberComponent() && this._showStepIcon()) padding += 20;
 
         if(padding == 30) padding += 5; 
         if(padding == 50) padding += 10; 
@@ -265,7 +265,7 @@ export class CoerTextBox extends ControlValue {
 
 
     /** */
-    public Focus(select: boolean = false): void {
+    public Focus(select: boolean = false): void { 
         if(this._isEnabled()) {
             this._htmlElement?.focus();
             if(select) this._htmlElement?.select();         
@@ -302,5 +302,6 @@ export class CoerTextBox extends ControlValue {
 
     //Functions For numberbox
     protected _IncrementStep(): void {}
-    protected _DecrementStep(): void {}
+    protected _DecrementStep(): void {} 
+    protected _ValueFormat = computed<string>(() => `${this._value()}`);
 }

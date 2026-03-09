@@ -43,7 +43,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     public readonly minWidth       = input<string>('100px');
     public readonly maxWidth       = input<string>('100%');
     public readonly height         = input<string>('350px');
-    public readonly minHeight      = input<string>('150px');
+    public readonly minHeight      = input<string>('330px');
     public readonly maxHeight      = input<string>('100%');
 
     public override readonly marginTop   = input<string>('15px');
@@ -193,7 +193,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
         //inputNumberbox
         else if(COLUMN_CONFIG?.inputNumberbox) { 
-            COLUMN_CONFIG.width = '250px'; 
+            COLUMN_CONFIG.width = '150px'; 
         }
 
         //inputSelectbox

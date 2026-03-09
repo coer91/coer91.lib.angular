@@ -2,6 +2,7 @@ import { AfterViewInit, Component, computed, input, output, signal, viewChild, W
 import { IBodySettings, ICallbackItem, IInputEnter, IColumnConfig, IInputChange } from "../coer-grid-interfaces";
 import { CoerTextBox } from "../../coer-textbox/coer-textbox.component";
 import { CoerSelectBox } from "../../coer-selectbox/coer-selectbox.component";
+import { CoerNumberBox } from "../../coer-numberbox/coer-numberbox.component";
 import { Tools } from "coer91.angular/tools";
 
 @Component({
@@ -14,7 +15,7 @@ export class CoerGridCell<T> implements AfterViewInit {
 
     //Elements   
     protected readonly coerTextbox   = viewChild<CoerTextBox>('inputTextbox');
-    //protected readonly coerNumberbox = viewChild<CoerNumberBox>('inputNumberbox');
+    protected readonly coerNumberbox = viewChild<CoerNumberBox>('inputNumberbox');
     protected readonly coerSelectbox = viewChild<CoerSelectBox<T>>('coerSelectbox');
     //protected readonly coerDatebox   = viewChild<CoerDateBox>('inputDatebox');
    
@@ -216,8 +217,8 @@ export class CoerGridCell<T> implements AfterViewInit {
                 break;
             }
 
-            case 'inputNumberbox': {
-                //this.coerNumberbox()?.Focus(onlyFocus);
+            case 'inputNumberbox': { 
+                this.coerNumberbox()?.Focus(onlyFocus);
                 break;
             }
 

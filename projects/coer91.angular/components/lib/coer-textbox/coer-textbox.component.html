@@ -39,7 +39,22 @@
             paddingLeft:  _paddingLeft(),
             paddingRight: _paddingRight(), 
             'text-align': textPosition()
-        }">  
+        }"> 
+        
+    @if(_isNumberComponent() && !_isFocused()) {
+        <input [type]="_inputType()"  
+            [name]="_id"
+            class="position-absolute" 
+            [placeholder]="_placeholder()"
+            [value]="_ValueFormat()" 
+            (focus)="Focus()"
+            [ngStyle]="{ 
+                width: _widtht(),
+                paddingLeft:  _paddingLeft(),
+                paddingRight: _paddingRight(), 
+                'text-align': textPosition()
+            }"> 
+    }
 
     @if(_showExternalButtonRight()) {
         <div class="coer-textbox-button radius-right-5px">

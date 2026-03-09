@@ -22,6 +22,10 @@ div.coer-textbox {
         background-color: inherit !important;
         color: var(--dark);
     }
+
+    input.display-format {
+        background-color: red !important;
+    }
    
     input:focus { 
         outline: none !important;
@@ -45,14 +49,14 @@ div.coer-textbox {
         gap: 5px !important;
 
         div.tricks-container { 
-            width: 20px;
-            max-width: 20px;
+            width: 20px !important;
+            max-width: 20px !important;
             height: var(--input-height); 
         }
 
         div.tricks-container i, i { 
-            font-size: 20px !important;
             cursor: pointer !important;
+            font-size: 20px !important;
         }
 
         i.i91-search, i.i91-mark, i.i91-eye-fill, i.i91-eye-slash-fill { 
@@ -81,6 +85,9 @@ div.coer-textbox {
         }
 
         div.tricks-container { 
+            display: flex !important;
+            flex-direction: column !important;
+            
             i.i91-90deg, i.i91-270deg {
                 color: var(--gray) !important;
             } 

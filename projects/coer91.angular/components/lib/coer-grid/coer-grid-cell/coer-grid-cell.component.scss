@@ -6,7 +6,8 @@ div.inputSwitch {
     padding: 5px;
 }
 
-div.inputTextbox, 
+div.inputTextbox,
+div.inputNumberbox, 
 div.inputSelectbox {     
     $height: 30px;
 
@@ -17,6 +18,14 @@ div.inputSelectbox {
 
         div.line {
             border-color: transparent !important;
+        }
+
+        div.icon-container {
+            div.tricks-container {  
+                height: $height !important; 
+
+                 
+            }
         }
 
         label {

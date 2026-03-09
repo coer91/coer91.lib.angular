@@ -56,7 +56,37 @@
 
     @case ('inputNumberbox') {
         <div [class]="_input()">  
-
+            <coer-numberbox
+                [id]="id()"
+                #inputNumberbox
+                [ngModel]="row()[column().config.property]"   
+                [isValid]="_GetAttributeValue('isValid', false)"
+                [isInvalid]="_GetAttributeValue('isInvalid', false)"
+                [placeholder]="_GetAttributeValue('placeholder', '########')"
+                [selectOnFocus]="_GetAttributeValue('selectOnFocus', false)"
+                [textPosition]="_GetAttributeValue('textPosition', 'center')"
+                [minLength]="_GetAttributeValue('minLength', 0)"
+                [maxLength]="_GetAttributeValue('maxLength', 20)"
+                [decimals]="_GetAttributeValue('decimals', 0)"
+                [step]="_GetAttributeValue('step', 1)"
+                [showStepIcon]="_GetAttributeValue('showStepIcon', false)"
+                [min]="_GetAttributeValue('min', 0)"
+                [max]="_GetAttributeValue('max', 2147483647)"
+                (onValueChange)="_isElementReady() ? onInputChange.emit({
+                    position: 'BODY',
+                    input: _input(),
+                    property: column().config.property,
+                    before: row(),
+                    value: $event
+                }): null"
+                (onKeyupEnter)="onKeyupEnter.emit({ 
+                    id: id(),
+                    input: _input(), 
+                    property: column().config.property,
+                    row: row(), 
+                    value: $event
+                })"
+            ></coer-numberbox>
         </div>
     }
 
