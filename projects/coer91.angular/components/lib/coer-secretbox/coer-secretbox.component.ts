@@ -1,4 +1,4 @@
-import { Component, effect, EffectRef, input } from '@angular/core';
+import { Component, computed, effect, EffectRef, input } from '@angular/core';
 import { CoerTextBox } from '../coer-textbox/coer-textbox.component';
 import { CONTROL_VALUE } from 'coer91.angular/tools';
 
@@ -32,4 +32,11 @@ export class CoerSecretBox extends CoerTextBox {
         super.Destructor();
         this.effectRef?.destroy();
     }
+
+
+    //Computed
+    protected override _inputType = computed<'text' | 'password' | 'number'>(() => {
+        if(this._showSecretClosed()) return 'password'; 
+        return 'text';
+    });
 }

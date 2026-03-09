@@ -22,7 +22,7 @@ div.coer-textbox {
         background-color: inherit !important;
         color: var(--dark);
     }
-
+   
     input:focus { 
         outline: none !important;
     }
@@ -30,7 +30,6 @@ div.coer-textbox {
     input:disabled {
         background-color: var(--readonly);
     }
-
 
     div.icon-container { 
         position: absolute !important;
@@ -45,7 +44,13 @@ div.coer-textbox {
         z-index: 1 !important;
         gap: 5px !important;
 
-        i { 
+        div.tricks-container { 
+            width: 20px;
+            max-width: 20px;
+            height: var(--input-height); 
+        }
+
+        div.tricks-container i, i { 
             font-size: 20px !important;
             cursor: pointer !important;
         }
@@ -73,6 +78,18 @@ div.coer-textbox {
 
         i.i91-270deg {
             color: var(--primary);
+        }
+
+        div.tricks-container { 
+            i.i91-90deg, i.i91-270deg {
+                color: var(--gray) !important;
+            } 
+        }
+
+        div.tricks-container.focus { 
+            i.i91-90deg, i.i91-270deg {
+                color: var(--primary) !important;
+            } 
         }
     }
 

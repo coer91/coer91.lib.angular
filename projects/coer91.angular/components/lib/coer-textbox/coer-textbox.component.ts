@@ -21,6 +21,10 @@ export class CoerTextBox extends ControlValue {
     protected readonly _isSecretComponent = signal<boolean>(false);
     protected readonly _showSecret = signal<boolean>(true); 
 
+    //numberbox
+    protected readonly _isNumberComponent = signal<boolean>(false); 
+    protected readonly _showStepIcon   = signal<boolean>(false); 
+
     //selectbox
     protected readonly _isSelectComponent = signal<boolean>(false); 
     protected readonly _dataSource = signal<any[]>([]);
@@ -52,6 +56,7 @@ export class CoerTextBox extends ControlValue {
     protected override async Start() { 
         this._htmlElement = HTMLElements.SelectElementById(this._id) as HTMLInputElement;  
         this._htmlElement?.addEventListener('keyup', this._onKeyup);
+        this._htmlElement?.addEventListener('keydown', this._onKeydown); 
         this._htmlElement?.addEventListener('paste', this._onPaste);
         this._htmlElement?.addEventListener('focus', this._onFocus);
         this._htmlElement?.addEventListener('blur', this._onBlur);   
@@ -66,6 +71,7 @@ export class CoerTextBox extends ControlValue {
     protected override Destructor() {   
         super.Destructor();
         this._htmlElement?.removeEventListener('keyup', this._onKeyup);
+        this._htmlElement?.removeEventListener('keydown', this._onKeydown);
         this._htmlElement?.removeEventListener('paste', this._onPaste);
         this._htmlElement?.removeEventListener('focus', this._onFocus); 
         this._htmlElement?.removeEventListener('blur', this._onBlur); 
@@ -89,8 +95,11 @@ export class CoerTextBox extends ControlValue {
             this.onKeyupEnter.emit(this._value());
             this.Blur(); 
         }
-
     } 
+
+
+    //Function
+    protected _onKeydown = (event: KeyboardEvent) => { event } 
 
 
     //Function
@@ -115,10 +124,7 @@ export class CoerTextBox extends ControlValue {
     
     
     //Computed
-    protected _inputType = computed<'text' | 'password'>(() => {
-        if(this._showSecretClosed()) return 'password'; 
-        return 'text';
-    });
+    protected _inputType = computed<'text' | 'password' | 'number'>(() => 'text');
 
 
     //Computed
@@ -180,6 +186,7 @@ export class CoerTextBox extends ControlValue {
         if(this.isValid() || this.isInvalid()) padding += 20; 
 
         if(this._isSelectComponent()) padding += 20;
+        else if(this._isNumberComponent()) padding += 20;
 
         if(padding == 30) padding += 5; 
         if(padding == 50) padding += 10; 
@@ -242,26 +249,11 @@ export class CoerTextBox extends ControlValue {
 
 
     //Computed
-    protected _ValueByComponent = computed(() => {
-        if(this._isSelectComponent()) {
-            return this._search();
-        }
-
-        return this._value();
-    }); 
+    protected _ValueByComponent = computed(() => this._value()); 
 
 
     //Function
-    protected _InputByComponent = (value: any): void => { 
-        if(this._isSelectComponent()) { 
-            this._index.set(0);
-            this._search.set(value); 
-        } 
-
-        else {
-            this._SetValue(value);
-        }
-    }
+    protected _Input = (value: any): void => this._SetValue(value); 
 
 
     /** */
@@ -306,5 +298,9 @@ export class CoerTextBox extends ControlValue {
     protected _placeholder = computed<string>(() => '');  
     protected _GetIconBySelect = (item: any): string => item; 
     protected _GetDisplayBySelect = (item: any): string => item;  
-    protected _ResetSearch(value: any): void { value } 
+    protected _ResetSearch(value: any): void { value }
+
+    //Functions For numberbox
+    protected _IncrementStep(): void {}
+    protected _DecrementStep(): void {}
 }

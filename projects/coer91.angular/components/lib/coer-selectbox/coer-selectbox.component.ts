@@ -24,14 +24,14 @@ export class CoerSelectBox<T> extends CoerTextBox {
     protected readonly _isLoading = signal<boolean>(false);
 
     //Input      
-    public override selectOnFocus   = input<boolean>(true);  
-    public override showClearButton = input<boolean>(true);
-    public dataSource               = input<T[]>([]);
-    public displayProperty          = input<string>('name');
-    public useIconProperty          = input<boolean>(false); 
+    public override readonly selectOnFocus   = input<boolean>(true);  
+    public override readonly showClearButton = input<boolean>(true);
+    public readonly dataSource               = input<T[]>([]);
+    public readonly displayProperty          = input<string>('name');
+    public readonly useIconProperty          = input<boolean>(false); 
 
     //Output
-    protected override readonly onValueChange = output<any>();
+    protected override readonly onValueChange = output<T>();
     protected readonly onOpen  = output<void>();
     protected readonly onClose = output<void>();
 
@@ -242,6 +242,17 @@ export class CoerSelectBox<T> extends CoerTextBox {
             return '';
         }
     } 
+
+
+    //Computed
+    protected override _ValueByComponent = computed(() => this._search()); 
+
+
+    //Function
+    protected override _Input = (value: any): void => {  
+        this._index.set(0);
+        this._search.set(value);  
+    }
 
 
     //Function

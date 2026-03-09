@@ -1,6 +1,6 @@
 <div [id]="_id + '-container'" class="coer-textbox" 
     [ngClass]="{ 
-        'background-color-readonly': isReadonly(),
+        'background-color-readonly': isReadonly(), 
         'invisible': isInvisible(),
         'display-none': isHidden(), 
     }"
@@ -24,7 +24,7 @@
             ></coer-button>
         </div>
     }
-    
+     
     <input [type]="_inputType()" 
         [id]="_id" 
         [name]="_id" 
@@ -33,7 +33,7 @@
         [disabled]="!_isEnabled()"
         [minLength]="minLength()"
         [maxLength]="maxLength()"
-        (input)="_InputByComponent($event.target.value)"
+        (input)="_Input($event.target.value)"
         [ngStyle]="{ 
             width: _widtht(),
             paddingLeft:  _paddingLeft(),
@@ -88,6 +88,13 @@
                     'color-danger' : !_isCollapsed() && isInvalid(),
                 }" (click)="_isCollapsed() ? Focus() : Blur()"></i>
             } 
+
+            @if(_isNumberComponent() && _showStepIcon() && _isEnabled()) {
+                <div [ngClass]="{ 'tricks-container': true, 'focus': _isFocused() }">
+                    <i class="i91-angle i91-270deg" (click)="_IncrementStep()"></i>
+                    <i class="i91-angle i91-90deg" (click)="_DecrementStep()"></i>
+                </div>
+            } 
         </div>
     }
 
@@ -138,4 +145,4 @@
             } 
         </ul> 
     }
-</div>      
+</div>       
