@@ -38,7 +38,8 @@
             width: _widtht(),
             paddingLeft:  _paddingLeft(),
             paddingRight: _paddingRight(), 
-            'text-align': textPosition()
+            'text-align': textPosition(), 
+            color: (_isNumberComponent() && !_isFocused() ? 'transparent' : 'var(--dark)')
         }"> 
         
     @if(_isNumberComponent() && !_isFocused()) {

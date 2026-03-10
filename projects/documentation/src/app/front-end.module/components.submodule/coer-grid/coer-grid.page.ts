@@ -1,5 +1,5 @@
 import { Component, signal, viewChild } from '@angular/core';   
-import { CoerModal, ICallbackItem, ICellSelectBox } from 'coer91.angular/components';
+import { CoerModal, ICallbackItem, ICellNumberBox, ICellSelectBox } from 'coer91.angular/components';
 import { Page } from 'coer91.angular/tools';
 
 @Component({
@@ -77,6 +77,18 @@ export class CoerGridPage extends Page {
         dataSource: this.dataSourceSELECTION(),
         // isValid: false,
          isInvalid: item.value == null,
+        // placeholder: '',
+        // textPosition: 'center',
+        // displayProperty: 'name',
+        // useIconProperty: true,
+    })
+
+    inputNumberbox = (item: ICallbackItem<any>): ICellNumberBox => ({
+        showInput: true, 
+        // isValid: false,
+         selectOnFocus: true,
+         format: 'currency',
+         decimals: 2,
         // placeholder: '',
         // textPosition: 'center',
         // displayProperty: 'name',

@@ -22,8 +22,8 @@ export class CoerTextBox extends ControlValue {
     protected readonly _showSecret = signal<boolean>(true); 
 
     //numberbox
-    protected readonly _isNumberComponent = signal<boolean>(false); 
-    protected readonly _showStepIcon   = signal<boolean>(false); 
+    protected readonly _isNumberComponent = signal<boolean>(false);  
+    protected readonly _showStepIcon      = signal<boolean>(false); 
 
     //selectbox
     protected readonly _isSelectComponent = signal<boolean>(false); 

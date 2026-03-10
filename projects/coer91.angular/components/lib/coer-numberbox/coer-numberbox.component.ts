@@ -15,6 +15,7 @@ export class CoerNumberBox extends CoerTextBox {
     protected effectRef!: EffectRef;
     protected override readonly _isNumberComponent = signal<boolean>(true);
     protected override readonly _showStepIcon = signal<boolean>(true);  
+    protected _stepIconLoading = signal<boolean>(false);
  
     //Inputs
     public override readonly minLength = input<number | string>(0);
@@ -51,11 +52,14 @@ export class CoerNumberBox extends CoerTextBox {
 
     //Computed
     protected override _ValueFormat = computed<string>(() => {
-        switch(this.format()) {
-            case 'number'  : return Numbers.ToNumericFormat(this._value());
-            case 'currency': return Numbers.ToCurrency(this._value());
-            default: return `${this._value()}`;
-        }
+        if(!this._stepIconLoading()) {
+            switch(this.format()) {
+                case 'number'  : return Numbers.ToNumericFormat(this._value());
+                case 'currency': return Numbers.ToCurrency(this._value()); 
+            }
+        } 
+
+        return `${this._value()}`;
     });
 
 
@@ -69,9 +73,8 @@ export class CoerNumberBox extends CoerTextBox {
     //Function
     protected override _onBlur = () => {
         const VALUE = String(this._value());
-        if(['-', '-0'].includes(VALUE) || VALUE.endsWith('.')) {
-            this._Input(0);  
-        }
+        if(VALUE == '-' || VALUE == '-0') this._Input(0);  
+        if(VALUE.endsWith('.')) this._Input(VALUE.split('.')[0]);   
 
         this.Blur();
     } 
@@ -89,6 +92,7 @@ export class CoerNumberBox extends CoerTextBox {
     //Function
     protected override _IncrementStep(): void { 
         if(this._isEnabled()) {  
+            this._stepIconLoading.set(true);
             if(!this._isFocused()) this.Focus(); 
             let VALUE = !Number.isNaN(this._value()) ? Number(this._value()) : 0; 
             
@@ -104,6 +108,7 @@ export class CoerNumberBox extends CoerTextBox {
             }
 
             this._Input(VALUE);  
+            Tools.Sleep(1000, 'IncrementStep').then(() => this._stepIconLoading.set(false));
         }
     }
 
@@ -111,6 +116,7 @@ export class CoerNumberBox extends CoerTextBox {
     //Function
     protected override _DecrementStep(): void { 
         if (this._isEnabled()) { 
+            this._stepIconLoading.set(true);
             if(!this._isFocused()) this.Focus();
             this._isFocused.set(true);
             let VALUE = !Number.isNaN(this._value()) ? Number(this._value()) : 0; 
@@ -127,6 +133,7 @@ export class CoerNumberBox extends CoerTextBox {
             }
 
             this._Input(VALUE);  
+            Tools.Sleep(1000, 'DecrementStep').then(() => this._stepIconLoading.set(false));
         }
     }
         
@@ -216,4 +223,14 @@ export class CoerNumberBox extends CoerTextBox {
 
         return String(value);
     }
+
+
+    //Computed
+    protected override _showLabel = computed<boolean>(() => {
+        return Tools.IsNotOnlyWhiteSpace(this.label()) || (
+            Tools.IsNotOnlyWhiteSpace(this.placeholder()) 
+            && Tools.IsOnlyWhiteSpace(this._value())
+            && (this.format() == 'none')
+        );
+    }); 
 }

@@ -43,7 +43,6 @@ export interface ICellSwitch {
 
 export interface ICellTextBox {
     showInput     : boolean; 
-    icon?         : string;
     isValid?      : boolean; 
     isInvalid?    : boolean;
     placeholder?  : string;
@@ -55,6 +54,20 @@ export interface ICellTextBox {
 
 
 export interface ICellNumberBox { 
+    showInput     : boolean; 
+    isValid?      : boolean; 
+    isInvalid?    : boolean;
+    placeholder?  : string;
+    selectOnFocus?: boolean;
+    textPosition? :'left' | 'center' | 'right'; 
+    minLength?    : number | string;
+    maxLength?    : number | string;
+    format?       : 'none' | 'number' | 'currency'
+    decimals?     : number;
+    step?         : number;
+    showStepIcon? : boolean;
+    min?          : number;
+    max?          : number;
 }
 
 
