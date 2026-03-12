@@ -52,12 +52,7 @@ export class CoerGridPage extends Page {
 
     path = (item: ICallbackItem<any>) => { 
         return `/home/${item.row.id}`;
-    }
-
-
-    Log(event: string, value: any) {
-        console.log({ event, value })
-    }
+    } 
 
 
     color = (item: ICallbackItem<any>) => {

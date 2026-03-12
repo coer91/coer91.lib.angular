@@ -13,10 +13,5 @@ export class CoerSwitchPage extends Page {
 
     constructor() {
         super('coer-switch')
-    }
-
-    //Function
-    protected Log(type: string, color: string) {
-         
-    }
+    } 
 }

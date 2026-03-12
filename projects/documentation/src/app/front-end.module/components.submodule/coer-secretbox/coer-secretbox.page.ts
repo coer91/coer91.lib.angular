@@ -10,9 +10,5 @@ export class CoerSecretBoxPage extends Page {
     
     protected value1 = signal<string>('hello');
 
-    constructor() { super('coer-secretbox') }
-
-    Log(value: any) {
-        console.log(value)
-    }
+    constructor() { super('coer-secretbox') } 
 }

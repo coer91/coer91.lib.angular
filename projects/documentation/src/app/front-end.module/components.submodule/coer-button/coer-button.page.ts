@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';   
-import { Page } from 'coer91.angular/tools';
+import { Page, Tools } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-button-page',
@@ -14,10 +14,9 @@ export class CoerButtonPage extends Page {
 
     constructor() {
         super('coer-button')
-    }
+    } 
 
-    //Function
-    protected Log(type: string, color: string) {
-        console.log(`Click on: [${type}][${color}]`);
+
+    protected override StartPage(): void {   
     }
 }

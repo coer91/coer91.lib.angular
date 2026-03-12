@@ -1,8 +1,7 @@
 import { Component, computed, effect, signal } from '@angular/core';
 import { navigationSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { Collections, Page, Strings, Tools } from 'coer91.angular/tools';
-import { IMenu } from 'coer91.angular/interfaces';  
-import { IMenuSelected } from '../../../../../dist/coer91.angular/types/coer91.angular-interfaces';
+import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';  
  
 @Component({
     selector: 'menu-page',

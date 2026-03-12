@@ -32,7 +32,7 @@ export abstract class Page implements AfterViewInit {
     protected readonly canDelete = signal<boolean>(false);
 
     /** */
-    protected breadcrumbs: ITitleBreadcrumb[] = [];
+    protected readonly breadcrumbs = signal<ITitleBreadcrumb[]>([]);
 
     /** */
     protected readonly responsePage = signal<any>(null);
@@ -54,8 +54,8 @@ export abstract class Page implements AfterViewInit {
     /** */
     constructor(@Inject(String) pageName: string) {
         this._SetPath();
+        SourcePage.Set(pageName, this._path);
         this.SetPageName(pageName);
-        SourcePage.Set(this._pageName, this._path);
         this._sourcePage = SourcePage.Get();
         this._SetBreadcrumbs();
         this._SetGoBack();
@@ -93,28 +93,29 @@ export abstract class Page implements AfterViewInit {
             const PATH_ARRAY = this._path.split('/');             
             PATH_ARRAY[PATH_ARRAY.length - 1] = String(id);
             this._path = PATH_ARRAY.join('/');
-        }
-         
-        if (this.breadcrumbs.length > 0) { 
-            this.breadcrumbs[this.breadcrumbs.length - 1].page = pageName;
-            this.breadcrumbs[this.breadcrumbs.length - 1].path = this._path;
-            BreadcrumbsPage.UpdateLast(pageName, this._path); 
-        } 
+        }         
 
-        this.router.navigateByUrl(this._path);
+        if (BreadcrumbsPage.Get().pop()?.page != pageName) {  
+            BreadcrumbsPage.UpdateLast(pageName, this._path);   
+            this._SetBreadcrumbs();
+        }          
+
+        this.router.navigateByUrl(this._path);  
     }  
 
 
     //Function
-    private _SetBreadcrumbs(): void {       
-        this.breadcrumbs = BreadcrumbsPage.Get().map(item => ({
-            page: item.page,
-            path: item.path,
-            click: () => BreadcrumbsPage.RemoveByPath(item.path)
-        }));  
+    private _SetBreadcrumbs(): void {    
+        this.breadcrumbs.set(
+            BreadcrumbsPage.Get().map(item => ({
+                page: item.page,
+                path: item.path,
+                click: () => BreadcrumbsPage.RemoveByPath(item.path)
+            }))
+        );  
 
-        if(this.breadcrumbs.length <= 0) { 
-            this.breadcrumbs = [{ page: this._pageName, path: this._path }];
+        if(this.breadcrumbs().length <= 0) { 
+            this.breadcrumbs.set([{ page: this._pageName, path: this._path }]);
         }
     }
 

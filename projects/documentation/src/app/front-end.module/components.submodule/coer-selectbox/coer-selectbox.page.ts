@@ -22,9 +22,5 @@ export class CoerSelectBoxPage extends Page {
         // Tools.Sleep(6000).then(() => {
         //     this.value1.set(null);
         // });
-    }
-
-    Log(value: any) {
-        console.log(value)
-    }
+    } 
 }

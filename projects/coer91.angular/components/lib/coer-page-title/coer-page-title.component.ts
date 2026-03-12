@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { ITitleBreadcrumb, ITitleGoBack, ITitleInformation } from 'coer91.angular/interfaces';
 import { isLoadingSIGNAL, screenSizeSIGNAL } from 'coer91.angular/signals'; 
 import { Collections, Navigation, Tools } from 'coer91.angular/tools';  
@@ -30,7 +30,7 @@ export class CoerPageTitle {
 
     //Constructor
     constructor() { 
-        this._GetSelectedMenu();
+        this._GetSelectedMenu(); 
     } 
 
 
@@ -71,7 +71,7 @@ export class CoerPageTitle {
     
     
     //computed
-    protected _breadcrumbs = computed<any[]>(() =>  
+    protected _breadcrumbs = computed<any[]>(() =>   
         Collections.SetIndex(this.breadcrumbs().slice(0, (screenSizeSIGNAL().breakpoint == 'mv' ? 1 : this.breadcrumbs().length)))
     );  
 

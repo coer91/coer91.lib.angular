@@ -43,11 +43,5 @@ export class CoerTextBoxPage extends Page {
             nombre: 'sfffsssssssssssssssssssbddfbdf'
          });
          }, 3000)
-    }
-
-
-    //Function
-    protected Log(event: any, value: any) {
-        console.log({ value, event })
-    }
+    } 
 }
