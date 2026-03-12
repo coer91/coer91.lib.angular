@@ -20,7 +20,7 @@ export abstract class Page implements AfterViewInit {
     protected readonly isUpdating = signal<boolean>(false);
 
     /** */
-    protected readonly isLoading = signal<boolean>(false);
+    protected readonly isLoading = signal<boolean>(true);
 
     /** */
     protected readonly canCreate = signal<boolean>(false);
@@ -179,8 +179,9 @@ export abstract class Page implements AfterViewInit {
 
     /** */
     protected SetPageFilters<T>(filters: T): void {
-        this.filters.set(Tools.BreakReference<T>(filters));
-        FiltersPage.Set(this._path, this.filters); 
+        const FILTERS = Tools.BreakReference<T>(filters);
+        this.filters.set(FILTERS);
+        FiltersPage.Set(this._path, FILTERS); 
     }
 
 
@@ -197,4 +198,11 @@ export abstract class Page implements AfterViewInit {
             ? this._routeParams[param] || ''
             : this._queryParams[param] || '';
     }
+
+
+    /** */
+    protected Log(value: any, logName: string | null = null): void {
+        if (Tools.IsNotNull(logName)) console.log({ log: logName, value });
+        else console.log(value);
+    } 
 }

@@ -10,7 +10,7 @@
     }">   
      
     <div class="coer-switch-container" [ngClass]="{ 'cursor-pointer': _isEnabled, 'cursor-loading': isLoading() }">
-        @if(labelPosition() === 'left' && label().isNotOnlyWhiteSpace()) {
+        @if(labelPosition() === 'left' && IsNotOnlyWhiteSpace(label())) {
             <label [for]="_id" (click)="_Toggle()" [ngStyle]="{ 'color': _textColor() }"
                 [ngClass]="{ 
                     'white-space-nowrap': !breakLabel(),
@@ -50,7 +50,7 @@
             }
         } 
         
-        @if(labelPosition() === 'right' && label().isNotOnlyWhiteSpace()) {
+        @if(labelPosition() === 'right' && IsNotOnlyWhiteSpace(label())) {
             <label [for]="_id" (click)="_Toggle()" [ngStyle]="{ 'color': _textColor() }"
                 [ngClass]="{ 
                     'white-space-nowrap': !breakLabel(),

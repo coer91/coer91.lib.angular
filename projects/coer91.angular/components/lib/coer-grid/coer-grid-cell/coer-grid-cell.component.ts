@@ -105,23 +105,22 @@ export class CoerGridCell<T> implements AfterViewInit {
 
     //Computed
     protected _GetCellValue = computed<string>(() => {  
-        let value = (this.row() as any)[this.column().config.property] || ''; 
+        const value = (this.row() as any)[this.column().config.property] || ''; 
         
         //Template
-        // if(Tools.IsNotNull(this.column().config?.template)) {  
-        //     if(Tools.IsFunction(this.column()?.config?.template)) {
-        //         return (this.column()?.config as any)?.template({
-        //             indexRow: this.row().indexRow,
-        //             property: this.column()?.config?.property,
-        //             row: { ...this.row() },
-        //             value
-        //         });
-        //     }
+        if(Tools.IsNotOnlyWhiteSpace(this.column()?.config?.template)) {  
+            const ROW = { ...this.row() };
+            delete ROW['__index__'];
+            delete ROW['__checked__'];
 
-        //     else if(Tools.IsNotOnlyWhiteSpace(this.column()?.config?.template)) {
-        //         return this.column()?.config?.template as string;
-        //     }
-        // }
+            return Tools.IsFunction(this.column().config.template)              
+                ? (this.column().config as any).template({ 
+                    property: this.column().config.property,
+                    row: ROW,
+                    value
+                }) 
+                : this.column().config.template
+        }
 
         return this.ApplyFormat()(value, this.column().config.format!); 
     }); 

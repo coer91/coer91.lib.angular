@@ -6,7 +6,7 @@ export class FiltersPage {
 
 
     /** */
-    public static Get<T>(path: string): T | null  {
+    public static Get<T>(path: string): T {
         let storage = sessionStorage.getItem(this.storage) as any;
 
         if(storage) {
@@ -19,7 +19,7 @@ export class FiltersPage {
             } 
         } 
 
-        return null; 
+        return {} as T; 
     }
 
 

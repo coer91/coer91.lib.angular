@@ -11,7 +11,7 @@ import { CONTROL_VALUE, ControlValue, HTMLElements, Tools } from 'coer91.angular
 export class CoerSwitch extends ControlValue { 
 
     //Variables     
-    protected override readonly _value = signal<boolean>(false);
+    protected override readonly _value = signal<boolean>(false); 
     protected _htmlElement!: HTMLElement;  
 
     //input

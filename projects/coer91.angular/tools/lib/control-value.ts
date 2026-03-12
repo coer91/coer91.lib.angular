@@ -102,7 +102,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
             this._UpdateValue()!(value); 
         } 
                  
-        this.onValueChange.emit(value);  
+        if(!this.isLoading()) this.onValueChange.emit(value);  
         this._value.set(value);  
     }
 

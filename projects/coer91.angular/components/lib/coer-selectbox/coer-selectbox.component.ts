@@ -211,13 +211,13 @@ export class CoerSelectBox<T> extends CoerTextBox {
             if(Tools.IsNotOnlyWhiteSpace(value)) {                 
                 if(this._arrayType() === 'string') value = String(value[this.displayProperty()]);
                 else if(this._arrayType() === 'number') value = Number(value[this.displayProperty()]); 
-
-                if(this._useModelBinding()) {
-                    this._UpdateValue()!(value); 
-                } 
-                  
-                this.onValueChange.emit(value);  
             }
+
+            if(this._useModelBinding()) {
+                this._UpdateValue()!(value); 
+            } 
+              
+            if(!this.isLoading()) this.onValueChange.emit(value);  
             
             this._value.set(value);  
             this._ResetSearch(value);

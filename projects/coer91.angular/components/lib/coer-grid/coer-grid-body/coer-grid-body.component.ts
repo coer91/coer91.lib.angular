@@ -181,7 +181,7 @@ export class CoerGridBody<T> {
 
     //Computed
     protected _IconShortHeader = (property: string) => {
-        return this._sort().property.equals(property) ? this._sort().icon : '';
+        return this._sort().property == property ? this._sort().icon : '';
     }
 
 
