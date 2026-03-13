@@ -66,3 +66,45 @@
 .no-selection::selection {
     user-select: none !important;
 } 
+
+
+.container-form-header {
+    @include Container();
+
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px;  
+} 
+
+@media (min-width: 0px) and (max-width: 576px) {   
+    .container-form-header > div:nth-child(1) { 
+        flex-basis: 100%; 
+        flex-grow: 1;
+    }        
+}
+ 
+@media (min-width: 576px) and (max-width: 768px) { 
+    .container-form-header > div:nth-child(1) { 
+        flex-basis: calc(100% - 150px - 10px); 
+    }     
+    
+    .container-form-header > div:nth-child(2) { 
+        text-align: center;
+        flex-basis: 150px; 
+    }  
+} 
+
+@media (min-width: 768px) { 
+    .container-form-header > div:nth-child(1) { 
+        flex-basis: 300px;
+    }     
+} 
+
+.container-form-header > div:nth-last-child(1) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-basis: fit-content; 
+    flex-grow: 1; 
+    gap: 10px;
+}

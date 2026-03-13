@@ -4,6 +4,24 @@
     [goBack]="goBack"
 ></coer-page-title>
 
+
+<section class="container-section">
+    <coer-button
+        [breakpoints]="{
+            type: {
+                xxl: 'filled',
+                xl: 'outline',
+                lg: 'icon-filled',
+                md: 'icon-filled-rounded',
+                sm: 'icon-outline',
+                xs: 'icon-outline-rounded',
+                mv: 'icon'
+            }  
+        }"
+    ></coer-button>
+</section>
+
+
 @for(type of typeList(); track type) {
     <section class="container-section">
         <h2>{{ type }}</h2>

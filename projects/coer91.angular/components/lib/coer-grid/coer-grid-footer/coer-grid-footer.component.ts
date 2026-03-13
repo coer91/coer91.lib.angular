@@ -1,5 +1,5 @@
 import { Component, input, WritableSignal } from '@angular/core'; 
-import { IFooterSettings } from '../coer-grid-interfaces';
+import { IFooterSettings } from 'coer91.angular/interfaces';
 import { Tools } from 'coer91.angular/tools';
 
 @Component({

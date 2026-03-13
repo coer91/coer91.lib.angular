@@ -1,4 +1,4 @@
-import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IInputChange, IHeaderSettings, IImportButton, ISelectedRow, IFooterSettings } from './coer-grid-interfaces';
+import { IBodySettings, IColumn, IColumnConfig, IDataSourceGroup, IInputChange, IHeaderSettings, IImportButton, ISelectedRow, IFooterSettings } from 'coer91.angular/interfaces';
 import { CoerAlert, Collections, CONTROL_VALUE, ControlValue, Dates, HTMLElements, Numbers, Strings, Tools } from 'coer91.angular/tools'; 
 import { AfterContentChecked, Component, computed, inject, input, output, signal, viewChild } from '@angular/core'; 
 import { Router } from '@angular/router';

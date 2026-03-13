@@ -1,6 +1,8 @@
 import { Component, signal, viewChild } from '@angular/core';   
-import { CoerModal, ICallbackItem, ICellNumberBox, ICellSelectBox } from 'coer91.angular/components';
+import { CoerModal } from 'coer91.angular/components';
+import { ICallbackItem, ICellNumberBox } from 'coer91.angular/interfaces';
 import { Page } from 'coer91.angular/tools';
+import { ICellSelectBox } from '../../../../../../../dist/coer91.angular/types/coer91.angular-components';
 
 @Component({
     selector: 'coer-grid-page',

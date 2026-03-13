@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, computed, input, output, signal, viewChild, WritableSignal } from "@angular/core";
-import { IBodySettings, ICallbackItem, IInputEnter, IColumnConfig, IInputChange } from "../coer-grid-interfaces";
+import { IBodySettings, ICallbackItem, IInputEnter, IColumnConfig, IInputChange } from "coer91.angular/interfaces";
 import { CoerTextBox } from "../../coer-textbox/coer-textbox.component";
 import { CoerSelectBox } from "../../coer-selectbox/coer-selectbox.component";
 import { CoerNumberBox } from "../../coer-numberbox/coer-numberbox.component";

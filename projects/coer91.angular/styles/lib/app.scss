@@ -1,4 +1,14 @@
 :root {
+    --mv: 0px;
+    --xs: 500px;    
+    --sm: 576px;  
+    --md: 768px;  
+    --lg: 992px;  
+    --xl: 1200px;  
+    --xxl: 1400px;
+}
+
+:root {
     --z-index-alert      : 100;
     --z-index-confirm    : 99;
     --z-index-items      : 98;

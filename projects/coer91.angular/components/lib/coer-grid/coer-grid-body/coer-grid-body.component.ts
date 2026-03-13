@@ -1,4 +1,4 @@
-import { IBodySettings, ICallbackItem, IColumn, IColumnConfig, IDataSourceGroup, IHeaderSettings, IInputChange, IInputEnter, ISelectedRow, ISort } from "../coer-grid-interfaces";
+import { IBodySettings, ICallbackItem, IColumn, IColumnConfig, IDataSourceGroup, IHeaderSettings, IInputChange, IInputEnter, ISelectedRow, ISort } from "coer91.angular/interfaces";
 import { Component, computed, input, output, signal, viewChildren, WritableSignal } from "@angular/core";
 import { CoerGridCell } from "../coer-grid-cell/coer-grid-cell.component";
 import { Collections, Dates, Tools } from "coer91.angular/tools"; 

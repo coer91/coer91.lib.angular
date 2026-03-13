@@ -12,6 +12,8 @@ export * from './lib/app/environments.interface';
 export * from './lib/app/screen-size.interface'; 
 
 //components
+export * from './lib/components/coer-grid-interfaces';
+export * from './lib/components/breakpoint-button.interface';
 export * from './lib/components/external-button.interface';
 export * from './lib/components/title-breadcrumb.interface';
 export * from './lib/components/title-go-back.interface';

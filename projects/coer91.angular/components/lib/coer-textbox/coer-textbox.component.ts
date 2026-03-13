@@ -267,8 +267,10 @@ export class CoerTextBox extends ControlValue {
     /** */
     public Focus(select: boolean = false): void { 
         if(this._isEnabled()) {
-            this._htmlElement?.focus();
-            if(select) this._htmlElement?.select();         
+            Tools.Sleep().then(() => {
+                this._htmlElement?.focus();
+                if(select) this._htmlElement?.select();        
+            }); 
         }
         
         else this.Blur(); 

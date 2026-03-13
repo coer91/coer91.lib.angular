@@ -268,12 +268,12 @@ export class CoerSelectBox<T> extends CoerTextBox {
         if(this._isEnabled()) {
             this._isLoading.set(true);  
             
+            await Tools.Sleep();
             if(this.selectOnFocus()) this._htmlElement?.select();
             else this._htmlElement?.focus();
 
             this._applySearch.set(false);  
-            this._isFocused.set(true);
-            await Tools.Sleep(); 
+            this._isFocused.set(true); 
               
             if(open) {
                 this._isCollapsed.set(false); 

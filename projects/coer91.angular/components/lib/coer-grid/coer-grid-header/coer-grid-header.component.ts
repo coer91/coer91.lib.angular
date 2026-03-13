@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, computed, ElementRef, input, output, signal, viewChild, WritableSignal } from '@angular/core'; 
-import { IInputChange, IHeaderSettings, IImportButton } from '../coer-grid-interfaces';
+import { IInputChange, IHeaderSettings, IImportButton } from 'coer91.angular/interfaces';
 import { CoerAlert, Files, Tools } from 'coer91.angular/tools';
 
 @Component({

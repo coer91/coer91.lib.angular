@@ -1,4 +1,6 @@
 import { AfterViewInit, Component, computed, input, OnDestroy, output } from '@angular/core';
+import { IBreakpointButton } from 'coer91.angular/interfaces';
+import { screenSizeSIGNAL } from 'coer91.angular/signals';
 import { HTMLElements, Tools } from 'coer91.angular/tools'; 
 
 @Component({
@@ -15,26 +17,27 @@ export class CoerButton implements AfterViewInit, OnDestroy {
     protected _htmlElement!: HTMLElement;
 
     //Inputs
-    public label        = input<string>(''); 
-    public type         = input<'filled' | 'outline' | 'icon' | 'icon-rounded' | 'icon-filled' | 'icon-filled-rounded' | 'icon-outline'  | 'icon-outline-rounded'>('filled');
-    public color        = input<'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light'>('primary');
-    public icon         = input<string>('');
-    public path         = input<string>('');
-    public iconPosition = input<'left' | 'right'>('left');
-    public isLoading    = input<boolean>(false); 
-    public isReadonly   = input<boolean>(false);
-    public isInvisible  = input<boolean>(false);
-    public isHidden     = input<boolean>(false);
-    public width        = input<string>('100px');
-    public minWidth     = input<string>('20px');
-    public maxWidth     = input<string>('100%'); 
-    public height       = input<string>('40px');
-    public minHeight    = input<string>('20px');
-    public maxHeight    = input<string>('40px');
-    public marginTop    = input<string>('0px');
-    public marginRight  = input<string>('0px');
-    public marginBottom = input<string>('0px');
-    public marginLeft   = input<string>('0px');
+    public readonly label        = input<string>(''); 
+    public readonly type         = input<'filled' | 'outline' | 'icon' | 'icon-rounded' | 'icon-filled' | 'icon-filled-rounded' | 'icon-outline'  | 'icon-outline-rounded'>('filled');
+    public readonly color        = input<'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light'>('primary');
+    public readonly icon         = input<string>('');
+    public readonly path         = input<string>('');
+    public readonly iconPosition = input<'left' | 'right'>('left');
+    public readonly isLoading    = input<boolean>(false); 
+    public readonly isReadonly   = input<boolean>(false);
+    public readonly isInvisible  = input<boolean>(false);
+    public readonly isHidden     = input<boolean>(false);
+    public readonly breakpoints  = input<IBreakpointButton>({});
+    public readonly width        = input<string>('100px');
+    public readonly minWidth     = input<string>('20px');
+    public readonly maxWidth     = input<string>('100%'); 
+    public readonly height       = input<string>('40px');
+    public readonly minHeight    = input<string>('20px');
+    public readonly maxHeight    = input<string>('40px');
+    public readonly marginTop    = input<string>('0px');
+    public readonly marginRight  = input<string>('0px');
+    public readonly marginBottom = input<string>('0px');
+    public readonly marginLeft   = input<string>('0px');
 
     //Output
     protected readonly onClick   = output<void>(); 
@@ -67,7 +70,7 @@ export class CoerButton implements AfterViewInit, OnDestroy {
 
     //Computed
     protected _label = computed(() => { 
-        if(['filled', 'outline'].includes(this.type())) {
+        if(['filled', 'outline'].includes(this._breakpointType())) {
             if(this.isLoading()) return 'Loading';
             return this.label().length <= 0 ? 'Click' : this.label();
         }
@@ -82,14 +85,14 @@ export class CoerButton implements AfterViewInit, OnDestroy {
         if(this.isInvisible()) background = 'background-color-transparent';
         else if(this.isLoading()) background = 'background-color-loading animation-fade'; 
         else if(this.isReadonly()) background = 'background-color-readonly'; 
-        else if(['filled', 'icon-filled', 'icon-filled-rounded'].includes(this.type())) {
+        else if(['filled', 'icon-filled', 'icon-filled-rounded'].includes(this._breakpointType())) {
             background = `background-color-${this.color()}`;
         }
          
         let color = `color-${this.color()}`;
         if(this.isInvisible()) color = 'color-transparent';
         else if(this.isLoading() || this.isReadonly()) color = 'color-gray'; 
-        else if(['filled', 'icon-filled', 'icon-filled-rounded'].includes(this.type())) {
+        else if(['filled', 'icon-filled', 'icon-filled-rounded'].includes(this._breakpointType())) {
             color = ['warning', 'light'].includes(this.color()) ? 'color-dark' : 'color-light';
         }  
 
@@ -109,9 +112,26 @@ export class CoerButton implements AfterViewInit, OnDestroy {
     });
 
 
+    //computed
+    protected _breakpointWidth = computed<string>(() => {        
+        switch(screenSizeSIGNAL().breakpoint) {
+            case 'mv' : return this.breakpoints().width?.mv  || this.width();
+            case 'xs' : return this.breakpoints().width?.xs  || this.width(); 
+            case 'sm' : return this.breakpoints().width?.sm  || this.width();  
+            case 'md' : return this.breakpoints().width?.md  || this.width();  
+            case 'lg' : return this.breakpoints().width?.lg  || this.width();  
+            case 'xl' : return this.breakpoints().width?.xl  || this.width(); 
+            case 'xxl': return this.breakpoints().width?.xxl || this.width(); 
+            default   : return this.width();
+        }  
+    });
+
+
     //Computed
     protected _width = computed<string>(() => {
-        return ['filled', 'outline'].includes(this.type()) ? this.width() : this.height();
+        return ['filled', 'outline'].includes(this._breakpointType()) 
+            ? this._breakpointWidth() 
+            : this.height();
     });
 
 
@@ -129,13 +149,14 @@ export class CoerButton implements AfterViewInit, OnDestroy {
 
     //Computed
     protected _icon = computed<string>(() => {
-        if(this.isLoading() && ['filled', 'outline'].includes(this.type())) return 'i91-arrows-rotate animation-spin animation-speed-15';
-        if(Tools.IsOnlyWhiteSpace(this.icon()) && !['filled', 'outline'].includes(this.type())) return 'i91-hand-pointer-fill';
+        if(this.isLoading() && ['filled', 'outline'].includes(this._breakpointType())) return 'i91-arrows-rotate animation-spin animation-speed-15';
+        if(Tools.IsOnlyWhiteSpace(this.icon()) && !['filled', 'outline'].includes(this._breakpointType())) return 'i91-hand-pointer-fill';
 
         switch(this.icon()) {
             case 'add'     : return 'i91-plus font-size-20px';
             case 'save'    : return 'i91-floppy-disk-fill font-size-20px';
             case 'excel'   : return 'i91-file-xls-fill font-size-20px';
+            case 'cancel'  : return 'i91-mark font-size-25px';
             case 'import'  : return 'i91-file-arrow-up-fill font-size-20px';
             case 'delete'  : return 'i91-trash-can font-size-20px';
             case 'edit'    : return 'i91-pen font-size-20px';
@@ -144,6 +165,21 @@ export class CoerButton implements AfterViewInit, OnDestroy {
             default: return this.icon();
         } 
     });
+
+
+    //computed
+    protected _breakpointType = computed<'filled' | 'outline' | 'icon' | 'icon-rounded' | 'icon-filled' | 'icon-filled-rounded' | 'icon-outline'  | 'icon-outline-rounded'>(() => {        
+        switch(screenSizeSIGNAL().breakpoint) {
+            case 'mv' : return this.breakpoints().type?.mv  || this.type();
+            case 'xs' : return this.breakpoints().type?.xs  || this.type(); 
+            case 'sm' : return this.breakpoints().type?.sm  || this.type();  
+            case 'md' : return this.breakpoints().type?.md  || this.type();  
+            case 'lg' : return this.breakpoints().type?.lg  || this.type();  
+            case 'xl' : return this.breakpoints().type?.xl  || this.type(); 
+            case 'xxl': return this.breakpoints().type?.xxl || this.type(); 
+            default   : return this.type();
+        }  
+    }); 
 
 
     //Function
