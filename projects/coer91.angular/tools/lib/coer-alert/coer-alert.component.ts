@@ -270,6 +270,8 @@ export class CoerAlert implements AfterViewInit {
         //Section
         const SECTION = document.createElement('section');
         SECTION.innerHTML = message!;
+        SECTION.style.paddingLeft = '20px';
+        SECTION.style.paddingRight = '20px';
         COER_CONFIRM.appendChild(SECTION);
 
         //Footer
