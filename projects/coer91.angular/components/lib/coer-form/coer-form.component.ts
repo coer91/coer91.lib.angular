@@ -1,6 +1,10 @@
 import { AfterViewInit, Component, computed, inject, input, OnDestroy, output, signal } from '@angular/core'; 
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { CoerAlert, HTMLElements, Tools } from 'coer91.angular/tools';
+import { CoerTextBox } from '../coer-textbox/coer-textbox.component';
+import { CoerSelectBox } from '../coer-selectbox/coer-selectbox.component'; 
+import { CoerSwitch } from '../coer-switch/coer-switch.component';
+import { CoerNumberBox } from '../coer-numberbox/coer-numberbox.component';
 
 @Component({
     selector: 'coer-form',
@@ -18,6 +22,7 @@ export class CoerForm implements AfterViewInit, OnDestroy {
 
     //Inputs
     public formGroup  = input.required<FormGroup>();
+    public controls   = input.required<(CoerTextBox | CoerNumberBox | CoerSwitch | CoerSelectBox<any>)[]>();  
     public isLoading  = input<boolean>(false); 
     public isReadonly = input<boolean>(false);  
 
@@ -42,17 +47,14 @@ export class CoerForm implements AfterViewInit, OnDestroy {
 
 
     //Computed
-    protected _isEnabled = computed<boolean>(() => {
-        return this.isLoading()  === false 
-            && this.isReadonly() === false 
-    }); 
+    protected _isEnabled = computed<boolean>(() => !this.isLoading() && !this.isReadonly()); 
 
 
     /** */
     public IsInvalidControl = (formControlName: string): boolean => {
         if(this._isReady()) {
-            if(Tools.IsNull(this.formGroup().get(formControlName))) return true; 
-            return this.formGroup().get(formControlName)!.touched && this.formGroup().get(formControlName)!.invalid
+            const CONTROL = this.controls().find(x => x.formControlName() == formControlName);
+            return CONTROL ? CONTROL.isTouched() && this.formGroup().get(formControlName)!.invalid : true; 
         }
 
         return this._isReady(); 
@@ -73,9 +75,9 @@ export class CoerForm implements AfterViewInit, OnDestroy {
 
     /** */
     public GetControlValue<T>(formControlName: string, alternative?: T): T {
-        return this._isReady() && Tools.IsNotNull(this.formGroup().get(formControlName))
-            ? this.formGroup().get(formControlName)!.value
-            : (Tools.IsNotNull(alternative) ? alternative! : null) as T;
+        return this._isReady() 
+            ? (this.formGroup().get(formControlName)?.value || alternative)
+            : (alternative || '' as T);
     }
 
 
@@ -88,22 +90,19 @@ export class CoerForm implements AfterViewInit, OnDestroy {
 
     /** */
     public HasControlValue(formControlName: string): boolean {
-        return Tools.IsNotNull(this.formGroup().get(formControlName))
-            ? Tools.IsNotOnlyWhiteSpace(this.formGroup().get(formControlName)!.value)
-            : false;
+        const CONTROL = this.formGroup().get(formControlName);
+        return Tools.IsNotNull(CONTROL) ? Tools.IsNotOnlyWhiteSpace(CONTROL!.value) : false;
     }
 
 
     /** Mark all controls as touched */
     public TouchForm(): void {
-        this.formGroup().markAllAsTouched();
+        for(const control of this.controls()) control.SetTouched(true);
     }
 
 
     /** Mark all controls as touched */
-    public IsValid(): boolean {
-        return this.formGroup().valid;
-    }
+    public IsValid = (): boolean => this.formGroup().valid; 
 
 
     /** Mark all controls as touched */
@@ -129,7 +128,8 @@ export class CoerForm implements AfterViewInit, OnDestroy {
     /** */
     public Reset<T>(properties: T | null = null): void {
         if (Tools.IsNull(properties)) this.formGroup().reset();
-        else this.formGroup().reset(properties);
+        else this.formGroup().reset(properties); 
+        for(const control of this.controls()) control.SetTouched(false);
     }
 
 
@@ -150,32 +150,23 @@ export class CoerForm implements AfterViewInit, OnDestroy {
 
 
     /** Focuses the specified control, otherwise the first invalid control or first control */
-    public Focus(formControl: string = ''): void {
-        const ELEMENT_COLLECTION = new Map<string, HTMLElement>();
-        const ERROR_COLLECTION   = new Map<string, ValidationErrors | null>();
+    public Focus(formControl: string = ''): void {  
+        const PROPERTY_LIST = Tools.GetPropertyList(this.formGroup().controls);
+        let control: any = this.controls().find(item => item.formControlName() == formControl);
+        
 
-        for(const property of Tools.GetPropertyList(this.formGroup().controls)) {
-            const ELEMENT = HTMLElements.SelectElement(`[formcontrolname='${property}'] input`);
-            if(ELEMENT) ELEMENT_COLLECTION.set(property, ELEMENT); 
-            
-            ERROR_COLLECTION.set(property, this.formGroup().controls[property].errors);
+        if(Tools.IsNull(control)) {
+            formControl = PROPERTY_LIST.find(item => Tools.IsNotNull(this.formGroup().controls[item].errors)) || '';
+            control = this.controls().find(item => item.formControlName() == formControl);
         }
 
-        if(ELEMENT_COLLECTION.size > 0) {
-            if(Tools.IsOnlyWhiteSpace(formControl)) {
-                for(const [property, error] of ERROR_COLLECTION) {
-                    if (Tools.IsNotNull(error)) {
-                        formControl = property;
-                        break;
-                    }
-                }
+        if(Tools.IsNull(control)) {
+            formControl = PROPERTY_LIST.length > 0 ? PROPERTY_LIST[0] : '';
+            control = this.controls().find(item => item.formControlName() == formControl);
+        }
 
-                if(Tools.IsOnlyWhiteSpace(formControl)) {
-                    formControl = Array.from(ELEMENT_COLLECTION.keys())[0];
-                }
-            }
-
-            ELEMENT_COLLECTION.get(formControl)?.focus();
+        if(control && Tools.IsFunction(control.Focus)) {
+            control.Focus();
         }
     }
 }

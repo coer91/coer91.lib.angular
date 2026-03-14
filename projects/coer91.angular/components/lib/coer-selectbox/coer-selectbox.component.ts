@@ -220,7 +220,7 @@ export class CoerSelectBox<T> extends CoerTextBox {
             if(!this.isLoading()) this.onValueChange.emit(value);  
             
             this._value.set(value);  
-            this._ResetSearch(value);
+            this._ResetSearch(value); 
             this.Blur(); 
         }
     }
@@ -297,7 +297,9 @@ export class CoerSelectBox<T> extends CoerTextBox {
     public override async Blur() {    
         if(this._isLoading()) return;
         this._isLoading.set(true);  
+        
         this._search.set(Tools.IsNotOnlyWhiteSpace(this._value()) ? this._value()[this.displayProperty()] : '');   
+        if(!this.isTouched() && this._isFocused() && this._isElementReady()) this.SetTouched(true);
         await Tools.Sleep();
 
         this._htmlElement?.blur();  
@@ -338,5 +340,5 @@ export class CoerSelectBox<T> extends CoerTextBox {
         }
 
         return Tools.IsNotOnlyWhiteSpace(item) ? Tools.BreakReference(item) : null;
-    }   
+    }     
 }

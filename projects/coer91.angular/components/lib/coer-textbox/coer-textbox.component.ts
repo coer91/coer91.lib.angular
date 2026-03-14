@@ -302,7 +302,7 @@ export class CoerTextBox extends ControlValue {
             if(element) HTMLElements.ScrollToElement(element, toView);
             
         }); 
-    } 
+    }  
 
 
     //Functions For selectbox

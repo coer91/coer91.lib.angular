@@ -166,8 +166,8 @@ export class Toolbar implements AfterViewInit {
     protected _ResetPassword() {     
         this._password.set('');
         this._confirm.set('');        
-        this.passwordRef()?.SetTouched(false);
-        this.confirmRef()?.SetTouched(false);
+        //this.passwordRef()?.SetTouched(false);
+        //this.confirmRef()?.SetTouched(false);
     } 
 
 

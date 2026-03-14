@@ -79,7 +79,8 @@ export class HTTP {
             return await this._BuildResponse(fetchResponse, request.responseType); 
         } 
         
-        catch {   
+        catch (error) { 
+            console.error(error);  
             Tools.Sleep(5000, 'Offline_API').then(() => new CoerAlert().Danger(null, 'Offline API', '', 0));  
             return this._BuildError(0, 'Offline API', request.responseType);
         } 
@@ -177,22 +178,26 @@ export class HTTP {
         if(fetchResponse.status >= 200) {
             switch(responseType) {
                 case 'json': {
-                    response = await fetchResponse.json();
+                    try   { response = await fetchResponse.json()}
+                    catch { response = null }
                     break;
                 }
     
-                case 'text': {
-                    response = await fetchResponse.text();
+                case 'text': { 
+                    try   { response = await fetchResponse.text()}
+                    catch { response = '' }
                     break;
                 }
     
-                case 'arraybuffer': {
-                    response = await fetchResponse.arrayBuffer();
+                case 'arraybuffer': { 
+                    try   { response = await fetchResponse.arrayBuffer()}
+                    catch { response = null }
                     break;
                 } 
                 
-                case 'blob': {
-                    response = await fetchResponse.blob();
+                case 'blob': { 
+                    try   { response = await fetchResponse.blob()}
+                    catch { response = null }
                     break;
                 } 
             } 

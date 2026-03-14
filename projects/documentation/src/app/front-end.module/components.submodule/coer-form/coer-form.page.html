@@ -1,0 +1,89 @@
+<coer-page-title
+    title="Form"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></coer-page-title>
+
+ 
+<coer-form #form [formGroup]="group" [controls]="[module, project, menuType, icon]">
+    <section class="container-form-header">
+        <div class="sm-width-200px">
+            <coer-textbox
+                #module
+                label="Module"
+                formControlName="module"
+                [isInvalid]="form.IsInvalidControl('module')"
+                [isLoading]="isLoading()" 
+            ></coer-textbox>
+            {{ module.isTouched() }}
+        </div>
+    
+        <div>  
+            <coer-button
+                label="Cancel" 
+                color="danger"
+                icon="i91-mark font-size-25px"
+                [isInvisible]="isLoading()"
+                [breakpoints]="{ 
+                    width: { mv: '50%', xs: '50%', sm: '90px' }
+                }" 
+                (onClick)="form.Reset()"
+            ></coer-button>
+    
+            <coer-button
+                #saveButton
+                label="Save" 
+                color="success"
+                icon="save"
+                [isLoading]="isLoading()"
+                [isReadonly]="form.IsInvalid()"
+                [breakpoints]="{
+                    width: { mv: '50%', xs: '50%', sm: '90px' }
+                }" 
+            ></coer-button>
+        </div>
+    </section>
+
+    <coer-grid 
+        [isLoading]="isLoading()"
+    >
+        <section class="width-100 flex-wrap"> 
+            <div class="flex-basis-300px flex-grow-1">
+                <coer-selectbox
+                    #project
+                    label="Project"
+                    formControlName="project"  
+                    [dataSource]="projectList()"
+                    [isInvalid]="form.IsInvalidControl('project')"
+                ></coer-selectbox>
+                {{ project.isTouched() }}
+            </div>
+            
+            <div class="flex-basis-300px flex-grow-1">
+                <coer-selectbox
+                    #menuType
+                    label="type"
+                    formControlName="menuType" 
+                    [dataSource]="menuTypeList()"
+                    [isInvalid]="form.IsInvalidControl('menuType')"
+                ></coer-selectbox>
+                {{ menuType.isTouched() }}
+            </div>
+
+            <div class="flex-basis-300px flex-grow-1">
+               <coer-textbox
+                    #icon
+                    label="icon"
+                    formControlName="icon"  
+                    [isInvalid]="form.IsInvalidControl('icon')"
+                    [externalButtons]="{
+                        showRight: form.GetControlValue('icon', '').length > 0,
+                        iconRight: form.GetControlValue('icon', ''),
+                        isReadonlyRight: true,
+                    }"
+               ></coer-textbox>
+               {{ icon.isTouched() }}
+            </div>
+        </section>
+    </coer-grid>
+</coer-form>

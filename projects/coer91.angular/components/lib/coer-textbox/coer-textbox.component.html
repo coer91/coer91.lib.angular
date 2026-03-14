@@ -26,7 +26,9 @@
         </div>
     }
      
-    <input [type]="_inputType()" 
+    <input 
+        #inputINNER
+        [type]="_inputType()" 
         [id]="_id" 
         [name]="_id" 
         [placeholder]="_placeholder()"
@@ -171,4 +173,4 @@
             }
         </ul> 
     }
-</div>       
+</div>         

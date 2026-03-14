@@ -5,7 +5,8 @@ import { SharedModule } from "../../../shared/shared.module";
 
 //Pages 
 import { CoerButtonPage    } from "./coer-button/coer-button.page";  
-import { CoerDateBoxPage  } from "./coer-datebox/coer-datebox.page";
+import { CoerDateBoxPage   } from "./coer-datebox/coer-datebox.page";
+import { CoerFormPage      } from "./coer-form/coer-form.page";
 import { CoerGridPage      } from "./coer-grid/coer-grid.page";
 import { CoerModalPage     } from "./coer-modal/coer-modal.page";
 import { CoerNumberBoxPage } from "./coer-numberbox/coer-numberbox.page";
@@ -19,6 +20,7 @@ export const routes: Routes = [{
     children: [  
         ROUTER_PAGE('coer-button'   , CoerButtonPage),  
         ROUTER_PAGE('coer-datebox'  , CoerDateBoxPage),  
+        ROUTER_PAGE('coer-form'     , CoerFormPage),  
         ROUTER_PAGE('coer-grid'     , CoerGridPage),  
         ROUTER_PAGE('coer-modal'    , CoerModalPage),
         ROUTER_PAGE('coer-numberbox', CoerNumberBoxPage),
@@ -33,6 +35,7 @@ export const routes: Routes = [{
     declarations: [ 
         CoerButtonPage, 
         CoerDateBoxPage,
+        CoerFormPage,
         CoerGridPage,
         CoerModalPage,
         CoerNumberBoxPage,

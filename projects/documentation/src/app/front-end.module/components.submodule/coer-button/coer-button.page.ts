@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';   
-import { Page, Tools } from 'coer91.angular/tools';
+import { HTTP, Page, Tools } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-button-page',
@@ -18,5 +18,9 @@ export class CoerButtonPage extends Page {
 
 
     protected override StartPage(): void {   
+
+        HTTP.DELETE<void>({
+            url: `https://localhost:5001/api/ProjectsModules/DeleteModule/${5}` 
+        }); 
     }
 }

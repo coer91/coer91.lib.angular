@@ -3,7 +3,7 @@
         <h1>{{ title }}</h1>
 
         <section class="form"> 
-            <coer-form #form [formGroup]="formGroup" [isLoading]="isLoading()">
+            <coer-form #form [formGroup]="formGroup" [controls]="[userRef, passwordRef]" [isLoading]="isLoading()">
                 <!-- user -->
                 <coer-textbox
                     #userRef

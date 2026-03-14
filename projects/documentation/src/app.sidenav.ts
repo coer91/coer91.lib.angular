@@ -15,9 +15,10 @@ export const NAVIGATION: IMenu[] = [
         { label: 'Components', icon: '', show: 'GRID', items: [ 
             { label: 'coer-button'   , icon: 'i91-hand-pointer-fill', path: '/front-end/components/coer-button'    },  
             { label: 'coer-datebox'  , icon: '',                      path: '/front-end/components/coer-datebox'   },  
+            { label: 'coer-form'     , icon: '',                      path: '/front-end/components/coer-form'      },  
             { label: 'coer-grid'     , icon: '',                      path: '/front-end/components/coer-grid'      },  
             { label: 'coer-modal'    , icon: 'i91-modal-fill',        path: '/front-end/components/coer-modal'     },
-            { label: 'coer-numberbox', icon: '',                      path: '/front-end/components/coer-numberbox'     },
+            { label: 'coer-numberbox', icon: '',                      path: '/front-end/components/coer-numberbox' },
             { label: 'coer-secretbox', icon: 'i91-eye-slash-fill',    path: '/front-end/components/coer-secretbox' },
             { label: 'coer-selectbox', icon: 'i91-angle i91-90deg',   path: '/front-end/components/coer-selectbox' },
             { label: 'coer-switch'   , icon: '',                      path: '/front-end/components/coer-switch'    },
