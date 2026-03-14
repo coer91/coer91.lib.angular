@@ -1,4 +1,4 @@
-section.coer-grid-container{
+section.coer-grid-container {
     animation-name: __KeyOpacity100 !important; 
     animation-iteration-count: 1 !important; 
     animation-duration: 1.0s !important;
@@ -6,6 +6,10 @@ section.coer-grid-container{
     box-shadow: 0px 1px 12px -10px var(--dark) !important;
     background-color: var(--containers);
     min-height: var(--input-height);      
-    border-radius: 8px; 
-    padding: 10px;
+    border-radius: 8px;  
+    padding: 10px; 
+
+    @media (min-width: 0px) and (max-width: 499px) {
+        margin: 15px 15px 0px 15px !important;
+    }
 }

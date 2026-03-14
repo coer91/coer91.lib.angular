@@ -28,7 +28,7 @@ export class CoerAlert implements AfterViewInit {
         
         message  = Tools.IsNotOnlyWhiteSpace(message) ? message  : '';
         title    = Tools.IsNotOnlyWhiteSpace(title)   ? title    : 'Information';
-        icon     = Tools.IsNotOnlyWhiteSpace(icon)    ? icon     : 'i91-info-circle';
+        icon     = Tools.GetDefaultIcon(icon || 'i91-info-circle'); 
         autohide = Tools.IsNotNull(icon)              ? autohide : 0;
 
         return await this._BuildAlert(message!, title!, icon!, autohide!, 'background-color-information');  
@@ -41,7 +41,7 @@ export class CoerAlert implements AfterViewInit {
         
         message  = Tools.IsNotOnlyWhiteSpace(message) ? message  : '';
         title    = Tools.IsNotOnlyWhiteSpace(title)   ? title    : 'Success';
-        icon     = Tools.IsNotOnlyWhiteSpace(icon)    ? icon     : 'i91-check-circle';
+        icon     = Tools.GetDefaultIcon(icon || 'i91-check-circle');
         autohide = Tools.IsNotNull(icon)              ? autohide : 0;
 
         return await this._BuildAlert(message!, title!, icon!, autohide!, 'background-color-success');  
@@ -54,7 +54,7 @@ export class CoerAlert implements AfterViewInit {
         
         message  = Tools.IsNotOnlyWhiteSpace(message) ? message  : '';
         title    = Tools.IsNotOnlyWhiteSpace(title)   ? title    : 'Warning';
-        icon     = Tools.IsNotOnlyWhiteSpace(icon)    ? icon     : 'i91-exclamation-triangle';
+        icon     = Tools.GetDefaultIcon(icon || 'i91-exclamation-triangle');
         autohide = Tools.IsNotNull(icon)              ? autohide : 0;
 
         return await this._BuildAlert(message!, title!, icon!, autohide!, 'background-color-warning');  
@@ -67,7 +67,7 @@ export class CoerAlert implements AfterViewInit {
         
         message  = Tools.IsNotOnlyWhiteSpace(message) ? message  : '';
         title    = Tools.IsNotOnlyWhiteSpace(title)   ? title    : 'Error';
-        icon     = Tools.IsNotOnlyWhiteSpace(icon)    ? icon     : 'i91-bug-fill';
+        icon     = Tools.GetDefaultIcon(icon || 'i91-exclamation-octagon');
         autohide = Tools.IsNotNull(icon)              ? autohide : 0;
 
         return await this._BuildAlert(message!, title!, icon!, autohide!, 'background-color-danger');  
@@ -91,7 +91,7 @@ export class CoerAlert implements AfterViewInit {
     /** */
     public CloseAllAlerts(): void {
         HTMLElements.SelectAllElements('aside#coerAlert > div.coer-alert').forEach(alert => this.CloseAlert(alert)); 
-    } 
+    }  
 
 
     /** */
@@ -212,7 +212,7 @@ export class CoerAlert implements AfterViewInit {
     private async _ConfirmInformation(message: string | null = null, icon: string | null = null, onlyInformation: boolean = false): Promise<boolean> {
         while(Tools.IsNull(CoerAlert._confirm)) await Tools.Sleep(100); 
         message = Tools.IsNotOnlyWhiteSpace(message) ? message : 'Confirm action';        
-        icon    = Tools.IsNotOnlyWhiteSpace(icon)    ? icon    : 'i91-info-circle'; 
+        icon    = Tools.GetDefaultIcon(icon || 'i91-info-circle'); 
         return await this._BuildConfirm(message!, icon!, onlyInformation, 'information');  
     }
 
@@ -221,7 +221,7 @@ export class CoerAlert implements AfterViewInit {
     private async _ConfirmSuccess(message: string | null = null, icon: string | null = null, onlyInformation: boolean = false): Promise<boolean> {
         while(Tools.IsNull(CoerAlert._confirm)) await Tools.Sleep(100);        
         message = Tools.IsNotOnlyWhiteSpace(message) ? message : 'Confirm action';
-        icon    = Tools.IsNotOnlyWhiteSpace(icon)    ? icon    : 'i91-check-circle';
+        icon    = Tools.GetDefaultIcon(icon || 'i91-check-circle');
         return await this._BuildConfirm(message!, icon!, onlyInformation, 'success');  
     }
 
@@ -230,7 +230,7 @@ export class CoerAlert implements AfterViewInit {
     private async _ConfirmWarning(message: string | null = null, icon: string | null = null, onlyInformation: boolean = false): Promise<boolean> {
         while(Tools.IsNull(CoerAlert._confirm)) await Tools.Sleep(100);        
         message = Tools.IsNotOnlyWhiteSpace(message) ? message : 'Confirm action';
-        icon    = Tools.IsNotOnlyWhiteSpace(icon)    ? icon    : 'i91-exclamation-triangle';
+        icon    = Tools.GetDefaultIcon(icon || 'i91-exclamation-triangle');
         return await this._BuildConfirm(message!, icon!, onlyInformation, 'warning');  
     }
 
@@ -239,7 +239,7 @@ export class CoerAlert implements AfterViewInit {
     private async _ConfirmDanger(message: string | null = null, icon: string | null = null, onlyInformation: boolean = false): Promise<boolean> {
         while(Tools.IsNull(CoerAlert._confirm)) await Tools.Sleep(100);        
         message = Tools.IsNotOnlyWhiteSpace(message) ? message : 'Confirm action';
-        icon    = Tools.IsNotOnlyWhiteSpace(icon)    ? icon    : 'i91-exclamation-octagon';
+        icon    = Tools.GetDefaultIcon(icon || 'i91-exclamation-octagon');
         return await this._BuildConfirm(message!, icon!, onlyInformation, 'danger');  
     }
  

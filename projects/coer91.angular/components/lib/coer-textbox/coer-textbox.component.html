@@ -21,6 +21,7 @@
                 [type]="externalButtons()?.typeLeft || 'icon-filled'"
                 [color]="externalButtons()?.colorLeft || 'secondary'"
                 [isReadonly]="(externalButtons()?.isReadonlyLeft || false)"
+                (onClick)="onClickLeft.emit()"
             ></coer-button>
         </div>
     }
@@ -64,6 +65,7 @@
                 [type]="externalButtons()?.typeRight || 'icon-filled'"
                 [color]="externalButtons()?.colorRight || 'secondary'"
                 [isReadonly]="(externalButtons()?.isReadonlyRight || false)" 
+                (onClick)="onClickRight.emit()"
             ></coer-button>
         </div>
     }
@@ -148,17 +150,25 @@
 
     @if(_isSelectComponent()) {
         <ul [id]="_id + '-options'" [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
-            @for(item of _dataSource(); track item.__index__) {
-                <li [id]="_id + '-index' + item.__index__" [ngClass]="{ 'focus': _index() == item.__index__ }" (click)="_SetValue(item)"> 
-                    @if(IsNotOnlyWhiteSpace(_GetIconBySelect(item))) {
-                        <span class="icon-container-option">
-                            <i [class]="_GetIconBySelect(item)"></i> 
-                        </span>
-                    }
-    
-                    <span class="display-property-option">{{ _GetDisplayBySelect(item) }}</span>    
+            @if(_dataSource().length > 0) {
+                @for(item of _dataSource(); track item.__index__) {
+                    <li [id]="_id + '-index' + item.__index__" [ngClass]="{ 'focus': _index() == item.__index__ }" (click)="_SetValue(item)"> 
+                        @if(IsNotOnlyWhiteSpace(_GetIconBySelect(item))) {
+                            <span class="icon-container-option">
+                                <i [class]="_GetIconBySelect(item)"></i> 
+                            </span>
+                        }
+        
+                        <span class="display-property-option">{{ _GetDisplayBySelect(item) }}</span>    
+                    </li>
+                } 
+            }
+
+            @else {
+                <li (click)="Blur()">    
+                    <span class="display-property-option"> -- No Options -- </span>    
                 </li>
-            } 
+            }
         </ul> 
     }
 </div>       

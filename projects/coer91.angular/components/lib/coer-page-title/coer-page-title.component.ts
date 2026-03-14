@@ -72,7 +72,7 @@ export class CoerPageTitle {
     
     //computed
     protected _breadcrumbs = computed<any[]>(() =>   
-        Collections.SetIndex(this.breadcrumbs().slice(0, (screenSizeSIGNAL().breakpoint == 'mv' ? 1 : this.breadcrumbs().length)))
+        Collections.SetIndex(this.breadcrumbs().slice( - (screenSizeSIGNAL().breakpoint == 'mv' ? 2 : this.breadcrumbs().length)))
     );  
 
 

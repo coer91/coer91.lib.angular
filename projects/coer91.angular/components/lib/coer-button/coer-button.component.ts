@@ -151,19 +151,7 @@ export class CoerButton implements AfterViewInit, OnDestroy {
     protected _icon = computed<string>(() => {
         if(this.isLoading() && ['filled', 'outline'].includes(this._breakpointType())) return 'i91-arrows-rotate animation-spin animation-speed-15';
         if(Tools.IsOnlyWhiteSpace(this.icon()) && !['filled', 'outline'].includes(this._breakpointType())) return 'i91-hand-pointer-fill';
-
-        switch(this.icon()) {
-            case 'add'     : return 'i91-plus font-size-20px';
-            case 'save'    : return 'i91-floppy-disk-fill font-size-20px';
-            case 'excel'   : return 'i91-file-xls-fill font-size-20px';
-            case 'cancel'  : return 'i91-mark font-size-25px';
-            case 'import'  : return 'i91-file-arrow-up-fill font-size-20px';
-            case 'delete'  : return 'i91-trash-can font-size-20px';
-            case 'edit'    : return 'i91-pen font-size-20px';
-            case 'modal'   : return 'i91-modal-fill font-size-20px';
-            case 'navigate': return 'i91-arrow-from-bracket font-size-20px';
-            default: return this.icon();
-        } 
+        return Tools.GetDefaultIcon(this.icon()); 
     });
 
 
@@ -197,12 +185,14 @@ export class CoerButton implements AfterViewInit, OnDestroy {
 
 
     /** Focus on the button */
-    public Focus(): void {
-        if(this._isEnabled()) {
-            Tools.Sleep().then(() => this._htmlElement?.focus());            
-        }
+    public Focus(delay: number = 0): void {
+        Tools.Sleep(delay).then(() => {
+            if(this._isEnabled()) {
+                this._htmlElement?.focus();            
+            }
         
-        else this.Blur(); 
+            else this.Blur(); 
+        }); 
     }
 
 

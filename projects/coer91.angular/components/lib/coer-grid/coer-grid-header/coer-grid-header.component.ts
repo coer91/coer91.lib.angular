@@ -122,7 +122,8 @@ export class CoerGridHeader<T> implements AfterViewInit {
     protected _slotPosition = computed(() => { 
         const position = Tools.IsNotOnlyWhiteSpace(this.headerSettings()?.slotPosition) ? this.headerSettings().slotPosition! : 'left';
         const margin = position === 'left' ? 'margin-right-auto' : 'margin-left-auto';   
-        return `display-flex gap-5px ${margin}`;
+        const width = this._buttons().length > 0 || this._showSearch() ? '' : 'width-100';
+        return `display-flex gap-5px ${width} ${margin}`;
     });   
     
 

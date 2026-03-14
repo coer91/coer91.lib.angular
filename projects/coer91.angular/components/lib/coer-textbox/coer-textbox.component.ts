@@ -50,6 +50,15 @@ export class CoerTextBox extends ControlValue {
     protected readonly onKeyupEnter  = output<string>();
     protected readonly onClickClear  = output<void>();
     protected readonly onClickSearch = output<string>(); 
+    protected readonly onClickLeft   = output<void>(); 
+    protected readonly onClickRight  = output<void>(); 
+
+
+    /** Sets the value of the component */
+    protected override _SetValue(value: any): void {     
+        if(Tools.IsNull(value)) value == '';
+        super._SetValue(value);
+    }
 
 
     //Start

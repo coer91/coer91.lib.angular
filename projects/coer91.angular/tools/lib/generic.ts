@@ -125,6 +125,28 @@ export const Tools = {
     },
 
 
+    GetDefaultIcon(icon: string | null): string { 
+        switch(icon) {
+            case 'add'     : return 'i91-plus font-size-20px';
+            case 'save'    : return 'i91-floppy-disk-fill font-size-20px';
+            case 'excel'   : return 'i91-file-xls-fill font-size-20px';
+            case 'cancel'  : return 'i91-mark font-size-25px';
+            case 'import'  : return 'i91-file-arrow-up-fill font-size-20px';
+            case 'delete'  : return 'i91-trash-can font-size-20px';
+            case 'edit'    : return 'i91-pen font-size-20px';
+            case 'modal'   : return 'i91-modal-fill font-size-20px';
+            case 'navigate': return 'i91-arrow-from-bracket font-size-20px';
+            case 'loading' : return 'i91-arrows-rotate animation-spin animation-speed-15';
+
+            case 'information': return 'i91-info-circle';
+            case 'success'    : return 'i91-check-circle';
+            case 'warning'    : return 'i91-exclamation-triangle';
+            case 'error'      : return 'i91-exclamation-octagon';
+            default: return icon || '';
+        }  
+    },
+
+
     /** Send text to the computer's clipboard */
     Clipboard: (text: string, message: string = '', title: string = 'Copied'): void => {
         try {
