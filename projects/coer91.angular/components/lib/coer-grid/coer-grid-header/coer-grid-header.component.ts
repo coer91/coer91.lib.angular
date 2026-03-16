@@ -29,6 +29,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
     public readonly dataSourceExport = input.required<T[]>();
 
     //Output     
+    protected readonly onClickFilter = output<void>();
     protected readonly onClickExport = output<T[]>();
     protected readonly onClickImport = output<IImportButton<T>>();
     protected readonly onClickAdd    = output<void>();
@@ -70,6 +71,14 @@ export class CoerGridHeader<T> implements AfterViewInit {
             isLoading:  boolean,
             event:      any
         }[]) 
+        .concat(SHOW('filterButton') ? [{
+            icon:       'filter',
+            color:      COLOR('filterButton', 'primary'),
+            path:       PATH('filterButton'),
+            tooltip:    TOOLTIP('filterButton'), 
+            isLoading:  LOADING('filterButton'),
+            event: this.onClickFilter
+        }] : [])
         .concat((SHOW('exportButton') && this.dataSourceExport().length > 0) ? [{
             icon:       'excel',
             color:      COLOR('exportButton', 'primary'),

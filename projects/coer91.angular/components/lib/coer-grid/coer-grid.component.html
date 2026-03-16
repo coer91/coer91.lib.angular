@@ -16,6 +16,7 @@
             [isLoading]="isLoading()"
             [isEnabled]="_isEnabled()"
             [dataSourceExport]="_dataSourceExport()"
+            (onClickFilter)="onClickFilter.emit()"
             (onClickExport)="onClickExport.emit($event)"
             (onClickImport)="_Import($event)"
             (onClickAdd)="_Add()"

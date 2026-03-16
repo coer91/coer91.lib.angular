@@ -141,6 +141,7 @@ export const Tools = {
             case 'success'    : return 'i91-check-circle';
             case 'warning'    : return 'i91-exclamation-triangle';
             case 'error'      : return 'i91-exclamation-octagon';
+            case 'filter'     : return 'i91-filter-fill font-size-20px';
             default: return icon || '';
         }  
     },

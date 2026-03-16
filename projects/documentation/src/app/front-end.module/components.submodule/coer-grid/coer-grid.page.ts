@@ -15,6 +15,7 @@ export class CoerGridPage extends Page {
     //Variables 
     protected readonly dataSource = signal<any[]>([]);
     protected readonly drop = signal<any>(null);
+    protected readonly showColumn = signal<boolean>(true);
 
      protected readonly dataSourceSELECTION = signal<any[]>([
         { id: 1, name: 'option 1' },

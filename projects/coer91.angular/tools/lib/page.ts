@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Inject, inject, signal } from "@angular/core"; 
 import { CoerAlert } from "./coer-alert/coer-alert.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IAppSource, ITitleBreadcrumb, ITitleGoBack } from "coer91.angular/interfaces";
+import { IAppSource, ICallbackItem, ITitleBreadcrumb, ITitleGoBack } from "coer91.angular/interfaces";
 import { BreadcrumbsPage } from "./page-breadcrumbs";
 import { ResponsePage } from "./page-response"; 
 import { FiltersPage } from "./page-filters"; 
@@ -217,5 +217,19 @@ export abstract class Page implements AfterViewInit {
     protected Log(value: any, logName: string | null = null): void {
         if (Tools.IsNotNull(logName)) console.log({ log: logName, value });
         else console.log(value);
+    } 
+
+
+    /** */
+    protected iconTemplate = (data: ICallbackItem<any>): string => {
+        return `<i class='${data.row.icon}'></i>`;
+    } 
+
+
+    /** */
+    protected isActiveTemplate = (data: ICallbackItem<any>): string => {
+        return data.value 
+            ? `<span class='color-green font-weight-bold'>ACTIVE</span>` 
+            : `<span class='color-gray font-weight-bold'>DISABLED</span>`;
     } 
 }

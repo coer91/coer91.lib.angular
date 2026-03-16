@@ -44,9 +44,10 @@
         [columns]="[
             { property: 'id'  , width: '100px',  textBreak: true, format: 'currency', inputNumberbox   },
             { property: 'option'    , inputSelectbox  },  
-            { property: 'name' },
+            { property: 'name', show: showColumn() },
         ]" 
-        [headerSettings]="{   
+        [headerSettings]="{ 
+            filterButton: { show: true },  
             exportButton: { show: true, fileName: 'ddddd' },
             importButton: { show: true, },
             addButton:    { show: true  },
@@ -67,8 +68,34 @@
         [footerSettings]="{
             show: true,
         }"
-      
+        (onClickFilter)="modalFilters.Open()"
     >
  
         
     </coer-grid>
+ 
+    <coer-modal
+    #modalFilters
+    title="Filters"
+    icon="i91-filter-fill"
+    width="300px"
+>
+    <coer-selectbox
+        label="Module"
+         
+        [isLoading]="isLoading()"
+        marginTop="15px"
+        marginBottom="15px" 
+    ></coer-selectbox>
+
+    <coer-selectbox
+        label="Submodule" 
+        [isLoading]="isLoading()"
+        marginBottom="15px"
+    ></coer-selectbox>
+
+    <coer-switch   
+        [isLoading]="isLoading()"
+        [textColor]="true" 
+    ></coer-switch>
+</coer-modal>

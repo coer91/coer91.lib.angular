@@ -1,4 +1,5 @@
 export interface IHeaderSettings {
+    filterButton?: IButton;
     exportButton?: IButtonExport;
     importButton?: IButtonImport;
     addButton?: IButtonAdd;

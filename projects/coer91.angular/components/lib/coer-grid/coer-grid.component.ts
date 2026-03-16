@@ -52,6 +52,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     public override readonly marginLeft  = input<string>('30px');
 
     //Outputs
+    protected readonly onClickFilter       = output<void>();
     protected readonly onClickExport       = output<T[]>();
     protected readonly onClickImport       = output<IImportButton<T>>();
     protected readonly onClickAdd          = output<T | null>();
@@ -136,7 +137,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     //computed
     protected _columns = computed<IColumnConfig<T>[]>(() => {
         const COLUMNS = this.columns().length > 0
-            ? new Set<string>(this.columns().map(item => item.property).filter(x => !['__index__', '__checked__'].includes(x)))
+            ? new Set<string>(this.columns().filter(x => !Tools.IsBooleanFalse(x.show)).map(item => item.property).filter(x => !['__index__', '__checked__'].includes(x)))
             : new Set<string>(Tools.GetPropertyList(this._value()[0]).filter(x => !['__index__', '__checked__'].includes(x)));
          
         return [...COLUMNS].map<IColumnConfig<T>>((property, index) => ({
