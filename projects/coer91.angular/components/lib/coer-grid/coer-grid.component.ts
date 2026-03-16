@@ -45,6 +45,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     public readonly height         = input<string>('350px');
     public readonly minHeight      = input<string>('330px');
     public readonly maxHeight      = input<string>('100%');
+    public readonly siblings       = input<HTMLElement[]>([]);
 
     public override readonly marginTop   = input<string>('15px');
     public override readonly marginRight = input<string>('30px'); 
@@ -127,29 +128,9 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
 
     ngAfterContentChecked(): void {
-        let ID = this._IdCalculated(-1, -1, 'header-container');
-        let ELEMENT = HTMLElements.SelectElementById(ID);
- 
-        if(ELEMENT) { 
-            let height = 0;
-            height += Number(HTMLElements.GetCssValue(ELEMENT, 'margin-bottom').split('px')[0]);
-            height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
-            this._headerHeight.set(height); 
-        }
-
-
-        ID = this._IdCalculated(-1, -1, 'footer-container');
-        ELEMENT = HTMLElements.SelectElementById(ID);
-
-        if(ELEMENT) { 
-            let height = 0;
-            height += Number(HTMLElements.GetCssValue(ELEMENT, 'margin-bottom').split('px')[0]);
-            height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
-            this._footerHeight.set(height); 
-        }
-
-        this._containerHeight.set(this.useContainer() ? 20 : 0);
-    } 
+        this.CalculateHeight();
+        Tools.Sleep().then(() => this.CalculateHeight());
+    }  
 
 
     //computed
@@ -378,6 +359,40 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
         return this.height();
     });
+
+
+    //Function
+    private CalculateHeight() {
+        let ID = this._IdCalculated(-1, -1, 'header-container');
+        let ELEMENT = HTMLElements.SelectElementById(ID);
+ 
+        if(ELEMENT) { 
+            let height = 0;
+            height += Number(HTMLElements.GetCssValue(ELEMENT, 'margin-bottom').split('px')[0]);
+            height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
+            this._headerHeight.set(height); 
+        }
+
+
+        ID = this._IdCalculated(-1, -1, 'footer-container');
+        ELEMENT = HTMLElements.SelectElementById(ID);
+
+        if(ELEMENT) { 
+            let height = 0;
+            height += Number(HTMLElements.GetCssValue(ELEMENT, 'margin-bottom').split('px')[0]);
+            height += Number(HTMLElements.GetHeight(ELEMENT).split('px')[0]); 
+            this._footerHeight.set(height); 
+        }
+
+        let container = this.useContainer() ? 20 : 0;
+        for(const sibling of this.siblings()) {
+            container += Number(HTMLElements.GetCssValue(sibling, 'margin-top').split('px')[0]);
+            container += Number(HTMLElements.GetCssValue(sibling, 'margin-bottom').split('px')[0]);
+            container += Number(HTMLElements.GetHeight(sibling).split('px')[0]); 
+        }
+
+        this._containerHeight.set(container);
+    }
 
 
     //Function

@@ -7,6 +7,8 @@ import { ResponsePage } from "./page-response";
 import { FiltersPage } from "./page-filters"; 
 import { SourcePage } from "./page-source";
 import { Tools } from "./generic";
+import { Collections } from "./collections";
+import { Strings } from "./strings";
 
 @Component({ template: '' })
 export abstract class Page implements AfterViewInit {
@@ -41,8 +43,18 @@ export abstract class Page implements AfterViewInit {
     protected readonly filters = signal<any>({});
 
     /** */
-    protected goBack: ITitleGoBack = { show: false };  
-   
+    protected goBack: ITitleGoBack = { show: false }; 
+    
+    //Helper tools
+    protected readonly IsNull = Tools.IsNull;
+    protected readonly IsNotNull = Tools.IsNotNull;
+    protected readonly IsOnlyWhiteSpace = Tools.IsOnlyWhiteSpace;
+    protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
+    protected readonly IsBooleanTrue  = Tools.IsBooleanTrue;
+    protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
+    protected readonly SetId = Collections.SetId; 
+    protected readonly SetIndex = Collections.SetIndex;
+    protected readonly Equals = Strings.Equals;
 
     //Private Variables
     private _path: string = '';

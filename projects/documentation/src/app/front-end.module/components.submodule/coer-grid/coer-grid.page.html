@@ -4,6 +4,30 @@
     [goBack]="goBack"
 ></coer-page-title>
 
+    <div #oter class="container-section">
+        <div class="flex-basis-300px flex-grow-1">
+                <coer-selectbox
+                    #project
+                    label="Project"
+                ></coer-selectbox>
+            </div>
+            
+            <div class="flex-basis-300px flex-grow-1">
+                <coer-selectbox
+                    #menuType
+                    label="type" 
+                     
+                ></coer-selectbox> 
+            </div>
+
+            <div class="flex-basis-300px flex-grow-1">
+               <coer-textbox
+                    #icon
+                    label="icon" 
+               ></coer-textbox>
+            </div>
+    </div>
+
 
     <coer-grid
         [(ngModel)]="dataSource"
@@ -14,8 +38,9 @@
         [useContainer]="true"
         label="Componentes triple Action"
         icon="i91-home-door-fill"
-        height="100px"
+        height="full"
         marginLeft="30px"
+        [siblings]="[oter]"
         [columns]="[
             { property: 'id'  , width: '100px',  textBreak: true, format: 'currency', inputNumberbox   },
             { property: 'option'    , inputSelectbox  },  

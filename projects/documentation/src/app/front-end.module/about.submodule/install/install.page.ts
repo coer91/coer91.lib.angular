@@ -10,9 +10,7 @@ import { IInstallationStep } from '@appShared/interfaces';
 })
 export class InstallPage extends Page {  
 
-    //Variables
-    protected IsNotNull = Tools.IsNotNull;
-    protected IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
+    //Variables 
     protected Clipboard = Tools.Clipboard;
  
     constructor() {

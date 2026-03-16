@@ -50,6 +50,7 @@ import * as tools      from 'coer91.angular/tools';
         pipes.DateTimePipe,
         pipes.CurrencyPipe,
         pipes.HtmlPipe,
+        pipes.IndexCollectionPipe,
         pipes.NoImagePipe,
         pipes.NumericFormatPipe,
         pipes.TimePipe, 
