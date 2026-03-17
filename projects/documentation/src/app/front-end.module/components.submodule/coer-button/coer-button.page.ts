@@ -19,8 +19,14 @@ export class CoerButtonPage extends Page {
 
     protected override StartPage(): void {   
 
-        HTTP.DELETE<void>({
-            url: `https://localhost:5001/api/ProjectsModules/DeleteModule/${5}` 
+        const patch = [{op: "replace", path: "/isActive", value: false}]
+
+        HTTP.PATCH<void>({
+            url: `https://localhost:5001/api/ProjectsPages/PatchPage/7`,
+            headers: [
+                { header: 'Content-Type', value: 'application/json-patch+json' }
+            ],
+            body: patch 
         }); 
     }
 }

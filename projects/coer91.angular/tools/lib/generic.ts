@@ -132,7 +132,7 @@ export const Tools = {
             case 'excel'      : return 'i91-file-xls-fill font-size-20px';
             case 'cancel'     : return 'i91-mark font-size-22px';
             case 'import'     : return 'i91-file-arrow-up-fill font-size-20px';
-            case 'delete'     : return 'i91-trash-can font-size-20px';
+            case 'delete'     : return 'i91-trash-can font-size-20px margin-right-3px';
             case 'edit'       : return 'i91-pen font-size-20px';
             case 'modal'      : return 'i91-modal-fill font-size-20px';
             case 'navigate'   : return 'i91-arrow-from-bracket font-size-20px';

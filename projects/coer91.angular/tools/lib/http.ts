@@ -105,7 +105,7 @@ export class HTTP {
         }
 
         //Build HEADERS
-        const _HEADERS = this._BuildHeaders();
+        const _HEADERS = this._BuildHeaders(method);
         if (request.headers) {
             for (const header of request.headers.filter(x => Tools.IsNotOnlyWhiteSpace(x.value))) {
                 _HEADERS.append(header.header, String(header.value));
@@ -121,8 +121,7 @@ export class HTTP {
                 }
 
                 else {
-                    _BODY = JSON.stringify(request.body);
-                    _HEADERS.set('Content-Type', 'application/json');
+                    _BODY = JSON.stringify(request.body); 
                 } 
             }
 
@@ -140,10 +139,19 @@ export class HTTP {
 
 
     //Function
-    private static _BuildHeaders(): Headers {
+    private static _BuildHeaders(method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'): Headers {
         const headers = new Headers();
 
-        const USER = Access.GetUser();
+        if (['POST', 'PUT'].includes(method)) {
+            headers.set('Content-Type', 'application/json'); 
+        }
+
+        else if(method == 'PATCH') {
+            headers.set('Content-Type', 'application/json-patch+json');
+        } 
+
+        const USER = Access.GetUser(); 
+
         if(Tools.IsNotOnlyWhiteSpace(USER?.jwt)) {
             const JWT = USER!.jwt.startsWith('BEARER') ? USER!.jwt : `BEARER ${USER!.jwt}`;
             headers.append('Authorization', JWT);
