@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
-import 'coer91.angular/extensions';  
+import './extensions/index';  
 
 //Modules    
 import * as components from 'coer91.angular/components';
