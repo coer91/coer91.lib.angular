@@ -8,7 +8,5 @@ import { Page } from 'coer91.angular/tools';
 })
 export class CoerDateBoxPage extends Page {   
 
-    constructor() { 
-        super('coer-datebox')  
-    } 
+    constructor() { super('coer-datebox') } 
 }

@@ -43,6 +43,7 @@ import * as tools      from 'coer91.angular/tools';
         components.CoerSecretBox,
         components.CoerSelectBox,
         components.CoerSwitch,
+        components.CoerTab,
         components.CoerTextBox,
         core.Coer91Root,
         directives.TemplateRefDirective,  

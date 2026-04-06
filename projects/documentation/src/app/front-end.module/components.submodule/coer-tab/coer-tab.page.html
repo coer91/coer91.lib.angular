@@ -1,0 +1,34 @@
+<coer-page-title
+    title="Tab"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></coer-page-title>
+
+ 
+<coer-tab height="full" [isLoading]="false" [isReadonly]="false">
+    <ng-template templateRef="option three">
+        <coer-grid 
+            [(ngModel)]="dataSource" 
+            [useContainer]="false"
+            [headerSettings]="{
+                search: { show: true }
+            }"
+            marginLeft="0px" marginRight="0px" marginTop="0px" height="100%">
+
+        </coer-grid>
+    </ng-template>
+
+    <ng-template templateRef="option one" icon="i91-home-door-fill">
+        Hello option one
+    </ng-template>
+
+    <ng-template templateRef="option two" title="hola" [show]="false">
+        Hello option two
+    </ng-template>
+
+    <ng-template templateRef="option www" title="hwwola" [isReadonly]="true">
+        Hello option wwwwwwwwwwwww
+    </ng-template>
+
+    
+</coer-tab>

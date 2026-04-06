@@ -1,8 +1,8 @@
 import { Directive, input, TemplateRef, WritableSignal } from "@angular/core";
 
-export interface ICoerRef {
+export interface ITemplateRef {
     template: TemplateRef<any>;
-    coerRef: WritableSignal<string>;
+    templateRef: WritableSignal<string>;
     title: WritableSignal<string>;
     icon: WritableSignal<string>;
     isReadonly: WritableSignal<boolean>;

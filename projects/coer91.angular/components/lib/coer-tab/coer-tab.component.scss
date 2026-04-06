@@ -1,0 +1,87 @@
+section.coer-tab-container {
+    animation-name: __KeyOpacity100 !important; 
+    animation-iteration-count: 1 !important; 
+    animation-duration: 1.0s !important;
+    animation-direction: reverse !important;
+    box-shadow: 0px 1px 12px -10px var(--dark) !important;
+    background-color: var(--containers);
+    min-height: var(--input-height);      
+    border-radius: 8px;  
+    padding: 10px; 
+
+    @media (min-width: 0px) and (max-width: 499px) {
+        margin: 15px 15px 0px 15px !important;
+    }
+}
+
+div.coer-tab { 
+    div.coer-tab-header {
+        display: flex !important;
+        align-items: center !important; 
+        justify-content: flex-start;
+        gap: 1.5px !important; 
+
+        div.coer-tab-header-option {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 5px !important;
+            padding: 5px 10px !important;
+            height: calc(var(--input-height) - 10px - 1.60px) !important;
+            border-radius: 8px 8px 0px 0px !important;
+            min-width: 100px !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            border-bottom: 2px solid var(--gray) !important;
+            font-weight: bolder !important;
+            background-color: var(--input);
+            transition: all 0.5s ease !important;  
+            margin-bottom: 5px !important;
+        }
+
+        div.coer-tab-header-option.tab-readonly { 
+            cursor: default !important;
+            border-bottom-color: var(--input) !important;
+            color: var(--readonly) !important;
+        }
+
+        div.coer-tab-header-option.tab-selected { 
+            border-bottom-color: var(--navigation) !important;
+            color: var(--navigation) !important;
+        }
+    }
+
+    div.coer-tab-body {
+        background-color: var(--containers); 
+        position: relative; 
+
+        div.coer-tab-body-template {
+            transition: opacity 0.300s ease !important;    
+        } 
+
+        div.loading,
+        div.empty-data {
+            position: absolute !important;
+            top: 0px !important;
+            right: 0px !important;
+            bottom: 0px !important;
+            left: 0px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 1 !important;
+
+            div.loading-content,
+            div.empty-data-content {
+                flex-flow: column !important;
+                display: inherit !important;
+                justify-content: inherit !important;
+                align-items: inherit !important;
+                font-size: 35px !important;
+                color: var(--gray) !important;
+                user-select: none !important; 
+                i { font-size: inherit !important; }
+            } 
+        }
+    } 
+}

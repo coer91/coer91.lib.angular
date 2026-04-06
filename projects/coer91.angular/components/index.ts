@@ -11,4 +11,5 @@ export * from './lib/coer-page-title/coer-page-title.component';
 export * from './lib/coer-secretbox/coer-secretbox.component';  
 export * from './lib/coer-selectbox/coer-selectbox.component';  
 export * from './lib/coer-switch/coer-switch.component';  
+export * from './lib/coer-tab/coer-tab.component';  
 export * from './lib/coer-textbox/coer-textbox.component';  

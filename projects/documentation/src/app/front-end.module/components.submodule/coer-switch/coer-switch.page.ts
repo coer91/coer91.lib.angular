@@ -6,12 +6,7 @@ import { Page } from 'coer91.angular/tools';
     templateUrl: './coer-switch.page.html', 
     standalone: false
 })
-export class CoerSwitchPage extends Page {  
+export class CoerSwitchPage extends Page {   
 
-    //Variables
-    
-
-    constructor() {
-        super('coer-switch')
-    } 
+    constructor() { super('coer-switch') } 
 }

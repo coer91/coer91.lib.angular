@@ -26,6 +26,16 @@
     --information: var(--blue  );
 } 
 
+:root { //Action Colors light
+    --primary-light    : color-mix(in srgb, var(--primary),     var(--light) 80%),  
+    --secondary-light  : color-mix(in srgb, var(--secondary),   var(--light) 80%),    
+    --success-light    : color-mix(in srgb, var(--success),     var(--light) 80%),   
+    --warning-light    : color-mix(in srgb, var(--warning),     var(--light) 80%),   
+    --danger-light     : color-mix(in srgb, var(--danger),      var(--light) 80%),   
+    --navigation-light : color-mix(in srgb, var(--navigation),  var(--light) 80%),   
+    --information-light: color-mix(in srgb, var(--information), var(--light) 80%),
+} 
+
 :root { //App Colors  
     --body:         var(--smoke); 
     --toolbar:      var(--light); 
@@ -70,13 +80,13 @@
     'information': var(--information), 
 
     //Action Colors Light
-    'primary-light'    : color-mix(in srgb, var(--primary),     var(--light) 80%),  
-    'secondary-light'  : color-mix(in srgb, var(--secondary),   var(--light) 80%),   
-    'success-light'    : color-mix(in srgb, var(--success),     var(--light) 80%),  
-    'warning-light'    : color-mix(in srgb, var(--warning),     var(--light) 80%),  
-    'danger-light'     : color-mix(in srgb, var(--danger),      var(--light) 80%),  
-    'navigation-light' : color-mix(in srgb, var(--navigation),  var(--light) 80%),  
-    'information-light': color-mix(in srgb, var(--information), var(--light) 80%),
+    'primary-light'    : var(--primary-light)    ,      
+    'secondary-light'  : var(--secondary-light)  ,     
+    'success-light'    : var(--success-light)    ,      
+    'warning-light'    : var(--warning-light)    ,      
+    'danger-light'     : var(--danger-light)     ,       
+    'navigation-light' : var(--navigation-light) ,   
+    'information-light': var(--information-light),
 
     //App Colors
     'body'        : var(--body        ),   

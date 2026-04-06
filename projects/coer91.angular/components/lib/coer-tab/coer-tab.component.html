@@ -1,0 +1,45 @@
+<section
+    [ngClass]="{ 'coer-tab-container': useContainer(), 'invisible': isInvisible(), 'display-none': isHidden() }" 
+    [ngStyle]="{ 'margin-top': marginTop(), 'margin-right' : marginRight(), 'margin-bottom': marginBottom(), 'margin-left': marginLeft() }">
+
+    <div class="coer-tab" [ngStyle]="{ 'width' : width(), 'min-width': minWidth(), 'max-width': maxWidth() }">
+        <div class="coer-tab-header">
+            @for(tab of _tabList(); track tab.__index__) {                 
+                <div class="coer-tab-header-option" (click)="_ClickTab(tab.__index__)"
+                    [ngClass]="{ 
+                        'tab-readonly': (tab.isReadonly() || isReadonly()),
+                        'tab-selected': tab.__index__ == _value(),
+                        'loading'     : isLoading()
+                    }">
+
+                    @if(IsNotOnlyWhiteSpace(_GetIcon(tab))) {
+                        <i [class]="_GetIcon(tab)"></i>
+                    }
+                    
+                    <span>{{ _GetLabel(tab) }}</span>  
+                </div>                
+            }
+        </div> 
+
+        <div class="coer-tab-body" [ngStyle]="{ 
+            'height'    : `calc(${_height()}   - ${_containerHeight()}px)`, 
+            'min-height': `calc(${minHeight()} - ${_containerHeight()}px)`, 
+            'max-height': `calc(${maxHeight()} - ${_containerHeight()}px)`,
+            'overflow'  : (isLoading() ? 'hidden' : 'auto')
+        }">    
+            <div class="coer-tab-body-template" [style]="{ opacity: (_showingTab() ? '1.00' : '0.00'), visibility: (_showingTab() ? 'visible' : 'hidden') }">
+                <ng-container [ngTemplateOutlet]="_GetContent()"></ng-container>
+            </div>  
+            
+            <!-- Loading / Empty -->
+            @if(isLoading()) {
+                <div class="loading">
+                    <div class="loading-content">
+                        <i class="i91-arrows-rotate animation-spin animation-speed-15"></i>
+                        <span class="fa-fade">Loading</span>
+                    </div>
+                </div> 
+            }
+        </div> 
+    </div>
+</section>  

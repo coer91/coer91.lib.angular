@@ -8,14 +8,11 @@ import { HTTP, Page, Tools } from 'coer91.angular/tools';
 })
 export class CoerButtonPage extends Page {  
 
+    constructor() { super('coer-button') } 
+
     //Variables
     protected typeList  = signal<any>(['filled', 'outline', 'icon-filled', 'icon-filled-rounded', 'icon-outline', 'icon-outline-rounded', 'icon', 'icon-rounded']);
     protected colorList = signal<any>(['primary', 'secondary', 'success', 'warning', 'danger', 'navigation', 'information', 'dark', 'light']);
-
-    constructor() {
-        super('coer-button')
-    } 
-
 
     protected override StartPage(): void {   
 
