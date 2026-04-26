@@ -1,141 +1,151 @@
-@switch(_input()) {
-    @case ('inputSwitch') {
-        <div [class]="_input()"> 
-            <coer-switch 
-                [id]="id()"
-                [ngModel]="row()[column().config.property]"
-                [isReadonly]="!isEnabled() ||!_isElementReady() || _GetAttributeValue('isReadonly', false)" 
-                [type]="_GetAttributeValue('type', 'switch')"
-                [color]="_GetAttributeValue('color', 'primary')"
-                [tooltip]="_GetAttributeValue('tooltip', '')"
-                [tooltipPosition]="_GetAttributeValue('tooltipPosition', 'left')" 
-                marginLeft="auto"
-                marginRight="auto"
-                [isLoading]="isLoadingInner()()" 
-                (onValueChange)="_isElementReady() ? onInputChange.emit({
-                    position: 'BODY',
-                    input: _input(),
-                    property: column().config.property,
-                    before: row(),
-                    value: $event
-                }): null"
-            ></coer-switch> 
-        </div>
-    } 
+@if(!isDraging() && isDragoverUp()) {
+    <div class="dragover-zone"></div>
+}
 
-    @case ('inputTextbox') {
-        <div [class]="_input()"> 
-            <coer-textbox
-                [id]="id()"
-                #inputTextbox
-                [ngModel]="row()[column().config.property]"   
-                [isValid]="_GetAttributeValue('isValid', false)"
-                [isInvalid]="_GetAttributeValue('isInvalid', false)"
-                [placeholder]="_GetAttributeValue('placeholder', 'Type...')"
-                [selectOnFocus]="_GetAttributeValue('selectOnFocus', false)"
-                [textPosition]="_GetAttributeValue('textPosition', 'left')"
-                [minLength]="_GetAttributeValue('minLength', 0)"
-                [maxLength]="_GetAttributeValue('maxLength', 50)"
-                (onValueChange)="_isElementReady() ? onInputChange.emit({
-                    position: 'BODY',
-                    input: _input(),
-                    property: column().config.property,
-                    before: row(),
-                    value: $event
-                }): null"
-                (onKeyupEnter)="onKeyupEnter.emit({ 
-                    id: id(),
-                    input: _input(), 
-                    property: column().config.property,
-                    row: row(), 
-                    value: $event
-                })"
-            ></coer-textbox>
-        </div>
-    }
-
-    @case ('inputNumberbox') {
-        <div [class]="_input()">  
-            <coer-numberbox
-                [id]="id()"
-                #inputNumberbox
-                [ngModel]="row()[column().config.property]"   
-                [isValid]="_GetAttributeValue('isValid', false)"
-                [isInvalid]="_GetAttributeValue('isInvalid', false)"
-                [placeholder]="_GetAttributeValue('placeholder', '########')"
-                [selectOnFocus]="_GetAttributeValue('selectOnFocus', false)"
-                [textPosition]="_GetAttributeValue('textPosition', 'center')"
-                [minLength]="_GetAttributeValue('minLength', 0)"
-                [maxLength]="_GetAttributeValue('maxLength', 20)"
-                [format]="_GetAttributeValue('format', 'number')"
-                [decimals]="_GetAttributeValue('decimals', 0)"
-                [step]="_GetAttributeValue('step', 1)"
-                [showStepIcon]="_GetAttributeValue('showStepIcon', false)"
-                [min]="_GetAttributeValue('min', 0)"
-                [max]="_GetAttributeValue('max', 2147483647)"
-                (onValueChange)="_isElementReady() ? onInputChange.emit({
-                    position: 'BODY',
-                    input: _input(),
-                    property: column().config.property,
-                    before: row(),
-                    value: $event
-                }): null"
-                (onKeyupEnter)="onKeyupEnter.emit({ 
-                    id: id(),
-                    input: _input(), 
-                    property: column().config.property,
-                    row: row(), 
-                    value: $event
-                })"
-            ></coer-numberbox>
-        </div>
-    }
-
-    @case ('inputSelectbox') {
-        <div [class]="_input()">  
-            <coer-selectbox
-                [id]="id()"
-                #coerSelectbox
-                [ngModel]="row()[column().config.property]"   
-                [dataSource]="_GetAttributeValue('dataSource', [])"
-                [isValid]="_GetAttributeValue('isValid', false)"
-                [isInvalid]="_GetAttributeValue('isInvalid', false)"
-                [placeholder]="_GetAttributeValue('placeholder', '-- Select --')"
-                [selectOnFocus]="_GetAttributeValue('selectOnFocus', true)"
-                [textPosition]="_GetAttributeValue('textPosition', 'left')"
-                [displayProperty]="_GetAttributeValue('displayProperty', 'name')"
-                [useIconProperty]="_GetAttributeValue('useIconProperty', false)"
-                (onOpen)="coerSelectbox.ScrollToElement(350, 'end')"
-                (onValueChange)="_SelectboxChange($event)"
-                (onKeyupEnter)="onKeyupEnter.emit({ 
-                    id: id(),
-                    input: _input(), 
-                    property: column().config.property,
-                    row: row(), 
-                    value: $event
-                })"
-            ></coer-selectbox>
-        </div>
-    }
-
-    @case ('inputDatebox') {
-        <div [class]="_input()">  
-
-        </div>
-    }
+<div [ngClass]="{ 'draging': isDraging(), 'dragover-zone': isDraging() && isDragoverself() }">
+    @switch(_input()) {
+        @case ('inputSwitch') {
+            <div [class]="_input()"> 
+                <coer-switch 
+                    [id]="id()"
+                    [ngModel]="row()[column().config.property]"
+                    [isReadonly]="!isEnabled() ||!_isElementReady() || _GetAttributeValue('isReadonly', false)" 
+                    [type]="_GetAttributeValue('type', 'switch')"
+                    [color]="_GetAttributeValue('color', 'primary')"
+                    [tooltip]="_GetAttributeValue('tooltip', '')"
+                    [tooltipPosition]="_GetAttributeValue('tooltipPosition', 'left')" 
+                    marginLeft="auto"
+                    marginRight="auto"
+                    [isLoading]="isLoadingInner()()" 
+                    (onValueChange)="_isElementReady() ? onInputChange.emit({
+                        position: 'BODY',
+                        input: _input(),
+                        property: column().config.property,
+                        before: row(),
+                        value: $event
+                    }): null"
+                ></coer-switch> 
+            </div>
+        } 
     
-    @default {
-        <div class="default" 
-            [class]="_GetTextColor()"
-            [ngStyle]="{ 
-                'justify-content': _GetTextAlignX(),
-                'word-break'     : _GetTextBreak(),
-                'white-space'    : _GetSpaceBreak(), 
-                'min-height'     : _minHeight()  
-            }"
-            (click)="isEnabled() ? onClickRow.emit(row()) : null"
-            (dblclick)="_DoubleClick()">  
-            <div [innerHTML]="_GetCellValue() | html"></div>          
-        </div> 
+        @case ('inputTextbox') {
+            <div [class]="_input()"> 
+                <coer-textbox
+                    [id]="id()"
+                    #inputTextbox
+                    [ngModel]="row()[column().config.property]"   
+                    [isValid]="_GetAttributeValue('isValid', false)"
+                    [isInvalid]="_GetAttributeValue('isInvalid', false)"
+                    [placeholder]="_GetAttributeValue('placeholder', 'Type...')"
+                    [selectOnFocus]="_GetAttributeValue('selectOnFocus', false)"
+                    [textPosition]="_GetAttributeValue('textPosition', 'left')"
+                    [minLength]="_GetAttributeValue('minLength', 0)"
+                    [maxLength]="_GetAttributeValue('maxLength', 50)"
+                    (onValueChange)="_isElementReady() ? onInputChange.emit({
+                        position: 'BODY',
+                        input: _input(),
+                        property: column().config.property,
+                        before: row(),
+                        value: $event
+                    }): null"
+                    (onKeyupEnter)="onKeyupEnter.emit({ 
+                        id: id(),
+                        input: _input(), 
+                        property: column().config.property,
+                        row: row(), 
+                        value: $event
+                    })"
+                ></coer-textbox>
+            </div>
+        }
+    
+        @case ('inputNumberbox') {
+            <div [class]="_input()">  
+                <coer-numberbox
+                    [id]="id()"
+                    #inputNumberbox
+                    [ngModel]="row()[column().config.property]"   
+                    [isValid]="_GetAttributeValue('isValid', false)"
+                    [isInvalid]="_GetAttributeValue('isInvalid', false)"
+                    [placeholder]="_GetAttributeValue('placeholder', '########')"
+                    [selectOnFocus]="_GetAttributeValue('selectOnFocus', false)"
+                    [textPosition]="_GetAttributeValue('textPosition', 'center')"
+                    [minLength]="_GetAttributeValue('minLength', 0)"
+                    [maxLength]="_GetAttributeValue('maxLength', 20)"
+                    [format]="_GetAttributeValue('format', 'number')"
+                    [decimals]="_GetAttributeValue('decimals', 0)"
+                    [step]="_GetAttributeValue('step', 1)"
+                    [showStepIcon]="_GetAttributeValue('showStepIcon', false)"
+                    [min]="_GetAttributeValue('min', 0)"
+                    [max]="_GetAttributeValue('max', 2147483647)"
+                    (onValueChange)="_isElementReady() ? onInputChange.emit({
+                        position: 'BODY',
+                        input: _input(),
+                        property: column().config.property,
+                        before: row(),
+                        value: $event
+                    }): null"
+                    (onKeyupEnter)="onKeyupEnter.emit({ 
+                        id: id(),
+                        input: _input(), 
+                        property: column().config.property,
+                        row: row(), 
+                        value: $event
+                    })"
+                ></coer-numberbox>
+            </div>
+        }
+    
+        @case ('inputSelectbox') {
+            <div [class]="_input()">  
+                <coer-selectbox
+                    [id]="id()"
+                    #coerSelectbox
+                    [ngModel]="row()[column().config.property]"   
+                    [dataSource]="_GetAttributeValue('dataSource', [])"
+                    [isValid]="_GetAttributeValue('isValid', false)"
+                    [isInvalid]="_GetAttributeValue('isInvalid', false)"
+                    [placeholder]="_GetAttributeValue('placeholder', '-- Select --')"
+                    [selectOnFocus]="_GetAttributeValue('selectOnFocus', true)"
+                    [textPosition]="_GetAttributeValue('textPosition', 'left')"
+                    [displayProperty]="_GetAttributeValue('displayProperty', 'name')"
+                    [useIconProperty]="_GetAttributeValue('useIconProperty', false)"
+                    (onOpen)="coerSelectbox.ScrollToElement(350, 'end')"
+                    (onValueChange)="_SelectboxChange($event)"
+                    (onKeyupEnter)="onKeyupEnter.emit({ 
+                        id: id(),
+                        input: _input(), 
+                        property: column().config.property,
+                        row: row(), 
+                        value: $event
+                    })"
+                ></coer-selectbox>
+            </div>
+        }
+    
+        @case ('inputDatebox') {
+            <div [class]="_input()">  
+    
+            </div>
+        }
+        
+        @default {
+            <div class="default" 
+                [class]="_GetTextColor()"
+                [ngStyle]="{ 
+                    'justify-content': _GetTextAlignX(),
+                    'word-break'     : _GetTextBreak(),
+                    'white-space'    : _GetSpaceBreak(), 
+                    'min-height'     : _minHeight()  
+                }"
+                (click)="isEnabled() ? onClickRow.emit(row()) : null"
+                (dblclick)="_DoubleClick()">  
+                <div [innerHTML]="_GetCellValue() | html"></div>          
+            </div> 
+        }
     }
+</div>
+
+@if(!isDraging() && isDragoverDown()) {
+    <div class="dragover-zone"></div>
 }

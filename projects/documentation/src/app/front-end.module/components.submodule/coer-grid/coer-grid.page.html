@@ -41,9 +41,10 @@
         height="full"
         marginLeft="30px"
         [siblings]="[oter]"
+        [isDraggable]="true"
         [columns]="[
-            { property: 'id'  , width: '100px',  textBreak: true, format: 'currency', inputNumberbox   },
-            { property: 'option'    , inputSelectbox  },  
+            { property: 'id'  , width: '100px',  textBreak: true, format: 'currency'   },
+            { property: 'option'    ,   },  
             { property: 'name', show: showColumn() },
         ]" 
         [headerSettings]="{ 
@@ -59,7 +60,7 @@
             showStriped: true,
             showBorders: false,
             focusNext: true,
-            selectionRows:  { show: false, selectOverRow: true, selectAllowed: null },
+            selectionRows:  { show: false, selectOverRow: false, selectAllowed: null },
             deleteButton:   { show: false, showConfirmation: false },
             editButton:     { show: false, },
             modalButton:    { show: false, },

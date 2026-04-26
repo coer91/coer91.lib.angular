@@ -43,6 +43,8 @@
             [isLoading]="isLoading()"
             [isEnabled]="_isEnabled()"
             [useContainer]="useContainer()"
+            [displayProperty]="displayProperty()"
+            [isDraggable]="isDraggable()"
             [height]="`calc(${_height()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [minHeight]="`calc(${minHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [maxHeight]="`calc(${ maxHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
@@ -58,6 +60,7 @@
             (onKeyupEnter)="onKeyupEnter.emit($event)"
             (onUpdateType)="_SetValueInput($event, true)"
             (onSort)="_SetValue($event, true); onSort.emit($event);"
+            (onReorder)="Reorder($event)"
         ></coer-grid-body>
         
         <!-- Footer -->

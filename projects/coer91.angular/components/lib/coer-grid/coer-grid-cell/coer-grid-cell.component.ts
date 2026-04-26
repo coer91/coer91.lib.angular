@@ -30,6 +30,10 @@ export class CoerGridCell<T> implements AfterViewInit {
     public readonly bodySettings   = input.required<IBodySettings<T>>();
     public readonly isLoadingInner = input.required<WritableSignal<boolean>>();
     public readonly isEnabled      = input.required<boolean>();
+    public readonly isDraging      = input.required<boolean>();
+    public readonly isDragoverself = input.required<boolean>();
+    public readonly isDragoverUp   = input.required<boolean>();
+    public readonly isDragoverDown = input.required<boolean>();
 
     //Outputs  
     protected readonly onClickRow       = output<T>();

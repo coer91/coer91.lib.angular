@@ -1,7 +1,7 @@
 import { IBodySettings, ICallbackItem, IColumn, IColumnConfig, IDataSourceGroup, IHeaderSettings, IInputChange, IInputEnter, ISelectedRow, ISort } from "coer91.angular/interfaces";
 import { Component, computed, input, output, signal, viewChildren, WritableSignal } from "@angular/core";
 import { CoerGridCell } from "../coer-grid-cell/coer-grid-cell.component";
-import { Collections, Dates, Tools } from "coer91.angular/tools"; 
+import { Collections, Dates, HTMLElements, Tools } from "coer91.angular/tools"; 
 
 @Component({
     selector: 'coer-grid-body',
@@ -18,6 +18,8 @@ export class CoerGridBody<T> {
     protected readonly _sort = signal<ISort>({ property: '', direction: 'none', icon: '' });
     protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
     protected readonly _checkAll = signal<boolean>(false);
+    protected readonly dragingId  = signal<number>(-1);
+    protected readonly dragoverId = signal<number>(-1);
 
     //Input
     public readonly value           = input.required<T[]>();
@@ -31,6 +33,8 @@ export class CoerGridBody<T> {
     public readonly isLoading       = input.required<boolean>();
     public readonly isEnabled       = input.required<boolean>();   
     public readonly useContainer    = input.required<boolean>();
+    public readonly displayProperty = input.required<string>();
+    public readonly isDraggable     = input.required<boolean>();
     public readonly search          = input.required<string>();
     public readonly height          = input.required<string>();
     public readonly minHeight       = input.required<string>();
@@ -50,6 +54,7 @@ export class CoerGridBody<T> {
     protected readonly onKeyupEnterLast    = output<IInputChange<T>>();
     protected readonly onUpdateType        = output<IInputChange<T>>(); 
     protected readonly onSort              = output<T[]>();
+    protected readonly onReorder           = output<{ from: number, to: number }>();
 
     //Function
     protected _showStriped = (index: number): boolean => {
@@ -61,7 +66,12 @@ export class CoerGridBody<T> {
     protected _ShowButton(button: any, position: 'left' | 'right', row: any = null) {
         let response = false;
 
-        if(position === button.position && this.isEnabled() && !this.isLoadingInner()() && this.dataSourceGroup().length > 0) { 
+        if(position === button.position 
+            && this.isEnabled() 
+            && !this.isLoadingInner()() 
+            && this.dataSourceGroup().length > 0
+            && this.dragingId() < 0
+        ) { 
             const SHOW_BUTTON = (this.bodySettings() as any)[button.property]?.show;
             
             if (Tools.IsNull(row)) {
@@ -159,7 +169,8 @@ export class CoerGridBody<T> {
         return this.bodySettings().selectionRows?.show 
             && this.dataSourceGroup().length > 0  
             && (this.bodySettings().selectionRows?.selectAllowed !== 0)
-            && this.isEnabled(); 
+            && this.isEnabled()
+            && this.dragingId() < 0; 
     });
 
 
@@ -543,4 +554,86 @@ export class CoerGridBody<T> {
             }  
         }
     }
+
+
+    /** */
+    protected _Drag(row: any, event: DragEvent) {    
+        event.stopPropagation();         
+        event.dataTransfer!.setData('text', `${row.__index__}`);
+        this.dragingId.set(row.__index__);
+        
+        let message = ""
+        if(Tools.HasProperty(row, this.displayProperty())) {
+            message = row[this.displayProperty()]; 
+        }
+
+        else if(Tools.IsOnlyWhiteSpace(message) && Tools.HasProperty(row, 'name')) {
+            message = row['name']; 
+        }
+
+        else if(Tools.IsOnlyWhiteSpace(message) && Tools.HasProperty(row, 'option')) {
+            message = row['option']; 
+        }
+
+        else message = "dragging"; 
+
+        const ELEMENT = event.target as HTMLElement;
+
+        if(ELEMENT) {     
+            const ghost = document.createElement("div");
+            ghost.innerHTML = ELEMENT.outerHTML;
+            ghost.style.background = "var(--primary)";
+            ghost.style.color = "var(--black)";
+            ghost.style.padding = "5px";
+            ghost.style.display = "flex"; 
+
+            let positionY = Number(HTMLElements.GetHeight(ELEMENT).split('px')[0] || 0);
+            if(positionY > 0) positionY /= 2;
+    
+            document.body.appendChild(ghost);
+            event.dataTransfer?.setDragImage(ghost, 100, positionY);
+            setTimeout(() => document.body.removeChild(ghost), 0);
+
+        }
+    }
+
+
+    /** */
+    protected _DragOver(index: number, event: DragEvent) {
+        event.preventDefault();
+        event.stopPropagation();  
+        this.dragoverId.set(index);
+    }
+
+
+    /** */
+    protected _Drop(index: number, event: DragEvent) {
+        event.preventDefault();
+        event.stopPropagation();        
+        
+        this.dragoverId.set(-1);
+        this.dragingId.set(-1);
+        const from = Number(event.dataTransfer?.getData('text') || '-1');
+        if(from >= 0) {
+            this.onReorder.emit({ from, to: index }); 
+        }        
+    }
+
+
+    //Computed
+    protected _cursor = computed(() => {
+        if(this.bodySettings().selectionRows?.show && this.bodySettings().selectionRows?.selectOverRow) {
+            return 'pointer';
+        }
+
+        else if(this.isDraggable() && this.dragingId() >= 0) {
+            return 'grabbing';
+        }
+
+        else if(this.isDraggable()) {
+            return 'grab';
+        }
+
+        return 'default';
+    }); 
 }

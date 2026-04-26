@@ -33,19 +33,21 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     protected _resize$!: Subscription;
 
     //Input 
-    public readonly columns        = input<IColumn<T>[]>([]);
-    public readonly headerSettings = input<IHeaderSettings>({}); 
-    public readonly bodySettings   = input<IBodySettings<T>>({}); 
-    public readonly footerSettings = input<IFooterSettings<T>>({}); 
-    public readonly useContainer   = input<boolean>(true);
-    public readonly icon           = input<string>('');
-    public readonly width          = input<string>('100%');
-    public readonly minWidth       = input<string>('100px');
-    public readonly maxWidth       = input<string>('100%');
-    public readonly height         = input<string>('350px');
-    public readonly minHeight      = input<string>('330px');
-    public readonly maxHeight      = input<string>('100%');
-    public readonly siblings       = input<HTMLElement[]>([]);
+    public readonly columns         = input<IColumn<T>[]>([]);
+    public readonly headerSettings  = input<IHeaderSettings>({}); 
+    public readonly bodySettings    = input<IBodySettings<T>>({}); 
+    public readonly footerSettings  = input<IFooterSettings<T>>({}); 
+    public readonly useContainer    = input<boolean>(true);
+    public readonly icon            = input<string>('');
+    public readonly width           = input<string>('100%');
+    public readonly minWidth        = input<string>('100px');
+    public readonly maxWidth        = input<string>('100%');
+    public readonly height          = input<string>('350px');
+    public readonly minHeight       = input<string>('330px');
+    public readonly maxHeight       = input<string>('100%');
+    public readonly siblings        = input<HTMLElement[]>([]);
+    public readonly displayProperty = input<string>('name');
+    public readonly isDraggable     = input<boolean>(false);
 
     public override readonly marginTop   = input<string>('15px');
     public override readonly marginRight = input<string>('30px'); 
@@ -457,6 +459,17 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
         this.onClickAdd.emit(row);
     }  
+
+
+    /** */
+    protected Reorder(event: any): void {
+        const { from, to } = event;
+        const DATA_SOURCE = [...this._value()];        
+        const FROM_DATA = { ...DATA_SOURCE[from] };
+        DATA_SOURCE.splice(from, 1);
+        DATA_SOURCE.splice(to, 0, FROM_DATA);        
+        this._SetValue(DATA_SOURCE);
+    }
 
 
     /** */

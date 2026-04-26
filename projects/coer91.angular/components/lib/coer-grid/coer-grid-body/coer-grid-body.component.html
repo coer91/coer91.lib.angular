@@ -65,6 +65,10 @@
             <tbody> 
                 @for(row of group.rows; let index = $index; track row.__index__) {
                     <tr [id]="IdCalculated()(row.__index__, -1, 'row')" 
+                        [draggable]="isDraggable()" 
+                        (dragstart)="_Drag(row, $event)"
+                        (dragover)="_DragOver(row.__index__, $event)"                        
+                        (drop)="_Drop(row.__index__, $event)"
                         [ngClass]="{ 
                             'striped'   : _showStriped(index), 
                             'no-striped': !_showStriped(index),
@@ -110,7 +114,7 @@
                                 [ngStyle]="{ 
                                     'border-bottom' : _borderButtom(), 
                                     'vertical-align': column.config.textAlignY!,   
-                                    'cursor'        : bodySettings().selectionRows?.selectOverRow ? 'pointer' : 'default'                                  
+                                    'cursor'        : _cursor()                       
                                 }"> 
                                 <coer-grid-cell
                                     [id]="IdCalculated()(row.__index__, column.__index__, 'cell')"
@@ -120,6 +124,10 @@
                                     [bodySettings]="bodySettings()"
                                     [isLoadingInner]="isLoadingInner()"
                                     [isEnabled]="isEnabled()"
+                                    [isDraging]="dragingId() === row.__index__"
+                                    [isDragoverself]="(dragoverId() === row.__index__) && (dragingId() == row.__index__)"
+                                    [isDragoverUp]="(dragoverId() === row.__index__) && (dragingId() > row.__index__)"
+                                    [isDragoverDown]="(dragoverId() === row.__index__) && (dragingId() < row.__index__)"
                                     (onClickRow)="_ClickOnRow($event)"
                                     (onDoubleClickRow)="onDoubleClickRow.emit($event)"
                                     (onInputChange)="onInputChange.emit($event)"
@@ -168,4 +176,4 @@
             <div class="empty-data-content"> No Data </div>
         </div>
     } 
-</section> 
+</section>  
