@@ -20,6 +20,10 @@ main {
             text-align: center !important;
             font-weight: bold !important;
             color: var(--dark) !important;
+
+            i {
+                font-size: 35px !important;
+            }
         }
 
         section.options {

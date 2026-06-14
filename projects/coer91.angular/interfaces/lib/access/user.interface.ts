@@ -1,11 +1,11 @@
 export interface IUser {
-    userId: number;
-    user: string;
-    userNumber: string;
-    role: string;
-    partner: string;
-    fullName: string; 
-    email: string;
-    jwt: string; 
-    roles: string[];
+    UserId:    number;
+    User:      string; 
+    PartnerId: number;
+    Partner:   string;
+    FullName:  string; 
+    Email:     string;
+    JWT:       string; 
+    Roles:     string[];
+    Language:  string;
 }

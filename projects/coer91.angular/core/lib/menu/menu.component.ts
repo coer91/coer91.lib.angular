@@ -1,7 +1,7 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core'; 
+import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';
 import { navigationSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { Collections, Page, Strings, Tools } from 'coer91.angular/tools';
-import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';  
  
 @Component({
     selector: 'menu-page',
@@ -26,13 +26,13 @@ export class MenuPage extends Page {
 
     //Function
     protected _isPage = (item: IMenu): boolean => {
-        return Tools.IsNull(item?.items) && Tools.IsNotOnlyWhiteSpace(item?.path);
+        return Tools.IsNull(item?.Items) && Tools.IsNotOnlyWhiteSpace(item?.Path);
     }
 
 
     //Function
     protected _getPath = (item: IMenu): string | null => {
-        return (this._isPage(item) && item.path!.length > 0) ? item.path! : null;
+        return (this._isPage(item) && item.Path!.length > 0) ? item.Path! : null;
     } 
     
     
@@ -57,11 +57,11 @@ export class MenuPage extends Page {
             this.title.set(TREE[0].label); 
             this.SetPageName(TREE[TREE.length - 1].label); 
             const INDEX_MENU = Number(TREE[0].id.split('index')[1]);
-            const MENU = navigationSIGNAL()[INDEX_MENU]?.items || [];
+            const MENU = navigationSIGNAL()[INDEX_MENU]?.Items || [];
                                 
             if(TREE.length > 1) {
                 const INDEX_SUBMENU = Number(TREE[1].id.split('index')[1]);
-                const SUBMENU = MENU[INDEX_SUBMENU]?.items || [];
+                const SUBMENU = MENU[INDEX_SUBMENU]?.Items || [];
                 this.menu.set(SUBMENU);
             }
 

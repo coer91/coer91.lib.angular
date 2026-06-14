@@ -1,4 +1,4 @@
-import { IAuthService, IHttpResponse, ILogin, ILoginResponse, IMenu, IToolbarMenu, IUserRole } from 'coer91.angular/interfaces'; 
+import { IAuthService, IHttpResponse, ILogin, ILoginResponse, IMenu, IToolbarMenu } from 'coer91.angular/interfaces'; 
 import { Component, input, output, signal, viewChild } from '@angular/core'; 
 import { isLoadingSIGNAL, userSIGNAL } from 'coer91.angular/signals';  
 import { Access, Tools } from 'coer91.angular/tools'; 
@@ -19,7 +19,7 @@ declare const appSettings: any;
             (onLogin)="Login($event)"
             (onRecoveryPassword)="RecoveryPassword($event)"
             (onUpdatePassword)="SetPassword($event)"
-            (onUpdateRole)="UpdateRole($event)"
+            (onUpdateLanguage)="UpdateLanguage($event)"
             (onUpdateJWT)="UpdateJWT()"
             (onClickToolbarMenu)="ToolbarMenu($event)"
         ></coer91-component>
@@ -43,7 +43,7 @@ export class Coer91Root {
     protected readonly onLogin            = output<ILogin>();
     protected readonly onRecoveryPassword = output<string>(); 
     protected readonly onUpdatePassword   = output<string>();
-    protected readonly onUpdateRole       = output<string>();
+    protected readonly onUpdateLanguage   = output<string>();
     protected readonly onUpdateJWT        = output<void>();
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
 
@@ -109,11 +109,10 @@ export class Coer91Root {
         }                     
 
         else {
-            const FUNCTION = this.authService().GetNavigationByRole as (project: string, role: string) => Promise<IHttpResponse<IMenu[]>>;
+            const FUNCTION = this.authService().GetNavigationByRole as (project: string) => Promise<IHttpResponse<IMenu[]>>;
 
-            const project = appSettings?.appInfo?.project || '';
-            const role = userSIGNAL()?.role || '';
-            const response = await FUNCTION(project, role);   
+            const project = appSettings?.appInfo?.project || '';            
+            const response = await FUNCTION(project);   
             
             if(response.ok) this._navigation.set(response.data);
              
@@ -134,7 +133,7 @@ export class Coer91Root {
             const response = await FUNCTION(user);   
     
             if(response.ok) {
-                this._coer91().alert.Information(response.data.password);
+                this._coer91().alert.Information(response.data.Password);
                 this._coer91().Show('LOGIN'); 
             }
     
@@ -151,13 +150,13 @@ export class Coer91Root {
 
 
     /** */
-    protected async SetPassword(password: string): Promise<void> { 
+    protected async SetPassword(Password: string): Promise<void> { 
         if(Tools.IsFunction(this.authService()?.SetPassword)) {
             const FUNCTION = this.authService().SetPassword as (login: ILogin) => Promise<IHttpResponse<string>>;
     
             isLoadingSIGNAL.set(true);
-            const user = userSIGNAL()?.user || '';
-            const response = await FUNCTION({ user, password });   
+            const User = userSIGNAL()?.User || '';
+            const response = await FUNCTION({ User, Password });   
     
             if(response.ok) {
                 this._coer91().alert.Success(response.data, 'Change Password', 'i91-lock-fill');
@@ -171,35 +170,35 @@ export class Coer91Root {
             isLoadingSIGNAL.set(false);
         }
 
-        this.onUpdatePassword.emit(password);
+        this.onUpdatePassword.emit(Password);
     }
 
 
     /** */
-    protected async UpdateRole(roleId: string): Promise<void> {
-        if(Tools.IsFunction(this.authService()?.SetUserRoleMain)) {
-            const FUNCTION = this.authService().SetUserRoleMain as (userId: number, roleId: string | number) => Promise<IHttpResponse<IUserRole>>;
+    protected async UpdateLanguage(language: string): Promise<void> {
+        //if(Tools.IsFunction(this.authService()?.SetUserRoleMain)) {
+        //     const FUNCTION = this.authService().SetUserRoleMain as (userId: number, roleId: string | number) => Promise<IHttpResponse<IUserRole>>;
             
-            isLoadingSIGNAL.set(true); 
-            const userId = userSIGNAL()?.userId || 0;
-            const response = await FUNCTION(userId, roleId);   
+        //     isLoadingSIGNAL.set(true); 
+        //     const userId = userSIGNAL()?.userId || 0;
+        //     const response = await FUNCTION(userId, roleId);   
     
-            if(response.ok) {
-                await this.UpdateJWT();
-                userSIGNAL.set(Access.GetUser());
-                this._coer91().CloseModal();
-                this._coer91().alert.Success('The rol has been updated', response.data.role); 
-                await this.GetNavigation(); 
-            }
+        //     if(response.ok) {
+        //         await this.UpdateJWT();
+        //         userSIGNAL.set(Access.GetUser());
+        //         this._coer91().CloseModal();
+        //         this._coer91().alert.Success('The rol has been updated', response.data.role); 
+        //         await this.GetNavigation(); 
+        //     }
     
-            else {
-                this._coer91().alert.Warning(response.message);
-            } 
+        //     else {
+        //         this._coer91().alert.Warning(response.message);
+        //     } 
     
-            isLoadingSIGNAL.set(false);
-        } 
+        //     isLoadingSIGNAL.set(false);
+        //} 
 
-        this.onUpdateRole.emit(roleId);
+        this.onUpdateLanguage.emit(language);
     }
 
 

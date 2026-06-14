@@ -142,6 +142,9 @@ export const Tools = {
             case 'warning'    : return 'i91-exclamation-triangle';
             case 'error'      : return 'i91-exclamation-octagon';
             case 'filter'     : return 'i91-filter-fill font-size-20px';
+            case 'bug'        : return 'i91-bug-fill font-size-20px'; 
+            case 'barcode'    : return 'i91-barcode font-size-20px';
+            case 'back'       : return 'i91-arrow-from-bracket font-size-25px i91-mirror-Y'
             default: return icon || '';
         }  
     },

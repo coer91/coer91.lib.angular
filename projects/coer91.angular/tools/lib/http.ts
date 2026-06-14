@@ -1,10 +1,12 @@
-import { IHttpRequest, IHttpResponse } from "coer91.angular/interfaces";
 import { CoerAlert } from "./coer-alert/coer-alert.component";
 import { Tools } from "./generic";
 import { Dates } from "./dates";
 import { Access } from "./access";
+import { IHttpRequest, IHttpResponse } from "coer91.angular/interfaces";
 
 export class HTTP {
+
+    public readonly alert = new CoerAlert();
 
     public static readonly STATUS_CODE = {
         /** 200 */
@@ -31,7 +33,7 @@ export class HTTP {
         PayloadTooLarge: 413,
         /** 500 */
         InnerError: 500
-    }  
+    }   
 
 
     /** */ 
@@ -80,8 +82,13 @@ export class HTTP {
         } 
         
         catch (error) { 
-            console.error(error);  
-            Tools.Sleep(5000, 'Offline_API').then(() => new CoerAlert().Danger(null, 'Offline API', '', 0));  
+            console.error(error);
+
+            Tools.Sleep(5000, 'Offline_API').then(() => { 
+                new CoerAlert().CloseAllAlerts();
+                new CoerAlert().Danger('WEB API is down', 'Offline', 'i91-cloud-slash-fill');
+            }); 
+
             return this._BuildError(0, 'Offline API', request.responseType);
         } 
     }
@@ -151,15 +158,12 @@ export class HTTP {
         } 
 
         const USER = Access.GetUser(); 
-
-        if(Tools.IsNotOnlyWhiteSpace(USER?.jwt)) {
-            const JWT = USER!.jwt.startsWith('BEARER') ? USER!.jwt : `BEARER ${USER!.jwt}`;
+        if(Tools.IsNotOnlyWhiteSpace(USER?.JWT)) {
+            const JWT = USER!.JWT.startsWith('BEARER') ? USER!.JWT : `BEARER ${USER!.JWT}`;
             headers.append('Authorization', JWT);
         }
 
-        if(Tools.IsNotOnlyWhiteSpace(USER?.user)) headers.append('Clien-User', USER!.user); 
-
-        if(Tools.IsNotOnlyWhiteSpace(USER?.role)) headers.append('User-Role', USER!.role); 
+        if(Tools.IsNotOnlyWhiteSpace(USER?.User)) headers.append('Clien-User', USER!.User);  
 
         headers.append('Utc-Offset', `${Dates.GetOffset() / 60}`);
         
@@ -232,7 +236,6 @@ export class HTTP {
     
             case 'arraybuffer': {
                 response = null;
-                //message = new TextDecoder().decode(new Uint8Array(message as any));
                 break;
             } 
             

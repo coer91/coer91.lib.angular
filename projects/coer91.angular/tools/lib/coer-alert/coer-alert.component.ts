@@ -83,7 +83,7 @@ export class CoerAlert implements AfterViewInit {
             HTMLElements.RemoveClass(alert, 'background-color-danger');
             alert.removeEventListener('mouseenter', (alert as any).StopAutohide);
             alert.removeEventListener('mouseleave', (alert as any).StartAutohide); 
-            Tools.Sleep(500).then(() => CoerAlert._alert.removeChild(alert!)); 
+            Tools.Sleep(500).then(() => CoerAlert._alert.removeChild(alert)); 
         } 
     } 
 
@@ -269,9 +269,11 @@ export class CoerAlert implements AfterViewInit {
 
         //Section
         const SECTION = document.createElement('section');
-        SECTION.innerHTML = message!;
-        SECTION.style.paddingLeft = '20px';
+        SECTION.innerHTML = `<p>${message!}</p>`;
+        SECTION.style.paddingTop   = '20px';
+        SECTION.style.paddingLeft  = '20px';
         SECTION.style.paddingRight = '20px';
+        SECTION.style.textAlign    = 'center';
         COER_CONFIRM.appendChild(SECTION);
 
         //Footer

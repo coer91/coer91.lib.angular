@@ -1,6 +1,11 @@
 <main>
     <div class="login-container">
-        <h1>{{ title }}</h1>
+        <h1>
+            {{ title }}
+            @if(_icon().length > 0) {
+                <i [class]="_icon()"></i> 
+            }
+        </h1>
 
         <section class="form"> 
             <coer-form #form [formGroup]="formGroup" [controls]="[userRef, passwordRef]" [isLoading]="isLoading()">

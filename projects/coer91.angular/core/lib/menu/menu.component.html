@@ -5,12 +5,16 @@
 ></coer-page-title> 
 
 <nav>
-    @for(item of _pages(); track item.id) {           
+    @for(item of _pages(); let index = $index; track item.Id) {           
         <a [routerLink]="_getPath(item)" class="animation-fadeIn">
-            @if((item?.icon || '').length > 0) {
-                <i [class]="item!.icon"></i>
+            @if(item?.ShowIndex) {
+                <span class="index">{{ index + 1 }}</span>
             }
-            <span> {{ item.label }} </span>
+          
+            @else if((item?.Icon || '').length > 0) {
+                <i [class]="item!.Icon"></i>
+            }
+            <span class="label"> {{ item.Label }} </span>
         </a> 
     }
 </nav>

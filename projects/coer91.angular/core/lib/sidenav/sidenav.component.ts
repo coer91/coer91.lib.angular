@@ -1,6 +1,6 @@
 import { SidenavAccordion } from './coer-sidenav-accordion/coer-sidenav-accordion.component'; 
-import { Component, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';  
-import { HTMLElements, Strings, Tools, Navigation, Collections, Screen } from 'coer91.angular/tools';
+import { Component, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';   
+import { Collections, Tools, Screen, HTMLElements, Strings, SourcePage, BreadcrumbsPage, Navigation } from 'coer91.angular/tools';
 import { isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';
 import { ResolveEnd, Router } from '@angular/router'; 
@@ -27,6 +27,9 @@ export class Sidenav {
     protected readonly _navigation = navigationSIGNAL;
     protected readonly _isLoading = isLoadingSIGNAL;
     protected readonly SetId = Collections.SetId;
+    protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
+    protected readonly IsBooleanTrue = Tools.IsBooleanTrue;
+    protected readonly IsOnlyWhiteSpace = Tools.IsOnlyWhiteSpace;
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
 
     //Inputs 
@@ -37,23 +40,26 @@ export class Sidenav {
     protected readonly onClose = output<void>();
  
 
-    constructor() {
-        Screen.ClickBrowserButton.subscribe(() => this._ClickBrowserButton()); 
+    constructor() { 
+        Screen.ClickBrowserButton.subscribe(url => this._ClickBrowserButton(url)); 
 
         effect(() => {  
             const NAVIGATION = this.navigation();
 
-            if(NAVIGATION.length > 0) {
-                const NAVIGATION_HOME: IMenu[] = !Tools.IsBooleanFalse(appSettings?.navigation?.showHome) 
-                    ? [{ id: 1, label: 'Home', icon: 'i91-home-door-fill', path: '/home' }] : []; 
+            if(Tools.IsNotNull(NAVIGATION)) {
+                const showHome = !Tools.IsBooleanFalse(appSettings?.navigation?.showHome);
+                const NAVIGATION_HOME: IMenu[] = showHome 
+                    ? [{ Id: 1, Label: 'Home', Icon: 'i91-home-door-fill', Path: '/home' }] : [];  
 
                 this._navigation.set(
                     ([] as IMenu[]) 
                     .concat(NAVIGATION_HOME)
                     .concat(NAVIGATION)
-                );  
-                 
-                Tools.Sleep().then(() => this._SetSelectedMenu());
+                );   
+                
+                Tools.Sleep().then(() => {
+                    this._SetSelectedMenu();
+                });
             }
         });
 
@@ -68,11 +74,11 @@ export class Sidenav {
                 filter(event => event instanceof ResolveEnd),
                 map((event: ResolveEnd) => ({ requested: event.url, resolved: event.urlAfterRedirects })) 
             )            
-            .subscribe(url => { 
+            .subscribe(url => {  
                 if(url.requested != url.resolved) { 
                     this._ResetStorage();
                     this._SetSelectedMenu();
-                }  
+                }      
             }
         );
     }   
@@ -86,17 +92,28 @@ export class Sidenav {
     });
 
 
+    //Computed
+    protected _SetId = (level: IMenu[]): any[] => {
+        return [...level].map((item, index) => ({ ...item, id: (index + 1) }));
+    }
+
+
     //Function
-    protected async _SetSelectedMenu(): Promise<void> {
+    protected async _SetSelectedMenu(path: string | null = null): Promise<void> {
         await Tools.Sleep();
         const NAVIGATION = this._navigation(); 
         
-        if(NAVIGATION.length > 0) {                 
+        if(NAVIGATION.length > 0) {               
 
-            const PATH = appSettings?.navigation?.redirectTo || 'home';
+            const PATH = Tools.IsNotOnlyWhiteSpace(path) ? path : (appSettings?.navigation?.redirectTo || 'home');
             const SELECTED_MENU = Navigation.GetSelectedMenu() || this._GetSelectedMenuByPath(PATH);   
              
             if(SELECTED_MENU) { 
+                if(document.location.href.endsWith('/')) {
+                    this._router.navigateByUrl(SELECTED_MENU.menu?.Path || PATH) ;
+                    await Tools.Sleep();
+                }
+
                 this._NavigateTo(SELECTED_MENU, false);   
             }
         } 
@@ -114,9 +131,11 @@ export class Sidenav {
             let menu   : any = { ...NAVIGATION[0] };
             let level  : any = 'LV1';
             let action : any = 'NONE';
-            let tree   : any = [{ id, label: NAVIGATION[0]?.label, icon: NAVIGATION[0]?.icon }]
+            let tree   : any = [{ id, label: NAVIGATION[0]?.Label, icon: NAVIGATION[0]?.Icon }]
     
-            const ELEMENT = HTMLElements.SelectElement(`.${path?.replaceAll('/', '__')}`);
+            const selector = `.${path?.replaceAll('/', '__')}`;
+            const ELEMENT = HTMLElements.SelectElement(selector);
+            const xxx = ELEMENT?.id //"lv1id0-lv2id0-lv3id0-index1"
     
             if(ELEMENT) {
                 const ELEMENT_ID = ELEMENT.getAttribute('id');
@@ -157,17 +176,17 @@ export class Sidenav {
                         level = 'LV3';
 
                         const SELECTED_MENU_LV1 = NAVIGATION
-                            .filter(x => x.items && x.items.length > 0)
-                            .find(x => x.items!.some(x => x.items?.some(x => x!.path === path)));  
+                            .filter(x => x.Items && x.Items.length > 0)
+                            .find(x => x.Items!.some(x => x.Items?.some(x => x!.Path === path)));  
 
                         const SELECTED_MENU_LV2 = NAVIGATION
-                            .filter(x => x.items && x.items.length > 0).flatMap(x => x.items)
-                            .find(x => x!.items!.some(x => x!.path === path)); 
+                            .filter(x => x.Items && x.Items.length > 0).flatMap(x => x.Items)
+                            .find(x => x!.Items!.some(x => x!.Path === path)); 
 
                         const SELECTED_MENU_LV3 = NAVIGATION
-                            .filter(x => x.items && x.items.length > 0).flatMap(x => x.items)
-                            .filter(x => x && x.items && x.items.length > 0).flatMap(x => x!.items)
-                            .find(x => x!.path === path);
+                            .filter(x => x.Items && x.Items.length > 0).flatMap(x => x.Items)
+                            .filter(x => x && x.Items && x.Items.length > 0).flatMap(x => x!.Items)
+                            .find(x => x!.Path === path);
                             
                         const ID_LV3 = ELEMENT_ID;
 
@@ -178,11 +197,11 @@ export class Sidenav {
                         const ID_LV1 = ELEMENT_LV1?.getAttribute('id'); 
 
                         if(SELECTED_MENU_LV1 && SELECTED_MENU_LV2 && SELECTED_MENU_LV3 && ID_LV1 && ID_LV2 && ID_LV3) { 
-                            menu = { id: ID_LV3, label: SELECTED_MENU_LV3.label, icon: SELECTED_MENU_LV3.icon, path: SELECTED_MENU_LV3.path };
+                            menu = { id: ID_LV3, label: SELECTED_MENU_LV3.Label, icon: SELECTED_MENU_LV3.Icon, path: SELECTED_MENU_LV3.Path };
                             tree = [
-                                { id: ID_LV1, label: SELECTED_MENU_LV1.label, icon: SELECTED_MENU_LV1?.icon },
-                                { id: ID_LV2, label: SELECTED_MENU_LV2.label, icon: SELECTED_MENU_LV2?.icon },
-                                { id: ID_LV3, label: SELECTED_MENU_LV3.label, icon: SELECTED_MENU_LV3?.icon }
+                                { id: ID_LV1, label: SELECTED_MENU_LV1.Label, icon: SELECTED_MENU_LV1?.Icon },
+                                { id: ID_LV2, label: SELECTED_MENU_LV2.Label, icon: SELECTED_MENU_LV2?.Icon },
+                                { id: ID_LV3, label: SELECTED_MENU_LV3.Label, icon: SELECTED_MENU_LV3?.Icon }
                             ]; 
                         } 
                     }
@@ -191,12 +210,12 @@ export class Sidenav {
                         level = 'LV2';
                         
                         const SELECTED_MENU_LV1 = NAVIGATION
-                            .filter(x => x.items && x.items.length > 0)
-                            .find(x => x.items!.some(x => x.items?.some(x => x!.path === path))); 
+                            .filter(x => x.Items && x.Items.length > 0)
+                            .find(x => x.Items!.some(x => x.Items?.some(x => x!.Path === path))); 
 
                         const SELECTED_MENU_LV2 = NAVIGATION
-                            .filter(x => x.items && x.items.length > 0).flatMap(x => x.items)
-                            .find(x => x!.path === path);
+                            .filter(x => x.Items && x.Items.length > 0).flatMap(x => x.Items)
+                            .find(x => x!.Path === path);
                             
                         const ID_LV2 = ELEMENT_ID;
 
@@ -204,21 +223,21 @@ export class Sidenav {
                         const ID_LV1 = ELEMENT_LV1?.getAttribute('id');
 
                         if(SELECTED_MENU_LV1 && SELECTED_MENU_LV2 && ID_LV1 && ID_LV2) { 
-                            menu = { id: ID_LV2, label: SELECTED_MENU_LV2.label, icon: SELECTED_MENU_LV2.icon, path: SELECTED_MENU_LV2.path };
+                            menu = { id: ID_LV2, label: SELECTED_MENU_LV2.Label, icon: SELECTED_MENU_LV2.Icon, path: SELECTED_MENU_LV2.Path };
                             tree = [
-                                { id: ID_LV1, label: SELECTED_MENU_LV1.label, icon: SELECTED_MENU_LV1?.icon },
-                                { id: ID_LV2, label: SELECTED_MENU_LV2.label, icon: SELECTED_MENU_LV2?.icon } 
+                                { id: ID_LV1, label: SELECTED_MENU_LV1.Label, icon: SELECTED_MENU_LV1?.Icon },
+                                { id: ID_LV2, label: SELECTED_MENU_LV2.Label, icon: SELECTED_MENU_LV2?.Icon } 
                             ]; 
                         } 
                     }
 
                     else {
                         level = 'LV1';
-                        const SELECTED_MENU = NAVIGATION.find(x => x.path === path);
+                        const SELECTED_MENU = NAVIGATION.find(x => x.Path === path);
 
                         if(SELECTED_MENU) { 
-                            menu =  { id: ELEMENT_ID, label: SELECTED_MENU.label, icon: SELECTED_MENU.icon, path: SELECTED_MENU.path };
-                            tree = [{ id: ELEMENT_ID, label: SELECTED_MENU.label, icon: SELECTED_MENU?.icon }]; 
+                            menu =  { id: ELEMENT_ID, label: SELECTED_MENU.Label, icon: SELECTED_MENU.Icon, path: SELECTED_MENU.Path };
+                            tree = [{ id: ELEMENT_ID, label: SELECTED_MENU.Label, icon: SELECTED_MENU?.Icon }]; 
                         }
                     };  
                 }  
@@ -239,13 +258,13 @@ export class Sidenav {
 
     //Function
     protected _IsOption = (menu: IMenu): boolean => {
-        return Tools.IsNull(menu?.items) && Tools.IsNotOnlyWhiteSpace(menu.path);
+        return Tools.IsNull(menu?.Items); 
     }
 
 
     //Function
     protected _IsMenu = (item: IMenu): boolean => {
-        return Tools.IsNotNull(item?.items) && Strings.Equals(item?.show, 'LIST');
+        return Tools.IsNotNull(item?.Items) && Strings.Equals(item?.MenuType, 'LIST');
     }  
 
 
@@ -261,7 +280,7 @@ export class Sidenav {
             level: 'LV1',
             action: 'NONE',
             tree: [
-                { id: lv1Id, label: lv1.label, icon: lv1?.icon || '' }
+                { id: lv1Id, label: lv1.Label, icon: lv1?.Icon || '' }
             ]
         }, true);
     }
@@ -279,8 +298,8 @@ export class Sidenav {
             level: 'LV2',
             action: 'NONE',
             tree: [
-                { id: lv1Id, label: lv1.label, icon: lv1?.icon || '' }, 
-                { id: lv2Id, label: lv2.label, icon: lv2?.icon || '' }
+                { id: lv1Id, label: lv1.Label, icon: lv1?.Icon || '' }, 
+                { id: lv2Id, label: lv2.Label, icon: lv2?.Icon || '' }
             ]
         }, true);
     }
@@ -298,9 +317,9 @@ export class Sidenav {
             level: 'LV3',
             action: 'NONE',
             tree: [
-                { id: lv1Id, label: lv1.label, icon: lv1?.icon || '' }, 
-                { id: lv2Id, label: lv2.label, icon: lv2?.icon || '' }, 
-                { id: lv3Id, label: lv3.label, icon: lv3?.icon || '' }
+                { id: lv1Id, label: lv1.Label, icon: lv1?.Icon || '' }, 
+                { id: lv2Id, label: lv2.Label, icon: lv2?.Icon || '' }, 
+                { id: lv3Id, label: lv3.Label, icon: lv3?.Icon || '' }
             ]
         }, true);
     }
@@ -317,7 +336,7 @@ export class Sidenav {
                 level: 'LV1',
                 action: action,
                 tree: [
-                    { id: lv1Id, label: lv1.label, icon: lv1?.icon || '' }
+                    { id: lv1Id, label: lv1.Label, icon: lv1?.Icon || '' }
                 ]
             }, false);
         }
@@ -335,8 +354,8 @@ export class Sidenav {
                 level: 'LV2',
                 action: action,
                 tree: [
-                    { id: lv1Id, label: lv1.label, icon: lv1?.icon || '' }, 
-                    { id: lv2Id, label: lv2.label, icon: lv2?.icon || '' }
+                    { id: lv1Id, label: lv1.Label, icon: lv1?.Icon || '' }, 
+                    { id: lv2Id, label: lv2.Label, icon: lv2?.Icon || '' }
                 ]
             }, false);
         }
@@ -355,7 +374,7 @@ export class Sidenav {
             level: 'LV1',
             action: 'GRID',
             tree: [
-                { id: lv1Id, label: lv1.label, icon: lv1?.icon || '' }
+                { id: lv1Id, label: lv1.Label, icon: lv1?.Icon || '' }
             ]
         }, true);
     } 
@@ -373,8 +392,8 @@ export class Sidenav {
             level: 'LV2',
             action: 'GRID',
             tree: [
-                { id: lv1Id, label: lv1.label, icon: lv1?.icon || '' },
-                { id: lv2Id, label: lv2.label, icon: lv2?.icon || '' }
+                { id: lv1Id, label: lv1.Label, icon: lv1?.Icon || '' },
+                { id: lv2Id, label: lv2.Label, icon: lv2?.Icon || '' }
             ]
         }, true);
     } 
@@ -395,14 +414,14 @@ export class Sidenav {
                 }
 
                 else {
-                   if(navigate) this._router.navigateByUrl(String(OPTION?.menu?.path));
+                   if(navigate) this._router.navigateByUrl(String(OPTION?.menu?.Path));
                 } 
 
                 if(['mv', 'xs', 'sm', 'md'].includes(screenSizeSIGNAL().breakpoint)) {
                     this.Close();
                 }
             
-                OPTION.menu.items = [];
+                OPTION.menu.Items = [];
                 Navigation.SetSelectedMenu(OPTION);   
                 selectedMenuSIGNAL.set(OPTION); 
                   
@@ -489,13 +508,18 @@ export class Sidenav {
     
     
     //Function 
-    private _ClickBrowserButton(): void { 
-        // const breadcrumbs = BreadcrumbsPage.Get();          
+    private async _ClickBrowserButton(url: string) { 
+        const fromPath = this._router.url;
+        const toPath   = url.split('#')[1];
+        const source   = SourcePage.Get()?.path;
 
-        // if(breadcrumbs.length > 0) {
-        //     if(this._router.url === breadcrumbs.pop()?.path) {
-        //         BreadcrumbsPage.RemoveLast();
-        //     }
-        // }
+        if(Tools.IsOnlyWhiteSpace(source)) {
+            this._ResetStorage();
+            this._SetSelectedMenu(toPath);
+        }
+
+        else {
+            BreadcrumbsPage.RemoveByPath(fromPath); 
+        }
     }
 }

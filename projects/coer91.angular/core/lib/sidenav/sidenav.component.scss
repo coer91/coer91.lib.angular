@@ -64,12 +64,19 @@ nav {
                     height: 16px !important;
                     min-height: 16px !important;
                     max-height: 16px !important;
-                }
+                } 
 
                 span {
                     white-space: nowrap !important;
                     overflow: hidden !important;
                     font-weight: bold !important;
+                }
+
+                span.index {
+                    text-align: center !important;
+                    width: 16px !important;
+                    max-width: 16px !important;
+                    overflow: visible !important;
                 }
 
                 div.grid {

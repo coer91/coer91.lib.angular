@@ -20,12 +20,14 @@ export class SidenavAccordion implements AfterViewInit, OnDestroy {
     protected readonly onDestroy = output<void>();
     protected onReady = output<void>();
 
-    //input
+    //input 
     public id    = input.required<string>();
     public title = input.required<string | null | undefined>();
     public icon  = input.required<string | null | undefined>(); 
     public level = input.required<'lv1' | 'lv2'>();
-    public showSidenav = input.required<boolean>(); 
+    public showIndicator = input.required<boolean>(); 
+    public showIndex     = input.required<number>(); 
+    public showSidenav   = input.required<boolean>(); 
 
     
     async ngAfterViewInit() {

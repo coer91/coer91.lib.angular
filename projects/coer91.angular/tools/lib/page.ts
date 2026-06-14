@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, inject, signal } from "@angular/core"; 
+import { AfterViewInit, Component, Inject, inject, OnDestroy, signal } from "@angular/core"; 
 import { CoerAlert } from "./coer-alert/coer-alert.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IAppSource, ICallbackItem, ITitleBreadcrumb, ITitleGoBack } from "coer91.angular/interfaces";
@@ -6,12 +6,11 @@ import { BreadcrumbsPage } from "./page-breadcrumbs";
 import { ResponsePage } from "./page-response"; 
 import { FiltersPage } from "./page-filters"; 
 import { SourcePage } from "./page-source";
-import { Tools } from "./generic";
-import { Collections } from "./collections";
+import { Tools } from "./generic"; 
 import { Strings } from "./strings";
 
 @Component({ template: '' })
-export abstract class Page implements AfterViewInit {
+export abstract class Page implements AfterViewInit, OnDestroy {
 
     //Injection
     protected readonly router = inject(Router);
@@ -46,20 +45,18 @@ export abstract class Page implements AfterViewInit {
     protected goBack: ITitleGoBack = { show: false }; 
     
     //Helper tools
-    protected readonly IsNull = Tools.IsNull;
-    protected readonly IsNotNull = Tools.IsNotNull;
-    protected readonly IsOnlyWhiteSpace = Tools.IsOnlyWhiteSpace;
+    protected readonly IsNull              = Tools.IsNull;
+    protected readonly IsNotNull           = Tools.IsNotNull;
+    protected readonly IsOnlyWhiteSpace    = Tools.IsOnlyWhiteSpace;
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
-    protected readonly IsBooleanTrue  = Tools.IsBooleanTrue;
-    protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
-    protected readonly SetId = Collections.SetId; 
-    protected readonly SetIndex = Collections.SetIndex;
-    protected readonly Equals = Strings.Equals;
+    protected readonly IsBooleanTrue       = Tools.IsBooleanTrue;
+    protected readonly IsBooleanFalse      = Tools.IsBooleanFalse;
+    protected readonly Equals              = Strings.Equals;
 
     //Private Variables
-    private _path: string = '';
-    private _pageName: string = '';
-    private _sourcePage: IAppSource | null = null; 
+    private _path:        string = '';
+    private _pageName:    string = '';
+    private _sourcePage:  IAppSource | null = null; 
     private _routeParams: any;
     private _queryParams: any;
 
@@ -72,7 +69,7 @@ export abstract class Page implements AfterViewInit {
         this._SetBreadcrumbs();
         this._SetGoBack();
         this.filters.set(FiltersPage.Get(this._path));
-        this._GetResponsePage(); 
+        this._GetResponsePage();  
     } 
 
 
@@ -80,20 +77,43 @@ export abstract class Page implements AfterViewInit {
         Tools.Sleep().then(() => this.StartPage());
     } 
 
+    ngOnDestroy(): void {
+        this.Destroy();
+    }
 
     /** Main method */
     protected StartPage(): void {}; 
 
 
+    /** Main method */
+    protected Destroy(): void {}; 
+
+
     //Function
-    private _SetPath(): void {
+    private async _SetPath() {
         this._routeParams = this._activatedRoute.snapshot.params;
-        this._queryParams = this._activatedRoute.snapshot.queryParams;
+        this._queryParams = this._activatedRoute.snapshot.queryParams; 
+       
         this._path = this.router.url; 
 
         if (this._path.includes('?')) {
             this._path = this._path.split('?')[0];
         }
+
+        await Tools.Sleep();
+        const activeKey = this._activatedRoute.snapshot.data['activeKey'] as string;
+        const GetNavigationKeys = this._activatedRoute.snapshot.data['GetNavigationKeys'];
+
+        if(Tools.IsNotOnlyWhiteSpace(activeKey) && Tools.IsFunction(GetNavigationKeys)) {
+            const NAVIGATION_KEYS: any[] = Array.from(GetNavigationKeys().values());
+            const ACTIVE_KEY = NAVIGATION_KEYS.find(x => x.activeKey === activeKey.toUpperCase());
+
+            if(ACTIVE_KEY) {
+                this.canCreate.set(ACTIVE_KEY.CanCreate);
+                this.canUpdate.set(ACTIVE_KEY.CanUpdate);
+                this.canDelete.set(ACTIVE_KEY.CanDelete);
+            } 
+        } 
     }
 
 
@@ -118,17 +138,28 @@ export abstract class Page implements AfterViewInit {
 
     //Function
     private _SetBreadcrumbs(): void {    
-        this.breadcrumbs.set(
-            BreadcrumbsPage.Get().map(item => ({
-                page: item.page,
-                path: item.path,
-                click: () => BreadcrumbsPage.RemoveByPath(item.path)
-            }))
-        );  
+        const breadcrumbs = BreadcrumbsPage.Get();
+            
+        if(breadcrumbs.length > 1) {
+            const last = breadcrumbs.pop(); 
+            const last2 = breadcrumbs.pop(); 
 
-        if(this.breadcrumbs().length <= 0) { 
-            this.breadcrumbs.set([{ page: this._pageName, path: this._path }]);
+            if(last?.path === last2?.path) {
+                BreadcrumbsPage.RemoveLast();
+            } 
         }
+
+        const BREADCRUMBS: IAppSource[] = BreadcrumbsPage.Get().map(item => ({
+            page: item.page,
+            path: item.path,
+            click: () => BreadcrumbsPage.RemoveByPath(item.path)
+        })); 
+
+        if(BREADCRUMBS.length <= 0) { 
+            BREADCRUMBS.push({ page: this._pageName, path: this._path });
+        }
+
+        this.breadcrumbs.set(BREADCRUMBS);
     }
 
 
@@ -222,13 +253,13 @@ export abstract class Page implements AfterViewInit {
 
     /** */
     protected iconTemplate = (data: ICallbackItem<any>): string => {
-        return `<i class='${data.row.icon}'></i>`;
+        return `<i class='${data.row.Icon}'></i>`;
     } 
 
 
     /** */
     protected isActiveTemplate = (data: ICallbackItem<any>): string => {
-        return data.value 
+        return Tools.IsBooleanTrue(data.row?.IsActive) 
             ? `<span class='color-green font-weight-bold'>ACTIVE</span>` 
             : `<span class='color-gray font-weight-bold'>DISABLED</span>`;
     } 

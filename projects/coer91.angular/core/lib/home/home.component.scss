@@ -14,6 +14,12 @@ section.container-section.coer91 {
         height: 40% !important;
     }
 
+    @media (min-width: 0px) and (max-width: 499px) {
+        figure { 
+            width: 75% !important; 
+        }
+    }
+
     footer {
         position: absolute !important;
         left: 0px !important;

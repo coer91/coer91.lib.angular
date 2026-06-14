@@ -16,4 +16,5 @@ export * from './lib/page-source';
 export * from './lib/page';
 export * from './lib/router';
 export * from './lib/screen';
+export * from './lib/section';
 export * from './lib/strings';

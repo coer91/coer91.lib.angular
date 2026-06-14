@@ -24,16 +24,16 @@ export class AppRoot {
     protected authService: IAuthService = { 
             
         Login: {
-            userId: 0,
-            user: 'COER91',
-            userNumber: '',
-            role: '',
-            partner: '',
-            fullName: '',
-            email: '',
-            jwt: '',
-            roles: [],
-            message: ''
+            UserId: 0,
+            User: 'COER91', 
+            PartnerId: 0,
+            Partner: '',
+            FullName: '',
+            Email: '',
+            JWT: '',
+            Roles: [],
+            Language: '',
+            Message: ''
         } 
     }
 }

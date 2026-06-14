@@ -1,14 +1,15 @@
 //access
+export * from './lib/access/active-key.interface';
 export * from './lib/access/auth-service.interface';
 export * from './lib/access/jwt.interface';
 export * from './lib/access/login-response.interface';
-export * from './lib/access/login.interface';
-export * from './lib/access/user-role.interface';
+export * from './lib/access/login.interface'; 
 export * from './lib/access/user.interface';
 
 //app
 export * from './lib/app/app-settings.interface';
 export * from './lib/app/environments.interface';
+export * from './lib/app/scanner.interface';
 export * from './lib/app/screen-size.interface'; 
 
 //components

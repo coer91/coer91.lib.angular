@@ -7,7 +7,12 @@
         }"> 
 
         <h4 [ngStyle]="{ paddingLeft: _paddingLeft() }">
-            @if(IsNotOnlyWhiteSpace(icon())) {
+            @if(showIndex() > 0) {
+                <span class="index">{{ showIndex() }}</span>
+            }
+
+
+            @else if(IsNotOnlyWhiteSpace(icon())) {
                 <i [class]="icon()"></i>
             }
 
@@ -19,7 +24,7 @@
         </h4>
       
         @if(showSidenav()) {
-            <button type="button">
+            <button type="button" [ngClass]="{ 'invisible': !showIndicator() }">
                 <i class="i91-angle" [class]="_isCollapsed() ? 'i91-270deg' : 'i91-90deg'"></i> 
             </button>
         }

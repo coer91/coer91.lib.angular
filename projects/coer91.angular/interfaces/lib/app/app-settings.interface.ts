@@ -2,26 +2,25 @@ import { IEnvironments } from "./environments.interface";
 
 export interface IAppSettings {
     appInfo: {
-        id: number;
-        project: string;
-        title: string;
-        version: string;
-        imageURL: string;
+        id:         number;
+        project:    string;
+        title:      string;
+        version:    string; 
         forCompany: string;
     }, 
     environment: IEnvironments;
     background: {
-        home: string;
+        home:  string;
         login: string;
     },
     security: {
         useJWT: boolean;
     }
     region: {
-        dateTime: 'MDY' | 'DMY';
-        language: 'es' | 'en';
+        dateTime:     'MDY' | 'DMY';
+        language:     'es' | 'en';
         currencyCode: 'MXN' | 'USD' | 'CAD' | 'EUR' | 'KRW' | 'CNY';
-        currency: '$' | '€' | '₩' | '¥';
+        currency:     '$' | '€' | '₩' | '¥';
     },
     navigation: {
         static: boolean; 

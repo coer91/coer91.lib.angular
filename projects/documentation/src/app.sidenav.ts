@@ -1,29 +1,29 @@
 import { IMenu } from "coer91.angular/interfaces";
 
 export const NAVIGATION: IMenu[] = [   
-    { label: 'Back End', icon: 'i91-logo-csharp-fill', show: 'LIST', items: [ 
+    { Label: 'Back End', Icon: 'i91-logo-csharp-fill', MenuType: 'LIST', Items: [ 
         
     ]},
 
-    { label: 'Front End', icon: 'i91-logo-angular-fill', show: 'LIST', items: [   
+    { Label: 'Front End', Icon: 'i91-logo-angular-fill', MenuType: 'LIST', Items: [   
         //About
-        { label: 'About Library', icon: 'i91-logo-coer91', show: 'LIST', items: [ 
-            { label: 'Install', icon: '', path: '/front-end/about-library/install' },
+        { Label: 'About Library', Icon: 'i91-logo-coer91', MenuType: 'LIST', Items: [ 
+            { Label: 'Install', Icon: '', Path: '/front-end/about-library/install' },
         ]},  
 
         //Components
-        { label: 'Components', icon: '', show: 'GRID', items: [ 
-            { label: 'coer-button'   , icon: 'i91-hand-pointer-fill', path: '/front-end/components/coer-button'    },  
-            { label: 'coer-datebox'  , icon: '',                      path: '/front-end/components/coer-datebox'   },  
-            { label: 'coer-form'     , icon: '',                      path: '/front-end/components/coer-form'      },  
-            { label: 'coer-grid'     , icon: '',                      path: '/front-end/components/coer-grid'      },  
-            { label: 'coer-modal'    , icon: 'i91-modal-fill',        path: '/front-end/components/coer-modal'     },
-            { label: 'coer-numberbox', icon: '',                      path: '/front-end/components/coer-numberbox' },
-            { label: 'coer-secretbox', icon: 'i91-eye-slash-fill',    path: '/front-end/components/coer-secretbox' },
-            { label: 'coer-selectbox', icon: 'i91-angle i91-90deg',   path: '/front-end/components/coer-selectbox' },
-            { label: 'coer-switch'   , icon: '',                      path: '/front-end/components/coer-switch'    },
-            { label: 'coer-tab'      , icon: '',                      path: '/front-end/components/coer-tab'    },
-            { label: 'coer-textbox'  , icon: 'i91-input-text',        path: '/front-end/components/coer-textbox'   },  
+        { Label: 'Components', Icon: '', MenuType: 'GRID', Items: [ 
+            { Label: 'coer-button'   , Icon: 'i91-hand-pointer-fill', Path: '/front-end/components/coer-button'    },  
+            { Label: 'coer-datebox'  , Icon: '',                      Path: '/front-end/components/coer-datebox'   },  
+            { Label: 'coer-form'     , Icon: '',                      Path: '/front-end/components/coer-form'      },  
+            { Label: 'coer-grid'     , Icon: '',                      Path: '/front-end/components/coer-grid'      },  
+            { Label: 'coer-modal'    , Icon: 'i91-modal-fill',        Path: '/front-end/components/coer-modal'     },
+            { Label: 'coer-numberbox', Icon: '',                      Path: '/front-end/components/coer-numberbox' },
+            { Label: 'coer-secretbox', Icon: 'i91-eye-slash-fill',    Path: '/front-end/components/coer-secretbox' },
+            { Label: 'coer-selectbox', Icon: 'i91-angle i91-90deg',   Path: '/front-end/components/coer-selectbox' },
+            { Label: 'coer-switch'   , Icon: '',                      Path: '/front-end/components/coer-switch'    },
+            { Label: 'coer-tab'      , Icon: '',                      Path: '/front-end/components/coer-tab'    },
+            { Label: 'coer-textbox'  , Icon: 'i91-input-text',        Path: '/front-end/components/coer-textbox'   },  
         ]}  
     ]},  
 ];

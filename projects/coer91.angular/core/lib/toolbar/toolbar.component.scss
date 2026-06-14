@@ -61,6 +61,7 @@ header {
         div.user {
             height: inherit !important;  
             user-select: none !important; 
+            max-width: calc(100% - 30px) !important;
 
             figure { 
                 height: inherit !important;
@@ -71,6 +72,12 @@ header {
                 border-radius: 5px !important; 
                 cursor: pointer !important; 
                 padding: 0px 5px !important;
+
+                @media (min-width: 0px) and (max-width: 499px) { 
+                    justify-content: flex-start !important;
+                    padding: 0px !important;
+                    overflow: hidden; 
+                }
 
                 div.user-image {
                     min-width: 38px !important;
@@ -89,6 +96,12 @@ header {
                         white-space: nowrap !important;
                         font-size: 14px !important;
                         font-weight: bold !important;
+
+                        @media (min-width: 0px) and (max-width: 499px) {  
+                            overflow: hidden !important;
+                            text-overflow: ellipsis !important; 
+                            max-width: calc(100% - 10px) !important;
+                        }
                     }
                 }
             }

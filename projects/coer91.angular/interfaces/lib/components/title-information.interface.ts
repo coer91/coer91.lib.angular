@@ -1,4 +1,4 @@
 export interface ITitleInformation {
-    show: boolean;
+    show:     boolean;
     tooltip?: string | null;
 }

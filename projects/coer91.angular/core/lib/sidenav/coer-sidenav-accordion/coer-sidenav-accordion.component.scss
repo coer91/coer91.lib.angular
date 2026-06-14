@@ -30,6 +30,11 @@ div {
                 overflow: hidden !important; 
                 max-width: calc(100% - 20px) !important;
             }
+
+            span.index {
+                width: 16px !important;
+                text-align: center !important;
+            }
         }
 
         button {

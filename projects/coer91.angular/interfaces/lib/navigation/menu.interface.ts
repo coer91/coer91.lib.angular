@@ -1,13 +1,15 @@
 export interface IMenu {
-    id?: number;
-    label: string;
-    icon?: string;
-    path?: string;
-    show?: 'LIST' | 'GRID';
-    canCreate?: boolean;
-    canUpdate?: boolean;
-    canDelete?: boolean;
-    activeKey?: string;
-    sequence?: number; 
-    items?: IMenu[];
+    Id?:            number;
+    Label:          string;
+    Icon?:          string;
+    Path?:          string;
+    MenuType?:      'LIST' | 'GRID' | 'PAGE';
+    ShowIndicator?: boolean;
+    ShowIndex?:     boolean;
+    CanCreate?:     boolean;
+    CanUpdate?:     boolean;
+    CanDelete?:     boolean;
+    ActiveKey?:     string;
+    Sequence?:      number; 
+    Items?:         IMenu[];
 }

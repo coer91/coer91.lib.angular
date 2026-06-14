@@ -13,7 +13,7 @@ export class Collections {
     
     /** Set an id and concat more arrays of the same type */
     public static SetId<T>(array: T[], ...args: T[][]): T[] {  
-        return [...array].concat(...args).map((item, index) => ({ ...item, id: (index + 1) }));
+        return [...array].concat(...args).map((item, index) => ({ ...item, Id: (index + 1) }));
     } 
     
     

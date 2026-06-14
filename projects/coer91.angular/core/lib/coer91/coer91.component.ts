@@ -48,7 +48,7 @@ export class Coer91Component {
     protected readonly onUpdateJWT        = output<void>();
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
     protected readonly onUpdatePassword   = output<string>();
-    protected readonly onUpdateRole       = output<string>();
+    protected readonly onUpdateLanguage   = output<string>();
  
     constructor() {    
         Screen.Resize.subscribe(screenSizeSIGNAL.set);  
@@ -69,7 +69,7 @@ export class Coer91Component {
     //Computed
     protected _isLogin = computed(() => { 
         return Tools.IsNotNull(userSIGNAL()) 
-            && Tools.IsNotOnlyWhiteSpace(userSIGNAL()?.user);
+            && Tools.IsNotOnlyWhiteSpace(userSIGNAL()?.User);
     }); 
 
 
@@ -113,14 +113,14 @@ export class Coer91Component {
 
         //Set Response
         if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) {
-            if(Tools.IsNotOnlyWhiteSpace(_response?.jwt)) {
-                Access.SetUser(_response.jwt);
+            if(Tools.IsNotOnlyWhiteSpace(_response?.JWT)) {
+                Access.SetUser(_response.JWT);
                 userSIGNAL.set(_response);  
             }
         }
 
         else {
-            if(Tools.IsNotOnlyWhiteSpace(_response?.user)) {
+            if(Tools.IsNotOnlyWhiteSpace(_response?.User)) {
                 Access.SetUser(_response);
                 userSIGNAL.set(_response);  
             }
@@ -129,7 +129,7 @@ export class Coer91Component {
         //Has Access
         if(Access.IsLogin()) {
             if(Tools.HasProperty(_response, 'message')) { 
-                this._alert.Information(_response.message, 'Welcome', 'i91-logo-coer91');
+                this._alert.Information(_response.Message, 'Welcome', 'i91-logo-coer91');
 
                 let path = '/home';
                 if(Tools.IsBooleanFalse(appSettings?.navigation?.showHome)) {
@@ -146,7 +146,7 @@ export class Coer91Component {
         }
 
         else {
-            this._alert.Warning(_response.message, 'No access', 'i91-hand-stop-fill'); 
+            this._alert.Warning(_response.Message, 'No access', 'i91-hand-stop-fill'); 
             this._login()?.FocusPassword();
         }
 
@@ -193,7 +193,7 @@ export class Coer91Component {
 
         else { 
             this._watchJWT$ = setInterval(() => {    
-                if(Tools.IsOnlyWhiteSpace(Access.GetUser()?.user)) {  
+                if(Tools.IsOnlyWhiteSpace(Access.GetUser()?.User)) {  
                     Access.LogOut(userSIGNAL);
                     clearInterval(this._watchJWT$);  
                 }  

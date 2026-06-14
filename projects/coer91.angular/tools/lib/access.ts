@@ -1,7 +1,7 @@
-import { IJWT, IUser } from "coer91.angular/interfaces";
 import { Tools } from "./generic";
 import { Dates } from "./dates";
 import { WritableSignal } from "@angular/core";
+import { IJWT, IUser } from "coer91.angular/interfaces";
 declare const appSettings: any;
 
 /** Controls user information in localStorage */
@@ -31,15 +31,15 @@ export class Access {
 
             if(JWT.claims?.hasOwnProperty('User')) {
                 return { 
-                    userId:     Number(JWT.claims?.UserId     || 0 ),
-                    user:       String(JWT.claims?.User       || ''),
-                    userNumber: String(JWT.claims?.UserNumber || ''),
-                    role:       String(JWT.claims?.Role       || ''),
-                    partner:    String(JWT.claims?.Partner    || ''),
-                    fullName:   String(JWT.claims?.FullName   || ''), 
-                    email:      String(JWT.claims?.Email      || ''),
-                    jwt:        JWT.jwt,
-                    roles:      String(JWT.claims?.Roles || '').replaceAll('[', '').replaceAll(']', '').split(',')
+                    UserId:     Number(JWT.claims?.UserId     || 0 ),
+                    User:       String(JWT.claims?.User       || ''), 
+                    PartnerId:  Number(JWT.claims?.partnerId  || 0),
+                    Partner:    String(JWT.claims?.Partner    || ''),
+                    FullName:   String(JWT.claims?.FullName   || ''), 
+                    Email:      String(JWT.claims?.Email      || ''),
+                    JWT:        JWT.jwt,
+                    Roles:      String(JWT.claims?.Roles      || '').replaceAll('[', '').replaceAll(']', '').split(','),
+                    Language:   String(JWT.claims?.Language   || ''),
                 }
             }  
         }
@@ -99,7 +99,7 @@ export class Access {
         else {
             const user = Access.GetUser();
             return Tools.IsNotNull(user) 
-                && Tools.IsNotOnlyWhiteSpace(user?.user);
+                && Tools.IsNotOnlyWhiteSpace(user?.User);
         }
     }  
 
@@ -110,7 +110,7 @@ export class Access {
 
         const user = this.useJWT
             ? Access.GetJWTInfo()?.claims?.User || '' 
-            : Access.GetUser()?.user || ''; 
+            : Access.GetUser()?.User || ''; 
 
         sessionStorage.removeItem(this.storage);
         localStorage.removeItem(this.storage); 
@@ -170,8 +170,8 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
                 environment: {
                     info: environment,
                     isDevelopment: true,
-                    isStaging: false,
-                    isProduction: false
+                    isStaging:     false,
+                    isProduction:  false
                 }
             });
         break;
@@ -182,8 +182,8 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
                 environment: {
                     info: environment,
                     isDevelopment: false,
-                    isStaging: true,
-                    isProduction: false
+                    isStaging:     true,
+                    isProduction:  false
                 }
             });
         break;
@@ -194,25 +194,26 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
                 environment: { 
                     info: environment,
                     isDevelopment: false,
-                    isStaging: false,
-                    isProduction: true
+                    isStaging:     false,
+                    isProduction:  true
                 }
             });
         break;
     }  
 
     return {
+        ...appSettings,
         appInfo: {
             id: 0,
             project: '',
-            title: 'COER 91',
+            title:   'COER 91',
             version: '0.0.0',
-            forCompany: 'COER 91',
+            company: 'COER System',
             ...appSettings?.appInfo
         },
         ...webAPI,
         background: {
-            home: '',
+            home:  '',
             login: '',
             ...appSettings?.background
         },
@@ -221,17 +222,17 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
             ...appSettings?.security
         },
         region: {
-            dateTime: 'MDY', 
-            language: 'en',
+            dateTime:     'MDY', 
+            language:     'en',
             currencyCode: 'MXN',
-            currency: '$',
+            currency:     '$',
             ...appSettings?.dateTime
         },
         navigation: {
-            static: true, 
-            showHome: true, 
+            static:    true, 
+            showHome:   true, 
             redirectTo: 'home',
             ...appSettings?.navigation
-        }
+        } 
     } 
 }

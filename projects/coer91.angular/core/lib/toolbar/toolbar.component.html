@@ -10,7 +10,7 @@
                     (onClick)="onClickToogle.emit()"
                 ></coer-button>
             }
-
+            
             <span class="title-project">
                 <span>{{ title }}</span>
                 
@@ -23,7 +23,7 @@
         @if(_isLoading()) {
             <div class="user-loading">
                 <span>Loading</span>
-                <div class="user-loading-image" [ngStyle]="{ backgroundImage: `url('coer91/images/loading.gif')` }"></div>
+                <div class="user-loading-image" [ngStyle]="{ backgroundImage: `url('hwmx-angular/images/loading.gif')` }"></div>
             </div>
         }
 
@@ -38,8 +38,8 @@
                 
                 @if(_showIdentity()) {
                     <div class="user-identity">
-                        <p>{{ user()?.fullName }}</p>
-                        <p>{{ user()?.role     }}</p>
+                        <p>{{ user()?.FullName }}</p>
+                        <p>{{ user()?.User     }}</p>
                     </div>
                 }
             </figure>
@@ -66,36 +66,24 @@
 </header> 
 
 
-<coer-modal #profileModal [title]="user()?.fullName || ''" icon="i91-user-fill">
+<coer-modal #profileModal [title]="user()?.FullName || ''" icon="i91-user-fill">
     <div class="user-profile">
         <!-- User -->
         <div class="flex-basis">
             <coer-textbox 
                 label="User"
-                [ngModel]="user()?.user" 
+                [ngModel]="user()?.User" 
                 [isLoading]="_isLoading()" 
                 [isReadonly]="true"
             ></coer-textbox> 
-        </div>
-
-        <!-- User Number -->
-        @if(IsNotOnlyWhiteSpace(user()?.userNumber)) {
-            <div class="flex-basis">
-                <coer-textbox 
-                    label="User Number"
-                    [ngModel]="user()?.userNumber" 
-                    [isLoading]="_isLoading()" 
-                    [isReadonly]="true"
-                ></coer-textbox> 
-            </div>
-        }
+        </div> 
 
         <!-- Email -->
-        @if(IsNotOnlyWhiteSpace(user()?.email)) {
+        @if(IsNotOnlyWhiteSpace(user()?.Email)) {
             <div class="flex-basis">
                 <coer-textbox 
                     label="Email"
-                    [ngModel]="user()?.email" 
+                    [ngModel]="user()?.Email" 
                     [isLoading]="_isLoading()" 
                     [isReadonly]="true"
                 ></coer-textbox> 
@@ -103,27 +91,26 @@
         }
 
         <!-- Partner -->
-        @if(IsNotOnlyWhiteSpace(user()?.partner)) {
+        @if(IsNotOnlyWhiteSpace(user()?.Partner)) {
             <div class="flex-basis">
                 <coer-textbox 
                     label="Partner"
-                    [ngModel]="user()?.partner" 
+                    [ngModel]="user()?.Partner" 
                     [isLoading]="_isLoading()" 
                     [isReadonly]="true"
                 ></coer-textbox> 
             </div> 
         }
 
-        <!-- Role --> 
-        @if(_roleList().length > 0) {
+        <!-- Language --> 
+        @if(_languageList().length > 0) {
             <div class="flex-basis">
                 <coer-selectbox 
-                    label="Role"
-                    [(ngModel)]="_role" 
+                    label="Language"
+                    [(ngModel)]="_language" 
                     [isLoading]="_isLoading()" 
-                    [dataSource]="_roleList()"
-                    [isReadonly]="_roleList().length <= 1"
-                    (onValueChange)="_UpdateRole($event)"
+                    [dataSource]="_languageList()"
+                    (onValueChange)="_UpdateLanguage($event)"
                 ></coer-selectbox> 
             </div>
         }   

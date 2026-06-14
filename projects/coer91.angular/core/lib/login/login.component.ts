@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, inject, output, signal, viewChild } from '@angular/core';  
-import { isLoadingSIGNAL } from 'coer91.angular/signals';
-import { Tools } from 'coer91.angular/tools';
-import { ILogin } from 'coer91.angular/interfaces'; 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, computed, inject, output, signal, viewChild } from '@angular/core';   
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 import { CoerButton, CoerForm, CoerSecretBox, CoerTextBox } from 'coer91.angular/components';
+import { ILogin } from 'coer91.angular/interfaces';
+import { environmentSIGNAL, isLoadingSIGNAL } from 'coer91.angular/signals';
+import { Tools } from 'coer91.angular/tools';
 declare const appSettings: any;
 
 @Component({
@@ -52,6 +52,16 @@ export class LoginPage implements AfterViewInit {
     } 
 
 
+    //Computed
+    protected _icon = computed(() => { 
+        switch(environmentSIGNAL().info) {           
+            case 'DEVELOPMENT': return 'i91-developer-fill';
+            case 'STAGING'    : return 'i91-quality-fill'; 
+        }  
+
+        return '';
+    });
+
 
     //Function
     protected _Toggle(): void {
@@ -63,10 +73,10 @@ export class LoginPage implements AfterViewInit {
     //Function
     protected _Click(): void {
         this.isLoading.set(true);
-        const { user, password } = this._form().GetValue<ILogin>(); 
+        const { user, password } = this._form().GetValue<any>(); 
 
         if(this.view() === 'LOGIN') {
-            this.onLogin.emit({ user, password });
+            this.onLogin.emit({ User: user, Password: password });
         }
 
         else {

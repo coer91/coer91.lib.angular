@@ -1,6 +1,6 @@
 export interface IOption {
-    id: number;
-    name: string;
-    about: string;
-    isActive: boolean;
+    Id:       number;
+    Name:     string;
+    About:    string;
+    IsActive: boolean;
 }
