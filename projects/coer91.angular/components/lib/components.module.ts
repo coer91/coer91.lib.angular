@@ -14,6 +14,7 @@ import { CoerGridCell   } from './coer-grid/coer-grid-cell/coer-grid-cell.compon
 import { CoerGridFooter } from './coer-grid/coer-grid-footer/coer-grid-footer.component';
 import { CoerGridHeader } from './coer-grid/coer-grid-header/coer-grid-header.component';
 import { CoerGrid       } from './coer-grid/coer-grid.component';
+import { CoerLoading    } from './coer-loading/coer-loading.component';
 import { CoerNumberBox  } from './coer-numberbox/coer-numberbox.component';
 import { CoerModal      } from './coer-modal/coer-modal.component';
 import { CoerPageTitle  } from './coer-page-title/coer-page-title.component';
@@ -41,6 +42,7 @@ import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
         CoerGridCell,
         CoerGridFooter,
         CoerGridHeader,
+        CoerLoading,
         CoerModal, 
         CoerNumberBox,
         CoerPageTitle,
@@ -55,6 +57,7 @@ import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
         CoerDateBox,
         CoerForm,
         CoerGrid,
+        CoerLoading,
         CoerModal, 
         CoerNumberBox,
         CoerPageTitle,

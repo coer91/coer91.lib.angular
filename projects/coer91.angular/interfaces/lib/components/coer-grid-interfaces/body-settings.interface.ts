@@ -10,6 +10,7 @@ export interface IBodySettings<T> {
     modalButton?: IRowButton<T>;
     navigateButton?: IRowButton<T>;
     focusNext?: boolean;
+    paginator?: IPaginator;
 }
 
 
@@ -39,4 +40,8 @@ export interface ISort {
     property: string;
     direction: 'ascendant' | 'descendant' | 'none';
     icon: string;
+}
+
+export interface IPaginator {
+    pageByRow?: number; 
 }

@@ -24,12 +24,13 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
     protected readonly _body = viewChild<CoerGridBody<T>>('body'); 
     
     //Variables 
-    protected override readonly _value = signal<T[]>([]);
-    protected readonly _search = signal<string>('');
-    protected readonly _isLoadingInner = signal<boolean>(false);  
-    protected readonly _headerHeight = signal<number>(0);
-    protected readonly _footerHeight = signal<number>(0); 
+    protected override readonly _value  = signal<T[]>([]);
+    protected readonly _search          = signal<string>('');
+    protected readonly _isLoadingInner  = signal<boolean>(false);  
+    protected readonly _headerHeight    = signal<number>(0);
+    protected readonly _footerHeight    = signal<number>(0); 
     protected readonly _containerHeight = signal<number>(0);
+    protected readonly _pagesLoaded     = signal<number>(0); 
     protected _resize$!: Subscription;
 
     //Input 
@@ -79,6 +80,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
         value = [...value!].map((item, index) => ({ __checked__: false, ...item, __index__: index }));          
         super._SetValue(value); 
 
+        Tools.Sleep(0, 'GridLoadPages').then(() => this._body()?.LoadPages(0)); 
         if(finishLoadingInner) this._isLoadingInner.set(false);
     } 
 
@@ -207,14 +209,13 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
 
     //Computed
     protected _dataSourceGroup = computed<IDataSourceGroup[]>(() => {
-        const DATA_SOURCE = this._dataSourceFiltered(); 
-          
+        const DATA_SOURCE = this._dataSourceFiltered();  
 
         //Response
         return DATA_SOURCE.length > 0 ? [{
             groupBy: 'Not Grouped',
             index: -1, 
-            rows: [...DATA_SOURCE].splice(0, 50)
+            rows: [...DATA_SOURCE].splice(0, this._pagesLoaded())
         }] : [];
     });
 

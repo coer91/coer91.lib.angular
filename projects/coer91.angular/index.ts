@@ -37,6 +37,7 @@ import * as tools      from 'coer91.angular/tools';
         components.CoerDateBox,
         components.CoerForm, 
         components.CoerGrid,
+        components.CoerLoading,
         components.CoerModal, 
         components.CoerNumberBox, 
         components.CoerPageTitle, 

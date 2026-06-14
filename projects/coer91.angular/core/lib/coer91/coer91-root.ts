@@ -12,7 +12,7 @@ declare const appSettings: any;
         <coer91-component
             #coer91Component 
             [navigation]="_navigation()"  
-            [toolbarShowUserData]="IsFunction(this.authService().Login)"
+            [toolbarShowUserData]="IsNotNull(this.authService().Login)"
             [toolbarShowProfileMenu]="true"
             [toolbarShowPasswordMenu]="IsNotNull(authService().RecoveryPassword)"
             [toolbarShowLogOutMenu]="true" 
@@ -51,7 +51,7 @@ export class Coer91Root {
     constructor() {          
         if(Access.IsLogin()) {  
             isLoadingSIGNAL.set(true);
-            userSIGNAL.set(Access.GetUser()); 
+            userSIGNAL.set(Access.GetUser());  
             this.GetNavigation().then(() => isLoadingSIGNAL.set(false));  
         }   
 

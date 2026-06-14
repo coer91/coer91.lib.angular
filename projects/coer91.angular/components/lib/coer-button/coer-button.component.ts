@@ -171,22 +171,23 @@ export class CoerButton implements AfterViewInit, OnDestroy {
 
 
     //Function
-    protected _Click(event: any): void {
+    protected _Click(event: Event | null): void {
         event?.preventDefault();
+        event?.stopPropagation();
         this.Blur();
         if (this._isEnabled()) this.onClick.emit();
     }
 
 
-    /** Press the button logically */
+    /** */
     public Click(): void {
         Tools.Sleep().then(() => this._Click(null));
     }
 
 
-    /** Focus on the button */
+    /** */
     public Focus(delay: number = 0): void {
-        Tools.Sleep(delay).then(() => {
+        Tools.Sleep(delay, 'CoerButtonFocus').then(() => {
             if(this._isEnabled()) {
                 this._htmlElement?.focus();            
             }
@@ -196,14 +197,8 @@ export class CoerButton implements AfterViewInit, OnDestroy {
     }
 
 
-    /** Blur the button */
+    /** */
     public Blur(): void {      
         this._htmlElement?.blur();
-    }
-
-
-    /** Scroll to the element */
-    public ScrollToElement(): void { 
-        HTMLElements.ScrollToElement(this._htmlElement); 
     }
 }

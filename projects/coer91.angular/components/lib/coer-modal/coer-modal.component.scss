@@ -1,6 +1,7 @@
 aside.coer-modal.backdrop { 
     z-index: var(--z-index-backdrop) !important; 
     overflow: auto !important;
+    position: fixed !important;
     
     div.coer-modal-content {
         display: grid !important;

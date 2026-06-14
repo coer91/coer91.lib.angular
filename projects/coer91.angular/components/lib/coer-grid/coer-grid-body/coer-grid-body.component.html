@@ -163,12 +163,7 @@
 
     <!-- Loading / Empty -->
     @if(isLoading()) {
-        <div class="loading">
-            <div class="loading-content">
-                <i class="i91-arrows-rotate animation-spin animation-speed-15"></i>
-                <span class="fa-fade">Loading</span>
-            </div>
-        </div> 
+        <coer-loading [isLoading]="true" position="sticky"></coer-loading>  
     } 
 
     @else if(isEnabled() && dataSourceGroup().length <= 0) {

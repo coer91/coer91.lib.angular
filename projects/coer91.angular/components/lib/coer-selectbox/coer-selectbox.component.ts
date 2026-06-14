@@ -1,6 +1,6 @@
-import { Component, computed, effect, EffectRef, input, output, signal } from '@angular/core';
-import { Collections, CONTROL_VALUE, HTMLElements, Numbers, Tools } from 'coer91.angular/tools';
+import { Component, computed, effect, EffectRef, input, output, signal } from '@angular/core'; 
 import { CoerTextBox } from '../coer-textbox/coer-textbox.component';
+import { Collections, CONTROL_VALUE, HTMLElements, Numbers, Tools } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-selectbox',
@@ -15,19 +15,19 @@ export class CoerSelectBox<T> extends CoerTextBox {
     protected effectRef!: EffectRef;
     protected override _htmlElement: HTMLInputElement | null = null;   
     protected override readonly _isSelectComponent = signal<boolean>(true);  
-    protected override readonly _isFocused = signal<boolean>(false); 
-    protected override readonly _search = signal<string>('');
-    protected override readonly _index = signal<number>(-1);
-    protected override readonly _isHoverElement = signal<boolean>(false);
-    protected readonly _arrayType = signal<'object' | 'string' | 'number'>('object');
-    protected readonly _applySearch = signal<boolean>(false);
-    protected readonly _isLoading = signal<boolean>(false);
+    protected override readonly _isFocused         = signal<boolean>(false); 
+    protected override readonly _search            = signal<string>('');
+    protected override readonly _index             = signal<number>(-1);
+    protected override readonly _isHoverElement    = signal<boolean>(false);
+    protected readonly _arrayType                  = signal<'object' | 'string' | 'number'>('object');
+    protected readonly _applySearch                = signal<boolean>(false);
+    protected _isLoading: boolean                  = false;
 
     //Input      
     public override readonly selectOnFocus   = input<boolean>(true);  
     public override readonly showClearButton = input<boolean>(true);
     public readonly dataSource               = input<T[]>([]);
-    public readonly displayProperty          = input<string>('name');
+    public readonly displayProperty          = input<string>('Name');
     public readonly useIconProperty          = input<boolean>(false); 
 
     //Output
@@ -61,6 +61,10 @@ export class CoerSelectBox<T> extends CoerTextBox {
     }
 
 
+    //Computed
+    private _valueCalculated = computed(() => this._arrayType() != 'object' ? this._value() : this._value()[this.displayProperty()]);
+
+
     //Function
     protected override _onPaste = () => { 
         Tools.Sleep().then(() => this._search.set(this._search().trim()));     
@@ -76,7 +80,7 @@ export class CoerSelectBox<T> extends CoerTextBox {
 
     //Function
     protected override _onBlur = () => {     
-        if(this._isLoading() || this._isHoverElement()) return;
+        if(this._isLoading || this._isHoverElement()) return;
         else this.Blur();
     }  
 
@@ -150,7 +154,7 @@ export class CoerSelectBox<T> extends CoerTextBox {
     }  
 
 
-    protected override Destructor() {
+    protected override Destructor() { 
         super.Destructor();
         this.effectRef?.destroy();
     }
@@ -159,16 +163,7 @@ export class CoerSelectBox<T> extends CoerTextBox {
     //Computed
     protected override _placeholder = computed<string>(() => {
         return Tools.HasProperty(this._value(), this.displayProperty()) ? this._value()[this.displayProperty()] : '';
-    });
-
-
-    //Computed
-    protected override _isEnabled = computed<boolean>(() => {
-        return this.isLoading()   === false 
-            && this.isReadonly()  === false
-            && this.isInvisible() === false
-            && this.isHidden()    === false
-    });
+    }); 
 
 
     //Computed
@@ -245,7 +240,9 @@ export class CoerSelectBox<T> extends CoerTextBox {
 
 
     //Computed
-    protected override _ValueByComponent = computed(() => this._search()); 
+    protected override _ValueByComponent = computed(() => { 
+        return this._arrayType() == 'object' ? this._search() : this._valueCalculated();
+    }); 
 
 
     //Function
@@ -263,10 +260,10 @@ export class CoerSelectBox<T> extends CoerTextBox {
 
     /** */
     public override async Focus(open: boolean = true) {   
-        if(this._isLoading()) return;
+        if(this._isLoading) return;
 
         if(this._isEnabled()) {
-            this._isLoading.set(true);  
+            this._isLoading = true;  
             
             await Tools.Sleep();
             if(this.selectOnFocus()) this._htmlElement?.select();
@@ -281,22 +278,23 @@ export class CoerSelectBox<T> extends CoerTextBox {
             } 
                         
             if(Tools.IsNotOnlyWhiteSpace(this._value())) {
-                const value = this._value()[this.displayProperty()];
+                const value = this._valueCalculated(); 
                 const index = this._dataSource().findIndex(item => String(item[this.displayProperty()]) == value);
                 this._index.set(index);  
                 HTMLElements.ScrollToElement(`#${this._id}-index${index}`);
             }
             
-            this._isLoading.set(false); 
+            this._isLoading = false; 
         }
         
         else this.Blur();   
-    }
+    } 
+
 
     /** */
     public override async Blur() {    
-        if(this._isLoading()) return;
-        this._isLoading.set(true);  
+        if(this._isLoading || this._isDestroyed()) return;
+        this._isLoading = true;  
         
         this._search.set(Tools.IsNotOnlyWhiteSpace(this._value()) ? this._value()[this.displayProperty()] : '');   
         if(!this.isTouched() && this._isFocused() && this._isElementReady()) this.SetTouched(true);
@@ -305,10 +303,10 @@ export class CoerSelectBox<T> extends CoerTextBox {
         this._htmlElement?.blur();  
         this._isCollapsed.set(true); 
         this._isFocused.set(false);  
-        this._index.set(-1); 
+        this._index.set(-1);  
+       
         this.onClose.emit();
-
-        this._isLoading.set(false); 
+        this._isLoading = false; 
     }
 
 

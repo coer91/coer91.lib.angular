@@ -6,11 +6,7 @@ import { SharedModule } from '../../shared/shared.module';
 const routes: Routes = [{
     path: '',
     data: { project: 'MySystem', module: 'System' }, 
-    children: [
-        {
-            path: 'about-library',
-            loadChildren: () => import('./about.submodule/about.submodule').then(submodule => submodule.AboutSubmodule)
-        },   
+    children: [   
         {
             path: 'components',
             loadChildren: () => import('./components.submodule/components.submodule').then(submodule => submodule.ComponentsSubmodule)

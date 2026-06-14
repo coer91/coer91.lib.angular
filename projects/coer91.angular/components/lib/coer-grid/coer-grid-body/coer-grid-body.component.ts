@@ -15,11 +15,14 @@ export class CoerGridBody<T> {
     protected readonly _coerGridCellList = viewChildren(CoerGridCell<T>); 
 
     //Variables
-    protected readonly _sort = signal<ISort>({ property: '', direction: 'none', icon: '' });
-    protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
-    protected readonly _checkAll = signal<boolean>(false);
-    protected readonly dragingId  = signal<number>(-1);
-    protected readonly dragoverId = signal<number>(-1);
+    protected _pagesObserver!: IntersectionObserver;
+    protected readonly _sort           = signal<ISort>({ property: '', direction: 'none', icon: '' });
+    protected readonly IsBooleanFalse  = Tools.IsBooleanFalse;
+    protected readonly _checkAll       = signal<boolean>(false);
+     protected readonly dragingId      = signal<number>(-1);
+    protected readonly dragoverId      = signal<number>(-1);
+    protected readonly dragoverOver    = signal<boolean>(false); 
+    protected readonly elementsByPages = new Set<string>();
 
     //Input
     public readonly value           = input.required<T[]>();
@@ -39,6 +42,7 @@ export class CoerGridBody<T> {
     public readonly height          = input.required<string>();
     public readonly minHeight       = input.required<string>();
     public readonly maxHeight       = input.required<string>(); 
+    public readonly pagesLoaded     = input.required<number>(); 
 
     //Outputs
     protected readonly onClickRow          = output<T>();
@@ -55,6 +59,17 @@ export class CoerGridBody<T> {
     protected readonly onUpdateType        = output<IInputChange<T>>(); 
     protected readonly onSort              = output<T[]>();
     protected readonly onReorder           = output<{ from: number, to: number }>();
+    protected readonly onLoadPages         = output<number>();
+
+    constructor() { 
+        document.addEventListener('dragover', event => event.preventDefault());        
+        document.addEventListener("drop", event => this._Drop(this.dragoverId(), event));     
+    }
+
+
+    ngOnDestroy() {
+        if(this._pagesObserver) this._pagesObserver?.disconnect(); 
+    }
 
     //Function
     protected _showStriped = (index: number): boolean => {
@@ -593,7 +608,6 @@ export class CoerGridBody<T> {
             document.body.appendChild(ghost);
             event.dataTransfer?.setDragImage(ghost, 100, positionY);
             setTimeout(() => document.body.removeChild(ghost), 0);
-
         }
     }
 
@@ -636,4 +650,43 @@ export class CoerGridBody<T> {
 
         return 'default';
     }); 
+
+
+    /** */
+    public async LoadPages(pages: number) {   
+        const pageByRow = this.bodySettings()?.paginator?.pageByRow || 50;
+        if(pages <= 0) pages = pageByRow;
+
+        if(pages <= pageByRow) {
+            if(this._pagesObserver) this._pagesObserver?.disconnect();
+
+            this._pagesObserver = new IntersectionObserver((inputList) => {
+                for(const input of inputList) {             
+                    if(input.isIntersecting) {
+                        this._pagesObserver.unobserve(input.target);
+
+                        const pagesLoaded = this.pagesLoaded() + pageByRow;
+                        this.onLoadPages.emit(pagesLoaded);
+                        this.LoadPages(pagesLoaded);
+                    }
+                } 
+            }); 
+
+            this.onLoadPages.emit(pages);
+        } 
+        
+        Tools.Sleep(1000, 'GridLoadPages').then(() => {
+            const ID = this.IdCalculated()((pages - 1), -1, 'row');
+            const ELEMENT = HTMLElements.SelectElementById(ID);    
+            
+            if(ELEMENT) {
+                if(this.elementsByPages.has(ID)) {
+                    this._pagesObserver.unobserve(ELEMENT);
+                }
+    
+                this.elementsByPages.add(ID);
+                this._pagesObserver.observe(ELEMENT); 
+            } 
+        });     
+    }
 }

@@ -4,7 +4,7 @@ const appSettings = {
         project: 'MySystem',
         title: 'COER 91',
         version: '1.0.0', 
-        forCompany: 'COER 91'
+        forCompany: 'COER System'
     },
     webAPI: {
         development: {

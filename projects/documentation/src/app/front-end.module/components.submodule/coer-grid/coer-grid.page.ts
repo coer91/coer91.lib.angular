@@ -32,13 +32,16 @@ export class CoerGridPage extends Page {
     constructor() { 
         super('coer-grid');
 
-        for(let i = 1; i <= 10; i++) { 
-            this.dataSource.update(x => x.concat([{ 
-                id: i, 
-                name: `item ${i}`,  
-                option: null
-            }]));
-        }
+        setTimeout(() => {
+            for(let i = 1; i <= 10000; i++) { 
+                this.dataSource.update(x => x.concat([{ 
+                    id: i, 
+                    name: `item ${i}`,  
+                    option: null
+                }]));
+            }
+
+        }, 3000)
 
         // this.dataSource.set([
         //     { id: 1, name: 'First',  case: '2026-03-01 00:00:00', case2: '2026-03-01 00:00:00', case3: '2026-03-01 00:00:00' },

@@ -23,13 +23,13 @@
                     @if(icon().length > 3) {
                         <i [class]="icon()"></i>
                     }
-                    <span> {{ title() }} </span>
+                    <span> {{ title() || '' }} </span>
                 </h3>
 
                 @if(showCancelButton()) {
                     <coer-button
                         type="icon-rounded"
-                        icon="i91-mark font-size-25px"
+                        icon="iw-mark font-size-25px"
                         color="secondary"
                         minWidth="25px"
                         maxWidth="25px"

@@ -2,25 +2,7 @@
     title="Button"
     [breadcrumbs]="breadcrumbs()"
     [goBack]="goBack"
-></coer-page-title>
-
-
-<section class="container-section">
-    <coer-button
-        [breakpoints]="{
-            type: {
-                xxl: 'filled',
-                xl: 'outline',
-                lg: 'icon-filled',
-                md: 'icon-filled-rounded',
-                sm: 'icon-outline',
-                xs: 'icon-outline-rounded',
-                mv: 'icon'
-            }  
-        }"
-    ></coer-button>
-</section>
-
+></coer-page-title> 
 
 @for(type of typeList(); track type) {
     <section class="container-section">
@@ -36,3 +18,21 @@
         </div>
     </section>
 } 
+
+<section class="container-section">
+    <h2>Type - breakpoints</h2>
+
+    <coer-button
+        [breakpoints]="{
+            type: {
+                xxl: 'filled',
+                xl: 'outline',
+                lg: 'icon-filled',
+                md: 'icon-filled-rounded',
+                sm: 'icon-outline',
+                xs: 'icon-outline-rounded',
+                mv: 'icon'
+            }  
+        }"
+    ></coer-button>
+</section>

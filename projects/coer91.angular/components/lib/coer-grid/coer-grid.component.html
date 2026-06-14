@@ -48,6 +48,7 @@
             [height]="`calc(${_height()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [minHeight]="`calc(${minHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
             [maxHeight]="`calc(${ maxHeight()} - ${this._headerHeight()}px - ${this._footerHeight()}px - ${_containerHeight()}px)`"
+            [pagesLoaded]="_pagesLoaded()"
             (onClickRow)="onClickRow.emit($event)"
             (onDoubleClickRow)="onDoubleClickRow.emit($event)"
             (onClickDeleteRow)="_ClickDeleteRow($event)"
@@ -61,6 +62,7 @@
             (onUpdateType)="_SetValueInput($event, true)"
             (onSort)="_SetValue($event, true); onSort.emit($event);"
             (onReorder)="Reorder($event)"
+            (onLoadPages)="_pagesLoaded.set($event)"
         ></coer-grid-body>
         
         <!-- Footer -->

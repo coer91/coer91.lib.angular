@@ -32,15 +32,15 @@ export class Coer91Component {
     protected _watchJWT$!: any; 
 
     //Inputs  
-    public readonly navigation = input.required<IMenu[]>(); 
-    public readonly toolbarMenu = input<IToolbarMenu[]>([]);
-    public readonly toolbarShowUserData = input<boolean>(false);
-    public readonly toolbarShowProfileMenu = input<boolean>(true); 
-    public readonly toolbarPreventProfileMenu = input<boolean>(false); 
-    public readonly toolbarShowPasswordMenu = input<boolean>(true); 
+    public readonly navigation                 = input.required<IMenu[]>(); 
+    public readonly toolbarMenu                = input<IToolbarMenu[]>([]);
+    public readonly toolbarShowUserData        = input<boolean>(false);
+    public readonly toolbarShowProfileMenu     = input<boolean>(true); 
+    public readonly toolbarPreventProfileMenu  = input<boolean>(false); 
+    public readonly toolbarShowPasswordMenu    = input<boolean>(true); 
     public readonly toolbarPreventPasswordMenu = input<boolean>(false);  
-    public readonly toolbarShowLogOutMenu = input<boolean>(true);  
-    public readonly toolbarPreventLogOutMenu = input<boolean>(false); 
+    public readonly toolbarShowLogOutMenu      = input<boolean>(true);  
+    public readonly toolbarPreventLogOutMenu   = input<boolean>(false); 
 
     //Output
     protected readonly onLogin            = output<ILogin>();

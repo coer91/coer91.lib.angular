@@ -24,14 +24,14 @@ export class AppRoot {
     protected authService: IAuthService = { 
             
         Login: {
-            UserId: 0,
-            User: 'COER91', 
-            PartnerId: 0,
-            Partner: '',
-            FullName: '',
-            Email: '',
+            UserId: 1,
+            User: 'coer91', 
+            PartnerId: 1,
+            Partner: 'COER System',
+            FullName: 'Christian Omar Escamilla Rodriguez',
+            Email: 'coer0408@gmail.com',
             JWT: '',
-            Roles: [],
+            Roles: ['Developer', 'Admin'],
             Language: '',
             Message: ''
         } 

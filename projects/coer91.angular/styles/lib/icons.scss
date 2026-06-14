@@ -30,7 +30,8 @@
     }   
 }  
  
-@each $icon in (    
+@each $icon in (  
+    '123',  
     'angle', 
     'arrow-circle',
     'arrow-from-bracket',
@@ -52,6 +53,8 @@
     'circle',
     'clipboard-fill',
     'clipboard',
+    'cloud-slash-fill',
+    'cloud-slash',
     'code',
     'copyright',
     'developer-fill',
@@ -87,6 +90,7 @@
     'filter',
     'floppy-disk-fill',
     'floppy-disk',
+    'form',
     'gear-fill',
     'grid',
     'hand-pointer-fill',
@@ -120,8 +124,16 @@
     'quality',
     'reply',
     'search',
+    'signpost-doble-fill',
+    'signpost-doble',
+    'signpost-fill',
+    'signpost',
     'sort-asc-arrow-down',
     'sort-desc-arrow-down', 
+    'tab',
+    'table-list',
+    'switch-off',
+    'switch-on', 
     'trash-can',
     'user',
     'user-fill'
