@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, computed, ElementRef, input, output, signal, viewChild, WritableSignal } from '@angular/core'; 
+import { AfterViewInit, Component, computed, ElementRef, input, output, Signal, signal, viewChild, WritableSignal } from '@angular/core'; 
+import { TemplateRefDirective } from 'coer91.angular/directives';
 import { IInputChange, IHeaderSettings, IImportButton } from 'coer91.angular/interfaces';
-import { CoerAlert, Files, Tools } from 'coer91.angular/tools';
+import { CoerAlert, Files, Strings, Tools } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-grid-header',
@@ -27,17 +28,21 @@ export class CoerGridHeader<T> implements AfterViewInit {
     public readonly isLoading        = input.required<boolean>();
     public readonly isEnabled        = input.required<boolean>();
     public readonly dataSourceExport = input.required<T[]>();
+    public readonly contentElements  = input.required<Signal<readonly TemplateRefDirective[]>>()
 
     //Output     
-    protected readonly onClickFilter = output<void>();
-    protected readonly onClickExport = output<T[]>();
-    protected readonly onClickImport = output<IImportButton<T>>();
-    protected readonly onClickAdd    = output<void>();
-    protected readonly onClickSave   = output<void>();
-    protected readonly onKeyupEnter  = output<IInputChange<T>>();
-    protected readonly onInputChange = output<IInputChange<T>>();
-    protected readonly onClickClear  = output<IInputChange<T>>();
-    protected readonly onClickSearch = output<IInputChange<T>>(); 
+    protected readonly onClickBack    = output<void>();
+    protected readonly onClickCancel  = output<void>();
+    protected readonly onClickFilter  = output<void>();
+    protected readonly onClickExport  = output<T[]>();
+    protected readonly onClickImport  = output<IImportButton<T>>();
+    protected readonly onClickAdd     = output<void>();
+    protected readonly onClickSave    = output<void>();
+    protected readonly onSearchChange = output<string>();
+    protected readonly onKeyupEnter   = output<IInputChange<T>>();
+    protected readonly onInputChange  = output<IInputChange<T>>();
+    protected readonly onClickClear   = output<IInputChange<T>>();
+    protected readonly onClickSearch  = output<IInputChange<T>>(); 
 
     ngAfterViewInit(): void {
         Tools.Sleep(1000).then(() => this._isElementReady.set(true));
@@ -65,14 +70,34 @@ export class CoerGridHeader<T> implements AfterViewInit {
 
         return ([] as {
             icon:       string,
+            label:      string,
             color:      'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light',
             path:       string,
             tooltip:    string, 
             isLoading:  boolean,
             event:      any
         }[]) 
+        .concat(SHOW('backButton') ? [{
+            icon:       'back', 
+            label:      'Back',
+            color:      COLOR('backButton', 'primary'),
+            path:       PATH('backButton'),
+            tooltip:    TOOLTIP('backButton'), 
+            isLoading:  LOADING('backButton'),
+            event: this.onClickBack
+        }] : [])
+        .concat(SHOW('cancelButton') ? [{
+            icon:       'cancel', 
+            label:      'Cancel',
+            color:      COLOR('cancelButton', 'danger'),
+            path:       PATH('cancelButton'),
+            tooltip:    TOOLTIP('cancelButton'), 
+            isLoading:  LOADING('cancelButton'),
+            event: this.onClickCancel
+        }] : [])
         .concat(SHOW('filterButton') ? [{
             icon:       'filter',
+            label:      'Filter',
             color:      COLOR('filterButton', 'primary'),
             path:       PATH('filterButton'),
             tooltip:    TOOLTIP('filterButton'), 
@@ -81,6 +106,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
         }] : [])
         .concat((SHOW('exportButton') && this.dataSourceExport().length > 0) ? [{
             icon:       'excel',
+            label:      'Export',
             color:      COLOR('exportButton', 'primary'),
             path:       PATH('exportButton'),
             tooltip:    TOOLTIP('exportButton'), 
@@ -94,6 +120,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
         }] : [])
         .concat(SHOW('importButton') ? [{
             icon:       'import',
+            label:      'Import',
             color:      COLOR('importButton', 'primary'),
             path:       PATH('importButton'),
             tooltip:    TOOLTIP('importButton'), 
@@ -104,6 +131,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
         }] : [])       
         .concat(SHOW('addButton') ? [{
             icon:       'add',
+            label:      'Add',
             color:      COLOR('addButton', 'primary'),
             path:       PATH('addButton'),
             tooltip:    TOOLTIP('addButton'), 
@@ -112,6 +140,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
         }] : [])
         .concat(SHOW('saveButton') ? [{
             icon:       'save',
+            label:      'Save',
             color:      COLOR('saveButton', 'primary'),
             path:       PATH('saveButton'),
             tooltip:    TOOLTIP('saveButton'), 
@@ -132,7 +161,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
         const position = Tools.IsNotOnlyWhiteSpace(this.headerSettings()?.slotPosition) ? this.headerSettings().slotPosition! : 'left';
         const margin = position === 'left' ? 'margin-right-auto' : 'margin-left-auto';   
         const width = this._buttons().length > 0 || this._showSearch() ? '' : 'width-100';
-        return `display-flex gap-5px ${width} ${margin}`;
+        return `flex-wrap gap-5px ${width} ${margin}`;
     });   
     
 
@@ -203,7 +232,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
                     }
 
                     message = message.substring(0, message.length - 1); 
-                    new CoerAlert().Warning(message, 'Invalid File Type', 'i91-file-xls-fill');
+                    new CoerAlert().Warning(message, 'Invalid File Type', 'iw-file-xls-fill');
                 }
 
                 this._inputFile().nativeElement.value = []; 
@@ -226,6 +255,20 @@ export class CoerGridHeader<T> implements AfterViewInit {
                 input: 'inputSearch',
                 value: (value || '')
             });
+
+            this.onSearchChange.emit(value);
         }
     }
+
+
+    //Computed
+    protected _gridHeaderBelow = computed<any>(() => { 
+        return this.contentElements()().find(x => Strings.Equals(x.templateRef(), 'grid-header-below')) || null;
+    });
+
+
+    //Computed
+    protected _showHeaderBelow = computed<boolean>(() => { 
+        return Tools.IsNotNull(this._gridHeaderBelow()?.template) && this._gridHeaderBelow()?.show();
+    });
 }

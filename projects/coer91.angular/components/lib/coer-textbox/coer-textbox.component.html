@@ -11,7 +11,8 @@
         marginTop   : marginTop(),
         marginRight : marginRight(),
         marginBottom: marginBottom(),
-        marginLeft  : marginLeft() 
+        marginLeft  : marginLeft(),
+        height      : ((size() == 'small') ? 'var(--input-height-small)' : 'var(--input-height)') 
     }">  
 
     @if(_showExternalButtonLeft()) {
@@ -21,6 +22,7 @@
                 [type]="externalButtons()?.typeLeft || 'icon-filled'"
                 [color]="externalButtons()?.colorLeft || 'secondary'"
                 [isReadonly]="(externalButtons()?.isReadonlyLeft || false)"
+                [height]="(size() == 'small') ? '25px' : 'var(--input-height)'"
                 (onClick)="onClickLeft.emit()"
             ></coer-button>
         </div>
@@ -51,6 +53,7 @@
             class="position-absolute" 
             [placeholder]="_placeholder()"
             [value]="_ValueFormat()" 
+            [disabled]="!_isEnabled()"
             (focus)="Focus()"
             [ngStyle]="{ 
                 width: _widtht(),
@@ -66,7 +69,8 @@
                 [icon]="externalButtons()?.iconRight || ''"
                 [type]="externalButtons()?.typeRight || 'icon-filled'"
                 [color]="externalButtons()?.colorRight || 'secondary'"
-                [isReadonly]="(externalButtons()?.isReadonlyRight || false)" 
+                [isReadonly]="(externalButtons()?.isReadonlyRight || false)"  
+                [height]="(size() == 'small') ? '25px' : 'var(--input-height)'"
                 (onClick)="onClickRight.emit()"
             ></coer-button>
         </div>
@@ -75,34 +79,34 @@
     @if(_paddingRight() != '10px') {
         <div class="icon-container" [ngStyle]="{ right: _right() }">
             @if(isInvalid() && _isEnabled()) {
-                <i class="i91-exclamation-circle-fill"></i>
+                <i class="iw-exclamation-circle-fill"></i>
             }
     
             @else if(isValid() && _isEnabled()) {
-                <i class="i91-check-circle-fill"></i>
+                <i class="iw-check-circle-fill"></i>
             }  
 
             @if(_showSearchButton()) {
-                <i class="i91-search" (click)="_ClickSearch()"></i>
+                <i class="iw-search" (click)="_ClickSearch()"></i>
             }
     
             @else if(_showClearButton()) {
-                <i class="i91-mark" (click)="Clear()"></i>
+                <i class="iw-mark" (click)="Clear()"></i>
             }  
 
             @else if(_showSecretClosed()) {
-                <i class="i91-eye-slash-fill" (click)="_showSecret.set(false); Focus();"></i>
+                <i class="iw-eye-slash-fill" (click)="_showSecret.set(false); Focus();"></i>
             }
     
             @else if(_showSecretOpen()) {
-                <i class="i91-eye-fill" (click)="_showSecret.set(true); Focus();"></i>
+                <i class="iw-eye-fill" (click)="_showSecret.set(true); Focus();"></i>
             } 
             
             @if(_isSelectComponent() && _isEnabled()) {
                 <i [ngClass]="{
-                    'i91-angle'    : true,
-                    'i91-90deg'    : _isCollapsed(),
-                    'i91-270deg'   : !_isCollapsed(),
+                    'iw-angle'    : true,
+                    'iw-90deg'    : _isCollapsed(),
+                    'iw-270deg'   : !_isCollapsed(),
                     'color-primary': !_isCollapsed() && !isValid() && !isInvalid(),
                     'color-success': !_isCollapsed() && isValid()  && !isInvalid(),
                     'color-danger' : !_isCollapsed() && isInvalid(),
@@ -111,8 +115,8 @@
 
             @if(_isNumberComponent() && _showStepIcon() && _isEnabled()) {
                 <div [ngClass]="{ 'tricks-container': true, 'focus': _isFocused() }">
-                    <i class="i91-angle i91-270deg" (click)="_IncrementStep()"></i>
-                    <i class="i91-angle i91-90deg" (click)="_DecrementStep()"></i>
+                    <i class="iw-angle iw-270deg" (click)="_IncrementStep()"></i>
+                    <i class="iw-angle iw-90deg" (click)="_DecrementStep()"></i>
                 </div>
             } 
         </div>
@@ -129,6 +133,7 @@
                 'isValid'        : isValid(), 
                 'isInvalid'      : isInvalid(),
                 'readonly'       : isReadonly(),
+                'small'          : (size() == 'small')
             }">
             <span [ngClass]="{ 'background-color-readonly': isReadonly() }"> {{ _label() }} </span>
         </label>
@@ -150,7 +155,7 @@
         ></div>
     }
 
-    @if(_isSelectComponent()) {
+    @if(_isSelectComponent()) {        
         <ul [id]="_id + '-options'" [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
             @if(_dataSource().length > 0) {
                 @for(item of _dataSource(); track item.__index__) {
@@ -173,4 +178,4 @@
             }
         </ul> 
     }
-</div>         
+</div>    

@@ -125,13 +125,13 @@
     
         @case ('inputDatebox') {
             <div [class]="_input()">  
-    
+            
             </div>
         }
         
         @default {
             <div class="default" 
-                [class]="_GetTextColor()"
+                [class]="`${_GetBackground()} ${_GetTextColor()}`"
                 [ngStyle]="{ 
                     'justify-content': _GetTextAlignX(),
                     'word-break'     : _GetTextBreak(),

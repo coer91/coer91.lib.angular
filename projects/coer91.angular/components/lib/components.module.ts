@@ -14,10 +14,11 @@ import { CoerGridCell   } from './coer-grid/coer-grid-cell/coer-grid-cell.compon
 import { CoerGridFooter } from './coer-grid/coer-grid-footer/coer-grid-footer.component';
 import { CoerGridHeader } from './coer-grid/coer-grid-header/coer-grid-header.component';
 import { CoerGrid       } from './coer-grid/coer-grid.component';
-import { CoerLoading    } from './coer-loading/coer-loading.component';
+import { CoerLoading    } from './coer-loading/coer-loading.component'; 
 import { CoerNumberBox  } from './coer-numberbox/coer-numberbox.component';
 import { CoerModal      } from './coer-modal/coer-modal.component';
 import { CoerPageTitle  } from './coer-page-title/coer-page-title.component';
+import { CoerRadio      } from './coer-radio/coer-radio.component';
 import { CoerSecretBox  } from './coer-secretbox/coer-secretbox.component'; 
 import { CoerSelectBox  } from './coer-selectbox/coer-selectbox.component'; 
 import { CoerSwitch     } from './coer-switch/coer-switch.component';
@@ -46,8 +47,9 @@ import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
         CoerModal, 
         CoerNumberBox,
         CoerPageTitle,
+        CoerRadio, 
         CoerSecretBox,
-        CoerSelectBox, 
+        CoerSelectBox,
         CoerSwitch,
         CoerTab,
         CoerTextBox,
@@ -61,6 +63,7 @@ import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
         CoerModal, 
         CoerNumberBox,
         CoerPageTitle,
+        CoerRadio,
         CoerSecretBox,
         CoerSelectBox,
         CoerSwitch,

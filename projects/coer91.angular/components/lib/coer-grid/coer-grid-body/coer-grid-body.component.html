@@ -6,8 +6,10 @@
     [ngStyle]="{ 
         'height'    : height(), 
         'min-height': minHeight(), 
-        'max-height': maxHeight()
-    }">
+        'max-height': maxHeight(),
+        'overflow'  : (isLoading() ? 'hidden' : 'auto')
+    }"> 
+
     <table>
         <thead>
             <tr>
@@ -26,12 +28,15 @@
                 }
 
 
-                @for(button of _buttonsByRow(); track button.property) {
+                @for(button of _buttonsByRow(); track button.property) { 
                     @if(_ShowButton(button, 'left')) {
                         <th class="action-column" scope="col"></th>
                     }
-                }
+                } 
 
+                @if(bodySettings().showRowNumber) {
+                    <th class="th-index">#</th>
+                }
 
                 @for(header of columns(); track header.__index__) {
                     <th scope="col" 
@@ -92,11 +97,11 @@
 
                         @for(button of _buttonsByRow(); track button.property) {
                             @if(_ShowButton(button, 'left')) {
-                                <td class="action-column" [ngStyle]="{ 'border-bottom' : _borderButtom() }">
+                                <td class="action-column" [ngStyle]="{ 'border-bottom': _borderButtom() }">
                                     @if(_ShowButton(button, 'left', row)) {
                                         <div class="action-column-content">
                                             <coer-button
-                                                type="icon-rounded"
+                                                [type]="button.type"
                                                 [color]="button.color!"
                                                 [icon]="button.icon"  
                                                 [path]="_Path(button.property, row)"
@@ -108,13 +113,17 @@
                             }
                         }
 
+                        @if(bodySettings().showRowNumber) {
+                            <td class="td-index" [ngStyle]="{ 'border-bottom': _borderButtom() }">{{ index + 1 }}</td>
+                        }
+
 
                         @for(column of columns(); track column.__index__) {
                             <td class="td-content"
                                 [ngStyle]="{ 
                                     'border-bottom' : _borderButtom(), 
                                     'vertical-align': column.config.textAlignY!,   
-                                    'cursor'        : _cursor()                       
+                                    'cursor'        : bodySettings().selectionRows?.selectOverRow ? 'pointer' : 'default'                                  
                                 }"> 
                                 <coer-grid-cell
                                     [id]="IdCalculated()(row.__index__, column.__index__, 'cell')"
@@ -140,11 +149,11 @@
 
                         @for(button of _buttonsByRow(); track button.property) {
                             @if(_ShowButton(button, 'right')) {
-                                <td class="action-column" [ngStyle]="{ 'border-bottom' : _borderButtom() }">
+                                <td class="action-column" [ngStyle]="{ 'border-bottom': _borderButtom() }">
                                     @if(_ShowButton(button, 'right', row)) {
                                         <div class="action-column-content">
                                             <coer-button
-                                                type="icon-rounded"
+                                                [type]="button.type"
                                                 [color]="button.color"
                                                 [icon]="button.icon"  
                                                 [path]="_Path(button.property, row)"
@@ -160,15 +169,15 @@
             </tbody>
         }
     </table>
-
+    
     <!-- Loading / Empty -->
     @if(isLoading()) {
-        <coer-loading [isLoading]="true" position="sticky"></coer-loading>  
+        <coer-loading [isLoading]="true" position="sticky"></coer-loading> 
     } 
 
     @else if(isEnabled() && dataSourceGroup().length <= 0) {
         <div class="empty-data">
             <div class="empty-data-content"> No Data </div>
         </div>
-    } 
-</section>  
+    }
+</section> 

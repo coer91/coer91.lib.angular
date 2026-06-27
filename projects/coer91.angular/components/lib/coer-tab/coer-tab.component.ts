@@ -1,5 +1,5 @@
-import { Component, computed, contentChildren, input, output, signal } from '@angular/core';
-import { Collections, CONTROL_VALUE, ControlValue, HTMLElements, Tools } from 'coer91.angular/tools'; 
+import { Component, computed, contentChildren, input, output, signal } from '@angular/core';  
+import { Collections, CONTROL_VALUE, ControlValue, HTMLElements, Tools } from 'coer91.angular/tools';
 import { ITemplateRef, TemplateRefDirective } from 'coer91.angular/directives';
 
 @Component({

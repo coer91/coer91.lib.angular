@@ -41,6 +41,7 @@ export class CoerTextBox extends ControlValue {
     public showClearButton  = input<boolean>(false);
     public showSearchButton = input<boolean>(false);
     public externalButtons  = input<IExternalButton>();
+    public size             = input<'small' | 'normal'>('normal');
     public width            = input<string>('100%');
     public minWidth         = input<string>('100px');
     public maxWidth         = input<string>('100%');  
@@ -263,6 +264,10 @@ export class CoerTextBox extends ControlValue {
 
     //Function
     protected _Input = (value: any): void => this._SetValue(value); 
+
+
+    //Computed
+    public isFocused = computed<boolean>(() => this._isFocused()); 
 
 
     /** */

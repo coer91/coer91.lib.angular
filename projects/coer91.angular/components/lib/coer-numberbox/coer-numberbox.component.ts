@@ -232,5 +232,5 @@ export class CoerNumberBox extends CoerTextBox {
             && Tools.IsOnlyWhiteSpace(this._value())
             && (this.format() == 'none')
         );
-    }); 
+    });  
 }

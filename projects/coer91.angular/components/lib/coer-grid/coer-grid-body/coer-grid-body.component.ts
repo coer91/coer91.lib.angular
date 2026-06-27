@@ -1,7 +1,7 @@
 import { IBodySettings, ICallbackItem, IColumn, IColumnConfig, IDataSourceGroup, IHeaderSettings, IInputChange, IInputEnter, ISelectedRow, ISort } from "coer91.angular/interfaces";
-import { Component, computed, input, output, signal, viewChildren, WritableSignal } from "@angular/core";
-import { CoerGridCell } from "../coer-grid-cell/coer-grid-cell.component";
+import { Component, computed, input, OnDestroy, output, signal, viewChildren, WritableSignal } from "@angular/core";
 import { Collections, Dates, HTMLElements, Tools } from "coer91.angular/tools"; 
+import { CoerGridCell } from "../coer-grid-cell/coer-grid-cell.component";
 
 @Component({
     selector: 'coer-grid-body',
@@ -9,20 +9,21 @@ import { Collections, Dates, HTMLElements, Tools } from "coer91.angular/tools";
     styleUrl: './coer-grid-body.component.scss',
     standalone: false
 })
-export class CoerGridBody<T> { 
+export class CoerGridBody<T> implements OnDestroy { 
     
     //Elements
     protected readonly _coerGridCellList = viewChildren(CoerGridCell<T>); 
 
-    //Variables
+    //Variables 
     protected _pagesObserver!: IntersectionObserver;
     protected readonly _sort           = signal<ISort>({ property: '', direction: 'none', icon: '' });
     protected readonly IsBooleanFalse  = Tools.IsBooleanFalse;
     protected readonly _checkAll       = signal<boolean>(false);
-     protected readonly dragingId      = signal<number>(-1);
+    protected readonly dragingId       = signal<number>(-1);
     protected readonly dragoverId      = signal<number>(-1);
     protected readonly dragoverOver    = signal<boolean>(false); 
     protected readonly elementsByPages = new Set<string>();
+    protected _isLoadingPaginator: boolean = false;
 
     //Input
     public readonly value           = input.required<T[]>();
@@ -63,7 +64,7 @@ export class CoerGridBody<T> {
 
     constructor() { 
         document.addEventListener('dragover', event => event.preventDefault());        
-        document.addEventListener("drop", event => this._Drop(this.dragoverId(), event));     
+        document.addEventListener("drop", event => this._Drop(this.dragoverId(), event)); 
     }
 
 
@@ -81,12 +82,7 @@ export class CoerGridBody<T> {
     protected _ShowButton(button: any, position: 'left' | 'right', row: any = null) {
         let response = false;
 
-        if(position === button.position 
-            && this.isEnabled() 
-            && !this.isLoadingInner()() 
-            && this.dataSourceGroup().length > 0
-            && this.dragingId() < 0
-        ) { 
+        if(position === button.position && this.isEnabled() && !this.isLoadingInner()() && this.dataSourceGroup().length > 0) { 
             const SHOW_BUTTON = (this.bodySettings() as any)[button.property]?.show;
             
             if (Tools.IsNull(row)) {
@@ -128,28 +124,32 @@ export class CoerGridBody<T> {
             property: 'deleteButton',
             icon: 'delete',  
             position: this.bodySettings()?.deleteButton?.position || 'right',
-            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.color) ? this.bodySettings()?.deleteButton?.color : 'danger', 
+            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.background) ? this.bodySettings()?.deleteButton?.background : (Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.color) ? this.bodySettings()?.deleteButton?.color : 'danger'), 
+            type: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.background) ? 'icon-filled' : 'icon-rounded',
             event: this.onClickDeleteRow 
         },
         { 
             property: 'editButton', 
             icon: 'edit',  
             position: this.bodySettings()?.editButton?.position || 'right',
-            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.color) ? this.bodySettings()?.editButton?.color : 'primary', 
+            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.background) ? this.bodySettings()?.editButton?.background : (Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.color) ? this.bodySettings()?.editButton?.color : 'primary'), 
+            type: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.background) ? 'icon-filled' : 'icon-rounded',
             event: this.onClickEditRow 
         },
         { 
             property: 'modalButton', 
             icon: 'modal',  
             position: this.bodySettings()?.modalButton?.position || 'right',
-            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.color) ? this.bodySettings()?.modalButton?.color : 'primary', 
+            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.background) ? this.bodySettings()?.modalButton?.background : (Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.color) ? this.bodySettings()?.modalButton?.color : 'primary'), 
+            type: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.background) ? 'icon-filled' : 'icon-rounded',
             event: this.onClickModalRow 
         },
         { 
             property: 'navigateButton', 
             icon: 'navigate',  
             position: this.bodySettings()?.navigateButton?.position || 'right',
-            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.color) ? this.bodySettings()?.navigateButton?.color : 'navigation', 
+            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.background) ? this.bodySettings()?.navigateButton?.background : (Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.color) ? this.bodySettings()?.navigateButton?.color : 'navigation'), 
+            type: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.background) ? 'icon-filled' : 'icon-rounded',
             event: this.onClickNavigateRow 
         }
     ]);
@@ -184,8 +184,7 @@ export class CoerGridBody<T> {
         return this.bodySettings().selectionRows?.show 
             && this.dataSourceGroup().length > 0  
             && (this.bodySettings().selectionRows?.selectAllowed !== 0)
-            && this.isEnabled()
-            && this.dragingId() < 0; 
+            && this.isEnabled(); 
     });
 
 
@@ -218,7 +217,7 @@ export class CoerGridBody<T> {
             && Tools.IsNotOnlyWhiteSpace(this.search())
             && Tools.IsNull(column?.inputSwitch)
             && (Tools.IsNull(this.headerSettings().search?.properties) || this.headerSettings().search!.properties!.length <= 0 || this.headerSettings().search!.properties!.includes(column.property)) 
-            ? 'i91-search' : '';
+            ? 'iw-search' : '';
     }  
 
 
@@ -554,7 +553,7 @@ export class CoerGridBody<T> {
                 this._sort.set({ 
                     property: column.property, 
                     direction: 'ascendant', 
-                    icon: 'i91-sort-asc-arrow-down' 
+                    icon: 'iw-sort-asc-arrow-down' 
                 });
             }
 
@@ -564,7 +563,7 @@ export class CoerGridBody<T> {
                 this._sort.set({ 
                     property: column.property, 
                     direction: 'descendant', 
-                    icon: 'i91-sort-desc-arrow-down' 
+                    icon: 'iw-sort-desc-arrow-down' 
                 });
             }  
         }
@@ -608,6 +607,7 @@ export class CoerGridBody<T> {
             document.body.appendChild(ghost);
             event.dataTransfer?.setDragImage(ghost, 100, positionY);
             setTimeout(() => document.body.removeChild(ghost), 0);
+
         }
     }
 
@@ -624,10 +624,11 @@ export class CoerGridBody<T> {
     protected _Drop(index: number, event: DragEvent) {
         event.preventDefault();
         event.stopPropagation();        
-        
+         
         this.dragoverId.set(-1);
         this.dragingId.set(-1);
         const from = Number(event.dataTransfer?.getData('text') || '-1');
+
         if(from >= 0) {
             this.onReorder.emit({ from, to: index }); 
         }        
@@ -649,13 +650,14 @@ export class CoerGridBody<T> {
         }
 
         return 'default';
-    }); 
+    });   
 
 
     /** */
     public async LoadPages(pages: number) {   
         const pageByRow = this.bodySettings()?.paginator?.pageByRow || 50;
         if(pages <= 0) pages = pageByRow;
+        if(pages == this.pagesLoaded()) return; 
 
         if(pages <= pageByRow) {
             if(this._pagesObserver) this._pagesObserver?.disconnect();
@@ -671,7 +673,7 @@ export class CoerGridBody<T> {
                     }
                 } 
             }); 
-
+            
             this.onLoadPages.emit(pages);
         } 
         

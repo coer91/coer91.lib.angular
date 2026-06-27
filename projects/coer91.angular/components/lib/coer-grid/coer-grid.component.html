@@ -3,7 +3,6 @@
     [ngStyle]="{ 'margin-top': marginTop(), 'margin-right' : marginRight(), 'margin-bottom': marginBottom(), 'margin-left': marginLeft() }">
     
     <div class="coer-grid" [ngStyle]="{ 'width' : width(), 'min-width': minWidth(), 'max-width': maxWidth() }">
-        
         <!-- Header -->
         <coer-grid-header
             #header
@@ -16,6 +15,9 @@
             [isLoading]="isLoading()"
             [isEnabled]="_isEnabled()"
             [dataSourceExport]="_dataSourceExport()"
+            [contentElements]="contentElements"
+            (onClickBack)="onClickBack.emit()"
+            (onClickCancel)="onClickCancel.emit()"
             (onClickFilter)="onClickFilter.emit()"
             (onClickExport)="onClickExport.emit($event)"
             (onClickImport)="_Import($event)"
@@ -24,7 +26,8 @@
             (onKeyupEnter)="onKeyupEnter.emit($event)"
             (onInputChange)="onInputChange.emit($event)"
             (onClickClear)="onClickClear.emit($event)"
-            (onClickSearch)="onClickSearch.emit($event)">
+            (onClickSearch)="onClickSearch.emit($event)"
+            (onSearchChange)="body.LoadPages(_pagesLoaded())">
             <ng-content></ng-content>
         </coer-grid-header>
        
@@ -61,7 +64,7 @@
             (onKeyupEnter)="onKeyupEnter.emit($event)"
             (onUpdateType)="_SetValueInput($event, true)"
             (onSort)="_SetValue($event, true); onSort.emit($event);"
-            (onReorder)="Reorder($event)"
+            (onReorder)="Reorder($event)" 
             (onLoadPages)="_pagesLoaded.set($event)"
         ></coer-grid-body>
         

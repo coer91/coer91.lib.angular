@@ -4,6 +4,7 @@ export interface IBodySettings<T> {
     showStriped?: boolean;
     showBorders?: boolean;
     showHover?: boolean;
+    showRowNumber?: boolean;
     selectionRows?: ISelectionRow;
     deleteButton?: IRowButtonDelete<T>;
     editButton?: IRowButton<T>;
@@ -17,14 +18,15 @@ export interface IBodySettings<T> {
 export interface IRowButton<T> {
     show?:   boolean | ((item: ICallbackItem<T>) => boolean); 
     position?: 'left' | 'right';
-    color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light'; 
+    color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light';
+    background?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light';  
     path?: (item: ICallbackItem<T>) => string; 
 }
 
 
 export interface IRowButtonDelete<T> extends IRowButton<T> {
     showConfirmation?: boolean;
-    confirmationProperty?: string;
+    displayProperty?: string;
     preventDefault?: boolean;
 }  
 
@@ -41,6 +43,7 @@ export interface ISort {
     direction: 'ascendant' | 'descendant' | 'none';
     icon: string;
 }
+
 
 export interface IPaginator {
     pageByRow?: number; 

@@ -1,6 +1,6 @@
 import { SidenavAccordion } from './coer-sidenav-accordion/coer-sidenav-accordion.component'; 
-import { Component, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';   
-import { Collections, Tools, Screen, HTMLElements, Strings, SourcePage, BreadcrumbsPage, Navigation } from 'coer91.angular/tools';
+import { Component, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';  
+import { HTMLElements, Strings, Tools, Navigation, Collections, Screen, SourcePage, BreadcrumbsPage } from 'coer91.angular/tools';
 import { isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
 import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';
 import { ResolveEnd, Router } from '@angular/router'; 
@@ -49,7 +49,7 @@ export class Sidenav {
             if(Tools.IsNotNull(NAVIGATION)) {
                 const showHome = !Tools.IsBooleanFalse(appSettings?.navigation?.showHome);
                 const NAVIGATION_HOME: IMenu[] = showHome 
-                    ? [{ Id: 1, Label: 'Home', Icon: 'i91-home-door-fill', Path: '/home' }] : [];  
+                    ? [{ Id: 1, Label: 'Home', Icon: 'iw-home-door-fill', Path: '/home' }] : [];  
 
                 this._navigation.set(
                     ([] as IMenu[]) 
@@ -57,9 +57,7 @@ export class Sidenav {
                     .concat(NAVIGATION)
                 );   
                 
-                Tools.Sleep().then(() => {
-                    this._SetSelectedMenu();
-                });
+                Tools.Sleep().then(() => this._SetSelectedMenu());
             }
         });
 
@@ -77,7 +75,7 @@ export class Sidenav {
             .subscribe(url => {  
                 if(url.requested != url.resolved) { 
                     this._ResetStorage();
-                    this._SetSelectedMenu();
+                    this._SetSelectedMenu(); 
                 }      
             }
         );
@@ -113,7 +111,7 @@ export class Sidenav {
                     this._router.navigateByUrl(SELECTED_MENU.menu?.Path || PATH) ;
                     await Tools.Sleep();
                 }
-
+                
                 this._NavigateTo(SELECTED_MENU, false);   
             }
         } 
@@ -135,7 +133,6 @@ export class Sidenav {
     
             const selector = `.${path?.replaceAll('/', '__')}`;
             const ELEMENT = HTMLElements.SelectElement(selector);
-            const xxx = ELEMENT?.id //"lv1id0-lv2id0-lv3id0-index1"
     
             if(ELEMENT) {
                 const ELEMENT_ID = ELEMENT.getAttribute('id');
@@ -404,17 +401,22 @@ export class Sidenav {
         const OPTION = { ...option }; 
          
         if(['NONE', 'GRID'].includes(OPTION.action)) {                           
-            Tools.Sleep(0, 'update-menu-selected').then(() => {                 
+            Tools.Sleep(0, 'update-menu-selected').then(() => {    
+                
+                //Testing
+                //navigate = (`${this._router.url}` == `${OPTION?.menu?.Path}`) ? navigate : true; 
+                //console.log(OPTION)
+                
                 if(OPTION.action === 'GRID') {
                     if(!([...OPTION.tree].pop()?.id === 'GRID')) {
-                        OPTION.tree.push({ id: 'GRID', label: 'Menu', icon: 'i91-grid' });
+                        OPTION.tree.push({ id: 'GRID', label: 'Menu', icon: 'iw-grid' });
                     }
                      
                     if(navigate) this._router.navigateByUrl('/menu'); 
                 }
 
                 else {
-                   if(navigate) this._router.navigateByUrl(String(OPTION?.menu?.Path));
+                   if(navigate) this._router.navigateByUrl(String(OPTION?.menu?.Path)); 
                 } 
 
                 if(['mv', 'xs', 'sm', 'md'].includes(screenSizeSIGNAL().breakpoint)) {

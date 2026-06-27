@@ -5,7 +5,7 @@ import { HTMLElements, Strings, Tools } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-modal',
-    templateUrl: './coer-modal.component.html', 
+    templateUrl: './coer-modal.component.html',  
     styleUrl: './coer-modal.component.scss', 
     standalone: false
 })
@@ -21,7 +21,7 @@ export class CoerModal implements AfterViewInit, OnDestroy {
     protected _htmlElement!: HTMLElement; 
 
     //input  
-    public readonly title            = input<string>(''); 
+    public readonly title            = input<string | undefined>(''); 
     public readonly icon             = input<string>(''); 
     public readonly showCancelButton = input<boolean>(true); 
     public readonly alignX           = input<'left' | 'center' | 'right'>('center'); 

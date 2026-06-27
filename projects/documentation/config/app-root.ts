@@ -1,7 +1,7 @@
 import { IAuthService } from 'coer91.angular/interfaces';
 import { environmentSIGNAL } from 'coer91.angular/signals';
 import { NAVIGATION } from '../app.sidenav';  
-import { appSettings } from '@appSettings';
+import { appSettings } from './environments';
 import { Component } from '@angular/core';   
 import { AppModule } from '../app/app.routing';
 

@@ -1,6 +1,6 @@
 export interface IActiveKey { 
-    ActiveKey: string, 
-    CanCreate: boolean, 
-    CanUpdate: boolean, 
-    CanDelete: boolean 
+    activeKey: string, 
+    canCreate: boolean, 
+    canUpdate: boolean, 
+    canDelete: boolean 
 }

@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { ITitleBreadcrumb, ITitleGoBack, ITitleInformation } from 'coer91.angular/interfaces';
 import { isLoadingSIGNAL, screenSizeSIGNAL } from 'coer91.angular/signals'; 
 import { Collections, Navigation, Tools } from 'coer91.angular/tools';  
@@ -13,7 +13,7 @@ export class CoerPageTitle {
     
     //Variables
     protected readonly _isLoading = isLoadingSIGNAL;
-    protected readonly _iconRoot = signal<string>('i91-house-door-fill');
+    protected readonly _iconRoot = signal<string>('iw-house-door-fill');
     protected readonly _labelRoot = signal<string | null>(null);
 
     //Inputs 
@@ -55,19 +55,15 @@ export class CoerPageTitle {
                 }
 
                 break;
-            } 
+            }  
 
             counter--;
             await Tools.Sleep(250);
         } while(counter  > 0) 
-    }
 
 
-    // //computed
-    // protected _tooltip = computed<string>(() => {
-    //     return Tools.IsNotOnlyWhiteSpace(this.information()?.tooltip)
-    //         ? this.information().tooltip! : 'Information';
-    // }); 
+            
+    } 
     
     
     //computed

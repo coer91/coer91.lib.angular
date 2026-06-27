@@ -7,7 +7,7 @@
 
             @else if(dataSourceSelected().length > 0) {
                 <span>
-                    <i class="i91-check-square"></i> 
+                    <i class="iw-check-square"></i> 
                     {{ dataSourceSelected().length | numericFormat }}
                 </span>
             }
@@ -15,7 +15,7 @@
 
         @if(IsNotOnlyWhiteSpace(search())) {
             <span class="quantity">
-                <i class="i91-filter-fill"></i>
+                <i class="iw-filter-fill"></i>
                 {{ dataSourceFiltered().length | numericFormat }} Rows 
             </span>
         } 

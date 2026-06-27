@@ -1,10 +1,10 @@
-import { ActivatedRouteSnapshot, CanActivateFn, Route, RouterStateSnapshot, Routes } from "@angular/router"; 
-import { HomePage } from "./home/home.component";
-import { MenuPage } from "./menu/menu.component";
-import { Type } from "@angular/core"; 
+import { ActivatedRouteSnapshot, CanActivateFn, Route, RouterStateSnapshot, Routes } from "@angular/router";
 import { isLoadingSIGNAL, navigationSIGNAL, userSIGNAL } from "coer91.angular/signals";
 import { Access, CoerAlert, Tools } from "coer91.angular/tools";
 import { IActiveKey } from "coer91.angular/interfaces";
+import { HomePage } from "./home/home.component";
+import { MenuPage } from "./menu/menu.component";
+import { Type } from "@angular/core";
 declare const appSettings: any;  
 
 
@@ -47,7 +47,7 @@ export const ActiveKeyGuard: CanActivateFn = async ({ data }: ActivatedRouteSnap
 
         isLoadingSIGNAL.set(false);
        
-        if(navigationKeys.map(x => x.ActiveKey).includes(ACTIVE_KEY)) return true; 
+        if(navigationKeys.map(x => x.activeKey).includes(ACTIVE_KEY)) return true; 
 
         else { 
             console.log(`Unathorized by path ${url}`);
@@ -81,7 +81,7 @@ export const ROUTER_PAGE = (path: string, component: Type<any>, activeKey: strin
 
 
 /** */
-export const ROUTES_WIA = ([] as Routes)
+export const ROUTES_COER91 = ([] as Routes)
     .concat([ROUTER_PAGE('menu', MenuPage)])
     .concat(!Tools.IsBooleanFalse(appSettings?.navigation?.showHome) ? [ROUTER_PAGE('home', HomePage)] : [])
     .concat([{ path: '**', redirectTo: (Tools.IsNotOnlyWhiteSpace(appSettings?.navigation?.redirectTo) ? appSettings?.navigation?.redirectTo : 'home') }]);  
@@ -96,10 +96,10 @@ export const GetNavigationKeys = () => {
         //Level 1
         if(Tools.IsNotOnlyWhiteSpace(LV1?.Path) && !NAVIGATION_KEYS.has(LV1.Path!)) { 
             NAVIGATION_KEYS.set(LV1.Path!, { 
-                ActiveKey: (Tools.IsNotOnlyWhiteSpace(LV1.ActiveKey) ? `${LV1.ActiveKey!}`.toUpperCase() : ''),
-                CanCreate: Tools.IsBooleanTrue(LV1?.CanCreate), 
-                CanUpdate: Tools.IsBooleanTrue(LV1?.CanUpdate), 
-                CanDelete: Tools.IsBooleanTrue(LV1?.CanDelete) 
+                activeKey: (Tools.IsNotOnlyWhiteSpace(LV1.ActiveKey) ? `${LV1.ActiveKey!}`.toUpperCase() : ''),
+                canCreate: Tools.IsBooleanTrue(LV1?.CanCreate), 
+                canUpdate: Tools.IsBooleanTrue(LV1?.CanUpdate), 
+                canDelete: Tools.IsBooleanTrue(LV1?.CanDelete) 
             });
         }
 
@@ -108,10 +108,10 @@ export const GetNavigationKeys = () => {
                 //Level 2
                 if(Tools.IsNotOnlyWhiteSpace(LV2?.Path) && !NAVIGATION_KEYS.has(LV2.Path!)) { 
                     NAVIGATION_KEYS.set(LV2.Path!, { 
-                        ActiveKey: (Tools.IsNotOnlyWhiteSpace(LV2.ActiveKey) ? `${LV2.ActiveKey!}`.toUpperCase() : ''),
-                        CanCreate: Tools.IsBooleanTrue(LV2?.CanCreate), 
-                        CanUpdate: Tools.IsBooleanTrue(LV2?.CanUpdate), 
-                        CanDelete: Tools.IsBooleanTrue(LV2?.CanDelete) 
+                        activeKey: (Tools.IsNotOnlyWhiteSpace(LV2.ActiveKey) ? `${LV2.ActiveKey!}`.toUpperCase() : ''),
+                        canCreate: Tools.IsBooleanTrue(LV2?.CanCreate), 
+                        canUpdate: Tools.IsBooleanTrue(LV2?.CanUpdate), 
+                        canDelete: Tools.IsBooleanTrue(LV2?.CanDelete) 
                     }); 
                 }
 
@@ -120,10 +120,10 @@ export const GetNavigationKeys = () => {
                         //Level 3
                         if(Tools.IsNotOnlyWhiteSpace(LV3?.Path) && !NAVIGATION_KEYS.has(LV3.Path!)) { 
                             NAVIGATION_KEYS.set(LV3.Path!, { 
-                                ActiveKey: (Tools.IsNotOnlyWhiteSpace(LV3.ActiveKey) ? `${LV3.ActiveKey!}`.toUpperCase() : ''),
-                                CanCreate: Tools.IsBooleanTrue(LV3?.CanCreate), 
-                                CanUpdate: Tools.IsBooleanTrue(LV3?.CanUpdate), 
-                                CanDelete: Tools.IsBooleanTrue(LV3?.CanDelete) 
+                                activeKey: (Tools.IsNotOnlyWhiteSpace(LV3.ActiveKey) ? `${LV3.ActiveKey!}`.toUpperCase() : ''),
+                                canCreate: Tools.IsBooleanTrue(LV3?.CanCreate), 
+                                canUpdate: Tools.IsBooleanTrue(LV3?.CanUpdate), 
+                                canDelete: Tools.IsBooleanTrue(LV3?.CanDelete) 
                             });                          
                         }
                     }

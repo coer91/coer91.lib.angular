@@ -149,8 +149,8 @@ export class CoerButton implements AfterViewInit, OnDestroy {
 
     //Computed
     protected _icon = computed<string>(() => {
-        if(this.isLoading() && ['filled', 'outline'].includes(this._breakpointType())) return 'i91-arrows-rotate animation-spin animation-speed-15';
-        if(Tools.IsOnlyWhiteSpace(this.icon()) && !['filled', 'outline'].includes(this._breakpointType())) return 'i91-hand-pointer-fill';
+        if(this.isLoading() && ['filled', 'outline'].includes(this._breakpointType())) return 'iw-arrows-rotate animation-spin animation-speed-15';
+        if(Tools.IsOnlyWhiteSpace(this.icon()) && !['filled', 'outline'].includes(this._breakpointType())) return 'iw-hand-pointer-fill';
         return Tools.GetDefaultIcon(this.icon()); 
     });
 
@@ -171,23 +171,22 @@ export class CoerButton implements AfterViewInit, OnDestroy {
 
 
     //Function
-    protected _Click(event: Event | null): void {
+    protected _Click(event: any): void {
         event?.preventDefault();
-        event?.stopPropagation();
         this.Blur();
         if (this._isEnabled()) this.onClick.emit();
     }
 
 
-    /** */
+    /** Press the button logically */
     public Click(): void {
         Tools.Sleep().then(() => this._Click(null));
     }
 
 
-    /** */
+    /** Focus on the button */
     public Focus(delay: number = 0): void {
-        Tools.Sleep(delay, 'CoerButtonFocus').then(() => {
+        Tools.Sleep(delay).then(() => {
             if(this._isEnabled()) {
                 this._htmlElement?.focus();            
             }
@@ -197,8 +196,14 @@ export class CoerButton implements AfterViewInit, OnDestroy {
     }
 
 
-    /** */
+    /** Blur the button */
     public Blur(): void {      
         this._htmlElement?.blur();
+    }
+
+
+    /** Scroll to the element */
+    public ScrollToElement(): void { 
+        HTMLElements.ScrollToElement(this._htmlElement); 
     }
 }

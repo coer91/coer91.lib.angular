@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, computed, inject, output, signal, viewChild } from '@angular/core';   
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
-import { CoerButton, CoerForm, CoerSecretBox, CoerTextBox } from 'coer91.angular/components';
-import { ILogin } from 'coer91.angular/interfaces';
+import { AfterViewInit, Component, computed, inject, output, signal, viewChild } from '@angular/core';  
 import { environmentSIGNAL, isLoadingSIGNAL } from 'coer91.angular/signals';
 import { Tools } from 'coer91.angular/tools';
+import { ILogin } from 'coer91.angular/interfaces'; 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CoerButton, CoerForm, CoerSecretBox, CoerTextBox } from 'coer91.angular/components';
 declare const appSettings: any;
 
 @Component({
@@ -55,8 +55,8 @@ export class LoginPage implements AfterViewInit {
     //Computed
     protected _icon = computed(() => { 
         switch(environmentSIGNAL().info) {           
-            case 'DEVELOPMENT': return 'i91-developer-fill';
-            case 'STAGING'    : return 'i91-quality-fill'; 
+            case 'DEVELOPMENT': return 'iw-developer-fill';
+            case 'STAGING'    : return 'iw-quality-fill'; 
         }  
 
         return '';

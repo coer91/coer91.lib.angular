@@ -1,0 +1,48 @@
+<div class="coer-radio animation-fadeIn"
+    [ngClass]="{ 'display-none': isHidden(), 'invisible': isInvisible() }"
+    [ngStyle]="{
+        'width'        : width(), 
+        'max-width'    : maxWidth(), 
+        'margin-top'   : marginTop(),
+        'margin-right' : marginRight(),
+        'margin-bottom': marginBottom(),
+        'margin-left'  : marginLeft()         
+    }">   
+     
+    <div class="coer-radio-container"  
+        [ngClass]="{
+            'flex-direction-column' : (position() === 'vertical'  ),
+            'flex-direction-row'    : (position() === 'horizontal'), 
+            'animation-appear'      : isLoading(),
+            'background-color-input': showBackround()
+        }">
+        
+        @for(item of _dataSource(); track item.__index__) {
+            <label [ngClass]="{ 'cursor-pointer': _isEnabled() }">
+                @if(labelPosition() == 'left') {
+                    <span [ngClass]="{
+                        'word-break'        : breakLabel(),
+                        'word-break-none'   : !breakLabel(),
+                        'white-space-nowrap': !breakLabel() 
+                    }">{{item.Label}}</span>
+                }
+
+                <input 
+                    type="radio" 
+                    [name]="_id" 
+                    [value]="item.__index__"
+                    [disabled]="!_isEnabled()"
+                    (input)="_ClickOption(item.__index__)"
+                > 
+                
+                @if(labelPosition() == 'right') {
+                    <span [ngClass]="{
+                        'word-break'        : breakLabel(),
+                        'word-break-none'   : !breakLabel(),
+                        'white-space-nowrap': !breakLabel() 
+                    }">{{item.Label}}</span>
+                }
+            </label>
+        } 
+    </div>
+</div>      

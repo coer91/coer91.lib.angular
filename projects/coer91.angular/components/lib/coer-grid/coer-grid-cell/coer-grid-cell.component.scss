@@ -27,7 +27,9 @@ div.inputSwitch {
 
 div.inputTextbox,
 div.inputNumberbox, 
-div.inputSelectbox {  
+div.inputSelectbox {     
+    $height: 30px;
+
     div.coer-textbox {  
         border-radius: none !important;
         background-color: transparent !important;
@@ -39,7 +41,9 @@ div.inputSelectbox {
 
         div.icon-container {
             div.tricks-container {  
-                height: $height !important;  
+                height: $height !important; 
+
+                 
             }
         }
 

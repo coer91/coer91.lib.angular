@@ -2,33 +2,32 @@ import { IAuthService, IHttpResponse, ILogin, ILoginResponse, IMenu, IToolbarMen
 import { Component, input, output, signal, viewChild } from '@angular/core'; 
 import { isLoadingSIGNAL, userSIGNAL } from 'coer91.angular/signals';  
 import { Access, Tools } from 'coer91.angular/tools'; 
-import { Coer91Component } from './coer91.component';
+import { COER91Component } from './coer.component';
 declare const appSettings: any;
 
 @Component({
     selector: 'coer91-root', 
     standalone: false,
     template: `
-        <coer91-component
-            #coer91Component 
+        <coer-component
+            #COER91Component 
             [navigation]="_navigation()"  
-            [toolbarShowUserData]="IsNotNull(this.authService().Login)"
+            [toolbarShowUserData]="IsFunction(this.authService().Login)"
             [toolbarShowProfileMenu]="true"
             [toolbarShowPasswordMenu]="IsNotNull(authService().RecoveryPassword)"
             [toolbarShowLogOutMenu]="true" 
             (onLogin)="Login($event)"
             (onRecoveryPassword)="RecoveryPassword($event)"
-            (onUpdatePassword)="SetPassword($event)"
-            (onUpdateLanguage)="UpdateLanguage($event)"
+            (onUpdatePassword)="SetPassword($event)" 
             (onUpdateJWT)="UpdateJWT()"
             (onClickToolbarMenu)="ToolbarMenu($event)"
-        ></coer91-component>
+        ></coer-component>
     `
 })
-export class Coer91Root { 
+export class COER91Root { 
 
     //Elements
-    protected readonly _coer91 = viewChild.required<Coer91Component>('coer91Component');
+    protected readonly _coer91 = viewChild.required<COER91Component>('COER91Component');
 
     //Variables  
     protected readonly _navigation = signal<IMenu[]>([]);  
@@ -43,7 +42,7 @@ export class Coer91Root {
     protected readonly onLogin            = output<ILogin>();
     protected readonly onRecoveryPassword = output<string>(); 
     protected readonly onUpdatePassword   = output<string>();
-    protected readonly onUpdateLanguage   = output<string>();
+    protected readonly onUpdateRole       = output<string>();
     protected readonly onUpdateJWT        = output<void>();
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
 
@@ -51,7 +50,7 @@ export class Coer91Root {
     constructor() {          
         if(Access.IsLogin()) {  
             isLoadingSIGNAL.set(true);
-            userSIGNAL.set(Access.GetUser());  
+            userSIGNAL.set(Access.GetUser()); 
             this.GetNavigation().then(() => isLoadingSIGNAL.set(false));  
         }   
 
@@ -80,8 +79,14 @@ export class Coer91Root {
             }
     
             else {
-                console.error(loginResponse.message);
-                this._coer91().alert.Danger('Login');
+                if(loginResponse.status < 500) {
+                    this._coer91().alert.Warning(loginResponse.message, 'Not Access', 'iw-hand-stop-fill');
+                }
+
+                else {
+                    console.error(loginResponse.message);
+                    this._coer91().alert.Danger('Login');
+                }
             } 
     
             isLoadingSIGNAL.set(false);
@@ -103,23 +108,27 @@ export class Coer91Root {
         this._navigation.set([]);
 
         await Tools.Sleep(); 
-        if(!Tools.IsBooleanFalse(appSettings?.navigation?.static) || !Tools.IsFunction(this.authService()?.GetNavigationByRole)) { 
-            await Tools.Sleep();
+         
+        if(!Tools.IsBooleanFalse(appSettings?.navigation?.static)) { 
             this._navigation.set(this.staticNavigation());
         }                     
 
         else {
-            const FUNCTION = this.authService().GetNavigationByRole as (project: string) => Promise<IHttpResponse<IMenu[]>>;
-
-            const project = appSettings?.appInfo?.project || '';            
-            const response = await FUNCTION(project);   
-            
-            if(response.ok) this._navigation.set(response.data);
-             
-            else {
-                console.error(response.message);
-                this._coer91().alert.Danger('GetNavigation');
+            if(Tools.IsFunction(this.authService()?.GetNavigation)) {
+                const FUNCTION = this.authService().GetNavigation as (projectId: number) => Promise<IHttpResponse<IMenu[]>>;
+    
+                const project = Number(appSettings?.appInfo?.id || 0); 
+                const response = await FUNCTION(project);   
+                
+                if(response.ok) this._navigation.set(response.data);
+                 
+                else {
+                    console.error(response.message);
+                    this._coer91().alert.Danger('GetNavigation');
+                }
             }
+
+            else this._navigation.set(this.staticNavigation());
         } 
     }
 
@@ -159,12 +168,12 @@ export class Coer91Root {
             const response = await FUNCTION({ User, Password });   
     
             if(response.ok) {
-                this._coer91().alert.Success(response.data, 'Change Password', 'i91-lock-fill');
+                this._coer91().alert.Success(response.data, 'Change Password', 'iw-lock-fill');
                 this._coer91().CloseModal();
             }
     
             else {
-                this._coer91().alert.Warning(response.message, 'Change Password', 'i91-lock-fill'); 
+                this._coer91().alert.Warning(response.message, 'Change Password', 'iw-lock-fill'); 
             } 
     
             isLoadingSIGNAL.set(false);
@@ -175,31 +184,43 @@ export class Coer91Root {
 
 
     /** */
-    protected async UpdateLanguage(language: string): Promise<void> {
-        //if(Tools.IsFunction(this.authService()?.SetUserRoleMain)) {
-        //     const FUNCTION = this.authService().SetUserRoleMain as (userId: number, roleId: string | number) => Promise<IHttpResponse<IUserRole>>;
+    // protected async UpdateRole(roleId: string): Promise<void> {
+    //     if(Tools.IsFunction(this.authService()?.SetUserRoleMain)) {
+    //         const FUNCTION = this.authService().SetUserRoleMain as (userId: number, roleId: string | number) => Promise<IHttpResponse<IUserRole>>;
             
-        //     isLoadingSIGNAL.set(true); 
-        //     const userId = userSIGNAL()?.userId || 0;
-        //     const response = await FUNCTION(userId, roleId);   
+    //         isLoadingSIGNAL.set(true); 
+    //         const userId = userSIGNAL()?.UserId || 0;
+    //         const response = await FUNCTION(userId, roleId);   
     
-        //     if(response.ok) {
-        //         await this.UpdateJWT();
-        //         userSIGNAL.set(Access.GetUser());
-        //         this._coer91().CloseModal();
-        //         this._coer91().alert.Success('The rol has been updated', response.data.role); 
-        //         await this.GetNavigation(); 
-        //     }
-    
-        //     else {
-        //         this._coer91().alert.Warning(response.message);
-        //     } 
-    
-        //     isLoadingSIGNAL.set(false);
-        //} 
+    //         if(response.ok) {
+    //             if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) { 
+    //                 await this.UpdateJWT();
+    //             }
 
-        this.onUpdateLanguage.emit(language);
-    }
+    //             else {
+    //                 const ACCESS_USER = Access.GetUser() as IUser;
+    //                 ACCESS_USER.RoleId = response.data.RoleId;
+    //                 ACCESS_USER.Role = response.data.Role;
+
+    //                 Access.SetUser({ ...ACCESS_USER });
+    //             }
+                
+    //             userSIGNAL.set(Access.GetUser());
+    //             this._coer91().CloseModal();
+    //             this._coer91().alert.Success('The rol has been updated', response.data.Role); 
+    //             await this.GetNavigation(); 
+    //             this._coer91().router.navigateByUrl(appSettings?.navigation?.redirectTo);
+    //         }
+    
+    //         else {
+    //             this._coer91().alert.Warning(response.message);
+    //         } 
+    
+    //         isLoadingSIGNAL.set(false);
+    //     } 
+
+    //     this.onUpdateRole.emit(roleId);
+    // }
 
 
     /** */

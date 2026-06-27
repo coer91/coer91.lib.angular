@@ -1,4 +1,6 @@
 export interface IHeaderSettings {
+    backButton?: IButton;
+    cancelButton?: IButton;
     filterButton?: IButton;
     exportButton?: IButtonExport;
     importButton?: IButtonImport;
@@ -6,7 +8,7 @@ export interface IHeaderSettings {
     saveButton?: IButton;
     search?: ISearch;
     slotPosition?: 'left' | 'right';
-    buttonType?: 'icon' | 'icon-rounded' | 'icon-filled' | 'icon-filled-rounded' | 'icon-outline'  | 'icon-outline-rounded'; 
+    buttonType?: 'filled' | 'outline' | 'icon' | 'icon-rounded' | 'icon-filled' | 'icon-filled-rounded' | 'icon-outline'  | 'icon-outline-rounded'; 
 }
 
 
@@ -14,11 +16,11 @@ export interface IButton {
     show: boolean;
     path?: string;
     tooltip?: string;  
-    color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light'; 
+    color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light';  
 }
 
 
-export interface IButtonExport extends IButtonAdd {    
+export interface IButtonExport extends IButton {    
     preventDefault?: boolean;
     fileName?: string;
     onlyColumnFiltered?: boolean;
@@ -27,7 +29,7 @@ export interface IButtonExport extends IButtonAdd {
 }
 
 
-export interface IButtonImport extends IButtonAdd {    
+export interface IButtonImport extends IButton {    
     preventDefault?: boolean;
     Autofill?: boolean;
 }

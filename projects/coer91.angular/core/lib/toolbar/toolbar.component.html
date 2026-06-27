@@ -4,7 +4,7 @@
             @if(_showButtonSidenav()) {
                 <coer-button
                     type="icon-rounded"
-                    icon="i91-menu"
+                    icon="iw-menu"
                     height="20px"
                     color="navigation"
                     (onClick)="onClickToogle.emit()"
@@ -39,7 +39,7 @@
                 @if(_showIdentity()) {
                     <div class="user-identity">
                         <p>{{ user()?.FullName }}</p>
-                        <p>{{ user()?.User     }}</p>
+                        <!-- <p>{{ user()?.Role     }}</p> -->
                     </div>
                 }
             </figure>
@@ -66,7 +66,7 @@
 </header> 
 
 
-<coer-modal #profileModal [title]="user()?.FullName || ''" icon="i91-user-fill">
+<coer-modal #profileModal [title]="user()?.FullName || ''" icon="iw-user-fill">
     <div class="user-profile">
         <!-- User -->
         <div class="flex-basis">
@@ -102,15 +102,16 @@
             </div> 
         }
 
-        <!-- Language --> 
-        @if(_languageList().length > 0) {
+        <!-- Role --> 
+        @if(_roleList().length > 0) {
             <div class="flex-basis">
                 <coer-selectbox 
-                    label="Language"
-                    [(ngModel)]="_language" 
+                    label="Role"
+                    [(ngModel)]="_role" 
                     [isLoading]="_isLoading()" 
-                    [dataSource]="_languageList()"
-                    (onValueChange)="_UpdateLanguage($event)"
+                    [dataSource]="_roleList()"
+                    [isReadonly]="_roleList().length <= 1"
+                     
                 ></coer-selectbox> 
             </div>
         }   
@@ -118,7 +119,7 @@
 </coer-modal>
 
 
-<coer-modal #passwordModal title="Change Password" icon="i91-lock-fill" (onClose)="_ResetPassword()" (onOpen)="passwordRef.Focus()">
+<coer-modal #passwordModal title="Change Password" icon="iw-lock-fill" (onClose)="_ResetPassword()" (onOpen)="passwordRef.Focus()">
     <div class="flex-wrap margin-top-15px max-width-300px margin-x-10px">
         <!-- Password -->
         <div class="flex-basis-300px flex-grow-1">

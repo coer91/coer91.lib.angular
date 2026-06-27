@@ -14,7 +14,7 @@ import { Tools } from "coer91.angular/tools";
 export class CoerGridCell<T> implements AfterViewInit {
 
     //Elements   
-    protected readonly coerTextbox   = viewChild<CoerTextBox>('inputTextbox');
+    protected readonly CoerTextBox   = viewChild<CoerTextBox>('inputTextbox');
     protected readonly coerNumberbox = viewChild<CoerNumberBox>('inputNumberbox');
     protected readonly coerSelectbox = viewChild<CoerSelectBox<T>>('coerSelectbox');
     //protected readonly coerDatebox   = viewChild<CoerDateBox>('inputDatebox');
@@ -208,7 +208,33 @@ export class CoerGridCell<T> implements AfterViewInit {
             }
         }
 
-        return 'color-dark';
+        return '';
+    });
+
+
+    //Computed
+    protected _GetBackground = computed(() => { 
+        let background: any = this.column().config?.background;
+
+        if(Tools.IsNotNull(background)) {
+            if(Tools.IsFunction(background)) { 
+                const ROW = { ...this.row() };
+                delete ROW['__index__'];
+                delete ROW['__checked__'];
+    
+                background = background({
+                    property: this.column().config.property, 
+                    row: ROW, 
+                    value: ROW[this.column().config.property] 
+                }) || null;
+            }
+    
+            if(Tools.IsNotOnlyWhiteSpace(background)) {
+                return `background-color-${background}`;
+            }
+        }
+
+        return '';
     });
 
 
@@ -216,7 +242,7 @@ export class CoerGridCell<T> implements AfterViewInit {
     public Focus(onlyFocus: boolean = false): void {
         switch(this._input()) {
             case 'inputTextbox': {
-                this.coerTextbox()?.Focus(onlyFocus);
+                this.CoerTextBox()?.Focus(onlyFocus);
                 break;
             }
 

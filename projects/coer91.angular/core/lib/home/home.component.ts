@@ -12,7 +12,7 @@ declare const appSettings: any;
 export class HomePage extends Page {   
   
     protected readonly version = '0.0.0'; 
-    protected readonly img = 'coer91/images/coer-system.png';
+    protected readonly img = 'coer91/images/hyundai-coer.png';
 
     constructor() {
         super('home');
@@ -24,7 +24,7 @@ export class HomePage extends Page {
     //Computed
     protected _environment = computed(() => {
         return environmentSIGNAL().info === 'PRODUCTION'
-            ? `${appSettings?.appInfo?.forCompany} © ${Dates.GetCurrentDate().getFullYear()}` 
+            ? `${appSettings?.appInfo?.company} © ${Dates.GetCurrentDate().getFullYear()}` 
             : environmentSIGNAL().info;
     });
 }

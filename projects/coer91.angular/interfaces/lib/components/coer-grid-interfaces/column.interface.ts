@@ -19,6 +19,7 @@ export interface IColumn<T> {
     textAlignX?:     'left' | 'center' | 'right';
     textAlignY?:     'top'  | 'middle' | 'bottom';
     color?:          null | 'primary' | 'secondary' | 'success' | 'warning'  | 'danger' | 'navigation' | 'information' | 'dark' | 'light' | ((item: ICallbackItem<T>) => null | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light');
+    background?:     null | 'primary' | 'secondary' | 'success' | 'warning'  | 'danger' | 'navigation' | 'information' | 'dark' | 'light' | ((item: ICallbackItem<T>) => null | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'navigation' | 'information' | 'dark' | 'light');
     format?:         'string' | 'number' | 'currency' | 'date' | 'time' | 'datetime';
     template?:       null | string  | ((item: ICallbackItem<T>) => string);
     inputSwitch?:    null | boolean | ((item: ICallbackItem<T>) => ICellSwitch);

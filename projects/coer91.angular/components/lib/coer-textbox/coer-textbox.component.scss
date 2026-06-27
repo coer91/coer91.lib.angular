@@ -55,28 +55,28 @@ div.coer-textbox {
             font-size: 20px !important;
         }
 
-        i.i91-search, i.i91-mark, i.i91-eye-fill, i.i91-eye-slash-fill { 
+        i.iw-search, i.iw-mark, i.iw-eye-fill, i.iw-eye-slash-fill { 
             color: color-mix(in srgb, var(--gray), var(--light) 50%); 
         }
 
-        i.i91-search:hover, i.i91-mark:hover, i.i91-eye-fill:hover, i.i91-eye-slash-fill:hover { 
+        i.iw-search:hover, i.iw-mark:hover, i.iw-eye-fill:hover, i.iw-eye-slash-fill:hover { 
             color: var(--gray) !important; 
         }
 
-        i.i91-exclamation-circle-fill { 
+        i.iw-exclamation-circle-fill { 
             color: var(--danger); 
         }
 
-        i.i91-check-circle-fill { 
+        i.iw-check-circle-fill { 
             color: var(--success); 
         }
 
-        i.i91-angle {
+        i.iw-angle {
             transition: all 0.3s ease !important;
             color: var(--gray);
         }
 
-        i.i91-270deg {
+        i.iw-270deg {
             color: var(--primary);
         }
 
@@ -84,13 +84,13 @@ div.coer-textbox {
             display: flex !important;
             flex-direction: column !important;
             
-            i.i91-90deg, i.i91-270deg {
+            i.iw-90deg, i.iw-270deg {
                 color: var(--gray) !important;
             } 
         }
 
         div.tricks-container.focus { 
-            i.i91-90deg, i.i91-270deg {
+            i.iw-90deg, i.iw-270deg {
                 color: var(--primary) !important;
             } 
         }
@@ -122,6 +122,11 @@ div.coer-textbox {
         background-color: transparent !important; 
     }
 
+    label.focus.small, label.no-empty.small {
+        font-size: 12px !important;
+        transform: translate(5px, -15px) !important;
+    }
+
     label.focus {
         color: var(--input-focus) !important;
     }
@@ -145,6 +150,11 @@ div.coer-textbox {
     label.focus.external-button,
     label.no-empty.external-button {
         transform: translate(45px, $label-top) !important;
+    }
+
+    label.focus.external-button.small,
+    label.no-empty.external-button.small {
+        transform: translate(45px, -15px) !important;
     }
 
     div.loading {

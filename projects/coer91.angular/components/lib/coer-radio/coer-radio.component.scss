@@ -1,0 +1,39 @@
+div.coer-radio {    
+    //background-color: aqua;
+    
+    div.coer-radio-container { 
+        overflow: hidden;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        width: inherit !important;
+        max-width: inherit !important;
+        min-height: calc(var(--input-height) - 10px) !important;
+        gap: 5px !important;
+        border-radius: 5px !important; 
+        padding: 5px 0px !important;
+
+        label {
+            display: flex !important;
+            align-items: center !important;
+            width: inherit !important;
+            max-width: inherit !important;
+            
+            input {
+                width:  16px !important;
+                min-width: 16px !important;
+                height: 16px !important;
+                min-height: 16px !important;
+                margin: 0px 5px !important; 
+            }
+
+            span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }         
+    }
+
+    div.animation-appear label input {
+        background-color: var(--loading);
+    }
+}

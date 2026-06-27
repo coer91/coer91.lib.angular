@@ -46,7 +46,7 @@ import * as tools      from 'coer91.angular/tools';
         components.CoerSwitch,
         components.CoerTab,
         components.CoerTextBox,
-        core.Coer91Root,
+        core.COER91Root,
         directives.TemplateRefDirective,  
         pipes.DatePipe,
         pipes.DateTimePipe,

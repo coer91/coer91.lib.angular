@@ -10,12 +10,12 @@ import { Sidenav } from '../sidenav/sidenav.component';
 declare const appSettings: any;
 
 @Component({
-    selector: 'coer91-component',
-    templateUrl: './coer91.component.html', 
-    styleUrl: './coer91.component.scss', 
+    selector: 'coer-component',
+    templateUrl: './coer.component.html', 
+    styleUrl: './coer.component.scss', 
     standalone: false
 })
-export class Coer91Component {   
+export class COER91Component {   
 
     //Injection
     protected readonly _alert  = inject(CoerAlert); 
@@ -27,20 +27,21 @@ export class Coer91Component {
     protected readonly _login = viewChild<LoginPage>('login');
 
     //Variables
-    public readonly alert = this._alert;    
+    public readonly alert  = this._alert; 
+    public readonly router = this._router;   
     protected readonly isOpenSidenav = signal<boolean>(true);
     protected _watchJWT$!: any; 
 
     //Inputs  
-    public readonly navigation                 = input.required<IMenu[]>(); 
-    public readonly toolbarMenu                = input<IToolbarMenu[]>([]);
-    public readonly toolbarShowUserData        = input<boolean>(false);
-    public readonly toolbarShowProfileMenu     = input<boolean>(true); 
-    public readonly toolbarPreventProfileMenu  = input<boolean>(false); 
-    public readonly toolbarShowPasswordMenu    = input<boolean>(true); 
+    public readonly navigation = input.required<IMenu[]>(); 
+    public readonly toolbarMenu = input<IToolbarMenu[]>([]);
+    public readonly toolbarShowUserData = input<boolean>(false);
+    public readonly toolbarShowProfileMenu = input<boolean>(true); 
+    public readonly toolbarPreventProfileMenu = input<boolean>(false); 
+    public readonly toolbarShowPasswordMenu = input<boolean>(true); 
     public readonly toolbarPreventPasswordMenu = input<boolean>(false);  
-    public readonly toolbarShowLogOutMenu      = input<boolean>(true);  
-    public readonly toolbarPreventLogOutMenu   = input<boolean>(false); 
+    public readonly toolbarShowLogOutMenu = input<boolean>(true);  
+    public readonly toolbarPreventLogOutMenu = input<boolean>(false); 
 
     //Output
     protected readonly onLogin            = output<ILogin>();
@@ -48,12 +49,10 @@ export class Coer91Component {
     protected readonly onUpdateJWT        = output<void>();
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
     protected readonly onUpdatePassword   = output<string>();
-    protected readonly onUpdateLanguage   = output<string>();
+    protected readonly onUpdateRole       = output<string>();
  
     constructor() {    
         Screen.Resize.subscribe(screenSizeSIGNAL.set);  
-
-        
 
         effect(() => { 
             if(this._isLogin()) this._WatchJWT(); 
@@ -129,7 +128,7 @@ export class Coer91Component {
         //Has Access
         if(Access.IsLogin()) {
             if(Tools.HasProperty(_response, 'message')) { 
-                this._alert.Information(_response.Message, 'Welcome', 'i91-logo-coer91');
+                this._alert.Information(_response.Message, 'Welcome', 'iw-logo-coer91');
 
                 let path = '/home';
                 if(Tools.IsBooleanFalse(appSettings?.navigation?.showHome)) {
@@ -146,7 +145,7 @@ export class Coer91Component {
         }
 
         else {
-            this._alert.Warning(_response.Message, 'No access', 'i91-hand-stop-fill'); 
+            this._alert.Warning(_response.Message, 'No access', 'iw-hand-stop-fill'); 
             this._login()?.FocusPassword();
         }
 
