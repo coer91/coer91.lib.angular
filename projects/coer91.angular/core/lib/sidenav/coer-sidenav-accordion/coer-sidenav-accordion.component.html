@@ -17,7 +17,7 @@
             }
 
             @else if(!showSidenav()) {
-                <i class='iw-menu'></i>
+                <i class='i91-menu'></i>
             }
 
             <span>{{ title() || '' }}</span>
@@ -25,7 +25,7 @@
       
         @if(showSidenav()) {
             <button type="button" [ngClass]="{ 'invisible': !showIndicator() }">
-                <i class="iw-angle" [class]="_isCollapsed() ? 'iw-270deg' : 'iw-90deg'"></i> 
+                <i class="i91-angle" [class]="_isCollapsed() ? 'i91-270deg' : 'i91-90deg'"></i> 
             </button>
         }
     </div>

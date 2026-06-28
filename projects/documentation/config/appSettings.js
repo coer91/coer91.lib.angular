@@ -1,10 +1,11 @@
 const appSettings = { 
     appInfo: {
-        id: 0,
-        project: 'MySystem',
+        id: 1,
+        project: 'coer91.angular',
         title: 'COER 91',
         version: '1.0.0', 
-        forCompany: 'COER System'
+        company: 'COER System',
+        icon: 'i91-logo-coer91'
     },
     webAPI: {
         development: {
@@ -18,7 +19,7 @@ const appSettings = {
         }
     },
     background: {
-        home: 'coer-system-91.png',
+        home: '',
         login: 'clip.mp4'
     },
     security: {

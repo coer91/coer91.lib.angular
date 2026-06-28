@@ -4,6 +4,7 @@ export interface IUser {
     PartnerId: number;
     Partner: string;
     FullName: string; 
+    Title: string;
     Email: string;
     JWT: string; 
     Roles: string[];

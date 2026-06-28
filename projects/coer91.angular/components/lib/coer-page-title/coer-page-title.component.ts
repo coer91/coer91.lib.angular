@@ -13,7 +13,7 @@ export class CoerPageTitle {
     
     //Variables
     protected readonly _isLoading = isLoadingSIGNAL;
-    protected readonly _iconRoot = signal<string>('iw-house-door-fill');
+    protected readonly _iconRoot = signal<string>('i91-house-door-fill');
     protected readonly _labelRoot = signal<string | null>(null);
 
     //Inputs 

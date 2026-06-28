@@ -1,32 +1,18 @@
+import { IAppSettings, IJWT, IUser } from "coer91.angular/interfaces";
+import { WritableSignal } from "@angular/core";
 import { Tools } from "./generic";
 import { Dates } from "./dates";
-import { WritableSignal } from "@angular/core";
-import { IJWT, IUser } from "coer91.angular/interfaces";
 declare const appSettings: any;
-
-/** Controls user information in localStorage */
+ 
 export class Access {
       
-    private static readonly useJWT  = Tools.IsBooleanTrue(appSettings?.security?.useJWT);
-    private static readonly storage = (appSettings?.appInfo?.project as string).replaceAll(' ', '') || 'coer91';
-    
-    /** */    
-    public static SetUser(user: string | IUser | null): void {  
-        if(user && !Tools.IsString(user) && user.hasOwnProperty('message')) {
-            const _user = Object.assign({}, user) as any;
-            delete _user['message'];
-            localStorage.setItem(this.storage, JSON.stringify({ user: _user }));
-        }
-
-        else {
-            localStorage.setItem(this.storage, JSON.stringify({ user }));
-        }
-    }
-     
+    private static readonly appSettings = appSettings as IAppSettings; 
+    private static readonly storage     = this.appSettings.appInfo.project;
+        
 
     /** */
     public static GetUser(): IUser | null {
-        if(this.useJWT) {
+        if(this.appSettings.security.useJWT) {
             const JWT = Access.GetJWTInfo();
 
             if(JWT.claims?.hasOwnProperty('User')) {
@@ -36,6 +22,7 @@ export class Access {
                     PartnerId:  Number(JWT.claims?.partnerId  || 0),
                     Partner:    String(JWT.claims?.Partner    || ''),
                     FullName:   String(JWT.claims?.FullName   || ''), 
+                    Title:      String(JWT.claims?.Title      || ''), 
                     Email:      String(JWT.claims?.Email      || ''),
                     JWT:        JWT.jwt,
                     Roles:      String(JWT.claims?.Roles      || '').replaceAll('[', '').replaceAll(']', '').split(','),
@@ -50,8 +37,8 @@ export class Access {
             if (storage) {
                 storage = JSON.parse(storage);
 
-                if (storage.hasOwnProperty('user')) {
-                    return storage.user; 
+                if (storage.hasOwnProperty('User')) {
+                    return storage.User; 
                 } 
             }       
         }
@@ -62,7 +49,7 @@ export class Access {
 
     /** */
     public static RememberUser(): string {
-        if(this.useJWT) {
+        if(this.appSettings.security.useJWT) {
             const CLAIMS = Access.GetJWTInfo().claims;
     
             if(CLAIMS.hasOwnProperty('User')) {
@@ -75,11 +62,11 @@ export class Access {
         if (storage) {
             storage = JSON.parse(storage);
             
-            if (storage.hasOwnProperty('user')) {
-                return Tools.IsString(storage.user) 
-                    && (String(storage.user).length <= 50)
-                    ? storage.user 
-                    : (storage.user?.user || ''); 
+            if (storage.hasOwnProperty('User')) {
+                return Tools.IsString(storage.User) 
+                    && (String(storage.User).length <= 50)
+                    ? storage.User 
+                    : (storage.User?.User || ''); 
             } 
         }
 
@@ -89,7 +76,7 @@ export class Access {
 
     /** */
     public static IsLogin(): boolean { 
-        if(this.useJWT) {
+        if(this.appSettings.security.useJWT) {
             const JWT = Access.GetJWTInfo();
             return Tools.IsNotOnlyWhiteSpace(JWT.claims?.User) 
                 && Tools.IsNotOnlyWhiteSpace(JWT.claims?.ExpirationDate) 
@@ -97,9 +84,10 @@ export class Access {
         }
 
         else {
-            const user = Access.GetUser();
-            return Tools.IsNotNull(user) 
-                && Tools.IsNotOnlyWhiteSpace(user?.User);
+            const User = Access.GetUser();
+            return Tools.IsNotNull(User) 
+                && Tools.IsNotOnlyWhiteSpace(User?.User)
+                && Tools.IsNotOnlyWhiteSpace(User?.Email);
         }
     }  
 
@@ -108,13 +96,13 @@ export class Access {
     public static LogOut(userSIGNAL: WritableSignal<IUser | null>): void {
         userSIGNAL.set(null);
 
-        const user = this.useJWT
+        const User = this.appSettings.security.useJWT
             ? Access.GetJWTInfo()?.claims?.User || '' 
             : Access.GetUser()?.User || ''; 
 
         sessionStorage.removeItem(this.storage);
         localStorage.removeItem(this.storage); 
-        localStorage.setItem(this.storage, JSON.stringify({ user }));
+        localStorage.setItem(this.storage, JSON.stringify({ User }));
             
         if(document.location.href.includes('#')) {
             document.location.href = '/#/';
@@ -126,13 +114,13 @@ export class Access {
 
     /** */
     public static GetJWTInfo(): IJWT {     
-        if(this.useJWT) {
+        if(this.appSettings.security.useJWT) {
             let storage = localStorage.getItem(this.storage) as any;
     
             if (storage) {
                 storage = JSON.parse(storage);
                 
-                if (storage.hasOwnProperty('user') && Tools.IsString(storage.user)) {
+                if (storage.hasOwnProperty('User') && Tools.IsString(storage.User)) {
                     const JWT = storage.user.split('.');  
     
                     if(JWT.length === 3) {
@@ -140,7 +128,7 @@ export class Access {
     
                         if(CLAIMS.hasOwnProperty('ExpirationDate')) {
                             return {
-                                jwt: storage.user,
+                                jwt: storage.User,
                                 minutes: Dates.GetDiff(CLAIMS.ExpirationDate, Dates.GetCurrentUTCDate(), 'minutes'),
                                 claims: CLAIMS
                             };
@@ -209,6 +197,7 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
             title:   'COER 91',
             version: '0.0.0',
             company: 'COER System',
+            icon: 'i91-logo-coer91',
             ...appSettings?.appInfo
         },
         ...webAPI,
@@ -231,7 +220,7 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
         navigation: {
             static:    true, 
             showHome:   true, 
-            redirectTo: 'home',
+            redirectTo: '/home',
             ...appSettings?.navigation
         } 
     } 

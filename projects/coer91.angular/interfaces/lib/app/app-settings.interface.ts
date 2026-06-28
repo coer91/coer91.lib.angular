@@ -5,9 +5,9 @@ export interface IAppSettings {
         id: number;
         project: string;
         title: string;
-        version: string;
-        imageURL: string;
+        version: string; 
         company: string;
+        icon: string;
     }, 
     environment: IEnvironments;
     background: {

@@ -2,7 +2,7 @@ import { SidenavAccordion } from './coer-sidenav-accordion/coer-sidenav-accordio
 import { Component, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';  
 import { HTMLElements, Strings, Tools, Navigation, Collections, Screen, SourcePage, BreadcrumbsPage } from 'coer91.angular/tools';
 import { isLoadingSIGNAL, navigationSIGNAL, screenSizeSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
-import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';
+import { IAppSettings, IMenu, IMenuSelected } from 'coer91.angular/interfaces';
 import { ResolveEnd, Router } from '@angular/router'; 
 import { map } from 'rxjs/operators';
 import { filter } from 'rxjs';
@@ -23,6 +23,7 @@ export class Sidenav {
     private readonly _router = inject(Router);
 
     //Variables    
+    private readonly appSettings: IAppSettings = appSettings;
     protected readonly show = signal<boolean>(true); 
     protected readonly _navigation = navigationSIGNAL;
     protected readonly _isLoading = isLoadingSIGNAL;
@@ -31,9 +32,6 @@ export class Sidenav {
     protected readonly IsBooleanTrue = Tools.IsBooleanTrue;
     protected readonly IsOnlyWhiteSpace = Tools.IsOnlyWhiteSpace;
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
-
-    //Inputs 
-    public readonly navigation = input.required<IMenu[]>();  
 
     //Output 
     protected readonly onOpen  = output<void>();
@@ -44,21 +42,9 @@ export class Sidenav {
         Screen.ClickBrowserButton.subscribe(url => this._ClickBrowserButton(url)); 
 
         effect(() => {  
-            const NAVIGATION = this.navigation();
-
-            if(Tools.IsNotNull(NAVIGATION)) {
-                const showHome = !Tools.IsBooleanFalse(appSettings?.navigation?.showHome);
-                const NAVIGATION_HOME: IMenu[] = showHome 
-                    ? [{ Id: 1, Label: 'Home', Icon: 'iw-home-door-fill', Path: '/home' }] : [];  
-
-                this._navigation.set(
-                    ([] as IMenu[]) 
-                    .concat(NAVIGATION_HOME)
-                    .concat(NAVIGATION)
-                );   
-                
-                Tools.Sleep().then(() => this._SetSelectedMenu());
-            }
+            if(this._navigation().length > 0) {
+                Tools.Sleep(500, 'SetSelectedMenu').then(() => this._SetSelectedMenu());
+            }  
         });
 
         effect(() => {
@@ -79,6 +65,8 @@ export class Sidenav {
                 }      
             }
         );
+
+        
     }   
 
 
@@ -409,7 +397,7 @@ export class Sidenav {
                 
                 if(OPTION.action === 'GRID') {
                     if(!([...OPTION.tree].pop()?.id === 'GRID')) {
-                        OPTION.tree.push({ id: 'GRID', label: 'Menu', icon: 'iw-grid' });
+                        OPTION.tree.push({ id: 'GRID', label: 'Menu', icon: 'i91-grid' });
                     }
                      
                     if(navigate) this._router.navigateByUrl('/menu'); 

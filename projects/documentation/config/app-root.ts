@@ -11,10 +11,10 @@ environmentSIGNAL.set(appSettings.environment);
     selector: 'app-root',
     imports: [AppModule], 
     template: `
-        <coer91-root 
+        <coer91 
             [authService]="authService" 
             [staticNavigation]="staticNavigation"
-        ></coer91-root>
+        ></coer91>
     `
 })
 export class AppRoot {   
@@ -29,11 +29,12 @@ export class AppRoot {
             PartnerId: 1,
             Partner: 'COER System',
             FullName: 'Christian Omar Escamilla Rodriguez',
+            Title: 'Developer',
             Email: 'coer0408@gmail.com',
             JWT: '',
             Roles: ['Developer', 'Admin'],
             Language: '',
-            Message: ''
+            Message: 'Christian Omar Escamilla Rodriguez'
         } 
     }
 }

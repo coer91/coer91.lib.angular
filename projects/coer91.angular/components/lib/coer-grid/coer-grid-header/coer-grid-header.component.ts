@@ -232,7 +232,7 @@ export class CoerGridHeader<T> implements AfterViewInit {
                     }
 
                     message = message.substring(0, message.length - 1); 
-                    new CoerAlert().Warning(message, 'Invalid File Type', 'iw-file-xls-fill');
+                    new CoerAlert().Warning(message, 'Invalid File Type', 'i91-file-xls-fill');
                 }
 
                 this._inputFile().nativeElement.value = []; 

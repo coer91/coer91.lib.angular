@@ -343,7 +343,7 @@ export class CoerGrid<T> extends ControlValue implements AfterContentChecked {
                     else displayProperty = 'row';
                 }
 
-                deleteItem = await this._alert.DangerConfirm(`Delete ${displayProperty} ?`, 'iw-trash-can');
+                deleteItem = await this._alert.DangerConfirm(`Delete ${displayProperty} ?`, 'i91-trash-can');
             }
 
             if(deleteItem) {

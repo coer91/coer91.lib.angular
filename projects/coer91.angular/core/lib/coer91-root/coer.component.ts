@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, output, signal, viewChild } from '@angular/core';  
-import { ILogin, ILoginResponse, IMenu, IToolbarMenu, IUser } from 'coer91.angular/interfaces';
+import { IAppSettings, ILogin, ILoginResponse, IToolbarMenu, IUser } from 'coer91.angular/interfaces';
 import { Access, CoerAlert, Dates, Screen, Tools } from 'coer91.angular/tools';
 import { screenSizeSIGNAL, userSIGNAL } from 'coer91.angular/signals';
 import { Toolbar } from '../toolbar/toolbar.component';
@@ -15,7 +15,7 @@ declare const appSettings: any;
     styleUrl: './coer.component.scss', 
     standalone: false
 })
-export class COER91Component {   
+export class Coer91Component {   
 
     //Injection
     protected readonly _alert  = inject(CoerAlert); 
@@ -27,21 +27,21 @@ export class COER91Component {
     protected readonly _login = viewChild<LoginPage>('login');
 
     //Variables
+    private readonly appSettings: IAppSettings = appSettings;
     public readonly alert  = this._alert; 
     public readonly router = this._router;   
     protected readonly isOpenSidenav = signal<boolean>(true);
     protected _watchJWT$!: any; 
 
     //Inputs  
-    public readonly navigation = input.required<IMenu[]>(); 
-    public readonly toolbarMenu = input<IToolbarMenu[]>([]);
-    public readonly toolbarShowUserData = input<boolean>(false);
-    public readonly toolbarShowProfileMenu = input<boolean>(true); 
-    public readonly toolbarPreventProfileMenu = input<boolean>(false); 
-    public readonly toolbarShowPasswordMenu = input<boolean>(true); 
+    public readonly toolbarMenu                = input<IToolbarMenu[]>([]);
+    public readonly toolbarShowUserData        = input<boolean>(false);
+    public readonly toolbarShowProfileMenu     = input<boolean>(true); 
+    public readonly toolbarPreventProfileMenu  = input<boolean>(false); 
+    public readonly toolbarShowPasswordMenu    = input<boolean>(true); 
     public readonly toolbarPreventPasswordMenu = input<boolean>(false);  
-    public readonly toolbarShowLogOutMenu = input<boolean>(true);  
-    public readonly toolbarPreventLogOutMenu = input<boolean>(false); 
+    public readonly toolbarShowLogOutMenu      = input<boolean>(true);  
+    public readonly toolbarPreventLogOutMenu   = input<boolean>(false); 
 
     //Output
     protected readonly onLogin            = output<ILogin>();
@@ -106,51 +106,58 @@ export class COER91Component {
     
     /** */
     public SetAccess(response: ILoginResponse | IUser): boolean {  
-        const _response = response as ILoginResponse;
-        Access.SetUser(null);
+        const user = response as ILoginResponse;
+        this.SetUser(null);
         userSIGNAL.set(null);  
 
         //Set Response
-        if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) {
-            if(Tools.IsNotOnlyWhiteSpace(_response?.JWT)) {
-                Access.SetUser(_response.JWT);
-                userSIGNAL.set(_response);  
+        if(this.appSettings.security.useJWT) {
+            if(Tools.IsNotOnlyWhiteSpace(user?.JWT)) {
+                this.SetUser(user.JWT);
+                userSIGNAL.set(user);  
             }
         }
 
         else {
-            if(Tools.IsNotOnlyWhiteSpace(_response?.User)) {
-                Access.SetUser(_response);
-                userSIGNAL.set(_response);  
+            if(Tools.IsNotOnlyWhiteSpace(user?.User)) {
+                this.SetUser(user);
+                userSIGNAL.set(user);  
             }
         }  
          
         //Has Access
         if(Access.IsLogin()) {
-            if(Tools.HasProperty(_response, 'message')) { 
-                this._alert.Information(_response.Message, 'Welcome', 'iw-logo-coer91');
+            if(Tools.HasProperty(user, 'Message')) { 
+                this._alert.Information(user.Message, 'Welcome', this.appSettings.appInfo.icon);
 
-                let path = '/home';
-                if(Tools.IsBooleanFalse(appSettings?.navigation?.showHome)) {
-                    if(Tools.IsNotOnlyWhiteSpace(appSettings?.navigation?.redirectTo)) {
-                        path = appSettings?.navigation?.redirectTo;
-                        if(!path.startsWith('/')) path = `/${path}`;
-                    }
-
-                    else path = '/';
-                }  
-
+                let path = this.appSettings.navigation.redirectTo;
+                if(!path.startsWith('/')) path = `/${path}`;    
                 this._router.navigateByUrl(path); 
             } 
+
+            return true;
+        }
+
+        this._alert.Warning(user.Message, 'No access', 'i91-hand-stop-fill'); 
+        this._login()?.FocusPassword();
+        return false;
+    } 
+
+
+    //Function   
+    public SetUser(User: string | IUser | null): void {  
+        const storage = this.appSettings.appInfo.project;
+
+        if(Tools.IsNotNull(User) && !Tools.IsString(User)) {
+            const _user = { ...User as any }
+            delete _user['message'];
+            localStorage.setItem(storage, JSON.stringify({ User: _user }));
         }
 
         else {
-            this._alert.Warning(_response.Message, 'No access', 'iw-hand-stop-fill'); 
-            this._login()?.FocusPassword();
+            localStorage.setItem(storage, JSON.stringify({ User }));
         }
-
-        return Access.IsLogin();  
-    } 
+    }
 
 
     //Function 
@@ -159,7 +166,7 @@ export class COER91Component {
         const VALIDATE_EVERY: number = 60000;
         const DIFERENCE_TO_UPDATE: number = 30;
 
-        if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) {
+        if(Tools.IsBooleanTrue(this.appSettings?.security?.useJWT)) {
             let JWT = Access.GetJWTInfo(); 
     
             if(Tools.IsOnlyWhiteSpace(JWT.claims?.ExpirationDate)) {

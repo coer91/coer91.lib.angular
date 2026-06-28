@@ -149,8 +149,8 @@ export class CoerButton implements AfterViewInit, OnDestroy {
 
     //Computed
     protected _icon = computed<string>(() => {
-        if(this.isLoading() && ['filled', 'outline'].includes(this._breakpointType())) return 'iw-arrows-rotate animation-spin animation-speed-15';
-        if(Tools.IsOnlyWhiteSpace(this.icon()) && !['filled', 'outline'].includes(this._breakpointType())) return 'iw-hand-pointer-fill';
+        if(this.isLoading() && ['filled', 'outline'].includes(this._breakpointType())) return 'i91-arrows-rotate animation-spin animation-speed-15';
+        if(Tools.IsOnlyWhiteSpace(this.icon()) && !['filled', 'outline'].includes(this._breakpointType())) return 'i91-hand-pointer-fill';
         return Tools.GetDefaultIcon(this.icon()); 
     });
 

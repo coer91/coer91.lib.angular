@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/lib",
     "declaration": true,
@@ -10,6 +10,6 @@
   "angularCompilerOptions": {
     "compilationMode": "partial"
   },
-  "include": ["./projects/coer91.angular/**/*.ts"],
+  "include": ["**/*.ts"],
   "exclude": []
 }

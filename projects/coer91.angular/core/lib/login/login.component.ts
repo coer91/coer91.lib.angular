@@ -55,8 +55,8 @@ export class LoginPage implements AfterViewInit {
     //Computed
     protected _icon = computed(() => { 
         switch(environmentSIGNAL().info) {           
-            case 'DEVELOPMENT': return 'iw-developer-fill';
-            case 'STAGING'    : return 'iw-quality-fill'; 
+            case 'DEVELOPMENT': return 'i91-developer-fill';
+            case 'STAGING'    : return 'i91-quality-fill'; 
         }  
 
         return '';

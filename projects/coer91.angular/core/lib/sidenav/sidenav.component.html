@@ -22,7 +22,7 @@
                         }
 
                         @else if(!show()) {
-                            <i class='iw-circle-fill'></i>
+                            <i class='i91-circle-fill'></i>
                         }
 
                         <span>{{ lv1.Label }}</span>
@@ -107,7 +107,7 @@
 
                                             <div class="grid"> 
                                                 <span>{{ lv2.Label }}</span>
-                                                <i class="iw-grid" [ngClass]="{ 'invisible': IsBooleanFalse(lv2.ShowIndicator) }"></i>
+                                                <i class="i91-grid" [ngClass]="{ 'invisible': IsBooleanFalse(lv2.ShowIndicator) }"></i>
                                             </div> 
                                         </div>
                                     }
@@ -131,7 +131,7 @@
                             <span [ngClass]="{ 
                                 'display-none': (!show() && IsOnlyWhiteSpace(lv1.Icon))  
                             }">{{ lv1.Label }}</span> 
-                            <i class="iw-grid" [ngClass]="{ 'invisible': IsBooleanFalse(lv1.ShowIndicator) }"></i>
+                            <i class="i91-grid" [ngClass]="{ 'invisible': IsBooleanFalse(lv1.ShowIndicator) }"></i>
                         </div> 
                     </div>
                 }

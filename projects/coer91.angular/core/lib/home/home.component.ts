@@ -12,7 +12,7 @@ declare const appSettings: any;
 export class HomePage extends Page {   
   
     protected readonly version = '0.0.0'; 
-    protected readonly img = 'coer91/images/hyundai-coer.png';
+    protected readonly img = 'coer91/images/coer-system-91.png';
 
     constructor() {
         super('home');
@@ -22,9 +22,14 @@ export class HomePage extends Page {
 
 
     //Computed
-    protected _environment = computed(() => {
+    protected _version = computed(() => {
         return environmentSIGNAL().info === 'PRODUCTION'
-            ? `${appSettings?.appInfo?.company} © ${Dates.GetCurrentDate().getFullYear()}` 
-            : environmentSIGNAL().info;
+            ? this.version : environmentSIGNAL().info;
     });
+
+
+    //Computed
+    protected _copyRight = computed(() => 
+        `${appSettings?.appInfo?.company} © ${Dates.GetCurrentDate().getFullYear()}`
+    );
 }

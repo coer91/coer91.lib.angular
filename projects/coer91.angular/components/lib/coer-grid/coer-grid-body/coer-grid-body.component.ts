@@ -217,7 +217,7 @@ export class CoerGridBody<T> implements OnDestroy {
             && Tools.IsNotOnlyWhiteSpace(this.search())
             && Tools.IsNull(column?.inputSwitch)
             && (Tools.IsNull(this.headerSettings().search?.properties) || this.headerSettings().search!.properties!.length <= 0 || this.headerSettings().search!.properties!.includes(column.property)) 
-            ? 'iw-search' : '';
+            ? 'i91-search' : '';
     }  
 
 
@@ -553,7 +553,7 @@ export class CoerGridBody<T> implements OnDestroy {
                 this._sort.set({ 
                     property: column.property, 
                     direction: 'ascendant', 
-                    icon: 'iw-sort-asc-arrow-down' 
+                    icon: 'i91-sort-asc-arrow-down' 
                 });
             }
 
@@ -563,7 +563,7 @@ export class CoerGridBody<T> implements OnDestroy {
                 this._sort.set({ 
                     property: column.property, 
                     direction: 'descendant', 
-                    icon: 'iw-sort-desc-arrow-down' 
+                    icon: 'i91-sort-desc-arrow-down' 
                 });
             }  
         }

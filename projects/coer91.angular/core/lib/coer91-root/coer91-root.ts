@@ -1,18 +1,17 @@
-import { IAuthService, IHttpResponse, ILogin, ILoginResponse, IMenu, IToolbarMenu } from 'coer91.angular/interfaces'; 
+import { IAppSettings, IAuthService, IHttpResponse, ILogin, ILoginResponse, IMenu, IToolbarMenu } from 'coer91.angular/interfaces'; 
 import { Component, input, output, signal, viewChild } from '@angular/core'; 
-import { isLoadingSIGNAL, userSIGNAL } from 'coer91.angular/signals';  
+import { isLoadingSIGNAL, navigationSIGNAL, userSIGNAL } from 'coer91.angular/signals';  
 import { Access, Tools } from 'coer91.angular/tools'; 
-import { COER91Component } from './coer.component';
+import { Coer91Component } from './coer.component';
 declare const appSettings: any;
 
 @Component({
-    selector: 'coer91-root', 
+    selector: 'coer91', 
     standalone: false,
     template: `
         <coer-component
-            #COER91Component 
-            [navigation]="_navigation()"  
-            [toolbarShowUserData]="IsFunction(this.authService().Login)"
+            #Coer91Component 
+            [toolbarShowUserData]="showUserData()"
             [toolbarShowProfileMenu]="true"
             [toolbarShowPasswordMenu]="IsNotNull(authService().RecoveryPassword)"
             [toolbarShowLogOutMenu]="true" 
@@ -20,23 +19,24 @@ declare const appSettings: any;
             (onRecoveryPassword)="RecoveryPassword($event)"
             (onUpdatePassword)="SetPassword($event)" 
             (onUpdateJWT)="UpdateJWT()"
-            (onClickToolbarMenu)="ToolbarMenu($event)"
+            (onClickToolbarMenu)="ClickToolbarMenu($event)"
         ></coer-component>
     `
 })
-export class COER91Root { 
+export class Coer91Root { 
 
     //Elements
-    protected readonly _coer91 = viewChild.required<COER91Component>('COER91Component');
+    protected readonly _coer91 = viewChild.required<Coer91Component>('Coer91Component');
 
     //Variables  
-    protected readonly _navigation = signal<IMenu[]>([]);  
+    private readonly appSettings: IAppSettings = appSettings; 
     protected readonly IsNotNull = Tools.IsNotNull; 
     protected readonly IsFunction = Tools.IsFunction; 
 
     //Inputs
-    public authService = input.required<IAuthService>(); 
-    public staticNavigation = input<IMenu[]>([]); 
+    public authService      = input.required<IAuthService>(); 
+    public staticNavigation = input<IMenu[]>([]);
+    public showUserData     = input<boolean>(true); 
 
     //Output
     protected readonly onLogin            = output<ILogin>();
@@ -46,8 +46,9 @@ export class COER91Root {
     protected readonly onUpdateJWT        = output<void>();
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
 
-    //Start
-    constructor() {          
+
+    /** */
+    constructor() {        
         if(Access.IsLogin()) {  
             isLoadingSIGNAL.set(true);
             userSIGNAL.set(Access.GetUser()); 
@@ -55,9 +56,7 @@ export class COER91Root {
         }   
 
         else Tools.Sleep().then(() => {
-            if(!Tools.IsFunction(this.authService().Login)) {
-                this.Login();
-            }
+            if(!Tools.IsFunction(this.authService().Login)) this.Login();
         }); 
     } 
 
@@ -80,7 +79,7 @@ export class COER91Root {
     
             else {
                 if(loginResponse.status < 500) {
-                    this._coer91().alert.Warning(loginResponse.message, 'Not Access', 'iw-hand-stop-fill');
+                    this._coer91().alert.Warning(loginResponse.message, 'Not Access', 'i91-hand-stop-fill');
                 }
 
                 else {
@@ -94,42 +93,48 @@ export class COER91Root {
         }
 
         else {  
-            const access = this._coer91().SetAccess(this.authService().Login as ILoginResponse);
-    
-            if(access) {
-                this.GetNavigation();
-            } 
+            const user   = this.authService().Login as ILoginResponse;
+            const access = this._coer91().SetAccess(user);    
+            if(access) this.GetNavigation();
         } 
     } 
 
 
     /** */
     protected async GetNavigation(): Promise<void> {
-        this._navigation.set([]);
-
-        await Tools.Sleep(); 
-         
-        if(!Tools.IsBooleanFalse(appSettings?.navigation?.static)) { 
-            this._navigation.set(this.staticNavigation());
+        let NAVIGATION: IMenu[] = [];
+        await Tools.Sleep();
+        
+        //Add home option
+        const HOME: IMenu[] = [];
+        if(this.appSettings.navigation.showHome) {
+            HOME.push({ Id: 1, Label: 'Home', Icon: 'i91-home-door-fill', Path: '/home' }); 
+        } 
+        
+        //Is static?
+        if(this.appSettings.navigation.static) { 
+            NAVIGATION = this.staticNavigation();
         }                     
 
         else {
             if(Tools.IsFunction(this.authService()?.GetNavigation)) {
-                const FUNCTION = this.authService().GetNavigation as (projectId: number) => Promise<IHttpResponse<IMenu[]>>;
-    
-                const project = Number(appSettings?.appInfo?.id || 0); 
-                const response = await FUNCTION(project);   
+                const FUNCTION = this.authService().GetNavigation as (projectId: number) => Promise<IHttpResponse<IMenu[]>>;    
+                const response = await FUNCTION(this.appSettings.appInfo.id);   
                 
-                if(response.ok) this._navigation.set(response.data);
+                if(response.ok) {
+                    NAVIGATION = response.data;
+                }
                  
                 else {
-                    console.error(response.message);
                     this._coer91().alert.Danger('GetNavigation');
+                    console.error(response.message);
                 }
             }
 
-            else this._navigation.set(this.staticNavigation());
-        } 
+            else this._coer91().alert.DangerOk('Navigation is not static');
+        }  
+
+        navigationSIGNAL.set(([] as IMenu[]).concat(HOME).concat(NAVIGATION));
     }
 
 
@@ -168,12 +173,12 @@ export class COER91Root {
             const response = await FUNCTION({ User, Password });   
     
             if(response.ok) {
-                this._coer91().alert.Success(response.data, 'Change Password', 'iw-lock-fill');
+                this._coer91().alert.Success(response.data, 'Change Password', 'i91-lock-fill');
                 this._coer91().CloseModal();
             }
     
             else {
-                this._coer91().alert.Warning(response.message, 'Change Password', 'iw-lock-fill'); 
+                this._coer91().alert.Warning(response.message, 'Change Password', 'i91-lock-fill'); 
             } 
     
             isLoadingSIGNAL.set(false);
@@ -229,7 +234,7 @@ export class COER91Root {
             const FUNCTION = this.authService().UpdateJWT as () => Promise<IHttpResponse<string>>;
     
             const JWT = await FUNCTION();   
-            if(JWT.ok) Access.SetUser(JWT.data);
+            if(JWT.ok) this._coer91().SetUser(JWT.data);
             
             else {
                 console.error(JWT.message);
@@ -242,11 +247,9 @@ export class COER91Root {
 
 
     /** */
-    protected ToolbarMenu(menu: IToolbarMenu): void {
-        if(menu.label === 'Log Out') {
-            if(!Tools.IsFunction(this.authService().Login)) {
-                this.Login();
-            }
+    protected ClickToolbarMenu(menu: IToolbarMenu): void {
+        if(menu.label === 'Log Out' && !Tools.IsFunction(this.authService().Login)) {
+            this.Login();
         }
 
         this.onClickToolbarMenu.emit(menu);

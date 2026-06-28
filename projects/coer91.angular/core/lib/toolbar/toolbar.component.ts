@@ -77,8 +77,8 @@ export class Toolbar implements AfterViewInit {
     //Computed
     protected _icon = computed(() => { 
         switch(environmentSIGNAL().info) {           
-            case 'DEVELOPMENT': return 'iw-developer-fill';
-            case 'STAGING'    : return 'iw-quality-fill'; 
+            case 'DEVELOPMENT': return 'i91-developer-fill';
+            case 'STAGING'    : return 'i91-quality-fill'; 
         }  
 
         return '';
@@ -112,7 +112,7 @@ export class Toolbar implements AfterViewInit {
     //Computed
     protected _showIdentity = computed(() => {
         return ['sm', 'md', 'lg', 'xl', 'xxl'].includes(screenSizeSIGNAL().breakpoint)
-            && (Tools.IsNotOnlyWhiteSpace(this.user()?.FullName) || Tools.IsNotOnlyWhiteSpace(this.user()?.FullName));
+            && (Tools.IsNotOnlyWhiteSpace(this.user()?.FullName) || Tools.IsNotOnlyWhiteSpace(this.user()?.Title));
     });
 
 
@@ -120,9 +120,9 @@ export class Toolbar implements AfterViewInit {
     protected _menu = computed<any[]>(() => {
         return Collections.SetIndex(
             this.menu()
-                .concat(this.showProfileMenu()  ? [{ label: 'Profile'        , preventDefault: this.preventProfileMenu() , icon: 'iw-user-fill'      }] : [])
-                .concat(this.showPasswordMenu() ? [{ label: 'Change Password', preventDefault: this.preventPasswordMenu(), icon: 'iw-lock-fill'      }] : [])
-                .concat(this.showLogOutMenu()   ? [{ label: 'Log Out'        , preventDefault: this.preventLogOutMenu()  , icon: 'iw-door-open-fill' }] : [])
+                .concat(this.showProfileMenu()  ? [{ label: 'Profile'        , preventDefault: this.preventProfileMenu() , icon: 'i91-user-fill'      }] : [])
+                .concat(this.showPasswordMenu() ? [{ label: 'Change Password', preventDefault: this.preventPasswordMenu(), icon: 'i91-lock-fill'      }] : [])
+                .concat(this.showLogOutMenu()   ? [{ label: 'Log Out'        , preventDefault: this.preventLogOutMenu()  , icon: 'i91-door-open-fill' }] : [])
         )
     }); 
 

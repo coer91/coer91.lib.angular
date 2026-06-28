@@ -15,7 +15,7 @@ export const LoginGuard: CanActivateFn = () => {
     else { 
         if(userSIGNAL()) {
             console.log(`Unathorized by login`);
-            new CoerAlert().Danger('Login expired', 'Unathorized', 'iw-hand-stop-fill');
+            new CoerAlert().Danger('Login expired', 'Unathorized', 'i91-hand-stop-fill');
             Access.LogOut(userSIGNAL);
         }   
         
@@ -51,7 +51,7 @@ export const ActiveKeyGuard: CanActivateFn = async ({ data }: ActivatedRouteSnap
 
         else { 
             console.log(`Unathorized by path ${url}`);
-            new CoerAlert().Danger('You do not have authorization for this section', 'Unathorized', 'iw-hand-stop-fill');        
+            new CoerAlert().Danger('You do not have authorization for this section', 'Unathorized', 'i91-hand-stop-fill');        
             
             let redirectTo = String(appSettings?.navigation?.redirectTo || '/home');
             if(!redirectTo.startsWith('/')) redirectTo = `/${redirectTo}`;
