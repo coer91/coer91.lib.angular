@@ -75,13 +75,13 @@
 //     animation-duration: 0.6s;  
 // }
 
-// .animation-appear {
-//     animation-name: __KeyOpacity100 !important;
-//     animation-iteration-count: infinite !important;
-//     animation-direction: alternate !important;
-//     animation-timing-function: linear !important;
-//     animation-duration: 1s; 
-// } 
+.animation-appear {
+    animation-name: __KeyOpacity50 !important;
+    animation-iteration-count: infinite !important;
+    animation-direction: alternate !important;
+    animation-timing-function: linear !important;
+    animation-duration: 1s; 
+} 
 
 // .animation-pulse {
 //     animation-name: __KeyScale !important;

@@ -3,7 +3,7 @@
     @for $i from 0 through 100 {
         .#{$breakpoint}z-index-#{$i} {
             z-index: $i !important;
-        }
+        } 
     }  
 
     //position

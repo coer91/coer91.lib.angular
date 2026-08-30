@@ -1,4 +1,4 @@
 export interface IScanner {
     code: string;
-    operation: 'EMIT' | 'ENTER' | 'AUTOCLEAN';
+    operation: 'EMIT' | 'ENTER' | 'AUTOCLEAN'
 }

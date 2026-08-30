@@ -1,4 +1,4 @@
-import { Collections } from "coer91.angular/tools";
+import { Collections } from 'coer91.angular/tools';
 
 declare global {
     interface Array<T> { 
@@ -55,19 +55,19 @@ Array.prototype.intercept = function<T>(array: T[], property: string | null = nu
 } 
 
 
-// Array.prototype.sortAsc = function<T>(property: string | null = null): T[] {
-//     return Collections.SortAsc(this, property);   
-// }
+Array.prototype.sortAsc = function<T>(property: string | null = null): T[] {
+    return Collections.SortAsc(this, property);   
+}
 
 
-// Array.prototype.sortDesc = function<T>(property: string | null = null): T[] {
-//     return Collections.SortDesc(this, property);   
-// }
+Array.prototype.sortDesc = function<T>(property: string | null = null): T[] {
+    return Collections.SortDesc(this, property);   
+}
 
 
-// Array.prototype.search = function<T>(text: string, properties: string[] = []): T[] {
-//     return Collections.Search(this, text, properties);   
-// }
+Array.prototype.search = function<T>(text: string, properties: string[] = []): T[] {
+    return Collections.Search(this, text, properties);   
+}
 
 
 export {};

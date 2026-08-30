@@ -1,5 +1,5 @@
 import { Component, input, output, computed, signal } from '@angular/core';
-import { CONTROL_VALUE, ControlValue, HTMLElements, Tools } from 'coer91.angular/tools';
+import { CONTROL_VALUE, ControlValue, HTMLElements, Tools, Translatory } from 'coer91.angular/tools';
 import { IExternalButton } from 'coer91.angular/interfaces';
 
 @Component({
@@ -41,10 +41,10 @@ export class CoerTextBox extends ControlValue {
     public showClearButton  = input<boolean>(false);
     public showSearchButton = input<boolean>(false);
     public externalButtons  = input<IExternalButton>();
+    public size             = input<'small' | 'normal'>('normal');
     public width            = input<string>('100%');
     public minWidth         = input<string>('100px');
-    public maxWidth         = input<string>('100%');  
-
+    public maxWidth         = input<string>('100%');    
 
     //Output     
     protected readonly onKeyupEnter  = output<string>();
@@ -217,9 +217,9 @@ export class CoerTextBox extends ControlValue {
 
 
     //Computed
-    protected _label = computed<string>(() => {
-        return Tools.IsNotOnlyWhiteSpace(this.label()) ? this.label() : this.placeholder();
-    }); 
+    protected _label = computed<string>(() => 
+        Tools.IsNotOnlyWhiteSpace(this.label()) ? this.label() : this.placeholder() 
+    ); 
 
 
     //Computed
@@ -263,6 +263,10 @@ export class CoerTextBox extends ControlValue {
 
     //Function
     protected _Input = (value: any): void => this._SetValue(value); 
+
+
+    //Computed
+    public isFocused = computed<boolean>(() => this._isFocused()); 
 
 
     /** */

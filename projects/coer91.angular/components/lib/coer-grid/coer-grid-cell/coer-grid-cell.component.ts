@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, computed, input, output, signal, viewChild, WritableSignal } from "@angular/core";
-import { IBodySettings, ICallbackItem, IInputEnter, IColumnConfig, IInputChange } from "coer91.angular/interfaces";
+import { IBodySettings, ICallbackItem, IInputEnter, IColumnConfig, IInputChange } from 'coer91.angular/interfaces';
 import { CoerTextBox } from "../../coer-textbox/coer-textbox.component";
 import { CoerSelectBox } from "../../coer-selectbox/coer-selectbox.component";
 import { CoerNumberBox } from "../../coer-numberbox/coer-numberbox.component";
-import { Tools } from "coer91.angular/tools";
+import { Tools } from 'coer91.angular/tools';
 
 @Component({
     selector: 'coer-grid-cell',
@@ -14,10 +14,10 @@ import { Tools } from "coer91.angular/tools";
 export class CoerGridCell<T> implements AfterViewInit {
 
     //Elements   
-    protected readonly coerTextbox   = viewChild<CoerTextBox>('inputTextbox');
+    protected readonly CoerTextBox   = viewChild<CoerTextBox>('inputTextbox');
     protected readonly coerNumberbox = viewChild<CoerNumberBox>('inputNumberbox');
     protected readonly coerSelectbox = viewChild<CoerSelectBox<T>>('coerSelectbox');
-    //protected readonly coerDatebox   = viewChild<CoerDateBox>('inputDatebox');
+    //protected readonly coerDatebox   = viewChild<WIADateBox>('inputDatebox');
    
     //Variables
     protected readonly _isElementReady = signal<boolean>(false);
@@ -62,14 +62,15 @@ export class CoerGridCell<T> implements AfterViewInit {
 
     /** */
     public _input = computed<'inputTextbox' | 'inputNumberbox' | 'inputSelectbox' | 'inputDatebox' | 'inputSwitch'>(() => {
-        const COLUMN_CONFIG = this.column().config;
+        const COLUMN_CONFIG = this.column().config;  
+
         if(Tools.IsNull(COLUMN_CONFIG?.template)) {
             if(this._ShowInput(COLUMN_CONFIG?.inputSwitch)) {
                 return 'inputSwitch';
             }
 
-            else if(this.isEnabled()) {
-                if(this._ShowInput(COLUMN_CONFIG?.inputTextbox)) {
+            else if(this.isEnabled()) { 
+                if(this._ShowInput(COLUMN_CONFIG?.inputTextbox)) {                     
                     return 'inputTextbox';
                 }
         
@@ -208,7 +209,33 @@ export class CoerGridCell<T> implements AfterViewInit {
             }
         }
 
-        return 'color-dark';
+        return '';
+    });
+
+
+    //Computed
+    protected _GetBackground = computed(() => { 
+        let background: any = this.column().config?.background;
+
+        if(Tools.IsNotNull(background)) {
+            if(Tools.IsFunction(background)) { 
+                const ROW = { ...this.row() };
+                delete ROW['__index__'];
+                delete ROW['__checked__'];
+    
+                background = background({
+                    property: this.column().config.property, 
+                    row: ROW, 
+                    value: ROW[this.column().config.property] 
+                }) || null;
+            }
+    
+            if(Tools.IsNotOnlyWhiteSpace(background)) {
+                return `background-color-${background}`;
+            }
+        }
+
+        return '';
     });
 
 
@@ -216,7 +243,7 @@ export class CoerGridCell<T> implements AfterViewInit {
     public Focus(onlyFocus: boolean = false): void {
         switch(this._input()) {
             case 'inputTextbox': {
-                this.coerTextbox()?.Focus(onlyFocus);
+                this.CoerTextBox()?.Focus(onlyFocus);
                 break;
             }
 

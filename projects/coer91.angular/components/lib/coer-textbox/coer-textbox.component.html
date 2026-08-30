@@ -11,7 +11,8 @@
         marginTop   : marginTop(),
         marginRight : marginRight(),
         marginBottom: marginBottom(),
-        marginLeft  : marginLeft() 
+        marginLeft  : marginLeft(),
+        height      : ((size() == 'small') ? 'var(--input-height-small)' : 'var(--input-height)') 
     }">  
 
     @if(_showExternalButtonLeft()) {
@@ -21,6 +22,7 @@
                 [type]="externalButtons()?.typeLeft || 'icon-filled'"
                 [color]="externalButtons()?.colorLeft || 'secondary'"
                 [isReadonly]="(externalButtons()?.isReadonlyLeft || false)"
+                [height]="(size() == 'small') ? '25px' : 'var(--input-height)'"
                 (onClick)="onClickLeft.emit()"
             ></coer-button>
         </div>
@@ -51,6 +53,7 @@
             class="position-absolute" 
             [placeholder]="_placeholder()"
             [value]="_ValueFormat()" 
+            [disabled]="!_isEnabled()"
             (focus)="Focus()"
             [ngStyle]="{ 
                 width: _widtht(),
@@ -66,7 +69,8 @@
                 [icon]="externalButtons()?.iconRight || ''"
                 [type]="externalButtons()?.typeRight || 'icon-filled'"
                 [color]="externalButtons()?.colorRight || 'secondary'"
-                [isReadonly]="(externalButtons()?.isReadonlyRight || false)" 
+                [isReadonly]="(externalButtons()?.isReadonlyRight || false)"  
+                [height]="(size() == 'small') ? '25px' : 'var(--input-height)'"
                 (onClick)="onClickRight.emit()"
             ></coer-button>
         </div>
@@ -129,6 +133,7 @@
                 'isValid'        : isValid(), 
                 'isInvalid'      : isInvalid(),
                 'readonly'       : isReadonly(),
+                'small'          : (size() == 'small')
             }">
             <span [ngClass]="{ 'background-color-readonly': isReadonly() }"> {{ _label() }} </span>
         </label>
@@ -150,7 +155,7 @@
         ></div>
     }
 
-    @if(_isSelectComponent()) {
+    @if(_isSelectComponent()) {        
         <ul [id]="_id + '-options'" [ngStyle]="{ 'max-height' : (_isCollapsed() ? '0px' : '175px') }">
             @if(_dataSource().length > 0) {
                 @for(item of _dataSource(); track item.__index__) {
@@ -173,4 +178,4 @@
             }
         </ul> 
     }
-</div>         
+</div>    

@@ -1,7 +1,7 @@
 //Modules
 import { NgModule } from '@angular/core'; 
 import { RouterModule, Routes } from '@angular/router';   
-import { SharedModule } from '../../shared/shared.module'; 
+import { SharedModule } from '../../../shared/shared.module'; 
  
 const routes: Routes = [{
     path: '',
@@ -9,7 +9,7 @@ const routes: Routes = [{
     children: [   
         {
             path: 'components',
-            loadChildren: () => import('./components.submodule/components.submodule').then(submodule => submodule.ComponentsSubmodule)
+            loadChildren: () => import('./submodules/components/components.submodule').then(submodule => submodule.ComponentsSubmodule)
         }, 
     ]
 }];  

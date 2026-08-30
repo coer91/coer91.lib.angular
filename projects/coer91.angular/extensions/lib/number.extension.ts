@@ -1,4 +1,4 @@
-import { Numbers } from "coer91.angular/tools";
+import { Numbers } from 'coer91.angular/tools';
 
 declare global {
     interface Number { 

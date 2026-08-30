@@ -1,4 +1,4 @@
-import { IMenuSelected } from "coer91.angular/interfaces";
+import { IMenuSelected } from 'coer91.angular/interfaces';
 
 declare const appSettings: any;
 

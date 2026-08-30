@@ -1,9 +1,9 @@
 import { IPatch } from "./patch.interface";
 
 export interface IHttpRequest<T> {
-    url:              string;
-    body?:            T | IPatch[] | {};
-    responseType?:    'arraybuffer' | 'blob' | 'json' | 'text';
+    url: string;
+    body?: T | IPatch[] | {};
+    responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
     withCredentials?: boolean;
     queryParams?: { 
         param: string, 
@@ -11,6 +11,6 @@ export interface IHttpRequest<T> {
     }[];
     headers?: { 
         header: string, 
-        value:  string | number | null | undefined 
+        value: string | number | null | undefined 
     }[]; 
 }

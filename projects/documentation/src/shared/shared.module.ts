@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core'; 
-import { coer91Module } from 'coer91.angular'; 
+import { Coer91Module } from 'coer91.angular'; 
  
 @NgModule({
-    imports: [coer91Module],
-    exports: [coer91Module]
+    imports: [Coer91Module],
+    exports: [Coer91Module]
 })
 export class SharedModule { }

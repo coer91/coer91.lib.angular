@@ -143,8 +143,10 @@ export const Tools = {
             case 'error'      : return 'i91-exclamation-octagon';
             case 'filter'     : return 'i91-filter-fill font-size-20px';
             case 'bug'        : return 'i91-bug-fill font-size-20px'; 
+            case 'back'       : return 'i91-arrow-from-bracket font-size-25px i91-mirror-Y';
             case 'barcode'    : return 'i91-barcode font-size-20px';
-            case 'back'       : return 'i91-arrow-from-bracket font-size-25px i91-mirror-Y'
+            case 'location'   : return 'i91-location font-size-20px';
+            case 'material'   : return 'i91-box-fill font-size-20px';
             default: return icon || '';
         }  
     },
@@ -161,5 +163,5 @@ export const Tools = {
         catch {  
             new CoerAlert().Warning('Unable to copy to clipboard', 'Quick Implement', 'i91-clipboard-fill');
         }        
-    }
+    }, 
 };

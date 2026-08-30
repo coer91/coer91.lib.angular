@@ -1,7 +1,7 @@
-import { IBodySettings, ICallbackItem, IColumn, IColumnConfig, IDataSourceGroup, IHeaderSettings, IInputChange, IInputEnter, ISelectedRow, ISort } from "coer91.angular/interfaces";
-import { Component, computed, input, output, signal, viewChildren, WritableSignal } from "@angular/core";
+import { IBodySettings, ICallbackItem, IColumn, IColumnConfig, IDataSourceGroup, IHeaderSettings, IInputChange, IInputEnter, ISelectedRow, ISort } from 'coer91.angular/interfaces';
+import { Component, computed, input, OnDestroy, output, signal, viewChildren, WritableSignal } from "@angular/core";
+import { Collections, Dates, HTMLElements, Tools } from 'coer91.angular/tools'; 
 import { CoerGridCell } from "../coer-grid-cell/coer-grid-cell.component";
-import { Collections, Dates, HTMLElements, Tools } from "coer91.angular/tools"; 
 
 @Component({
     selector: 'coer-grid-body',
@@ -9,20 +9,21 @@ import { Collections, Dates, HTMLElements, Tools } from "coer91.angular/tools";
     styleUrl: './coer-grid-body.component.scss',
     standalone: false
 })
-export class CoerGridBody<T> { 
+export class CoerGridBody<T> implements OnDestroy { 
     
     //Elements
     protected readonly _coerGridCellList = viewChildren(CoerGridCell<T>); 
 
-    //Variables
+    //Variables 
     protected _pagesObserver!: IntersectionObserver;
     protected readonly _sort           = signal<ISort>({ property: '', direction: 'none', icon: '' });
     protected readonly IsBooleanFalse  = Tools.IsBooleanFalse;
     protected readonly _checkAll       = signal<boolean>(false);
-     protected readonly dragingId      = signal<number>(-1);
+    protected readonly dragingId       = signal<number>(-1);
     protected readonly dragoverId      = signal<number>(-1);
     protected readonly dragoverOver    = signal<boolean>(false); 
     protected readonly elementsByPages = new Set<string>();
+    protected _isLoadingPaginator: boolean = false;
 
     //Input
     public readonly value           = input.required<T[]>();
@@ -43,6 +44,7 @@ export class CoerGridBody<T> {
     public readonly minHeight       = input.required<string>();
     public readonly maxHeight       = input.required<string>(); 
     public readonly pagesLoaded     = input.required<number>(); 
+    public readonly isDestroyed     = input.required<boolean>();
 
     //Outputs
     protected readonly onClickRow          = output<T>();
@@ -63,7 +65,7 @@ export class CoerGridBody<T> {
 
     constructor() { 
         document.addEventListener('dragover', event => event.preventDefault());        
-        document.addEventListener("drop", event => this._Drop(this.dragoverId(), event));     
+        document.addEventListener("drop", event => this._Drop(this.dragoverId(), event)); 
     }
 
 
@@ -81,12 +83,7 @@ export class CoerGridBody<T> {
     protected _ShowButton(button: any, position: 'left' | 'right', row: any = null) {
         let response = false;
 
-        if(position === button.position 
-            && this.isEnabled() 
-            && !this.isLoadingInner()() 
-            && this.dataSourceGroup().length > 0
-            && this.dragingId() < 0
-        ) { 
+        if(position === button.position && this.isEnabled() && !this.isLoadingInner()() && this.dataSourceGroup().length > 0) { 
             const SHOW_BUTTON = (this.bodySettings() as any)[button.property]?.show;
             
             if (Tools.IsNull(row)) {
@@ -128,28 +125,32 @@ export class CoerGridBody<T> {
             property: 'deleteButton',
             icon: 'delete',  
             position: this.bodySettings()?.deleteButton?.position || 'right',
-            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.color) ? this.bodySettings()?.deleteButton?.color : 'danger', 
+            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.background) ? this.bodySettings()?.deleteButton?.background : (Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.color) ? this.bodySettings()?.deleteButton?.color : 'danger'), 
+            type: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.deleteButton?.background) ? 'icon-filled' : 'icon-rounded',
             event: this.onClickDeleteRow 
         },
         { 
             property: 'editButton', 
             icon: 'edit',  
             position: this.bodySettings()?.editButton?.position || 'right',
-            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.color) ? this.bodySettings()?.editButton?.color : 'primary', 
+            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.background) ? this.bodySettings()?.editButton?.background : (Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.color) ? this.bodySettings()?.editButton?.color : 'primary'), 
+            type: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.editButton?.background) ? 'icon-filled' : 'icon-rounded',
             event: this.onClickEditRow 
         },
         { 
             property: 'modalButton', 
             icon: 'modal',  
             position: this.bodySettings()?.modalButton?.position || 'right',
-            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.color) ? this.bodySettings()?.modalButton?.color : 'primary', 
+            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.background) ? this.bodySettings()?.modalButton?.background : (Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.color) ? this.bodySettings()?.modalButton?.color : 'primary'), 
+            type: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.modalButton?.background) ? 'icon-filled' : 'icon-rounded',
             event: this.onClickModalRow 
         },
         { 
             property: 'navigateButton', 
             icon: 'navigate',  
             position: this.bodySettings()?.navigateButton?.position || 'right',
-            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.color) ? this.bodySettings()?.navigateButton?.color : 'navigation', 
+            color: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.background) ? this.bodySettings()?.navigateButton?.background : (Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.color) ? this.bodySettings()?.navigateButton?.color : 'navigation'), 
+            type: Tools.IsNotOnlyWhiteSpace(this.bodySettings()?.navigateButton?.background) ? 'icon-filled' : 'icon-rounded',
             event: this.onClickNavigateRow 
         }
     ]);
@@ -184,8 +185,7 @@ export class CoerGridBody<T> {
         return this.bodySettings().selectionRows?.show 
             && this.dataSourceGroup().length > 0  
             && (this.bodySettings().selectionRows?.selectAllowed !== 0)
-            && this.isEnabled()
-            && this.dragingId() < 0; 
+            && this.isEnabled(); 
     });
 
 
@@ -608,6 +608,7 @@ export class CoerGridBody<T> {
             document.body.appendChild(ghost);
             event.dataTransfer?.setDragImage(ghost, 100, positionY);
             setTimeout(() => document.body.removeChild(ghost), 0);
+
         }
     }
 
@@ -624,10 +625,11 @@ export class CoerGridBody<T> {
     protected _Drop(index: number, event: DragEvent) {
         event.preventDefault();
         event.stopPropagation();        
-        
+         
         this.dragoverId.set(-1);
         this.dragingId.set(-1);
         const from = Number(event.dataTransfer?.getData('text') || '-1');
+
         if(from >= 0) {
             this.onReorder.emit({ from, to: index }); 
         }        
@@ -649,44 +651,46 @@ export class CoerGridBody<T> {
         }
 
         return 'default';
-    }); 
+    });   
 
 
     /** */
-    public async LoadPages(pages: number) {   
+    public async LoadPages(pages: number) {
+        if(this.isDestroyed()) return;   
         const pageByRow = this.bodySettings()?.paginator?.pageByRow || 50;
-        if(pages <= 0) pages = pageByRow;
+        
+        if(pages <= 0) {
+            pages = pageByRow;
+            this.onLoadPages?.emit(pages);
+        }    
 
         if(pages <= pageByRow) {
             if(this._pagesObserver) this._pagesObserver?.disconnect();
 
             this._pagesObserver = new IntersectionObserver((inputList) => {
-                for(const input of inputList) {             
+                for(const input of inputList) {  
                     if(input.isIntersecting) {
                         this._pagesObserver.unobserve(input.target);
-
-                        const pagesLoaded = this.pagesLoaded() + pageByRow;
-                        this.onLoadPages.emit(pagesLoaded);
+                                                        
+                        const pagesLoaded = this.pagesLoaded() + pageByRow; 
+                        this.onLoadPages?.emit(pagesLoaded);
                         this.LoadPages(pagesLoaded);
                     }
                 } 
-            }); 
-
-            this.onLoadPages.emit(pages);
-        } 
+            });       
+        }         
         
-        Tools.Sleep(1000, 'GridLoadPages').then(() => {
-            const ID = this.IdCalculated()((pages - 1), -1, 'row');
-            const ELEMENT = HTMLElements.SelectElementById(ID);    
-            
-            if(ELEMENT) {
-                if(this.elementsByPages.has(ID)) {
-                    this._pagesObserver.unobserve(ELEMENT);
-                }
-    
-                this.elementsByPages.add(ID);
-                this._pagesObserver.observe(ELEMENT); 
-            } 
-        });     
-    }
+        await Tools.Sleep();
+        const ID = this.IdCalculated()((pages - 1), -1, 'row');
+        const ELEMENT = HTMLElements.SelectElementById(ID);
+
+        if(ELEMENT) {     
+            if(this.elementsByPages.has(ID)) {
+                this._pagesObserver.unobserve(ELEMENT);
+            }
+
+            this.elementsByPages.add(ID);
+            this._pagesObserver.observe(ELEMENT); 
+        } 
+    } 
 }

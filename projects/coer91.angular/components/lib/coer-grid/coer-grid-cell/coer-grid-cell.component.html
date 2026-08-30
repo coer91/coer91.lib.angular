@@ -1,7 +1,7 @@
 @if(!isDraging() && isDragoverUp()) {
     <div class="dragover-zone"></div>
 }
-
+ 
 <div [ngClass]="{ 'draging': isDraging(), 'dragover-zone': isDraging() && isDragoverself() }">
     @switch(_input()) {
         @case ('inputSwitch') {
@@ -29,6 +29,7 @@
         } 
     
         @case ('inputTextbox') {
+            
             <div [class]="_input()"> 
                 <coer-textbox
                     [id]="id()"
@@ -125,13 +126,13 @@
     
         @case ('inputDatebox') {
             <div [class]="_input()">  
-    
+            
             </div>
         }
         
         @default {
             <div class="default" 
-                [class]="_GetTextColor()"
+                [class]="`${_GetBackground()} ${_GetTextColor()}`"
                 [ngStyle]="{ 
                     'justify-content': _GetTextAlignX(),
                     'word-break'     : _GetTextBreak(),

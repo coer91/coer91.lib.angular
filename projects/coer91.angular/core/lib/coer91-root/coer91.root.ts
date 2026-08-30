@@ -1,7 +1,7 @@
-import { IAuthService, IHttpResponse, ILogin, ILoginResponse, IMenu, IToolbarMenu } from 'coer91.angular/interfaces'; 
+import { IAuthService, IHttpResponse, ILogin, ILoginResponse, IMenu, IToolbarMenu, IUser } from 'coer91.angular/interfaces'; 
 import { Component, input, output, signal, viewChild } from '@angular/core'; 
 import { isLoadingSIGNAL, userSIGNAL } from 'coer91.angular/signals';  
-import { Access, Tools } from 'coer91.angular/tools'; 
+import { Access, HTTP, Tools } from 'coer91.angular/tools'; 
 import { Coer91Component } from './coer91.component';
 declare const appSettings: any;
 
@@ -10,9 +10,9 @@ declare const appSettings: any;
     standalone: false,
     template: `
         <coer91-component
-            #coer91Component 
+            #Coer91Component 
             [navigation]="_navigation()"  
-            [toolbarShowUserData]="IsNotNull(this.authService().Login)"
+            [toolbarShowUserData]="true"
             [toolbarShowProfileMenu]="true"
             [toolbarShowPasswordMenu]="IsNotNull(authService().RecoveryPassword)"
             [toolbarShowLogOutMenu]="true" 
@@ -25,10 +25,10 @@ declare const appSettings: any;
         ></coer91-component>
     `
 })
-export class Coer91Root { 
+export class coer91Root { 
 
     //Elements
-    protected readonly _coer91 = viewChild.required<Coer91Component>('coer91Component');
+    protected readonly _coer91 = viewChild.required<Coer91Component>('Coer91Component');
 
     //Variables  
     protected readonly _navigation = signal<IMenu[]>([]);  
@@ -43,7 +43,7 @@ export class Coer91Root {
     protected readonly onLogin            = output<ILogin>();
     protected readonly onRecoveryPassword = output<string>(); 
     protected readonly onUpdatePassword   = output<string>();
-    protected readonly onUpdateLanguage   = output<string>();
+    protected readonly onUpdateLanguage   = output<{ Id: string; Name: string }>();
     protected readonly onUpdateJWT        = output<void>();
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
 
@@ -51,7 +51,7 @@ export class Coer91Root {
     constructor() {          
         if(Access.IsLogin()) {  
             isLoadingSIGNAL.set(true);
-            userSIGNAL.set(Access.GetUser());  
+            userSIGNAL.set(Access.GetUser()); 
             this.GetNavigation().then(() => isLoadingSIGNAL.set(false));  
         }   
 
@@ -80,8 +80,14 @@ export class Coer91Root {
             }
     
             else {
-                console.error(loginResponse.message);
-                this._coer91().alert.Danger('Login');
+                if(loginResponse.status < 500) {
+                    this._coer91().alert.Warning(loginResponse.message, 'Not Access', 'i91-hand-stop-fill');
+                }
+
+                else {
+                    console.error(loginResponse.message);
+                    this._coer91().alert.Danger('Login');
+                }
             } 
     
             isLoadingSIGNAL.set(false);
@@ -103,23 +109,33 @@ export class Coer91Root {
         this._navigation.set([]);
 
         await Tools.Sleep(); 
-        if(!Tools.IsBooleanFalse(appSettings?.navigation?.static) || !Tools.IsFunction(this.authService()?.GetNavigationByRole)) { 
-            await Tools.Sleep();
+         
+        if(!Tools.IsBooleanFalse(appSettings?.navigation?.static)) { 
             this._navigation.set(this.staticNavigation());
         }                     
 
         else {
-            const FUNCTION = this.authService().GetNavigationByRole as (project: string) => Promise<IHttpResponse<IMenu[]>>;
+            if(Tools.IsFunction(this.authService()?.GetNavigation)) {
+                const FUNCTION = this.authService().GetNavigation as (projectId: number) => Promise<IHttpResponse<IMenu[]>>;
+    
+                const project = Number(appSettings?.appInfo?.id || 0); 
+                const response = await FUNCTION(project);   
+                
+                if(response.ok) this._navigation.set(response.data);
+                 
+                else {
+                    if(response.status == HTTP.STATUS_CODE.Unauthorize) {
+                        Access.LogOut(userSIGNAL);
+                    }
 
-            const project = appSettings?.appInfo?.project || '';            
-            const response = await FUNCTION(project);   
-            
-            if(response.ok) this._navigation.set(response.data);
-             
-            else {
-                console.error(response.message);
-                this._coer91().alert.Danger('GetNavigation');
+                    else {
+                        console.error(response.message);
+                        this._coer91().alert.Danger('GetNavigation');
+                    }
+                }
             }
+
+            else this._navigation.set(this.staticNavigation());
         } 
     }
 
@@ -175,35 +191,44 @@ export class Coer91Root {
 
 
     /** */
-    protected async UpdateLanguage(language: string): Promise<void> {
-        //if(Tools.IsFunction(this.authService()?.SetUserRoleMain)) {
-        //     const FUNCTION = this.authService().SetUserRoleMain as (userId: number, roleId: string | number) => Promise<IHttpResponse<IUserRole>>;
+    protected async UpdateLanguage(language: { Id: string; Name: string }): Promise<void> {
+        if(Tools.IsFunction(this.authService()?.SetLanguage)) {
+            const FUNCTION = this.authService().SetLanguage as (languageId: string) => Promise<IHttpResponse<string>>;
             
-        //     isLoadingSIGNAL.set(true); 
-        //     const userId = userSIGNAL()?.userId || 0;
-        //     const response = await FUNCTION(userId, roleId);   
+            isLoadingSIGNAL.set(true); 
+            const response = await FUNCTION(language.Id);   
     
-        //     if(response.ok) {
-        //         await this.UpdateJWT();
-        //         userSIGNAL.set(Access.GetUser());
-        //         this._coer91().CloseModal();
-        //         this._coer91().alert.Success('The rol has been updated', response.data.role); 
-        //         await this.GetNavigation(); 
-        //     }
+            if(response.ok) {
+                if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) { 
+                    await this.UpdateJWT();                      
+                }
+
+                else {
+                    const ACCESS_USER = Access.GetUser() as IUser;
+                    ACCESS_USER.Language = response.data; 
+                    Access.SetUser({ ...ACCESS_USER });
+                }
+                
+                userSIGNAL.set(Access.GetUser());
+                this._coer91().CloseModal();
+                this._coer91().alert.Success('The Language has been updated', language.Name); 
+                await this.GetNavigation(); 
+                this._coer91().router.navigateByUrl(appSettings?.navigation?.redirectTo);
+            }
     
-        //     else {
-        //         this._coer91().alert.Warning(response.message);
-        //     } 
+            else {
+                this._coer91().alert.Warning(response.message);
+            } 
     
-        //     isLoadingSIGNAL.set(false);
-        //} 
+            isLoadingSIGNAL.set(false);
+        } 
 
         this.onUpdateLanguage.emit(language);
     }
 
 
     /** */
-    protected async UpdateJWT(): Promise<void> {      
+    protected async UpdateJWT(): Promise<void> {  
         if(Tools.IsFunction(this.authService()?.UpdateJWT)) {
             const FUNCTION = this.authService().UpdateJWT as () => Promise<IHttpResponse<string>>;
     
@@ -211,8 +236,14 @@ export class Coer91Root {
             if(JWT.ok) Access.SetUser(JWT.data);
             
             else {
-                console.error(JWT.message);
-                this._coer91().alert.Danger('UpdateJWT');
+                if(JWT.status < 500) {
+                    Access.LogOut(userSIGNAL);
+                }
+
+                else {
+                    console.error(JWT.message);
+                    this._coer91().alert.Danger('UpdateJWT');
+                }
             }
         } 
 

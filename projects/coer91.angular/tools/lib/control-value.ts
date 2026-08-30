@@ -16,13 +16,13 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
 
     //Variables 
     protected effectControlValueRef!: EffectRef;
-    protected readonly _id = Tools.GetGuid();
-    protected readonly _value = signal<any>(null);
-    protected readonly _isTouched = signal<boolean>(false);
+    protected readonly _id                = Tools.GetGuid();
+    protected readonly _value             = signal<any>(null);
+    protected readonly _isTouched         = signal<boolean>(false);
     protected readonly _IsTouchedFunction = signal<Function | null>(null);
-    protected readonly _UpdateValue = signal<Function | null>(null);
-    protected readonly _isElementReady = signal<boolean>(false);
-    protected readonly _isDestroyed    = signal<boolean>(false);
+    protected readonly _UpdateValue       = signal<Function | null>(null);
+    protected readonly _isElementReady    = signal<boolean>(false);
+    protected readonly _isDestroyed       = signal<boolean>(false);
     
     protected readonly IsNull              = Tools.IsNull;
     protected readonly IsNotNull           = Tools.IsNotNull;
@@ -34,7 +34,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
     //Input
     public readonly value           = input<any>('');
     public readonly formControlName = input<string>(''); 
-    public readonly label           = input<string>('');
+    public readonly label           = input<string>(''); 
     public readonly isLoading       = input<boolean>(false); 
     public readonly isReadonly      = input<boolean>(false);
     public readonly isInvisible     = input<boolean>(false);
@@ -96,7 +96,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
             && this.isReadonly()  === false
             && this.isInvisible() === false
             && this.isHidden()    === false
-    });
+    }); 
 
 
     /** Sets the value of the component */
@@ -116,7 +116,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
 
     //Function
     protected writeValue(value: any): void {    
-        this._SetValue(value);
+        this._SetValue(value); 
     }
 
 
@@ -124,7 +124,7 @@ export abstract class ControlValue implements AfterViewInit, OnDestroy {
     protected registerOnChange(callback: Function): void { 
         if(Tools.IsFunction(callback)) {
             this._UpdateValue.set(callback);  
-        }  
+        }   
     }
 
 

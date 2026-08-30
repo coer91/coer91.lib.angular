@@ -1,7 +1,7 @@
+import { IJWT, IUser } from 'coer91.angular/interfaces';
 import { Tools } from "./generic";
 import { Dates } from "./dates";
 import { WritableSignal } from "@angular/core";
-import { IJWT, IUser } from "coer91.angular/interfaces";
 declare const appSettings: any;
 
 /** Controls user information in localStorage */
@@ -31,15 +31,17 @@ export class Access {
 
             if(JWT.claims?.hasOwnProperty('User')) {
                 return { 
-                    UserId:     Number(JWT.claims?.UserId     || 0 ),
-                    User:       String(JWT.claims?.User       || ''), 
-                    PartnerId:  Number(JWT.claims?.partnerId  || 0),
-                    Partner:    String(JWT.claims?.Partner    || ''),
-                    FullName:   String(JWT.claims?.FullName   || ''), 
-                    Email:      String(JWT.claims?.Email      || ''),
-                    JWT:        JWT.jwt,
-                    Roles:      String(JWT.claims?.Roles      || '').replaceAll('[', '').replaceAll(']', '').split(','),
-                    Language:   String(JWT.claims?.Language   || ''),
+                    UserId:       Number(JWT.claims?.UserId       || 0 ),
+                    User:         String(JWT.claims?.User         || ''),
+                    DepartmentId: Number(JWT.claims?.DepartmentId || 0 ),
+                    Department:   String(JWT.claims?.Department   || ''),
+                    PartnerId:    Number(JWT.claims?.partnerId    || 0),
+                    Partner:      String(JWT.claims?.Partner      || ''),
+                    FullName:     String(JWT.claims?.FullName     || ''), 
+                    Email:        String(JWT.claims?.Email        || ''), 
+                    Language:     String(JWT.claims?.Language     || ''),
+                    JWT:          JWT.jwt,
+                    Roles:        String(JWT.claims?.Roles        || '').replaceAll('[', '').replaceAll(']', '').split(','),
                 }
             }  
         }
@@ -117,10 +119,10 @@ export class Access {
         localStorage.setItem(this.storage, JSON.stringify({ user }));
             
         if(document.location.href.includes('#')) {
-            document.location.href = '/#/';
+            document.location.href = '/#/home';
         }
 
-        else document.location.href = '/';
+        else document.location.href = '/home';
     }
 
 
@@ -170,8 +172,8 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
                 environment: {
                     info: environment,
                     isDevelopment: true,
-                    isStaging:     false,
-                    isProduction:  false
+                    isStaging: false,
+                    isProduction: false
                 }
             });
         break;
@@ -182,8 +184,8 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
                 environment: {
                     info: environment,
                     isDevelopment: false,
-                    isStaging:     true,
-                    isProduction:  false
+                    isStaging: true,
+                    isProduction: false
                 }
             });
         break;
@@ -194,8 +196,8 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
                 environment: { 
                     info: environment,
                     isDevelopment: false,
-                    isStaging:     false,
-                    isProduction:  true
+                    isStaging: false,
+                    isProduction: true
                 }
             });
         break;
@@ -206,14 +208,14 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
         appInfo: {
             id: 0,
             project: '',
-            title:   'COER 91',
+            title: 'WIA',
             version: '0.0.0',
-            company: 'COER System',
+            company: 'Hyundai WIA',
             ...appSettings?.appInfo
         },
         ...webAPI,
         background: {
-            home:  '',
+            home: '',
             login: '',
             ...appSettings?.background
         },
@@ -222,15 +224,15 @@ export const GetAppSettings = <T>(environment: 'DEVELOPMENT' | 'STAGING' | 'PROD
             ...appSettings?.security
         },
         region: {
-            dateTime:     'MDY', 
-            language:     'en',
+            dateTime: 'MDY', 
+            language: 'en',
             currencyCode: 'MXN',
-            currency:     '$',
+            currency: '$',
             ...appSettings?.dateTime
         },
         navigation: {
-            static:    true, 
-            showHome:   true, 
+            static: true, 
+            showHome: true, 
             redirectTo: 'home',
             ...appSettings?.navigation
         } 

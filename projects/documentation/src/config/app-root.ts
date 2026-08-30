@@ -26,13 +26,15 @@ export class AppRoot {
         Login: {
             UserId: 1,
             User: 'coer91', 
+            DepartmentId: 0,
+            Department: '',
             PartnerId: 1,
             Partner: 'COER System',
             FullName: 'Christian Omar Escamilla Rodriguez',
             Email: 'coer0408@gmail.com',
+            Language: '',
             JWT: '',
             Roles: ['Developer', 'Admin'],
-            Language: '',
             Message: ''
         } 
     }

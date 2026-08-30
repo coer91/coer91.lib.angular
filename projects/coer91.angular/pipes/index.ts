@@ -6,4 +6,4 @@ export * from './lib/html.pipe';
 export * from './lib/index-collection.pipe';
 export * from './lib/no-image.pipe';
 export * from './lib/numeric-format.pipe';
-export * from './lib/time.pipe'; 
+export * from './lib/time.pipe';  

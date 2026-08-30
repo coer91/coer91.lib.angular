@@ -1,8 +1,8 @@
+import { IHttpRequest, IHttpResponse } from 'coer91.angular/interfaces';
 import { CoerAlert } from "./coer-alert/coer-alert.component";
 import { Tools } from "./generic";
 import { Dates } from "./dates";
 import { Access } from "./access";
-import { IHttpRequest, IHttpResponse } from "coer91.angular/interfaces";
 
 export class HTTP {
 
@@ -158,6 +158,7 @@ export class HTTP {
         } 
 
         const USER = Access.GetUser(); 
+
         if(Tools.IsNotOnlyWhiteSpace(USER?.JWT)) {
             const JWT = USER!.JWT.startsWith('BEARER') ? USER!.JWT : `BEARER ${USER!.JWT}`;
             headers.append('Authorization', JWT);
@@ -236,6 +237,7 @@ export class HTTP {
     
             case 'arraybuffer': {
                 response = null;
+                //message = new TextDecoder().decode(new Uint8Array(message as any));
                 break;
             } 
             

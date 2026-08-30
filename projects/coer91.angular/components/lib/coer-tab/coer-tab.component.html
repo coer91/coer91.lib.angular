@@ -22,9 +22,9 @@
         </div> 
 
         <div class="coer-tab-body" [ngStyle]="{ 
-            'height'    : `calc(${_height()}   - ${_containerHeight()}px)`, 
-            'min-height': `calc(${minHeight()} - ${_containerHeight()}px)`, 
-            'max-height': `calc(${maxHeight()} - ${_containerHeight()}px)`,
+            'height'    : `calc(${_height()}   - ${compensationHeight()}px)`, 
+            'min-height': `calc(${minHeight()} - ${compensationHeight()}px)`, 
+            'max-height': `calc(${maxHeight()} - ${compensationHeight()}px)`,
             'overflow'  : (isLoading() ? 'hidden' : 'auto')
         }">    
             <div class="coer-tab-body-template" [style]="{ opacity: (_showingTab() ? '1.00' : '0.00'), visibility: (_showingTab() ? 'visible' : 'hidden') }">

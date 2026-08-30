@@ -1,4 +1,4 @@
-import { IAppSource } from "coer91.angular/interfaces";
+import { IAppSource } from 'coer91.angular/interfaces';
 import { BreadcrumbsPage } from "./page-breadcrumbs"; 
 declare const appSettings: any;
  

@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { ITitleBreadcrumb, ITitleGoBack, ITitleInformation } from 'coer91.angular/interfaces';
 import { isLoadingSIGNAL, screenSizeSIGNAL } from 'coer91.angular/signals'; 
 import { Collections, Navigation, Tools } from 'coer91.angular/tools';  
@@ -55,19 +55,15 @@ export class CoerPageTitle {
                 }
 
                 break;
-            } 
+            }  
 
             counter--;
             await Tools.Sleep(250);
         } while(counter  > 0) 
-    }
 
 
-    // //computed
-    // protected _tooltip = computed<string>(() => {
-    //     return Tools.IsNotOnlyWhiteSpace(this.information()?.tooltip)
-    //         ? this.information().tooltip! : 'Information';
-    // }); 
+            
+    } 
     
     
     //computed

@@ -1,4 +1,4 @@
-import { HTMLElements } from "coer91.angular/tools";
+import { HTMLElements } from 'coer91.angular/tools';
 
 declare global {
     interface HTMLElement {

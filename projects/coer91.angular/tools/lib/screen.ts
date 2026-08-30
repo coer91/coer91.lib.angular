@@ -1,8 +1,12 @@
 
 import { Observable } from "rxjs";
-import { IScreenSize } from "coer91.angular/interfaces";
+import { IScanner, IScreenSize } from 'coer91.angular/interfaces'; 
+import { CoerAlert } from "./coer-alert/coer-alert.component";
+
 
 export class Screen {
+
+    protected static readonly alert = new CoerAlert();
 
     /** Gets the width of the browser window */
     public static get WINDOW_WIDTH(): number {
@@ -73,5 +77,5 @@ export class Screen {
         return () => { 
             window.removeEventListener('popstate', handlePopState); 
         };
-    });
+    }); 
 }

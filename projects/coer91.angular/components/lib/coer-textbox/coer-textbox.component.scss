@@ -122,6 +122,11 @@ div.coer-textbox {
         background-color: transparent !important; 
     }
 
+    label.focus.small, label.no-empty.small {
+        font-size: 12px !important;
+        transform: translate(5px, -15px) !important;
+    }
+
     label.focus {
         color: var(--input-focus) !important;
     }
@@ -145,6 +150,11 @@ div.coer-textbox {
     label.focus.external-button,
     label.no-empty.external-button {
         transform: translate(45px, $label-top) !important;
+    }
+
+    label.focus.external-button.small,
+    label.no-empty.external-button.small {
+        transform: translate(45px, -15px) !important;
     }
 
     div.loading {

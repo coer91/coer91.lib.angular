@@ -7,11 +7,11 @@ export class NoImagePipe implements PipeTransform {
     transform(value: string | File | null | undefined, defaultImage: 'IMAGE' | 'USER' = 'IMAGE'): string {
 
         if (typeof value == 'string' && value.trim().toUpperCase() == 'LOADING')
-            return 'coersystem/images/loading.gif';
+            return '/coer91/images/loading.gif';
 
         let NO_IMAGE = (defaultImage === 'IMAGE') 
-            ? 'coer91/images/no-image.png'
-            : 'coer91/images/no-user.png';
+            ? '/coer91/images/no-image.png'
+            : '/coer91/images/no-user.png';
 
         if(Tools.IsOnlyWhiteSpace(value) ) {
             return NO_IMAGE;

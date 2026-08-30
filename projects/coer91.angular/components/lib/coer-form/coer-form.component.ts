@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, computed, inject, input, OnDestroy, output, signal } from '@angular/core'; 
-import { FormGroup, ValidationErrors } from '@angular/forms';
-import { CoerAlert, HTMLElements, Tools } from 'coer91.angular/tools';
+import { FormGroup } from '@angular/forms';
+import { CoerAlert, Tools } from 'coer91.angular/tools';
 import { CoerTextBox } from '../coer-textbox/coer-textbox.component';
 import { CoerSelectBox } from '../coer-selectbox/coer-selectbox.component'; 
 import { CoerSwitch } from '../coer-switch/coer-switch.component';
 import { CoerNumberBox } from '../coer-numberbox/coer-numberbox.component';
+import { CoerRadio } from '../coer-radio/coer-radio.component';
 
 @Component({
     selector: 'coer-form',
@@ -22,7 +23,7 @@ export class CoerForm implements AfterViewInit, OnDestroy {
 
     //Inputs
     public formGroup  = input.required<FormGroup>();
-    public controls   = input.required<(CoerTextBox | CoerNumberBox | CoerSwitch | CoerSelectBox<any>)[]>();  
+    public controls   = input.required<(CoerTextBox | CoerNumberBox | CoerSwitch | CoerSelectBox<any> | CoerRadio<any>)[]>();  
     public isLoading  = input<boolean>(false); 
     public isReadonly = input<boolean>(false);  
 

@@ -54,14 +54,14 @@
 
 @mixin ApplyBreakpoints($module) { 
     @each $breakpoint, $min-width in (      
-        ''     : var(--mv),
-        'mv-'  : var(--mv),
-        'xs-'  : var(--xs),    
-        'sm-'  : var(--sm),  
-        'md-'  : var(--md),  
-        'lg-'  : var(--lg),   
-        'xl-'  : var(--xl), 
-        'xxl-' : var(--xxl), 
+        ''     : 0px,
+        'mv-'  : 0px,
+        'xs-'  : 500px,    
+        'sm-'  : 576px,  
+        'md-'  : 768px,  
+        'lg-'  : 992px,   
+        'xl-'  : 1200px, 
+        'xxl-' : 1400px, 
     ) {   
         @if ($breakpoint == '') {       
             @include Module($module, $breakpoint);

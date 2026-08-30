@@ -38,8 +38,8 @@
                 
                 @if(_showIdentity()) {
                     <div class="user-identity">
-                        <p>{{ user()?.FullName }}</p>
-                        <p>{{ user()?.User     }}</p>
+                        <p>{{ user()?.FullName   }}</p>
+                        <p>{{ user()?.Department }}</p>
                     </div>
                 }
             </figure>
@@ -103,13 +103,13 @@
         }
 
         <!-- Language --> 
-        @if(_languageList().length > 0) {
+        @if(IsNotOnlyWhiteSpace(_language())) {
             <div class="flex-basis">
                 <coer-selectbox 
                     label="Language"
                     [(ngModel)]="_language" 
                     [isLoading]="_isLoading()" 
-                    [dataSource]="_languageList()"
+                    [dataSource]="_languageList()" 
                     (onValueChange)="_UpdateLanguage($event)"
                 ></coer-selectbox> 
             </div>

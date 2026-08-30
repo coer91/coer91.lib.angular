@@ -27,20 +27,22 @@ export class Coer91Component {
     protected readonly _login = viewChild<LoginPage>('login');
 
     //Variables
-    public readonly alert = this._alert;    
+    private _isActiveScreen = false; 
+    public readonly alert  = this._alert; 
+    public readonly router = this._router;   
     protected readonly isOpenSidenav = signal<boolean>(true);
     protected _watchJWT$!: any; 
 
     //Inputs  
-    public readonly navigation                 = input.required<IMenu[]>(); 
-    public readonly toolbarMenu                = input<IToolbarMenu[]>([]);
-    public readonly toolbarShowUserData        = input<boolean>(false);
-    public readonly toolbarShowProfileMenu     = input<boolean>(true); 
-    public readonly toolbarPreventProfileMenu  = input<boolean>(false); 
-    public readonly toolbarShowPasswordMenu    = input<boolean>(true); 
+    public readonly navigation = input.required<IMenu[]>(); 
+    public readonly toolbarMenu = input<IToolbarMenu[]>([]);
+    public readonly toolbarShowUserData = input<boolean>(false);
+    public readonly toolbarShowProfileMenu = input<boolean>(true); 
+    public readonly toolbarPreventProfileMenu = input<boolean>(false); 
+    public readonly toolbarShowPasswordMenu = input<boolean>(true); 
     public readonly toolbarPreventPasswordMenu = input<boolean>(false);  
-    public readonly toolbarShowLogOutMenu      = input<boolean>(true);  
-    public readonly toolbarPreventLogOutMenu   = input<boolean>(false); 
+    public readonly toolbarShowLogOutMenu = input<boolean>(true);  
+    public readonly toolbarPreventLogOutMenu = input<boolean>(false); 
 
     //Output
     protected readonly onLogin            = output<ILogin>();
@@ -48,12 +50,17 @@ export class Coer91Component {
     protected readonly onUpdateJWT        = output<void>();
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
     protected readonly onUpdatePassword   = output<string>();
-    protected readonly onUpdateLanguage   = output<string>();
+    protected readonly onUpdateLanguage   = output<{ Id: string; Name: string }>();
+
+    //Computed
+    protected _isLogin = computed(() => { 
+        return Tools.IsNotNull(userSIGNAL()) 
+            && Tools.IsNotOnlyWhiteSpace(userSIGNAL()?.User);
+    }); 
+
  
     constructor() {    
         Screen.Resize.subscribe(screenSizeSIGNAL.set);  
-
-        
 
         effect(() => { 
             if(this._isLogin()) this._WatchJWT(); 
@@ -63,14 +70,9 @@ export class Coer91Component {
                 Tools.Sleep().then(() => this._login()?.SetUser(Access.RememberUser()));
             }
         });    
+
+        document.addEventListener("visibilitychange", () => this._isActiveScreen = !document.hidden);
     } 
-
-
-    //Computed
-    protected _isLogin = computed(() => { 
-        return Tools.IsNotNull(userSIGNAL()) 
-            && Tools.IsNotOnlyWhiteSpace(userSIGNAL()?.User);
-    }); 
 
 
     //Computed
@@ -157,12 +159,12 @@ export class Coer91Component {
     //Function 
     private _WatchJWT(): void {  
         clearInterval(this._watchJWT$);
-        const VALIDATE_EVERY: number = 60000;
+        const VALIDATE_EVERY: number = 60000; 
         const DIFERENCE_TO_UPDATE: number = 30;
 
         if(Tools.IsBooleanTrue(appSettings?.security?.useJWT)) {
             let JWT = Access.GetJWTInfo(); 
-    
+            
             if(Tools.IsOnlyWhiteSpace(JWT.claims?.ExpirationDate)) {
                 console.warn('ExpirationDate not provided in JWT. Watching JWT is not working');
                 return;
@@ -172,18 +174,22 @@ export class Coer91Component {
                 Access.LogOut(userSIGNAL); 
                 return;
             } 
-    
+            
             this.onUpdateJWT.emit();   
-    
+            
             this._watchJWT$ = setInterval(() => { 
-                JWT = Access.GetJWTInfo(); 
+                JWT = Access.GetJWTInfo();  
                 
-                if(Tools.IsNotOnlyWhiteSpace(JWT.claims?.ExpirationDate)) {   
-                    if (Dates.GetDiff(JWT.claims.ExpirationDate, Dates.GetCurrentUTCDate(), 'minutes') <= DIFERENCE_TO_UPDATE) {
-                        this._WatchJWT();   
-                    }
+                if (JWT.minutes <= 0) {
+                    Access.LogOut(userSIGNAL); 
+                    return;
                 } 
-    
+
+                if(Tools.IsNotOnlyWhiteSpace(JWT.claims?.ExpirationDate)) {   
+                    const inRangeforUpdate = Dates.GetDiff(JWT.claims.ExpirationDate, Dates.GetCurrentUTCDate(), 'minutes') <= DIFERENCE_TO_UPDATE;
+                    if (this._isActiveScreen && inRangeforUpdate) this.onUpdateJWT.emit();
+                } 
+        
                 else {
                     Access.LogOut(userSIGNAL);
                     clearInterval(this._watchJWT$); 

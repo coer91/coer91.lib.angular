@@ -1,5 +1,5 @@
-import { Component, computed, contentChildren, input, output, signal } from '@angular/core';
-import { Collections, CONTROL_VALUE, ControlValue, HTMLElements, Tools } from 'coer91.angular/tools'; 
+import { AfterContentChecked, Component, computed, contentChildren, input, output, signal } from '@angular/core';  
+import { Collections, CONTROL_VALUE, ControlValue, HTMLElements, Tools } from 'coer91.angular/tools';
 import { ITemplateRef, TemplateRefDirective } from 'coer91.angular/directives';
 
 @Component({
@@ -9,14 +9,14 @@ import { ITemplateRef, TemplateRefDirective } from 'coer91.angular/directives';
     providers: [CONTROL_VALUE(CoerTab)], 
     standalone: false
 })
-export class CoerTab extends ControlValue { 
+export class CoerTab extends ControlValue implements AfterContentChecked { 
 
     //Content
     private readonly _contentElements = contentChildren<any>(TemplateRefDirective);
 
     //Variables     
     protected override readonly _value  = signal<number>(0); 
-    protected readonly _containerHeight = signal<number>(0);
+    public readonly compensationHeight = signal<number>(0);
     protected readonly _showingTab      = signal<boolean>(false);
      
 
@@ -41,22 +41,28 @@ export class CoerTab extends ControlValue {
 
     //AfterViewInit
     protected override async Start() {
-        this._showingTab.set(true);
-        this.CalculateHeight();
-        Tools.Sleep().then(() => this.CalculateHeight());
+        this._showingTab.set(true); 
     }  
 
 
+    ngAfterContentChecked(): void {
+        this.CalculateHeight();
+        Tools.Sleep().then(() => this.CalculateHeight());
+    } 
+
+
     //Function
-    private CalculateHeight() { 
-        let container = this.useContainer() ? 60 : 40;
+    public CalculateHeight() { 
+        let container = this.useContainer() ? 20 : 0;
+        
         for(const sibling of this.siblings()) {
             container += Number(HTMLElements.GetCssValue(sibling, 'margin-top').split('px')[0]);
             container += Number(HTMLElements.GetCssValue(sibling, 'margin-bottom').split('px')[0]);
             container += Number(HTMLElements.GetHeight(sibling).split('px')[0]); 
         }
 
-        this._containerHeight.set(container);
+        let compensation = 45.39; 
+        this.compensationHeight.set(container + compensation);
     }
 
 

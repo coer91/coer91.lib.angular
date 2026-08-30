@@ -1,5 +1,5 @@
 @use "../../components/lib/coer-grid/coer-grid-cell/coer-grid-cell.component.scss";
 
-coer-button, coer-textbox, coer-switch {
+coer-button, coer-textbox, coer-switch, coer-radio, coer-loading {
     display: contents !important;
 } 

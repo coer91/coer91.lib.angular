@@ -1,8 +1,8 @@
-import { environmentSIGNAL, screenSizeSIGNAL, userSIGNAL, isLoadingSIGNAL, navigationSIGNAL } from 'coer91.angular/signals';
+import { environmentSIGNAL, screenSizeSIGNAL, userSIGNAL, userImageSIGNAL, isLoadingSIGNAL, navigationSIGNAL } from 'coer91.angular/signals';
 import { AfterViewInit, Component, computed, effect, input, output, signal, viewChild } from '@angular/core';  
 import { Access, Collections, HTMLElements, Tools } from 'coer91.angular/tools';
-import { IToolbarMenu } from 'coer91.angular/interfaces';
 import { CoerButton, CoerModal, CoerSecretBox } from 'coer91.angular/components';
+import { IToolbarMenu } from 'coer91.angular/interfaces';
 declare const appSettings: any;
 
 @Component({
@@ -22,13 +22,13 @@ export class Toolbar implements AfterViewInit {
 
     //Variables 
     protected readonly user = userSIGNAL;  
-    protected readonly userImage = signal<string>('');   
+    protected readonly userImage = userImageSIGNAL;   
     protected readonly _isLoading = isLoadingSIGNAL;    
     protected readonly title = appSettings?.appInfo?.title; 
     protected readonly _isCollapsed = signal<boolean>(true); 
     protected readonly _password = signal<string>(''); 
-    protected readonly _confirm = signal<string>('');  
-    protected readonly _language = signal<any>(null); 
+    protected readonly _confirm = signal<string>(''); 
+    protected readonly _language = signal<{ Id: string; Name: string } | null>(null); 
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
 
     //Inputs
@@ -42,17 +42,30 @@ export class Toolbar implements AfterViewInit {
     public readonly preventLogOutMenu   = input.required<boolean>();
 
     //Output 
-    protected readonly onClickToogle      = output<void>(); 
+    protected readonly onClickToogle = output<void>(); 
     protected readonly onClickToolbarMenu = output<IToolbarMenu>();
-    protected readonly onUpdatePassword   = output<string>();
-    protected readonly onUpdateLanguage   = output<string>(); 
+    protected readonly onUpdatePassword = output<string>();
+    protected readonly onUpdateLanguage = output<{ Id: string; Name: string }>();
+
+
+    //Computed
+    protected _languageList = computed<{ Id: string; Name: string }[]>(() => {  
+        return [
+            { Id: 'en_US', Name: 'English' }, 
+            { Id: 'es_MX', Name: 'Español' }, 
+            { Id: 'ko-KR', Name: '한국어'   }
+        ];
+    });
+
 
     constructor() {
         effect(() => {
             const USER = userSIGNAL(); 
-            this._language.set(USER?.Language); 
+            const Language = this._languageList().find(x => x.Id == USER?.Language) || null;
+            this._language.set(Language); 
         });
     }
+
 
     ngAfterViewInit(): void {
         Tools.Sleep().then(() => {
@@ -63,13 +76,7 @@ export class Toolbar implements AfterViewInit {
     }       
      
     //Computed
-    protected _showButtonSidenav = computed<boolean>(() => navigationSIGNAL().length > 1);
-
-
-    //Computed
-    protected _languageList = computed<any[]>(() => {  
-        return [];
-    });
+    protected _showButtonSidenav = computed<boolean>(() => navigationSIGNAL().length > 1); 
 
     
     //Computed
@@ -110,7 +117,7 @@ export class Toolbar implements AfterViewInit {
     //Computed
     protected _showIdentity = computed(() => {
         return ['sm', 'md', 'lg', 'xl', 'xxl'].includes(screenSizeSIGNAL().breakpoint)
-            && (Tools.IsNotOnlyWhiteSpace(this.user()?.FullName) || Tools.IsNotOnlyWhiteSpace('Other'));
+            && (Tools.IsNotOnlyWhiteSpace(this.user()?.FullName) || Tools.IsNotOnlyWhiteSpace(this.user()?.Department));
     });
 
 
@@ -153,9 +160,9 @@ export class Toolbar implements AfterViewInit {
 
 
     //Function
-    protected _UpdateLanguage(language: string) { 
-        if(Tools.IsNotOnlyWhiteSpace(language) && Tools.IsNotNull(this.user())) { 
-            if(this.user()?.Language != language) this.onUpdateLanguage.emit(language);
+    protected _UpdateLanguage(language: { Id: string; Name: string }) { 
+        if(Tools.IsNotNull(language) && Tools.IsNotNull(this.user())) { 
+            if(this.user()?.Language != language.Id) this.onUpdateLanguage.emit(language);
         }       
     }
 

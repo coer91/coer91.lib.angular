@@ -8,7 +8,7 @@ const appSettings = {
     },
     webAPI: {
         development: {
-            mySystem: 'https://localhost:5001'
+            mySystem: ''
         },
         staging: {
             mySystem: ''
@@ -19,7 +19,7 @@ const appSettings = {
     },
     background: {
         home: 'coer-system-91.png',
-        login: 'clip.mp4'
+        login: ''
     },
     security: {
         useJWT: false

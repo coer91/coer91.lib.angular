@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';   
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router'; 
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';  
 import './extensions/index';  
 
 //Modules    
@@ -41,12 +41,13 @@ import * as tools      from 'coer91.angular/tools';
         components.CoerModal, 
         components.CoerNumberBox, 
         components.CoerPageTitle, 
+        components.CoerRadio,
         components.CoerSecretBox,
         components.CoerSelectBox,
         components.CoerSwitch,
         components.CoerTab,
         components.CoerTextBox,
-        core.Coer91Root,
+        core.coer91Root,
         directives.TemplateRefDirective,  
         pipes.DatePipe,
         pipes.DateTimePipe,
@@ -55,8 +56,8 @@ import * as tools      from 'coer91.angular/tools';
         pipes.IndexCollectionPipe,
         pipes.NoImagePipe,
         pipes.NumericFormatPipe,
-        pipes.TimePipe, 
+        pipes.TimePipe,  
         tools.CoerAlert,
     ]
 })
-export class coer91Module { }   
+export class Coer91Module { }   

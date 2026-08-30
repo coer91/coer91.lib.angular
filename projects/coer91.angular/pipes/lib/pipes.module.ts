@@ -8,7 +8,7 @@ import { HtmlPipe            } from './html.pipe';
 import { IndexCollectionPipe } from './index-collection.pipe';
 import { NoImagePipe         } from './no-image.pipe';
 import { NumericFormatPipe   } from './numeric-format.pipe';
-import { TimePipe            } from './time.pipe';
+import { TimePipe            } from './time.pipe'; 
 
 @NgModule({
     declarations: [
@@ -19,7 +19,7 @@ import { TimePipe            } from './time.pipe';
         IndexCollectionPipe,
         NoImagePipe,
         NumericFormatPipe,
-        TimePipe
+        TimePipe, 
     ],
     exports: [
         CurrencyPipe,
@@ -29,7 +29,7 @@ import { TimePipe            } from './time.pipe';
         IndexCollectionPipe,
         NoImagePipe,
         NumericFormatPipe,
-        TimePipe
+        TimePipe, 
     ]
 })
 export class PipesModule { }

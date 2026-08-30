@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router"; 
-import { ROUTER_PAGE } from "coer91.angular/tools";
-import { SharedModule } from "../../../shared/shared.module";
+import { RouterModule, Routes } from "@angular/router";  
+import { SharedModule } from "@appShared";
+import { ROUTER_PAGE } from "coer91.angular/core";
 
 //Pages 
 import { CoerButtonPage    } from "./coer-button/coer-button.page";  

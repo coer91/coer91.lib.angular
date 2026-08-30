@@ -9,6 +9,7 @@ export * from './lib/coer-loading/coer-loading.component';
 export * from './lib/coer-modal/coer-modal.component'; 
 export * from './lib/coer-numberbox/coer-numberbox.component'; 
 export * from './lib/coer-page-title/coer-page-title.component'; 
+export * from './lib/coer-radio/coer-radio.component'; 
 export * from './lib/coer-secretbox/coer-secretbox.component';  
 export * from './lib/coer-selectbox/coer-selectbox.component';  
 export * from './lib/coer-switch/coer-switch.component';  

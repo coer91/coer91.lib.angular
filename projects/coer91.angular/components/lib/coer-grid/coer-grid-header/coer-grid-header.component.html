@@ -29,6 +29,7 @@
 
             @for(button of _buttons(); track button.icon) {
                 <coer-button
+                    [label]="button.label"
                     [type]="headerSettings().buttonType || 'icon-filled-rounded'" 
                     [icon]="button.icon"
                     [color]="button.color"
@@ -69,6 +70,12 @@
                     value: ($event || '')
                 })"
             ></coer-textbox> 
+        </div>
+    }
+
+    @if(_showHeaderBelow()) { 
+        <div #HeaderBelowRef class="flex-wrap-middle-right width-100 gap-10px">
+            <ng-container [ngTemplateOutlet]="_gridHeaderBelow().template"></ng-container>
         </div>
     }
 </header>

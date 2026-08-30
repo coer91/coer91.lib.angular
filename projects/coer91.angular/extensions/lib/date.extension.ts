@@ -1,4 +1,4 @@
-import { Dates } from "coer91.angular/tools";
+import { Dates } from 'coer91.angular/tools';
  
 declare global {
     interface Date { 

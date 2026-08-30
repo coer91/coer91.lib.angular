@@ -5,5 +5,5 @@
     "types": []
   },
   "include": ["./projects/documentation/src/**/*.ts"],
-  "exclude": ["./projects/documentation/src/**/*.spec.ts"]
+  "exclude": []
 }

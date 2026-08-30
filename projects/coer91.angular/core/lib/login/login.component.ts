@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, computed, inject, output, signal, viewChild } from '@angular/core';   
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
-import { CoerButton, CoerForm, CoerSecretBox, CoerTextBox } from 'coer91.angular/components';
-import { ILogin } from 'coer91.angular/interfaces';
+import { AfterViewInit, Component, computed, inject, output, signal, viewChild } from '@angular/core';  
 import { environmentSIGNAL, isLoadingSIGNAL } from 'coer91.angular/signals';
-import { Tools } from 'coer91.angular/tools';
+import { Dates, Tools } from 'coer91.angular/tools';
+import { ILogin } from 'coer91.angular/interfaces'; 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CoerButton, CoerForm, CoerSecretBox, CoerTextBox } from 'coer91.angular/components';
 declare const appSettings: any;
 
 @Component({
@@ -24,6 +24,7 @@ export class LoginPage implements AfterViewInit {
     protected readonly _loginButton   = viewChild.required<CoerButton>('loginRef');
 
     //Variables
+    protected readonly version    = '0.0.0'; 
     protected readonly title      = appSettings?.appInfo?.title || '';
     protected readonly isLoading  = isLoadingSIGNAL; 
     protected readonly background = ''; 
@@ -41,6 +42,7 @@ export class LoginPage implements AfterViewInit {
 
 
     constructor() {
+        if(Tools.IsNotOnlyWhiteSpace(appSettings?.appInfo?.version)) this.version = appSettings?.appInfo?.version; 
         if(Tools.IsNotOnlyWhiteSpace(appSettings?.background?.login)) this.background = appSettings?.background?.login; 
     }
 
@@ -61,6 +63,14 @@ export class LoginPage implements AfterViewInit {
 
         return '';
     });
+
+
+    //Computed
+        protected _version = computed(() => environmentSIGNAL().info === 'PRODUCTION' ? this.version : environmentSIGNAL().info);
+    
+    
+        //Computed
+        protected _copy = computed(() => `${appSettings?.appInfo?.company} © ${Dates.GetCurrentDate().getFullYear()}`);
 
 
     //Function

@@ -1,4 +1,4 @@
-import { Strings, Tools } from "coer91.angular/tools";
+import { Strings, Tools } from 'coer91.angular/tools';
 
 
 declare global {

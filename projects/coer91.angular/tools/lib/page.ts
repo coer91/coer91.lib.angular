@@ -1,13 +1,16 @@
-import { AfterViewInit, Component, Inject, inject, OnDestroy, signal } from "@angular/core"; 
+import { IAppSource, ICallbackItem, ICellSwitch, ICellTextBox, ITitleBreadcrumb, ITitleGoBack } from 'coer91.angular/interfaces';
+import { AfterViewInit, Component, computed, Inject, inject, OnDestroy, signal } from "@angular/core"; 
 import { CoerAlert } from "./coer-alert/coer-alert.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IAppSource, ICallbackItem, ITitleBreadcrumb, ITitleGoBack } from "coer91.angular/interfaces";
 import { BreadcrumbsPage } from "./page-breadcrumbs";
 import { ResponsePage } from "./page-response"; 
 import { FiltersPage } from "./page-filters"; 
+import { Translatory } from "./translatory";
+import { Collections } from "./collections";
 import { SourcePage } from "./page-source";
-import { Tools } from "./generic"; 
 import { Strings } from "./strings";
+import { Tools } from "./generic";
+import { Access } from "./access";
 
 @Component({ template: '' })
 export abstract class Page implements AfterViewInit, OnDestroy {
@@ -15,7 +18,8 @@ export abstract class Page implements AfterViewInit, OnDestroy {
     //Injection
     protected readonly router = inject(Router);
     protected readonly alert = new CoerAlert();
-    private readonly _activatedRoute = inject(ActivatedRoute); 
+    protected translatory: Translatory = new Translatory();
+    private readonly _activatedRoute = inject(ActivatedRoute);  
 
     /** */
     protected readonly isUpdating = signal<boolean>(false);
@@ -42,21 +46,32 @@ export abstract class Page implements AfterViewInit, OnDestroy {
     protected readonly filters = signal<any>({});
 
     /** */
+    protected readonly language = signal<'en_US' | 'es_MX' | 'ko-KR'>('en_US');
+
+    /** */
     protected goBack: ITitleGoBack = { show: false }; 
+
+    /** */
+    protected isReadonly = computed(() => {
+        return (this.isUpdating()  && !this.canUpdate()) 
+            || (!this.isUpdating() && !this.canCreate())
+    });
     
     //Helper tools
-    protected readonly IsNull              = Tools.IsNull;
-    protected readonly IsNotNull           = Tools.IsNotNull;
-    protected readonly IsOnlyWhiteSpace    = Tools.IsOnlyWhiteSpace;
+    protected readonly IsNull = Tools.IsNull;
+    protected readonly IsNotNull = Tools.IsNotNull;
+    protected readonly IsOnlyWhiteSpace = Tools.IsOnlyWhiteSpace;
     protected readonly IsNotOnlyWhiteSpace = Tools.IsNotOnlyWhiteSpace;
-    protected readonly IsBooleanTrue       = Tools.IsBooleanTrue;
-    protected readonly IsBooleanFalse      = Tools.IsBooleanFalse;
-    protected readonly Equals              = Strings.Equals;
+    protected readonly IsBooleanTrue  = Tools.IsBooleanTrue;
+    protected readonly IsBooleanFalse = Tools.IsBooleanFalse;
+    protected readonly SetId = Collections.SetId; 
+    protected readonly SetIndex = Collections.SetIndex;
+    protected readonly Equals = Strings.Equals;
 
     //Private Variables
-    private _path:        string = '';
-    private _pageName:    string = '';
-    private _sourcePage:  IAppSource | null = null; 
+    private _path: string = '';
+    private _pageName: string = '';
+    private _sourcePage: IAppSource | null = null; 
     private _routeParams: any;
     private _queryParams: any;
 
@@ -69,24 +84,26 @@ export abstract class Page implements AfterViewInit, OnDestroy {
         this._SetBreadcrumbs();
         this._SetGoBack();
         this.filters.set(FiltersPage.Get(this._path));
-        this._GetResponsePage();  
-    } 
+        this._GetResponsePage();   
+    }  
 
 
     ngAfterViewInit(): void {  
         Tools.Sleep().then(() => this.StartPage());
     } 
 
+
     ngOnDestroy(): void {
         this.Destroy();
     }
+
 
     /** Main method */
     protected StartPage(): void {}; 
 
 
     /** Main method */
-    protected Destroy(): void {}; 
+    protected Destroy(): void {};  
 
 
     //Function
@@ -100,20 +117,28 @@ export abstract class Page implements AfterViewInit, OnDestroy {
             this._path = this._path.split('?')[0];
         }
 
-        await Tools.Sleep();
-        const activeKey = this._activatedRoute.snapshot.data['activeKey'] as string;
-        const GetNavigationKeys = this._activatedRoute.snapshot.data['GetNavigationKeys'];
+        await Tools.Sleep(0);
+        const activeKey = this._activatedRoute.snapshot.data['activeKey'] as string;        
+        
+        if(Tools.IsNotOnlyWhiteSpace(activeKey)) {
+            const GetNavigationKeys = this._activatedRoute.snapshot.data['GetNavigationKeys'];               
 
-        if(Tools.IsNotOnlyWhiteSpace(activeKey) && Tools.IsFunction(GetNavigationKeys)) {
-            const NAVIGATION_KEYS: any[] = Array.from(GetNavigationKeys().values());
-            const ACTIVE_KEY = NAVIGATION_KEYS.find(x => x.activeKey === activeKey.toUpperCase());
-
-            if(ACTIVE_KEY) {
-                this.canCreate.set(ACTIVE_KEY.CanCreate);
-                this.canUpdate.set(ACTIVE_KEY.CanUpdate);
-                this.canDelete.set(ACTIVE_KEY.CanDelete);
+            if(Tools.IsFunction(GetNavigationKeys)) {  
+                const NAVIGATION_KEYS: any[] = Array.from(GetNavigationKeys().values()).filter((x: any) => Tools.IsNotOnlyWhiteSpace(x.activeKey));
+                
+                const ACTIVE_KEY = NAVIGATION_KEYS.find(x => x.activeKey === activeKey.toUpperCase());
+                                 
+                if(ACTIVE_KEY) {
+                    this.canCreate.set(ACTIVE_KEY.canCreate);
+                    this.canUpdate.set(ACTIVE_KEY.canUpdate);
+                    this.canDelete.set(ACTIVE_KEY.canDelete);    
+                }  
             } 
         } 
+
+        const Language: any = Access.GetUser()?.Language;
+        this.language.set(Tools.IsNotOnlyWhiteSpace(Language) ? Language : null);
+        this.translatory = new Translatory(Language); 
     }
 
 
@@ -137,7 +162,7 @@ export abstract class Page implements AfterViewInit, OnDestroy {
 
 
     //Function
-    private _SetBreadcrumbs(): void {    
+    private _SetBreadcrumbs(): void {  
         const breadcrumbs = BreadcrumbsPage.Get();
             
         if(breadcrumbs.length > 1) {
@@ -253,14 +278,23 @@ export abstract class Page implements AfterViewInit, OnDestroy {
 
     /** */
     protected iconTemplate = (data: ICallbackItem<any>): string => {
-        return `<i class='${data.row.Icon}'></i>`;
+        return `<i class='${data.value}'></i>`;
     } 
 
 
     /** */
     protected isActiveTemplate = (data: ICallbackItem<any>): string => {
-        return Tools.IsBooleanTrue(data.row?.IsActive) 
+        return data.value 
             ? `<span class='color-green font-weight-bold'>ACTIVE</span>` 
             : `<span class='color-gray font-weight-bold'>DISABLED</span>`;
     } 
+
+
+    /** */
+    protected switchTemplate = (_: ICallbackItem<any>): ICellSwitch => {
+        return {
+            showInput: true,
+            isReadonly: this.isLoading() || this.isReadonly()
+        }
+    }  
 }
