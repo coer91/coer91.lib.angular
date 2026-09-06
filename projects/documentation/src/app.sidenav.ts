@@ -8,7 +8,8 @@ export const NAVIGATION: IMenu[] = [
     { Label: 'Front End', Icon: 'i91-logo-angular-fill', MenuType: 'LIST', Items: [   
          
         { Label: 'Components', Icon: '', MenuType: 'GRID', Items: [ 
-            { Label: 'coer-button'    , Icon: 'i91-hand-pointer-fill',   Path: '/front-end/components/coer-button'     },  
+            { Label: 'coer-accordion' , Icon: '',                        Path: '/front-end/components/coer-accordion'  },  
+            { Label: 'coer-button'    , Icon: 'i91-hand-pointer-fill',   Path: '/front-end/components/coer-button'     }, 
             //{ Label: 'coer-datebox'   , Icon: 'i91-calendar-days',       Path: '/front-end/components/coer-datebox'    },  
             //{ Label: 'coer-form'      , Icon: 'i91-form',                Path: '/front-end/components/coer-form'       },  
             //{ Label: 'coer-grid'      , Icon: 'i91-table-list',          Path: '/front-end/components/coer-grid'       },  

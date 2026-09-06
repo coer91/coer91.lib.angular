@@ -1,1 +1,1 @@
-export * from './installation-step';
+export * from './doc-input';

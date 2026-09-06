@@ -1,0 +1,20 @@
+<coer-page-title
+    title="Accordion"
+    [breadcrumbs]="breadcrumbs()"
+    [goBack]="goBack"
+></coer-page-title> 
+
+
+<coer-accordion label="Inputs"> 
+    <coer-grid
+        [(ngModel)]="inputs"
+        [columns]="[
+            { property: 'Name', width: '150px' },
+            { property: 'Description' }
+        ]"
+        [footerSettings]="{ show: false }"
+        marginLeft="0px"
+        marginTop="0px"
+        marginRight="0px"
+    ></coer-grid>
+</coer-accordion>

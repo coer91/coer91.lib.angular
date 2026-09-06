@@ -6,6 +6,7 @@ import { DirectivesModule } from 'coer91.angular/directives';
 import { PipesModule } from 'coer91.angular/pipes';
 
 //Components  
+import { CoerAccordion  } from './coer-accordion/coer-accordion.component';
 import { CoerButton     } from './coer-button/coer-button.component'; 
 import { CoerDateBox    } from './coer-datebox/coer-datebox.component';
 import { CoerForm       } from './coer-form/coer-form.component';
@@ -35,6 +36,7 @@ import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
         PipesModule
     ],
     declarations: [  
+        CoerAccordion,
         CoerButton,
         CoerDateBox,
         CoerForm,
@@ -55,6 +57,7 @@ import { CoerTextBox    } from './coer-textbox/coer-textbox.component';
         CoerTextBox,
     ],
     exports: [   
+        CoerAccordion,
         CoerButton,
         CoerDateBox,
         CoerForm,

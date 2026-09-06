@@ -33,6 +33,7 @@ import * as tools      from 'coer91.angular/tools';
         RouterOutlet,
         FormsModule,
         ReactiveFormsModule,  
+        components.CoerAccordion,
         components.CoerButton,
         components.CoerDateBox,
         components.CoerForm, 

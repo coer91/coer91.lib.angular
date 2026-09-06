@@ -4,6 +4,7 @@ import { SharedModule } from "@appShared";
 import { ROUTER_PAGE } from "coer91.angular/core";
 
 //Pages 
+import { CoerAccordionPage } from "./coer-accordion/coer-accordion.page";
 import { CoerButtonPage    } from "./coer-button/coer-button.page";  
 import { CoerDateBoxPage   } from "./coer-datebox/coer-datebox.page";
 import { CoerFormPage      } from "./coer-form/coer-form.page";
@@ -19,6 +20,7 @@ import { CoerTextBoxPage   } from "./coer-textbox/coer-textbox.page";
 export const routes: Routes = [{
     path: '',
     children: [  
+        ROUTER_PAGE('coer-accordion', CoerAccordionPage),
         ROUTER_PAGE('coer-button'   , CoerButtonPage),  
         ROUTER_PAGE('coer-datebox'  , CoerDateBoxPage),  
         ROUTER_PAGE('coer-form'     , CoerFormPage),  
@@ -35,6 +37,7 @@ export const routes: Routes = [{
 
 @NgModule({
     declarations: [ 
+        CoerAccordionPage,
         CoerButtonPage, 
         CoerDateBoxPage,
         CoerFormPage,

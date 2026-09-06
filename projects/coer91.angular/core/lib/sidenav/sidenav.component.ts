@@ -46,7 +46,7 @@ export class Sidenav {
         effect(() => {  
             const NAVIGATION = this.navigation();
 
-            if(Tools.IsNotNull(NAVIGATION)) {
+            if(Tools.IsNotNull(NAVIGATION) && NAVIGATION.length > 0) {
                 const showHome = !Tools.IsBooleanFalse(appSettings?.navigation?.showHome);
                 const NAVIGATION_HOME: IMenu[] = showHome 
                     ? [{ Id: 1, Label: 'Home', Icon: 'i91-home-door-fill', Path: '/home' }] : [];  
@@ -400,49 +400,42 @@ export class Sidenav {
     protected _NavigateTo(option: IMenuSelected, navigate: boolean): void {  
         const OPTION = { ...option }; 
          
-        if(['NONE', 'GRID'].includes(OPTION.action)) {                           
-            Tools.Sleep(0, 'update-menu-selected').then(() => {    
-                
-                //Testing
-                //navigate = (`${this._router.url}` == `${OPTION?.menu?.Path}`) ? navigate : true; 
-                //console.log(OPTION)
-                
-                if(OPTION.action === 'GRID') {
-                    if(!([...OPTION.tree].pop()?.id === 'GRID')) {
-                        OPTION.tree.push({ id: 'GRID', label: 'Menu', icon: 'i91-menu-grid' });
-                    }
-                     
-                    if(navigate) this._router.navigateByUrl('/menu'); 
+        if(['NONE', 'GRID'].includes(OPTION.action)) {                   
+            if(OPTION.action === 'GRID') {
+                if(!([...OPTION.tree].pop()?.id === 'GRID')) {
+                    OPTION.tree.push({ id: 'GRID', label: 'Menu', icon: 'i91-menu-grid' });
                 }
+                 
+                if(navigate) this._router.navigateByUrl('/menu'); 
+            }
 
-                else {
-                   if(navigate) this._router.navigateByUrl(String(OPTION?.menu?.Path)); 
-                } 
+            else {
+               if(navigate) this._router.navigateByUrl(String(OPTION?.menu?.Path)); 
+            } 
 
-                if(['mv', 'xs', 'sm', 'md'].includes(screenSizeSIGNAL().breakpoint)) {
-                    this.Close();
+            if(['mv', 'xs', 'sm', 'md'].includes(screenSizeSIGNAL().breakpoint)) {
+                this.Close();
+            }
+        
+            OPTION.menu.Items = [];
+            Navigation.SetSelectedMenu(OPTION);   
+            selectedMenuSIGNAL.set(OPTION); 
+              
+            HTMLElements.ScrollToElement(OPTION.tree[0].id, 'start');
+            document.querySelectorAll<HTMLElement>('.selected').forEach(item => item.classList.remove('selected'));
+            OPTION.tree.forEach(({ id }) => HTMLElements.AddClass(`#${id}`, 'selected')); 
+                            
+            //Close Menus
+            for(const accordion of this._menuList() || []) {                
+                if(Strings.Equals(OPTION.level, 'LV1')) { 
+                    if(!accordion.isCollapsed()) accordion.Close();
                 }
-            
-                OPTION.menu.Items = [];
-                Navigation.SetSelectedMenu(OPTION);   
-                selectedMenuSIGNAL.set(OPTION); 
-                  
-                HTMLElements.ScrollToElement(OPTION.tree[0].id, 'start');
-                document.querySelectorAll<HTMLElement>('.selected').forEach(item => item.classList.remove('selected'));
-                OPTION.tree.forEach(({ id }) => HTMLElements.AddClass(`#${id}`, 'selected')); 
-                                
-                //Close Menus
-                for(const accordion of this._menuList() || []) {                
-                    if(Strings.Equals(OPTION.level, 'LV1')) { 
-                        if(!accordion.isCollapsed()) accordion.Close();
-                    }
     
-                    else if(Strings.Equals(OPTION.level, 'LV2')) {
-                        if(Strings.Equals(OPTION.tree[0].id, accordion.id())) continue;
-                        else accordion.Close();
-                    }
-                }  
-            });
+                else if(Strings.Equals(OPTION.level, 'LV2')) {
+                    if(Strings.Equals(OPTION.tree[0].id, accordion.id())) continue;
+                    else accordion.Close();
+                }
+            }  
         }  
 
         else {    
