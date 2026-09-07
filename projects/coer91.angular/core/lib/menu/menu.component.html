@@ -6,7 +6,7 @@
 
 <nav>
     @for(item of _pages(); let index = $index; track item.Id) {           
-        <a [routerLink]="_getPath(item)" class="animation-fadeIn">
+        <a [routerLink]="_getPath(item)" (click)="_SetSelectedMenu(item)" class="animation-fadeIn">
             @if(item?.ShowIndex) {
                 <span class="index">{{ index + 1 }}</span>
             }

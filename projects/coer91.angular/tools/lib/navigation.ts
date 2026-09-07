@@ -34,4 +34,34 @@ export class Navigation {
 
         return null;
     }
+
+
+    /** */
+    public static SetPagetitle(spageTitle: string): void { 
+        let storage = sessionStorage.getItem(this.storage) as any;
+       
+        if (storage) storage = JSON.parse(storage);
+        
+        storage = Object.assign({}, storage, { 
+            navigation: { ...storage?.navigation, spageTitle } 
+        });
+        
+        sessionStorage.setItem(this.storage, JSON.stringify(storage));
+    }
+
+
+    /** */
+    public static GetPageTitle(): string {
+        let storage = sessionStorage.getItem(this.storage) as any;
+		
+        if (storage) {
+            storage = JSON.parse(storage);
+
+            if (storage.hasOwnProperty('navigation') && storage.navigation.hasOwnProperty('spageTitle')) {
+                return storage?.navigation?.spageTitle || '';
+            }
+        }
+
+        return '';
+    }
 }

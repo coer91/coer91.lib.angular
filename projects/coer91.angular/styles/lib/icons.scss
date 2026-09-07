@@ -31,6 +31,7 @@
 }  
  
 @each $icon in (    
+    '123',
     'angle', 
     'arrow-circle',
     'arrow-from-bracket',
@@ -63,6 +64,7 @@
     'diagram-project',
     'door-closed-fill',
     'door-open-fill',
+    'ellipsis',
     'exclamation-circle-fill',
     'exclamation-circle',
     'exclamation-diamond-fill',
@@ -84,6 +86,7 @@
     'file-arrow-up',
     'file-csv-fill',
     'file-csv',
+    'file-edit-fill',
     'file-fill',
     'file-xls-fill',
     'file-xls',
@@ -125,13 +128,24 @@
     'plus',
     'quality-fill',
     'quality',
+    'radio-button',
     'reply',
     'search',
+    'shapes',
+    'signpost-double-fill',
+    'signpost-double',
+    'signpost-fill',
+    'signpost',
     'sort-asc-arrow-down',
-    'sort-desc-arrow-down', 
+    'sort-desc-arrow-down',
+    'square-half',
+    'switch-off', 
+    'switch-on', 
+    'table-list',
+    'textarea',
     'trash-can',
+    'user-fill',
     'user',
-    'user-fill'
 ) {
     .i91-#{$icon} { 
         @include Icon();

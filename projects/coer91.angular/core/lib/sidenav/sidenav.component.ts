@@ -46,7 +46,7 @@ export class Sidenav {
         effect(() => {  
             const NAVIGATION = this.navigation();
 
-            if(Tools.IsNotNull(NAVIGATION) && NAVIGATION.length > 0) {
+            if(Tools.IsNotNull(NAVIGATION)) {
                 const showHome = !Tools.IsBooleanFalse(appSettings?.navigation?.showHome);
                 const NAVIGATION_HOME: IMenu[] = showHome 
                     ? [{ Id: 1, Label: 'Home', Icon: 'i91-home-door-fill', Path: '/home' }] : [];  
@@ -57,7 +57,9 @@ export class Sidenav {
                     .concat(NAVIGATION)
                 );   
                 
-                Tools.Sleep().then(() => this._SetSelectedMenu());
+                if(NAVIGATION.length > 0) {
+                    Tools.Sleep().then(() => this._SetSelectedMenu());
+                } 
             }
         });
 
@@ -87,13 +89,7 @@ export class Sidenav {
         return this.show() 
             ? 'width-sidenav' 
             : (['xl', 'xxl'].includes(screenSizeSIGNAL().breakpoint) ? 'width-40px cursor-pointer' : 'width-0px');
-    });
-
-
-    //Computed
-    protected _SetId = (level: IMenu[]): any[] => {
-        return [...level].map((item, index) => ({ ...item, id: (index + 1) }));
-    }
+    }); 
 
 
     //Function
@@ -102,8 +98,7 @@ export class Sidenav {
         const NAVIGATION = this._navigation(); 
         
         if(NAVIGATION.length > 0) {               
-
-            const PATH = Tools.IsNotOnlyWhiteSpace(path) ? path : (appSettings?.navigation?.redirectTo || 'home');
+            const PATH = Tools.IsNotOnlyWhiteSpace(path) ? path : (appSettings?.navigation?.redirectTo || '/home');
             const SELECTED_MENU = Navigation.GetSelectedMenu() || this._GetSelectedMenuByPath(PATH);   
              
             if(SELECTED_MENU) { 
@@ -418,7 +413,8 @@ export class Sidenav {
             }
         
             OPTION.menu.Items = [];
-            Navigation.SetSelectedMenu(OPTION);   
+            Navigation.SetSelectedMenu(OPTION); 
+            Navigation.SetPagetitle(OPTION.menu.Label);  
             selectedMenuSIGNAL.set(OPTION); 
               
             HTMLElements.ScrollToElement(OPTION.tree[0].id, 'start');
@@ -438,9 +434,7 @@ export class Sidenav {
             }  
         }  
 
-        else {    
-            this._CloseMenus(OPTION);
-        }    
+        else this._CloseMenus(OPTION);
     } 
 
 

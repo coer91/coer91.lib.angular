@@ -4,10 +4,10 @@ import { Numbers } from "./numbers";
 
 export class Translatory {
 
-    private _language: 'en_US' | 'es_MX' | 'ko-KR' = 'en_US';
+    private _language: 'en' | 'es' | 'fr' | 'ko' | 'zh';
     private _alert = new CoerAlert();
 
-    constructor(language: 'en_US' | 'es_MX' | 'ko-KR' = 'en_US') {
+    constructor(language: 'en' | 'es' | 'fr' | 'ko' | 'zh' = 'en') {
         this._language = language;
     }
 
@@ -16,288 +16,288 @@ export class Translatory {
     public label = {
         Project: () => {
             switch(this._language) {
-                case 'es_MX': return 'Proyecto';
-                case 'ko-KR': return '프로젝트'; 
+                case 'es': return 'Proyecto';
+                case 'ko': return '프로젝트'; 
                 default:      return 'Project';
             } 
         },
 
         Module: () => {
             switch(this._language) {
-                case 'es_MX': return 'Módulo';
-                case 'ko-KR': return '기준 치수'; 
+                case 'es': return 'Módulo';
+                case 'ko': return '기준 치수'; 
                 default:      return 'Module';
             } 
         },
 
         Submodule: () => {
             switch(this._language) {
-                case 'es_MX': return 'Submódulo';
-                case 'ko-KR': return '서브모듈'; 
+                case 'es': return 'Submódulo';
+                case 'ko': return '서브모듈'; 
                 default:      return 'Submodule';
             } 
         },
 
         Page: () => {
             switch(this._language) {
-                case 'es_MX': return 'Página';
-                case 'ko-KR': return '페이지'; 
+                case 'es': return 'Página';
+                case 'ko': return '페이지'; 
                 default:      return 'Page';
             } 
         },
 
         User: () => {
             switch(this._language) {
-                case 'es_MX': return 'Usuario';
-                case 'ko-KR': return '사용자'; 
+                case 'es': return 'Usuario';
+                case 'ko': return '사용자'; 
                 default:      return 'User';
             } 
         },
 
         Role: () => {
             switch(this._language) {
-                case 'es_MX': return 'Rol';
-                case 'ko-KR': return '역할'; 
+                case 'es': return 'Rol';
+                case 'ko': return '역할'; 
                 default:      return 'Role';
             } 
         },
 
         Active: () => {
             switch(this._language) {
-                case 'es_MX': return 'Activo';
-                case 'ko-KR': return '활동적인'; 
+                case 'es': return 'Activo';
+                case 'ko': return '활동적인'; 
                 default:      return 'Active';
             } 
         },
 
         Disabled: () => {
             switch(this._language) {
-                case 'es_MX': return 'Deshabilitado';
-                case 'ko-KR': return '비활성화됨'; 
+                case 'es': return 'Deshabilitado';
+                case 'ko': return '비활성화됨'; 
                 default:      return 'Disabled';
             } 
         },
 
         CaseLabel: () => {
             switch(this._language) {
-                case 'es_MX': return 'Etiqueta de Caja';
-                case 'ko-KR': return '케이스 라벨'; 
+                case 'es': return 'Etiqueta de Caja';
+                case 'ko': return '케이스 라벨'; 
                 default:      return 'Case Label';
             } 
         },
 
         Division: () => {
             switch(this._language) {
-                case 'es_MX': return 'División';
-                case 'ko-KR': return '구분'; 
+                case 'es': return 'División';
+                case 'ko': return '구분'; 
                 default:      return 'Division';
             } 
         },
 
         EoNumber: () => {
             switch(this._language) {
-                case 'es_MX': return 'Número EO';
-                case 'ko-KR': return 'EO 번호'; 
+                case 'es': return 'Número EO';
+                case 'ko': return 'EO 번호'; 
                 default:      return 'EO Number';
             } 
         },
 
         HasDefect: () => {
             switch(this._language) {
-                case 'es_MX': return 'Está defectuoso';
-                case 'ko-KR': return '결함이 있습니다'; 
+                case 'es': return 'Está defectuoso';
+                case 'ko': return '결함이 있습니다'; 
                 default:      return 'Has Defect';
             } 
         },
 
         InputDate: () => {
             switch(this._language) {
-                case 'es_MX': return 'Fecha de Entrada';
-                case 'ko-KR': return '입력 날짜'; 
+                case 'es': return 'Fecha de Entrada';
+                case 'ko': return '입력 날짜'; 
                 default:      return 'Input Date';
             } 
         },
 
         IsDeleted: () => {
             switch(this._language) {
-                case 'es_MX': return 'Eliminado';
-                case 'ko-KR': return '삭제됨'; 
+                case 'es': return 'Eliminado';
+                case 'ko': return '삭제됨'; 
                 default:      return 'Deleted';
             } 
         },
 
         Location: () => {
             switch(this._language) {
-                case 'es_MX': return 'Localización';
-                case 'ko-KR': return '위치'; 
+                case 'es': return 'Localización';
+                case 'ko': return '위치'; 
                 default:      return 'Location';
             } 
         },
 
         Lot: () => {
             switch(this._language) {
-                case 'es_MX': return 'Lote';
-                case 'ko-KR': return '일괄'; 
+                case 'es': return 'Lote';
+                case 'ko': return '일괄'; 
                 default:      return 'Lot';
             } 
         },
 
         LotNumber: () => {
             switch(this._language) {
-                case 'es_MX': return 'Número de Lote';
-                case 'ko-KR': return '로트 번호'; 
+                case 'es': return 'Número de Lote';
+                case 'ko': return '로트 번호'; 
                 default:      return 'Lot Number';
             } 
         },
 
         ManualScanner: () => {
             switch(this._language) {
-                case 'es_MX': return 'Scanner Manual';
-                case 'ko-KR': return '수동 스캐너'; 
+                case 'es': return 'Scanner Manual';
+                case 'ko': return '수동 스캐너'; 
                 default:      return 'Manual Scanner';
             } 
         },
 
         Material: () => {
             switch(this._language) {
-                case 'es_MX': return 'Material';
-                case 'ko-KR': return '재료';   
+                case 'es': return 'Material';
+                case 'ko': return '재료';   
                 default:      return 'Material';
             } 
         },
 
         Product: () => {
             switch(this._language) {
-                case 'es_MX': return 'Producto';
-                case 'ko-KR': return '제품';    
+                case 'es': return 'Producto';
+                case 'ko': return '제품';    
                 default:      return 'Product';
             } 
         },
 
         PartNumber: () => {
             switch(this._language) {
-                case 'es_MX': return 'Número de Parte';
-                case 'ko-KR': return '부품 번호'; 
+                case 'es': return 'Número de Parte';
+                case 'ko': return '부품 번호'; 
                 default:      return 'Part Number';
             } 
         },
 
         Printer: () => {
             switch(this._language) {
-                case 'es_MX': return 'Impresora';
-                case 'ko-KR': return '프린터'; 
+                case 'es': return 'Impresora';
+                case 'ko': return '프린터'; 
                 default:      return 'Printer';
             } 
         },
 
         ProductionDate: () => {
             switch(this._language) {
-                case 'es_MX': return 'Fecha Producción';
-                case 'ko-KR': return '생산 날짜'; 
+                case 'es': return 'Fecha Producción';
+                case 'ko': return '생산 날짜'; 
                 default:      return 'Production Date';
             } 
         },
 
         Qty: () => {
             switch(this._language) {
-                case 'es_MX': return 'Cant.';
-                case 'ko-KR': return '수량'; 
+                case 'es': return 'Cant.';
+                case 'ko': return '수량'; 
                 default:      return 'Qty';
             } 
         },
 
         Quantity: () => {
             switch(this._language) {
-                case 'es_MX': return 'Cantidad';
-                case 'ko-KR': return '수량'; 
+                case 'es': return 'Cantidad';
+                case 'ko': return '수량'; 
                 default:      return 'Quantity';
             } 
         },
 
         Required: () => {
             switch(this._language) {
-                case 'es_MX': return 'Requerido';
-                case 'ko-KR': return '필수';    
+                case 'es': return 'Requerido';
+                case 'ko': return '필수';    
                 default:      return 'Required';
             } 
         },
 
         Scanner: () => {
             switch(this._language) {
-                case 'es_MX': return 'Scanner';
-                case 'ko-KR': return '스캐너'; 
+                case 'es': return 'Scanner';
+                case 'ko': return '스캐너'; 
                 default:      return 'Scanner';
             } 
         },
 
         Scanned: () => {
             switch(this._language) {
-                case 'es_MX': return 'Escaneado';
-                case 'ko-KR': return '스캔됨';    
+                case 'es': return 'Escaneado';
+                case 'ko': return '스캔됨';    
                 default:      return 'Scanned';
             } 
         },
 
         Storage: () => {
             switch(this._language) {
-                case 'es_MX': return 'Almacén';
-                case 'ko-KR': return '저장소'; 
+                case 'es': return 'Almacén';
+                case 'ko': return '저장소'; 
                 default:      return 'Storage';
             } 
         },
 
         StorageCode: () => {
             switch(this._language) {
-                case 'es_MX': return 'Código de Almacén';
-                case 'ko-KR': return '저장소 코드'; 
+                case 'es': return 'Código de Almacén';
+                case 'ko': return '저장소 코드'; 
                 default:      return 'Storage Code';
             } 
         },
 
         Transaction: () => {
             switch(this._language) {
-                case 'es_MX': return 'Transacción';
-                case 'ko-KR': return '거래'; 
+                case 'es': return 'Transacción';
+                case 'ko': return '거래'; 
                 default:      return 'Transaction';
             } 
         },
 
         Unit: () => {
             switch(this._language) {
-                case 'es_MX': return 'Unidad';
-                case 'ko-KR': return '단위'; 
+                case 'es': return 'Unidad';
+                case 'ko': return '단위'; 
                 default:      return 'Unit';
             } 
         },
 
         Vendor: () => {
             switch(this._language) {
-                case 'es_MX': return 'Vendedor';
-                case 'ko-KR': return '공급업체'; 
+                case 'es': return 'Vendedor';
+                case 'ko': return '공급업체'; 
                 default:      return 'Vendor';
             } 
         },
 
         VendorCode: () => {
             switch(this._language) {
-                case 'es_MX': return 'Código de Vendedor';
-                case 'ko-KR': return '공급업체 코드'; 
+                case 'es': return 'Código de Vendedor';
+                case 'ko': return '공급업체 코드'; 
                 default:      return 'Vendor Code';
             } 
         },
 
         Warehouse: () => {
             switch(this._language) {
-                case 'es_MX': return 'Bodega';
-                case 'ko-KR': return '창고'; 
+                case 'es': return 'Bodega';
+                case 'ko': return '창고'; 
                 default:      return 'Warehouse';
             } 
         },
 
         WarehouseCode: () => {
             switch(this._language) {
-                case 'es_MX': return 'Código de Bodega';
-                case 'ko-KR': return '창고 코드'; 
+                case 'es': return 'Código de Bodega';
+                case 'ko': return '창고 코드'; 
                 default:      return 'Warehouse Code';
             } 
         },
@@ -310,12 +310,12 @@ export class Translatory {
             let message = 'This lot has already been scanned';
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message = 'Este lote ya está escaneado';
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message = '이 로트는 이미 스캔되었습니다';
                     break;
                 }
@@ -328,12 +328,12 @@ export class Translatory {
             let message = 'This lot is not in the order';
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message = 'Este lote no está en la orden';
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message = '이 로트는 주문에 없습니다';
                     break;
                 }
@@ -346,12 +346,12 @@ export class Translatory {
             let message = 'Invalid code';
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message = 'Código inválido';
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message = '잘못된 코드';
                     break;
                 }
@@ -364,12 +364,12 @@ export class Translatory {
             let message = 'No data';
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message = 'No hay datos';
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message = '데이터가 없습니다';
                     break;
                 }
@@ -382,12 +382,12 @@ export class Translatory {
             let message = 'No data for this Case Label';
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message = ' No hay datos para esta etiqueta de caja';
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message = '이 케이스 라벨에 대한 데이터가 없습니다';
                     break;
                 }
@@ -400,12 +400,12 @@ export class Translatory {
             let message = 'This lot has been deleted';
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message = 'Este lote ha sido eliminado';
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message = '이 로트가 삭제되었습니다';
                     break;
                 }
@@ -418,12 +418,12 @@ export class Translatory {
             let message = 'This lot has defects';
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message = 'Este lote tiene defectos';
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message = '이 로트에는 결함이 있습니다';
                     break;
                 }
@@ -444,13 +444,13 @@ export class Translatory {
              
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message1 = 'Confirmar transacción';
                     message2 = 'lote' + (isPlural ? 's' : '');
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message1 = '거래 확인';
                     message2 = '로트' + (isPlural ? '들' : '');
                     break;
@@ -474,13 +474,13 @@ export class Translatory {
              
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message1 = 'Cancelar transacción';
                     message2 = 'lote' + (isPlural ? 's' : '');
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message1 = '거래 취소';
                     message2 = '로트' + (isPlural ? '들' : '');
                     break;
@@ -506,7 +506,7 @@ export class Translatory {
             let message4 = 'Location'
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message1 = 'Confirmar transacción';
                     message2 = 'lote' + (isPlural ? 's' : '');
                     message3 = 'Almacén';
@@ -514,7 +514,7 @@ export class Translatory {
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message1 = '거래 확인';
                     message2 = '로트' + (isPlural ? '들' : '');
                     message3 = '창고';
@@ -543,7 +543,7 @@ export class Translatory {
             let message4 = 'Location'
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message1 = 'Cancelar transacción';
                     message2 = 'lote' + (isPlural ? 's' : '');
                     message3 = 'Almacén';
@@ -551,7 +551,7 @@ export class Translatory {
                     break;
                 }
 
-                case 'ko-KR': {
+                case 'ko': {
                     message1 = '거래 취소';
                     message2 = '로트' + (isPlural ? '들' : '');
                     message3 = '창고';
@@ -574,12 +574,12 @@ export class Translatory {
             let message = `Remove<br>#<b>${lotNumber}</b><br>lot?`;              
             
             switch(this._language) {
-                case 'es_MX': {
+                case 'es': {
                     message = `Remover lote<br>#<b>${lotNumber}</b>?`; 
                     break;
                 }
 
-                case 'ko-KR': { 
+                case 'ko': { 
                     message = `로트<br>#<b>${lotNumber}</b><br>삭제하시겠습니까?`
                     break;
                 }

@@ -1,6 +1,6 @@
 import { Component, computed, effect, signal } from '@angular/core';
 import { navigationSIGNAL, selectedMenuSIGNAL } from 'coer91.angular/signals';
-import { Collections, Page, Strings, Tools } from 'coer91.angular/tools';
+import { Collections, Page, Strings, Tools, Navigation } from 'coer91.angular/tools';
 import { IMenu, IMenuSelected } from 'coer91.angular/interfaces';  
  
 @Component({
@@ -72,5 +72,17 @@ export class MenuPage extends Page {
                 this.GoToSource();
             }
         } 
+    }
+
+
+    //Function
+    protected async _SetSelectedMenu(menu: IMenu): Promise<void> { 
+        if(this._isPage(menu)) { 
+            const selectedMenu = Navigation.GetSelectedMenu();
+
+            if(selectedMenu) {
+                Navigation.SetPagetitle(menu.Label);
+            }
+        }
     }
 }

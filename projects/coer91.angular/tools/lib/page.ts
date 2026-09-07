@@ -8,6 +8,7 @@ import { FiltersPage } from "./page-filters";
 import { Translatory } from "./translatory";
 import { Collections } from "./collections";
 import { SourcePage } from "./page-source";
+import { Navigation } from "./navigation";
 import { Strings } from "./strings";
 import { Tools } from "./generic";
 import { Access } from "./access";
@@ -45,8 +46,12 @@ export abstract class Page implements AfterViewInit, OnDestroy {
     /** */
     protected readonly filters = signal<any>({});
 
+
     /** */
-    protected readonly language = signal<'en_US' | 'es_MX' | 'ko-KR'>('en_US');
+    protected readonly pageTitle = signal<string>('');
+
+    /** */
+    protected readonly language = signal<'en' | 'es' | 'fr' | 'ko' | 'zh'>('en');
 
     /** */
     protected goBack: ITitleGoBack = { show: false }; 
@@ -78,7 +83,8 @@ export abstract class Page implements AfterViewInit, OnDestroy {
     /** */
     constructor(@Inject(String) pageName: string) {
         this._SetPath();
-        SourcePage.Set(pageName, this._path);
+        this._SetLanguage();
+        this.SetSource(pageName);
         this.SetPageName(pageName);
         this._sourcePage = SourcePage.Get();
         this._SetBreadcrumbs();
@@ -107,7 +113,7 @@ export abstract class Page implements AfterViewInit, OnDestroy {
 
 
     //Function
-    private async _SetPath() {
+    private _SetPath() {
         this._routeParams = this._activatedRoute.snapshot.params;
         this._queryParams = this._activatedRoute.snapshot.queryParams; 
        
@@ -115,8 +121,12 @@ export abstract class Page implements AfterViewInit, OnDestroy {
 
         if (this._path.includes('?')) {
             this._path = this._path.split('?')[0];
-        }
+        }  
+    }
 
+
+    //Function
+    private async _SetLanguage(): Promise<void> {
         await Tools.Sleep(0);
         const activeKey = this._activatedRoute.snapshot.data['activeKey'] as string;        
         
@@ -138,8 +148,15 @@ export abstract class Page implements AfterViewInit, OnDestroy {
 
         const Language: any = Access.GetUser()?.Language;
         this.language.set(Tools.IsNotOnlyWhiteSpace(Language) ? Language : null);
-        this.translatory = new Translatory(Language); 
-    }
+        this.translatory = new Translatory(this.language());
+    } 
+
+
+    /** */
+    protected SetSource(pageName: string): void {
+        SourcePage.Set(pageName, this._path);
+        this.pageTitle.set(Navigation.GetPageTitle());
+    }   
 
 
     /** */
