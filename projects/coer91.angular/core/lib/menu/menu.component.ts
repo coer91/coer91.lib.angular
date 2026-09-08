@@ -20,7 +20,7 @@ export class MenuPage extends Page {
 
         effect(() => {  
             this._GetNavigation(selectedMenuSIGNAL())
-        }); 
+        });    
     }  
 
 

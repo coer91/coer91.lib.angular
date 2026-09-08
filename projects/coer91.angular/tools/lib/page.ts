@@ -81,16 +81,19 @@ export abstract class Page implements AfterViewInit, OnDestroy {
     private _queryParams: any;
 
     /** */
-    constructor(@Inject(String) pageName: string) {
+    constructor(@Inject(String) pageName: string) {         
         this._SetPath();
-        this._SetLanguage();
-        this.SetSource(pageName);
-        this.SetPageName(pageName);
-        this._sourcePage = SourcePage.Get();
-        this._SetBreadcrumbs();
-        this._SetGoBack();
-        this.filters.set(FiltersPage.Get(this._path));
-        this._GetResponsePage();   
+        
+        if(Tools.IsOnlyWhiteSpace(this.GetParam('__menuId__'))) {
+            this._SetLanguage();
+            this.SetSource(pageName);
+            this.SetPageName(pageName);
+            this._sourcePage = SourcePage.Get();
+            this._SetBreadcrumbs();
+            this._SetGoBack();
+            this.filters.set(FiltersPage.Get(this._path));
+            this._GetResponsePage(); 
+        }
     }  
 
 
@@ -109,7 +112,7 @@ export abstract class Page implements AfterViewInit, OnDestroy {
 
 
     /** Main method */
-    protected Destroy(): void {};  
+    protected Destroy(): void {};   
 
 
     //Function
@@ -153,7 +156,7 @@ export abstract class Page implements AfterViewInit, OnDestroy {
 
 
     /** */
-    protected SetSource(pageName: string): void {
+    protected SetSource(pageName: string): void {         
         SourcePage.Set(pageName, this._path);
         this.pageTitle.set(Navigation.GetPageTitle());
     }   
@@ -201,7 +204,7 @@ export abstract class Page implements AfterViewInit, OnDestroy {
             BREADCRUMBS.push({ page: this._pageName, path: this._path });
         }
 
-        this.breadcrumbs.set(BREADCRUMBS);
+        this.breadcrumbs.set([...BREADCRUMBS]); 
     }
 
 

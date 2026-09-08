@@ -379,7 +379,7 @@ export class Sidenav {
         this._ResetStorage();
 
         this._NavigateTo({
-            id: lv1Id,
+            id: lv2Id,
             menu: { ...lv2 }, 
             level: 'LV2',
             action: 'GRID',
@@ -400,8 +400,11 @@ export class Sidenav {
                 if(!([...OPTION.tree].pop()?.id === 'GRID')) {
                     OPTION.tree.push({ id: 'GRID', label: 'Menu', icon: 'i91-menu-grid' });
                 }
-                 
-                if(navigate) this._router.navigateByUrl('/menu'); 
+                   
+                if(navigate) {
+                    this._router.navigateByUrl(`/menu/${option.id}`); 
+                    Tools.Sleep().then(() => this._router.navigateByUrl(`/menu`)); 
+                }
             }
 
             else {

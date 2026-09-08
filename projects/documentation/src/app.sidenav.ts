@@ -6,7 +6,8 @@ export const NAVIGATION: IMenu[] = [
     //]},
 
     { Label: 'Front End', Icon: 'i91-logo-angular-fill', MenuType: 'LIST', Items: [   
-         
+        { Label: 'Install', Icon: 'i91-logo-coer91', Path: '/front-end/install' },  
+
         { Label: 'Components', Icon: '', MenuType: 'GRID', Items: [ 
             { Label: 'Accordion'   , Icon: 'i91-square-half i91-90deg', Path: '/front-end/components/coer-accordion'  },  
             { Label: 'Button'      , Icon: 'i91-hand-pointer-fill'    , Path: '/front-end/components/coer-button'     }, 
@@ -24,6 +25,14 @@ export const NAVIGATION: IMenu[] = [
             { Label: 'Tab Panel'   , Icon: 'i91-ellipsis'             , Path: '/front-end/components/coer-tab'        },
             { Label: 'Text Area'   , Icon: 'i91-textarea'             , Path: '/front-end/components/coer-textarea'   },
             { Label: 'Textbox'     , Icon: 'i91-input-text'           , Path: '/front-end/components/coer-textbox'    },  
-        ]}  
+        ]},
+        
+        { Label: 'Styles', Icon: '', MenuType: 'GRID', Items: [ 
+            { Label: 'Animation', Icon: '', Path: '/front-end/styles/animation' },  
+            { Label: 'Border'   , Icon: '', Path: '/front-end/styles/border'    }, 
+            { Label: 'Color'    , Icon: '', Path: '/front-end/styles/color'     },  
+            { Label: 'Container', Icon: '', Path: '/front-end/styles/container' },  
+            { Label: 'Cursor'   , Icon: '', Path: '/front-end/styles/cursor'    },  
+        ]}
     ]},  
 ];

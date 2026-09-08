@@ -37,13 +37,13 @@ export class Navigation {
 
 
     /** */
-    public static SetPagetitle(spageTitle: string): void { 
+    public static SetPagetitle(pageTitle: string): void { 
         let storage = sessionStorage.getItem(this.storage) as any;
        
         if (storage) storage = JSON.parse(storage);
         
         storage = Object.assign({}, storage, { 
-            navigation: { ...storage?.navigation, spageTitle } 
+            navigation: { ...storage?.navigation, pageTitle } 
         });
         
         sessionStorage.setItem(this.storage, JSON.stringify(storage));
@@ -57,8 +57,8 @@ export class Navigation {
         if (storage) {
             storage = JSON.parse(storage);
 
-            if (storage.hasOwnProperty('navigation') && storage.navigation.hasOwnProperty('spageTitle')) {
-                return storage?.navigation?.spageTitle || '';
+            if (storage.hasOwnProperty('navigation') && storage.navigation.hasOwnProperty('pageTitle')) {
+                return storage?.navigation?.pageTitle || '';
             }
         }
 

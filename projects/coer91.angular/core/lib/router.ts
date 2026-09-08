@@ -82,7 +82,7 @@ export const ROUTER_PAGE = (path: string, component: Type<any>, activeKey: strin
 
 /** */
 export const ROUTES_COER91 = ([] as Routes)
-    .concat([ROUTER_PAGE('menu', MenuPage)])
+    .concat([ROUTER_PAGE('menu', MenuPage), ROUTER_PAGE('menu/:__menuId__', MenuPage)])
     .concat(!Tools.IsBooleanFalse(appSettings?.navigation?.showHome) ? [ROUTER_PAGE('home', HomePage)] : [])
     .concat([{ path: '**', redirectTo: (Tools.IsNotOnlyWhiteSpace(appSettings?.navigation?.redirectTo) ? appSettings?.navigation?.redirectTo : 'home') }]);  
 

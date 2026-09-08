@@ -22,7 +22,7 @@ export class SourcePage {
         let storage = sessionStorage.getItem(this.storage) as any;
         if (storage) storage = JSON.parse(storage);
         storage = { ...storage, source };
-        sessionStorage.setItem(this.storage, JSON.stringify(storage));
+        sessionStorage.setItem(this.storage, JSON.stringify(storage)); 
     }
 
 
