@@ -1,4 +1,4 @@
-import { IAppSource, ICallbackItem, ICellSwitch, ICellTextBox, ITitleBreadcrumb, ITitleGoBack } from 'coer91.angular/interfaces';
+import { IAppSource, ICallbackItem, ICellSwitch, ITitleBreadcrumb, ITitleGoBack } from 'coer91.angular/interfaces';
 import { AfterViewInit, Component, computed, Inject, inject, OnDestroy, signal } from "@angular/core"; 
 import { CoerAlert } from "./coer-alert/coer-alert.component";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -19,7 +19,7 @@ export abstract class Page implements AfterViewInit, OnDestroy {
     //Injection
     protected readonly router = inject(Router);
     protected readonly alert = new CoerAlert();
-    protected translatory: Translatory = new Translatory();
+    protected translatory = new Translatory('en');
     private readonly _activatedRoute = inject(ActivatedRoute);  
 
     /** */
@@ -85,6 +85,7 @@ export abstract class Page implements AfterViewInit, OnDestroy {
         this._SetPath();
         
         if(Tools.IsOnlyWhiteSpace(this.GetParam('__menuId__'))) {
+            this._SetAccess();
             this._SetLanguage();
             this.SetSource(pageName);
             this.SetPageName(pageName);
@@ -129,8 +130,8 @@ export abstract class Page implements AfterViewInit, OnDestroy {
 
 
     //Function
-    private async _SetLanguage(): Promise<void> {
-        await Tools.Sleep(0);
+    private async _SetAccess(): Promise<void> {
+        await Tools.Sleep();
         const activeKey = this._activatedRoute.snapshot.data['activeKey'] as string;        
         
         if(Tools.IsNotOnlyWhiteSpace(activeKey)) {
@@ -147,8 +148,12 @@ export abstract class Page implements AfterViewInit, OnDestroy {
                     this.canDelete.set(ACTIVE_KEY.canDelete);    
                 }  
             } 
-        } 
+        }  
+    } 
 
+
+    //Function
+    private async _SetLanguage(): Promise<void> { 
         const Language: any = Access.GetUser()?.Language;
         this.language.set(Tools.IsNotOnlyWhiteSpace(Language) ? Language : null);
         this.translatory = new Translatory(this.language());

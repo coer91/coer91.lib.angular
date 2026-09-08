@@ -7,301 +7,101 @@ export class Translatory {
     private _language: 'en' | 'es' | 'fr' | 'ko' | 'zh';
     private _alert = new CoerAlert();
 
-    constructor(language: 'en' | 'es' | 'fr' | 'ko' | 'zh' = 'en') {
+    constructor(language: 'en' | 'es' | 'fr' | 'ko' | 'zh') {
         this._language = language;
+
+        switch(language) {
+            case 'es': this.SetLabelES(); return;
+            case 'fr': this.SetLabelFR(); return;
+            case 'ko': this.SetLabelKO(); return;
+            case 'zh': this.SetLabelZH(); return;
+        } 
     }
 
-     
+
     /** */
     public label = {
-        Project: () => {
-            switch(this._language) {
-                case 'es': return 'Proyecto';
-                case 'ko': return '프로젝트'; 
-                default:      return 'Project';
-            } 
-        },
-
-        Module: () => {
-            switch(this._language) {
-                case 'es': return 'Módulo';
-                case 'ko': return '기준 치수'; 
-                default:      return 'Module';
-            } 
-        },
-
-        Submodule: () => {
-            switch(this._language) {
-                case 'es': return 'Submódulo';
-                case 'ko': return '서브모듈'; 
-                default:      return 'Submodule';
-            } 
-        },
-
-        Page: () => {
-            switch(this._language) {
-                case 'es': return 'Página';
-                case 'ko': return '페이지'; 
-                default:      return 'Page';
-            } 
-        },
-
-        User: () => {
-            switch(this._language) {
-                case 'es': return 'Usuario';
-                case 'ko': return '사용자'; 
-                default:      return 'User';
-            } 
-        },
-
-        Role: () => {
-            switch(this._language) {
-                case 'es': return 'Rol';
-                case 'ko': return '역할'; 
-                default:      return 'Role';
-            } 
-        },
-
-        Active: () => {
-            switch(this._language) {
-                case 'es': return 'Activo';
-                case 'ko': return '활동적인'; 
-                default:      return 'Active';
-            } 
-        },
-
-        Disabled: () => {
-            switch(this._language) {
-                case 'es': return 'Deshabilitado';
-                case 'ko': return '비활성화됨'; 
-                default:      return 'Disabled';
-            } 
-        },
-
-        CaseLabel: () => {
-            switch(this._language) {
-                case 'es': return 'Etiqueta de Caja';
-                case 'ko': return '케이스 라벨'; 
-                default:      return 'Case Label';
-            } 
-        },
-
-        Division: () => {
-            switch(this._language) {
-                case 'es': return 'División';
-                case 'ko': return '구분'; 
-                default:      return 'Division';
-            } 
-        },
-
-        EoNumber: () => {
-            switch(this._language) {
-                case 'es': return 'Número EO';
-                case 'ko': return 'EO 번호'; 
-                default:      return 'EO Number';
-            } 
-        },
-
-        HasDefect: () => {
-            switch(this._language) {
-                case 'es': return 'Está defectuoso';
-                case 'ko': return '결함이 있습니다'; 
-                default:      return 'Has Defect';
-            } 
-        },
-
-        InputDate: () => {
-            switch(this._language) {
-                case 'es': return 'Fecha de Entrada';
-                case 'ko': return '입력 날짜'; 
-                default:      return 'Input Date';
-            } 
-        },
-
-        IsDeleted: () => {
-            switch(this._language) {
-                case 'es': return 'Eliminado';
-                case 'ko': return '삭제됨'; 
-                default:      return 'Deleted';
-            } 
-        },
-
-        Location: () => {
-            switch(this._language) {
-                case 'es': return 'Localización';
-                case 'ko': return '위치'; 
-                default:      return 'Location';
-            } 
-        },
-
-        Lot: () => {
-            switch(this._language) {
-                case 'es': return 'Lote';
-                case 'ko': return '일괄'; 
-                default:      return 'Lot';
-            } 
-        },
-
-        LotNumber: () => {
-            switch(this._language) {
-                case 'es': return 'Número de Lote';
-                case 'ko': return '로트 번호'; 
-                default:      return 'Lot Number';
-            } 
-        },
-
-        ManualScanner: () => {
-            switch(this._language) {
-                case 'es': return 'Scanner Manual';
-                case 'ko': return '수동 스캐너'; 
-                default:      return 'Manual Scanner';
-            } 
-        },
-
-        Material: () => {
-            switch(this._language) {
-                case 'es': return 'Material';
-                case 'ko': return '재료';   
-                default:      return 'Material';
-            } 
-        },
-
-        Product: () => {
-            switch(this._language) {
-                case 'es': return 'Producto';
-                case 'ko': return '제품';    
-                default:      return 'Product';
-            } 
-        },
-
-        PartNumber: () => {
-            switch(this._language) {
-                case 'es': return 'Número de Parte';
-                case 'ko': return '부품 번호'; 
-                default:      return 'Part Number';
-            } 
-        },
-
-        Printer: () => {
-            switch(this._language) {
-                case 'es': return 'Impresora';
-                case 'ko': return '프린터'; 
-                default:      return 'Printer';
-            } 
-        },
-
-        ProductionDate: () => {
-            switch(this._language) {
-                case 'es': return 'Fecha Producción';
-                case 'ko': return '생산 날짜'; 
-                default:      return 'Production Date';
-            } 
-        },
-
-        Qty: () => {
-            switch(this._language) {
-                case 'es': return 'Cant.';
-                case 'ko': return '수량'; 
-                default:      return 'Qty';
-            } 
-        },
-
-        Quantity: () => {
-            switch(this._language) {
-                case 'es': return 'Cantidad';
-                case 'ko': return '수량'; 
-                default:      return 'Quantity';
-            } 
-        },
-
-        Required: () => {
-            switch(this._language) {
-                case 'es': return 'Requerido';
-                case 'ko': return '필수';    
-                default:      return 'Required';
-            } 
-        },
-
-        Scanner: () => {
-            switch(this._language) {
-                case 'es': return 'Scanner';
-                case 'ko': return '스캐너'; 
-                default:      return 'Scanner';
-            } 
-        },
-
-        Scanned: () => {
-            switch(this._language) {
-                case 'es': return 'Escaneado';
-                case 'ko': return '스캔됨';    
-                default:      return 'Scanned';
-            } 
-        },
-
-        Storage: () => {
-            switch(this._language) {
-                case 'es': return 'Almacén';
-                case 'ko': return '저장소'; 
-                default:      return 'Storage';
-            } 
-        },
-
-        StorageCode: () => {
-            switch(this._language) {
-                case 'es': return 'Código de Almacén';
-                case 'ko': return '저장소 코드'; 
-                default:      return 'Storage Code';
-            } 
-        },
-
-        Transaction: () => {
-            switch(this._language) {
-                case 'es': return 'Transacción';
-                case 'ko': return '거래'; 
-                default:      return 'Transaction';
-            } 
-        },
-
-        Unit: () => {
-            switch(this._language) {
-                case 'es': return 'Unidad';
-                case 'ko': return '단위'; 
-                default:      return 'Unit';
-            } 
-        },
-
-        Vendor: () => {
-            switch(this._language) {
-                case 'es': return 'Vendedor';
-                case 'ko': return '공급업체'; 
-                default:      return 'Vendor';
-            } 
-        },
-
-        VendorCode: () => {
-            switch(this._language) {
-                case 'es': return 'Código de Vendedor';
-                case 'ko': return '공급업체 코드'; 
-                default:      return 'Vendor Code';
-            } 
-        },
-
-        Warehouse: () => {
-            switch(this._language) {
-                case 'es': return 'Bodega';
-                case 'ko': return '창고'; 
-                default:      return 'Warehouse';
-            } 
-        },
-
-        WarehouseCode: () => {
-            switch(this._language) {
-                case 'es': return 'Código de Bodega';
-                case 'ko': return '창고 코드'; 
-                default:      return 'Warehouse Code';
-            } 
-        },
+        Project    : 'Project',
+        Module     : 'Module',
+        Submodule  : 'Submodule',
+        Page       : 'Page',
+        User       : 'User',
+        Role       : 'Role',
+        Active     : 'Active',
+        Disabled   : 'Disabled', 
+        Required   : 'Required',
+        Transaction: 'Transaction',       
+        Warehouse  : 'Warehouse',
+        Quantity   : 'Quantity' 
     }
+
+
+    //Function
+    private SetLabelES() {
+        this.label.Project     = 'Proyecto';
+        this.label.Module      = 'Módulo';
+        this.label.Submodule   = 'Submódulo';
+        this.label.Page        = 'Página';
+        this.label.User        = 'Usuario';
+        this.label.Role        = 'Rol';
+        this.label.Active      = 'Activo';
+        this.label.Disabled    = 'Deshabilitado';
+        this.label.Required    = 'Requerido';
+        this.label.Transaction = 'Transacción';
+        this.label.Warehouse   = 'Almacén';
+        this.label.Quantity    = 'Cantidad';
+    }
+
+
+    //Function
+    private SetLabelFR() {
+        this.label.Project     = 'Projet';
+        this.label.Module      = 'Module';
+        this.label.Submodule   = 'Sous-module';
+        this.label.Page        = 'Page';
+        this.label.User        = 'Utilisateur';
+        this.label.Role        = 'Rôle';
+        this.label.Active      = 'Actif';
+        this.label.Disabled    = 'Désactivé';
+        this.label.Required    = 'Requis';
+        this.label.Transaction = 'Transaction';
+        this.label.Warehouse   = 'Entrepôt';
+        this.label.Quantity    = 'Quantité';
+    }
+
+
+    //Function
+    private SetLabelKO() {
+        this.label.Project     = '프로젝트';
+        this.label.Module      = '기준 치수';
+        this.label.Submodule   = '서브모듈';
+        this.label.Page        = '페이지';
+        this.label.User        = '사용자';
+        this.label.Role        = '역할';
+        this.label.Active      = '활동적인';
+        this.label.Disabled    = '비활성화됨';
+        this.label.Required    = '필수';
+        this.label.Transaction = '거래';
+        this.label.Warehouse   = '창고';
+        this.label.Quantity    = '수량';
+    }
+
+
+    //Function
+    private SetLabelZH() {
+        this.label.Project     = '项目';
+        this.label.Module      = '模块';
+        this.label.Submodule   = '子模块';
+        this.label.Page        = '页面';
+        this.label.User        = '用户';
+        this.label.Role        = '角色';
+        this.label.Active      = '启用';
+        this.label.Disabled    = '禁用';
+        this.label.Required    = '必填';
+        this.label.Transaction = '交易';
+        this.label.Warehouse   = '仓库';
+        this.label.Quantity    = '数量';
+    }  
 
     
     /** */
